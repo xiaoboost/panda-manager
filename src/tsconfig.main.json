@@ -1,0 +1,12 @@
+{
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "outDir": "../dist/main",
+        "module": "commonjs",
+        "jsx": "preserve",
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true
+    },
+    "include": ["./main", "./shared", "../types"],
+    "exclude": ["../dist", "./render"]
+}
