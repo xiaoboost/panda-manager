@@ -7,6 +7,6 @@
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true
     },
-    "include": ["./main", "./shared", "../types"],
+    "include": ["./main", "../types"],
     "exclude": ["../dist", "./render"]
 }

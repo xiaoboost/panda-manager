@@ -2,20 +2,24 @@ import * as path from 'path';
 import * as url from 'url';
 
 import { app, BrowserWindow } from 'electron';
+import { devHttpPort } from '../../build/config';
 
 let win: BrowserWindow | null;
 
 function createWindow() {
     win = new BrowserWindow({ width: 800, height: 600 });
 
-    win.loadURL(url.format({
-        pathname: path.join(__dirname, '../render/index.html'),
-        protocol: 'file:',
-        slashes: true
-    }));
-
-    // Open the DevTools.
-    win.webContents.openDevTools();
+    if (process.env.NODE_ENV === 'development') {
+        win.loadURL(`http://localhosts:${devHttpPort}`);
+        win.webContents.openDevTools();
+    }
+    else {
+        win.loadURL(url.format({
+            pathname: path.join(__dirname, '../render/index.html'),
+            protocol: 'file:',
+            slashes: true
+        }));
+    }
 
     // Emitted when the window is closed.
     win.on('closed', () => {

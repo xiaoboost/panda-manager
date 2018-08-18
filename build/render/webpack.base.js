@@ -1,7 +1,7 @@
 const { yellow, green } = require('chalk');
-const { resolve, resolveRoot, buildTag } = require('./utils');
+const { createBuildTag } = require('../utils');
+const { render: config, resolveRoot } = require('../config');
 
-const config = require('./config');
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -16,7 +16,7 @@ console.log(yellow('> Start Compile:\n'));
 
 module.exports = {
     mode: process.env.NODE_ENV,
-    entry: [resolve('main.tsx')],
+    entry: [config.resolve('main.tsx')],
     output: {
         // 编译输出的静态资源根路径
         path: config.output,
@@ -38,7 +38,7 @@ module.exports = {
         mainFiles: ['index.tsx', 'index.ts'],
         // 默认路径别名
         alias: {
-            'src': resolve('./'),
+            'src': config.resolve('./'),
             'object-assign': resolveRoot('node_modules/object-assign/index.js'),
         },
     },
@@ -107,10 +107,10 @@ module.exports = {
         new HtmlWebpackPlugin({
             filename: 'index.html',
             data: {
-                build: buildTag(),
+                build: createBuildTag(),
                 year: new Date().getFullYear(),
             },
-            template: resolve('index.html'),
+            template: config.resolve('index.html'),
             inject: true,
             minify: {
                 removeComments: !isDevelopment,

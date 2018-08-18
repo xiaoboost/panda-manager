@@ -3,6 +3,6 @@
     "compilerOptions": {
         "module": "esnext"
     },
-    "include": ["./render", "./shared", "../types"],
+    "include": ["./render", "../types"],
     "exclude": ["node_modules", "../dist", "./main"]
 }
