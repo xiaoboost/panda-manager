@@ -10,7 +10,7 @@ function createWindow() {
     win = new BrowserWindow({ width: 800, height: 600 });
 
     if (process.env.NODE_ENV === 'development') {
-        win.loadURL(`http://localhosts:${devHttpPort}`);
+        win.loadURL(`http://localhost:${devHttpPort}`);
         win.webContents.openDevTools();
     }
     else {

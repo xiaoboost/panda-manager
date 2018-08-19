@@ -5,20 +5,26 @@
   "main": "dist/main/main.js",
   "scripts": {
     "clear": "rm -rf ./dist",
-    "dev:main": "node ./node_modules/typescript/lib/tsc.js -p ./src/tsconfig.main.json -w",
-    "build:main": "cross-env NODE_ENV=production node ./node_modules/typescript/lib/tsc.js -p ./src/tsconfig.main.json --sourceMap false",
-    "build:render": "cross-env NODE_ENV=production node src/render/build/webpack.prod.js",
+    "dev:main": "node ./build/main/webpack.dev.js",
+    "build:main": "node ./build/main/webpack.prod.js",
+    "dev:render": "node ./build/render/webpack.dev.js",
+    "build:render": "node ./build/render/webpack.prod.js",
     "build": "npm run clear && npm run build:main && npm run build:render",
     "start": "./node_modules/.bin/electron ."
   },
   "author": "xiao",
   "license": "MIT",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/xiaoboost/panda-manager"
+  },
   "dependencies": {
     "react": "^16.4.2",
     "react-dom": "^16.4.2"
   },
   "devDependencies": {
     "@types/koa": "^2.0.46",
+    "@types/memory-fs": "^0.3.1",
     "@types/node": "^10.7.0",
     "@types/react": "^16.4.10",
     "@types/react-dom": "^16.0.7",
@@ -31,6 +37,7 @@
     "friendly-errors-webpack-plugin": "^1.7.0",
     "html-webpack-plugin": "^3.2.0",
     "koa": "^2.5.2",
+    "memory-fs": "^0.4.1",
     "mini-css-extract-plugin": "^0.4.1",
     "optimize-css-assets-webpack-plugin": "^5.0.0",
     "progress-bar-webpack-plugin": "^1.11.0",

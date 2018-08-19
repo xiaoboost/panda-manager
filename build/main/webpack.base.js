@@ -40,6 +40,11 @@ module.exports = {
         tslib: 'require("tslib/tslib.js")',
     },
     plugins: [
+        new webpack.HashedModuleIdsPlugin({
+            hashFunction: 'sha256',
+            hashDigest: 'hex',
+            hashDigestLength: 6,
+        }),
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': isDevelopment ? '"development"' : '"production"',
         }),
