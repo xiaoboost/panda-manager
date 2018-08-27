@@ -9,6 +9,7 @@
         "isolatedModules": false,
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
+        "allowSyntheticDefaultImports": true,
         "noImplicitAny": true,
         "noImplicitThis": true,
         "noImplicitReturns": false,

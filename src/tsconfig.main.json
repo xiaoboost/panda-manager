@@ -4,7 +4,6 @@
         "outDir": "../dist/main",
         "module": "commonjs",
         "jsx": "preserve",
-        "allowSyntheticDefaultImports": true,
         "esModuleInterop": true
     },
     "include": ["./main", "../types"],
