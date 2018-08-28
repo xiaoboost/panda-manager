@@ -16,7 +16,12 @@ console.log(yellow('> Start Compile:\n'));
 
 module.exports = {
     mode: process.env.NODE_ENV,
-    entry: [config.resolve('main.tsx')],
+    entry: config.resolve('main.tsx'),
+    target: 'electron-renderer',
+    node: {
+        __dirname: false,
+        __filename: false,
+    },
     output: {
         // 编译输出的静态资源根路径
         path: config.output,
@@ -116,8 +121,6 @@ module.exports = {
                 removeComments: !isDevelopment,
                 collapseWhitespace: !isDevelopment,
                 ignoreCustomComments: [/^-/],
-                // 更多选项请参考下面的链接:
-                // https://github.com/kangax/html-minifier#options-quick-reference
             },
             chunksSortMode: 'dependency',
             excludeChunks: [],
