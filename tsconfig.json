@@ -20,6 +20,9 @@
         "suppressImplicitAnyIndexErrors": true,
         "allowJs": true,
         "lib": ["es2015", "es2016", "es2017", "dom"],
-        "baseUrl": "."
+        "baseUrl": ".",
+        "paths": {
+            "*": ["*", "src/main/*", "src/render/*"]
+        }
     }
 }

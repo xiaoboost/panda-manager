@@ -19,7 +19,6 @@
     "url": "https://github.com/xiaoboost/panda-manager"
   },
   "dependencies": {
-    "node-7z": "^0.4.0",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-router-dom": "^4.3.1",
@@ -29,7 +28,6 @@
     "@types/koa": "^2.0.46",
     "@types/memory-fs": "^0.3.1",
     "@types/node": "^10.7.0",
-    "@types/node-7z": "^0.4.2",
     "@types/react": "^16.4.10",
     "@types/react-dom": "^16.0.7",
     "@types/react-router-dom": "^4.3.0",
@@ -49,9 +47,11 @@
     "optimize-css-assets-webpack-plugin": "^5.0.0",
     "progress-bar-webpack-plugin": "^1.11.0",
     "shelljs": "^0.8.2",
+    "style-loader": "^0.23.0",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
     "ts-loader": "^4.5.0",
+    "tsconfig-paths-webpack-plugin": "^3.2.0",
     "tslint": "^5.11.0",
     "typescript": "^3.0.1",
     "uglifyjs-webpack-plugin": "^1.3.0",

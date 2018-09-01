@@ -1,7 +1,11 @@
 {
     "extends": "../tsconfig.json",
     "compilerOptions": {
-        "module": "esnext"
+        "module": "esnext",
+        "baseUrl": "../",
+        "paths": {
+            "*": ["*", "src/render/*"]
+        }
     },
     "include": ["./render", "../types"],
     "exclude": ["node_modules", "../dist", "./main"]
