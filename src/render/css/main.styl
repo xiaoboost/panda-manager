@@ -1,4 +1,5 @@
 @import './variable';
+@import './font';
 
 * {
     margin: 0;
@@ -6,8 +7,9 @@
     border: 0;
     cursor: inherit;
     user-select: inherit;
+    box-sizing: border-box;
     -webkit-margin-before: 0;
-    -webkit-margin-after: 0
+    -webkit-margin-after: 0;
 }
 
 html, body, #app {
@@ -24,14 +26,4 @@ html, body, #app {
 
 input, textarea {
     cursor: text;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-    transition: opacity .4s ease;
-}
-
-.fade-enter,
-.fade-leave-active {
-    opacity: 0;
 }
