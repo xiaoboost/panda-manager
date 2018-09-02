@@ -1,0 +1,45 @@
+.fm-tag-list {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    flex-direction: row;
+
+    width: 100%;
+}
+
+.fm-tag {
+    flex-shrink: 0;
+    flex-grow: 0;
+    flex-basis: 0;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.65);
+    list-style: none;
+    padding: 0 5px 0 7px;
+    border-radius: 4px;
+    border: 1px solid #d9d9d9;
+    background: #fafafa;
+    opacity: 1;
+    margin-right: 8px;
+    white-space: nowrap;
+    transition: all .3s cubic-bezier(0.215, 0.61, 0.355, 1);
+
+    .fm-icon {
+        font-size: 14px;
+        margin-left: 4px;
+        cursor: pointer;
+    }
+
+    &.fm-tag-fade-enter, &.fm-tag-fade-exit-active {
+        padding-left: 0;
+        padding-right: 0;
+        border-left: 0;
+        border-right: 0;
+        margin-right: 0;
+        opacity: 0;
+    }
+}
