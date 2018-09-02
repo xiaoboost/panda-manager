@@ -17,3 +17,13 @@ export function remove<T>(arr: T[], item: T) {
         }
     }
 }
+
+// 原生 eval 函数重命名
+export const $eval: typeof eval = (window as any).eval;
+
+// disabled eval
+if (process.env.NODE_ENV !== 'development') {
+    (window as any).eval = global.eval = function() {
+        throw new Error(`Sorry, this app does not support window.eval().`)
+    }
+}
