@@ -1,9 +1,18 @@
+import './css/main';
+
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import { HashRouter, Route, Switch } from 'react-router-dom';
 
-import App from './components/app/component';
+import MainList from 'views/main-list/component';
+import ItemDetail from 'views/item-detail/component';
 
 ReactDOM.render(
-    <App />,
-    document.getElementById('root')!,
+    <HashRouter>
+        <Switch>
+            <Route exact path="/" component={MainList} />
+            <Route path="/detail/:id(\d+)" component={ItemDetail} />
+        </Switch>
+    </HashRouter>,
+    document.getElementById('app')!,
 );

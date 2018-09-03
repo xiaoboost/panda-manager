@@ -7,6 +7,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 
@@ -46,6 +47,11 @@ module.exports = {
             'src': config.resolve('./'),
             'object-assign': resolveRoot('node_modules/object-assign/index.js'),
         },
+        plugins: [
+            new TsconfigPathsPlugin({
+                configFile: resolveRoot('src/tsconfig.render.json'),
+            }),
+        ],
     },
     module: {
         rules: [
@@ -64,7 +70,9 @@ module.exports = {
             {
                 test: /\.styl(us)?$/,
                 use: [
-                    MiniCssExtractPlugin.loader,
+                    isDevelopment
+                        ? 'style-loader'
+                        : MiniCssExtractPlugin.loader,
                     'css-loader',
                     'stylus-loader',
                 ],

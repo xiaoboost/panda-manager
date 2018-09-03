@@ -4,7 +4,11 @@
         "outDir": "../dist/main",
         "module": "commonjs",
         "jsx": "preserve",
-        "esModuleInterop": true
+        "esModuleInterop": true,
+        "baseUrl": "../",
+        "paths": {
+            "*": ["*", "src/main/*"]
+        }
     },
     "include": ["./main", "../types"],
     "exclude": ["../dist", "./render"]
