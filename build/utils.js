@@ -1,4 +1,4 @@
-const { join } = require('path');
+const { join, extname } = require('path');
 
 /**
  * Generate tag of build
@@ -42,7 +42,7 @@ exports.ramMiddleware = function(fs, root) {
 
         const fileStat = fs.statSync(filePath);
 
-        ctx.type = filePath;
+        ctx.type = extname(filePath);
         ctx.lastModified = new Date();
 
         ctx.set('Accept-Ranges', 'bytes');
