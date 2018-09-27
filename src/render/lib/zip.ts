@@ -114,8 +114,7 @@ export default class Zip {
 
             await (new Promise((resolve) => {
                 fs.mkdirp(fileDir)
-                    .then(() => this._zip
-                        .file(innerPath)
+                    .then(() => data
                         .nodeStream()
                         .pipe(fs.createWriteStream(filePath))
                         .on('finish', resolve)
@@ -132,10 +131,10 @@ export default class Zip {
         }
     }
     /** 将压缩包写入硬盘 */
-    write(targetDir: string): Promise<boolean> {
+    write(targetDir: string) {
         const targetFile = path.join(targetDir, `${this.name}.zip`);
 
-        return new Promise((resolve) => {
+        return new Promise<boolean>((resolve) => {
             this._zip
                 .generateNodeStream({
                     type: 'nodebuffer',
@@ -149,5 +148,21 @@ export default class Zip {
                     resolve(false);
                 });
         });
+    }
+    /** 生成异步的文件列表迭代器 */
+    async * files() {
+        for (const [innerPath, data] of Object.entries(this._zip.files)) {
+            if (data.dir) {
+                continue;
+            }
+
+            const buffer = await data.async('nodebuffer');
+
+            yield {
+                path: innerPath,
+                name: path.parse(innerPath).name,
+                buffer,
+            };
+        }
     }
 }
