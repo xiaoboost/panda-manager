@@ -3,7 +3,7 @@ import path from 'path';
 import JSZip from 'jszip';
 
 import { handleError } from './error';
-import { isString, isArray } from './assert';
+import { isString, isArray } from './utils';
 
 /** 读取文件夹内所有文件的路径 */
 async function readDir(dir: string) {
