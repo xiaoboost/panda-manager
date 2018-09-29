@@ -1,4 +1,5 @@
 const { join, extname } = require('path');
+const { loader } = require('mini-css-extract-plugin');
 
 /**
  * Generate tag of build
@@ -12,6 +13,16 @@ exports.createBuildTag = function() {
     const time = now.toTimeString().slice(0, 8);
 
     return `${year}.${month}.${date} - ${time}`;
+};
+
+/** 生成 css loader */
+exports.cssLoader = function() {
+    return [
+        process.env.NODE_ENV === 'development'
+            ? 'style-loader'
+            : loader,
+        'css-loader',
+    ];
 };
 
 /**

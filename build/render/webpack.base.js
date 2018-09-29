@@ -1,5 +1,5 @@
 const { yellow, green } = require('chalk');
-const { createBuildTag } = require('../utils');
+const { createBuildTag, cssLoader } = require('../utils');
 const { render: config, resolveRoot } = require('../config');
 
 const webpack = require('webpack');
@@ -41,7 +41,7 @@ module.exports = {
         // 自动补全的扩展名
         extensions: ['.tsx', '.ts', '.js', '.jsx', '.json', '.styl'],
         // 目录下的默认主文件
-        mainFiles: ['index.tsx', 'index.ts'],
+        mainFiles: ['index.tsx', 'index.ts', 'index.js'],
         // 默认路径别名
         alias: {
             'src': config.resolve('./'),
@@ -68,14 +68,23 @@ module.exports = {
                 },
             },
             {
+                test: /\.css$/,
+                use: cssLoader(),
+            },
+            {
                 test: /\.styl(us)?$/,
-                use: [
-                    isDevelopment
-                        ? 'style-loader'
-                        : MiniCssExtractPlugin.loader,
-                    'css-loader',
-                    'stylus-loader',
-                ],
+                use: cssLoader().concat(['stylus-loader']),
+            },
+            {
+                test: /\.less$/,
+                use: cssLoader().concat([
+                    {
+                        loader: 'less-loader',
+                        options: {
+                            javascriptEnabled: true
+                        },
+                    },
+                ]),
             },
         ],
     },
