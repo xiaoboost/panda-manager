@@ -4,7 +4,6 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 
 module.exports = {
     mode: process.env.NODE_ENV,
-    devtool: '',
     entry: config.resolve('main.ts'),
     target: 'electron-main',
     node: {
@@ -19,6 +18,9 @@ module.exports = {
     resolve: {
         extensions: ['.ts', '.js', '.json', '.styl'],
         mainFiles: ['index.tsx', 'index.ts'],
+        alias: {
+            'src': config.resolve('./'),
+        },
     },
     module: {
         rules: [

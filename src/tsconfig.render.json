@@ -4,9 +4,9 @@
         "module": "esnext",
         "baseUrl": "../",
         "paths": {
-            "*": ["*", "src/render/*"]
+            "*": ["*", "src/render/*", "src/shared/*"]
         }
     },
-    "include": ["./render", "../types"],
-    "exclude": ["node_modules", "../dist", "./main"]
+    "include": ["./render", "./shared", "../types"],
+    "exclude": ["../node_modules", "../dist", "./main"]
 }

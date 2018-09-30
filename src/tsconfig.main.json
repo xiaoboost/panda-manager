@@ -7,9 +7,9 @@
         "esModuleInterop": true,
         "baseUrl": "../",
         "paths": {
-            "*": ["*", "src/main/*"]
+            "*": ["*", "src/main/*", "src/shared/*"]
         }
     },
-    "include": ["./main", "../types"],
-    "exclude": ["../dist", "./render"]
+    "include": ["./main", "./shared", "../types"],
+    "exclude": ["../node_modules", "../dist", "./render"]
 }

@@ -10,6 +10,8 @@ const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 // 删除输出文件夹
 rm('-rf', main.output);
 
+// 每个模块用 eval() 执行, SourceMap 作为 DataUrl 添加到文件末尾
+baseConfig.devtool = 'eval-source-map';
 // 调试用的插件
 baseConfig.plugins.push(
     new webpack.NamedModulesPlugin(),
