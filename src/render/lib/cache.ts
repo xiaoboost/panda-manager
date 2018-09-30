@@ -39,10 +39,39 @@ export interface TagsGroupData extends TagData {
     tags: string[];
 }
 
+type MangaInput =
+    Pick<MangaData, 'name' | 'path' | 'isFolder'> &
+    Partial<Pick<MangaData, 'id' | 'tagsGroups'>>;
+
+/** 同人志数据 */
+class Manga implements MangaData {
+    name: string;
+    isFolder: boolean;
+    tagsGroups: TagsGroupData[];
+
+    readonly id: string;
+    readonly path: string;
+
+    /** 当前漫画的缓存数据路径 */
+    readonly cachePath = join(appRoot, 'cache', this.id);
+
+    constructor({
+        name, path, isFolder,
+        id = uuid(),
+        tagsGroups = [],
+    }: MangaInput) {
+        this.name = name;
+        this.id = id;
+        this.path = path;
+        this.isFolder = isFolder;
+        this.tagsGroups = tagsGroups;
+    }
+}
+
 /** 缓存数据 */
 class AppCache {
     /** 所有同人志 */
-    mangas: MangaData[] = [];
+    mangas: Manga[] = [];
     /** 所有标签 */
     tags: AnyObject<TagData> = {};
     /** 所有标签集合 */
