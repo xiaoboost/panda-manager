@@ -12,3 +12,6 @@ declare type Parameters<T extends Function> = T extends (...args: infer R) => an
 
 /** return the array type */
 declare type GetArray<T> = T extends (any | (infer R)[]) ? R[] : never;
+
+/** any object */
+declare type AnyObject<T = any> = { [key: string]: T };

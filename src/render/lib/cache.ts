@@ -3,6 +3,7 @@ import * as fs from 'fs-extra';
 import { join } from 'path';
 
 import {
+    omit,
     appRoot,
     isArray,
     isStrictObject,
@@ -39,74 +40,68 @@ export interface TagsGroupData extends TagData {
 }
 
 /** 缓存数据 */
-export interface AppCache {
+class AppCache {
     /** 所有同人志 */
-    mangas: MangaData[];
+    mangas: MangaData[] = [];
     /** 所有标签 */
-    tags: {
-        [key: string]: TagData;
-    };
+    tags: AnyObject<TagData> = {};
     /** 所有标签集合 */
-    tagsGroups: {
-        [key: string]: TagsGroupData;
-    };
-}
+    tagsGroups: AnyObject<TagsGroupData> = {};
+    /** 当前所有文件夹 */
+    directories: string[] = [];
 
-const CachePath = join(appRoot, 'cache');
-const CacheData: AppCache = {
-    mangas: [],
-    tags: {},
-    tagsGroups: {},
-};
+    /** 缓存文件路径 */
+    readonly path = join(appRoot, 'cache/meta.json');
 
-/** 读取同人志漫画预览数据 */
-async function readMangaMeta(id: string) {
+    /** 检查数据是否正确 */
+    private checkCacheData(data: AnyObject = this) {
+        let result = true;
 
-}
+        const arrs = ['mangas', 'directories'];
+        const objs = ['tags', 'tagsGroups'];
 
-/** 写缓存 */
-export function writeMeta(data: AppCache) {
-    return fs.writeFile(
-        join(CachePath, 'meta.json'),
-        JSON.stringify(data),
-    );
-}
-
-/** 检查缓存数据是否正确 */
-function checkCacheData(data: AppCache) {
-    let result = true;
-
-    if (!isArray(data.mangas)) {
-        result = false;
-        data.mangas = [];
-    }
-
-    if (!isStrictObject(data.tags)) {
-        result = false;
-        data.tags = {};
-    }
-
-    if (!isStrictObject(data.tagsGroups)) {
-        result = false;
-        data.tagsGroups = {};
-    }
-
-    return result;
-}
-
-/** 初始化 */
-export async function init() {
-    try {
-        const buffer = await fs.readFile(join(CachePath, 'meta.json'));
-        const data = JSON.parse(buffer.toString());
-
-        if (!checkCacheData(data)) {
-            await writeMeta(data);
+        for (const key of arrs) {
+            if (!isArray(data[key])) {
+                result = false;
+                data[key] = [];
+            }
         }
 
-        Object.assign(CacheData, data);
+        for (const key of objs) {
+            if (!isStrictObject(data[key])) {
+                result = false;
+                data[key] = {};
+            }
+        }
+
+        return result;
     }
-    catch (e) {
-        await writeMeta(CacheData);
+
+    /** 从硬盘读取缓存 */
+    async readFromDisk() {
+        try {
+            const buffer = await fs.readFile(this.path);
+            const data = JSON.parse(buffer.toString());
+
+            if (!this.checkCacheData(data)) {
+                await this.writeToDisk();
+            }
+
+            Object.assign(this, data);
+        }
+        catch (e) {
+            await this.writeToDisk();
+        }
+    }
+
+    /** 讲缓存写入硬盘 */
+    writeToDisk() {
+        return fs.writeFile(
+            this.path,
+            JSON.stringify(omit(this, ['path'])),
+        );
     }
 }
+
+/** 全局缓存 */
+export const appCache = new AppCache();

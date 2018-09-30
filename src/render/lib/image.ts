@@ -8,8 +8,6 @@ type CompressOption = (JpegOptions | PngOptions) & {
     };
 }
 
-Sharp.gravity.east
-
 /** 压缩图片 */
 export function compress(
     image: Buffer,
