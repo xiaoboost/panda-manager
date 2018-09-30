@@ -3,11 +3,11 @@ import 'antd/lib/button/style'
 
 import * as React from 'react';
 import Button from 'antd/lib/button';
-import { selectDirectories } from 'lib/communicate';
+import { selectDirectory } from 'lib/utils';
 
 export default class Header extends React.Component<{}, {}> {
     addFolder = async () => {
-        const directories = await selectDirectories();
+        const directories = await selectDirectory();
         console.log(directories);
     }
 

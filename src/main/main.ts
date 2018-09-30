@@ -3,7 +3,6 @@ import * as url from 'url';
 
 import { app, BrowserWindow } from 'electron';
 import { devHttpPort } from '../../build/config';
-import * as communicate from './communicate';
 
 let win: BrowserWindow | null;
 
@@ -22,11 +21,8 @@ function createWindow() {
         }));
     }
 
-    communicate.install(win);
-
     win.on('closed', () => {
         win = null;
-        communicate.uninstall();
     });
 }
 
