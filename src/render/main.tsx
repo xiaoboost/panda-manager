@@ -8,7 +8,7 @@ import { appCache } from 'lib/cache';
 import MainList from 'views/main-list/component';
 import ItemDetail from 'views/item-detail/component';
 
-appCache.readFromDisk();
+appCache.readCache();
 
 render(
     <HashRouter>
