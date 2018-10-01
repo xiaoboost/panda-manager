@@ -2,8 +2,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import JSZip from 'jszip';
 
-import { handleError } from './error';
-import { isString, isArray } from './utils';
+import { isString, isArray, handleError } from './utils';
 
 /** 读取文件夹内所有文件的路径 */
 async function readDir(dir: string) {
@@ -32,7 +31,7 @@ export default class Zip {
         const zip = new Zip(path.parse(zipPath).name);
         const zipContent = await fs.readFile(zipPath);
 
-        zip._zip.loadAsync(zipContent);
+        await zip._zip.loadAsync(zipContent);
 
         return zip;
     }
@@ -159,9 +158,10 @@ export default class Zip {
             const buffer = await data.async('nodebuffer');
 
             yield {
-                path: innerPath,
-                name: path.parse(innerPath).name,
                 buffer,
+                path: innerPath,
+                name: path.basename(innerPath),
+                lastModify: new Date(data.date).getTime(),
             };
         }
     }
