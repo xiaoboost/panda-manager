@@ -1,12 +1,14 @@
 import uuid from 'uuid';
+import Zip from './zip';
 import * as fs from 'fs-extra';
-import { join } from 'path';
+import { join, dirname, extname } from 'path';
+import { compress, imageExtend } from './image';
 
 import {
-    omit,
     appRoot,
     isArray,
     isStrictObject,
+    handleError,
 } from './utils';
 
 /** 同人志元数据 */
@@ -18,7 +20,7 @@ export interface MangaData {
     /** 真实文件存在的路径 */
     path: string;
     /** 当前同人志是否是文件夹 */
-    isFolder: boolean;
+    isDirectory: boolean;
     /** 当前漫画的 tag 集合 */
     tagsGroups: TagsGroupData[];
 }
@@ -40,31 +42,86 @@ export interface TagsGroupData extends TagData {
 }
 
 type MangaInput =
-    Pick<MangaData, 'name' | 'path' | 'isFolder'> &
+    Pick<MangaData, 'name' | 'path' | 'isDirectory'> &
     Partial<Pick<MangaData, 'id' | 'tagsGroups'>>;
+
+type CacheFileData =
+    Pick<AppCache, 'tags' | 'tagsGroups' | 'directories'> &
+    { mangas: string[] };
 
 /** 同人志数据 */
 class Manga implements MangaData {
     name: string;
-    isFolder: boolean;
+    isDirectory: boolean;
     tagsGroups: TagsGroupData[];
 
     readonly id: string;
     readonly path: string;
 
     /** 当前漫画的缓存数据路径 */
-    readonly cachePath = join(appRoot, 'cache', this.id);
+    readonly cachePath: string;
 
     constructor({
-        name, path, isFolder,
+        name,
+        path,
+        isDirectory,
         id = uuid(),
         tagsGroups = [],
     }: MangaInput) {
         this.name = name;
         this.id = id;
         this.path = path;
-        this.isFolder = isFolder;
+        this.isDirectory = isDirectory;
         this.tagsGroups = tagsGroups;
+        this.cachePath = join(appRoot, 'cache', this.id);
+    }
+
+    /** 生成缓存并将其写入硬盘 */
+    async writeCache() {
+        const images: {
+            name: string;
+            buffer: Buffer;
+        }[] = [];
+
+        // 当前漫画是文件夹
+        if (this.isDirectory) {
+
+        }
+        // 当前漫画是压缩包
+        else {
+            const zip = await Zip.loadZip(this.path);
+
+            for await (const file of zip.files()) {
+                images.push({
+                    name: file.name,
+                    buffer: file.buffer,
+                });
+            }
+        }
+
+        // const coverBuffer = await compress(images[0].buffer, 'jpg', {
+        //     quality: 90,
+        //     size: {
+        //         height: 280,
+        //     },
+        // });
+
+        const mangaData: MangaData = {
+            name: this.name,
+            id: this.id,
+            path: this.path,
+            isDirectory: this.isDirectory,
+            tagsGroups: this.tagsGroups,
+        };
+
+        await fs.mkdirp(this.cachePath);
+        await fs.writeJSON(this.path, mangaData);
+
+        // await fs.writeFile(join(this.cachePath, 'cover.jpg'), images[0].buffer);
+
+        // debugger;
+        // const coverImage = images[0];
+
     }
 }
 
@@ -79,8 +136,12 @@ class AppCache {
     /** 当前所有文件夹 */
     directories: string[] = [];
 
+    /** 缓存文件名称 */
+    readonly fileName = 'meta.json';
+    /** 缓存文件夹路径 */
+    readonly dirPath = join(appRoot, 'cache');
     /** 缓存文件路径 */
-    readonly path = join(appRoot, 'cache/meta.json');
+    readonly path = join(this.dirPath, this.fileName);
 
     /** 检查数据是否正确 */
     private checkCacheData(data: AnyObject = this) {
@@ -107,28 +168,98 @@ class AppCache {
     }
 
     /** 从硬盘读取缓存 */
-    async readFromDisk() {
-        try {
-            const buffer = await fs.readFile(this.path);
-            const data = JSON.parse(buffer.toString());
+    async readCache() {
+        const data = await fs.readJSON(this.path).catch(() => void 0) as CacheFileData;
 
-            if (!this.checkCacheData(data)) {
-                await this.writeToDisk();
-            }
+        // 缓存数据存在
+        if (data) {
+            this.checkCacheData(data);
+            this.tags = data.tags;
+            this.tagsGroups = data.tagsGroups;
 
-            Object.assign(this, data);
+            // 读取所有漫画缓存数据
+            const metas = await Promise.all(
+                data.mangas.map(
+                    (id) =>
+                        fs.readJSON(join(this.dirPath, id, 'meta.json'))
+                            .then((data: MangaData) => Promise.resolve(new Manga(data)))
+                            .catch(() => {})
+                ),
+            );
+
+            // 过滤错误信息
+            this.mangas = metas.filter((item): item is Manga => !!item);
+
+            // 删除多余缓存文件
+            const mangaFiles = (await fs.readdir(this.dirPath)).filter((file) => file !== this.fileName);
+
+            await Promise.all(
+                mangaFiles
+                    .filter((id) => !data.mangas.includes(id))
+                    .map((id) => fs.remove(join(this.dirPath, id))),
+            );
         }
-        catch (e) {
-            await this.writeToDisk();
-        }
+
+        // 重写缓存
+        await fs.mkdirp(this.dirPath);
+        await this.writeCache();
     }
 
     /** 讲缓存写入硬盘 */
-    writeToDisk() {
-        return fs.writeFile(
-            this.path,
-            JSON.stringify(omit(this, ['path'])),
-        );
+    async writeCache() {
+        const data: CacheFileData =  {
+            mangas: this.mangas.map((item) => item.id),
+            tags: this.tags,
+            tagsGroups: this.tagsGroups,
+            directories: this.directories,
+        };
+
+        await fs.mkdirp(dirname(this.path));
+        await fs.writeJSON(this.path, data);
+    }
+
+    /** 添加文件夹 */
+    async addDirectory(dirInput: string) {
+        if (this.directories.includes(dirInput)) {
+            handleError(new Error(`This directory is already added: ${dirInput}`));
+            return;
+        }
+
+        const dirs: string[] = [];
+
+        try {
+            const result = await fs.readdir(dirInput);
+            dirs.push(...result);
+        }
+        catch (e) {
+            handleError(e);
+            return;
+        }
+
+        /** 添加文件夹 */
+        this.directories.push(dirInput);
+
+        /** 逐个添加文件 */
+        for (const name of dirs) {
+            const fullPath = join(dirInput, name);
+            const stat = await fs.stat(fullPath);
+            const isDirectory = stat.isDirectory();
+
+            if (!isDirectory && extname(name) !== '.zip') {
+                continue;
+            }
+
+            const manga = new Manga({
+                name,
+                path: fullPath,
+                isDirectory: stat.isDirectory(),
+            });
+
+            await manga.writeCache();
+            this.mangas.push(manga);
+        }
+
+        await this.writeCache();
     }
 }
 
