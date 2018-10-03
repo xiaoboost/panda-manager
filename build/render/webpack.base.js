@@ -68,6 +68,10 @@ module.exports = {
                 },
             },
             {
+                test: /\.node$/,
+                use: 'node-loader'
+            },
+            {
                 test: /\.css$/,
                 use: cssLoader(),
             },
