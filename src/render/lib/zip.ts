@@ -46,8 +46,9 @@ export default class Zip {
     /** 读取 zip 文件 */
     static async loadZip(zipPath: string) {
         const zip = new Zip(path.parse(zipPath).name);
+        const content = await fs.readFile(zipPath);
 
-        await zip._zip.loadAsync(fs.createReadStream(zipPath));
+        await zip._zip.loadAsync(content);
 
         return zip;
     }
@@ -154,7 +155,7 @@ export default class Zip {
 
         // 所有文件
         // TODO: 这里需要做排序，排序规则未定
-        const files = Object.keys(this._zip);
+        const files = Object.keys(this._zip.files);
 
         // 异步迭代所有文件
         for (const key of files) {

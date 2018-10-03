@@ -3,12 +3,18 @@ import 'antd/lib/button/style'
 
 import * as React from 'react';
 import Button from 'antd/lib/button';
+import { appCache } from 'lib/cache';
 import { selectDirectory } from 'lib/utils';
 
 export default class MainList extends React.Component {
     addFolder = async () => {
         const directories = await selectDirectory();
-        console.log(directories);
+
+        if (!directories) {
+            return;
+        }
+
+        appCache.addDirectory(directories);
     }
 
     render() {

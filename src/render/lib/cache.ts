@@ -1,7 +1,7 @@
 import uuid from 'uuid';
-import Zip from './zip';
+import Zip from 'lib/zip';
 import * as fs from 'fs-extra';
-import { join, dirname, extname } from 'path';
+import { join, dirname, parse, extname } from 'path';
 import { compress, imageExtend } from './image';
 
 import {
@@ -59,7 +59,9 @@ class Manga implements MangaData {
     readonly path: string;
 
     /** 当前漫画的缓存数据路径 */
-    readonly cachePath: string;
+    private readonly _cachePath: string;
+    /** 预览图片位置列表 */
+    private readonly _imagePositions: number[][] = [];
 
     constructor({
         name,
@@ -68,20 +70,37 @@ class Manga implements MangaData {
         id = uuid(),
         tagsGroups = [],
     }: MangaInput) {
-        this.name = name;
+        this.name = parse(name).name;
         this.id = id;
         this.path = path;
         this.isDirectory = isDirectory;
         this.tagsGroups = tagsGroups;
-        this.cachePath = join(appRoot, 'cache', this.id);
+        this._cachePath = join(appRoot, 'cache', this.id);
     }
 
     /** 生成缓存并将其写入硬盘 */
     async writeCache() {
-        const images: {
-            name: string;
-            buffer: Buffer;
-        }[] = [];
+        // 封面配置
+        const coverOption = {
+            quality: 90,
+            size: { height: 280 },
+        };
+        // 内容配置
+        const contentOption = {
+            quality: 90,
+            size: { height: 200 },
+        };
+        // 漫画 meta 信息
+        const mangaData: MangaData = {
+            name: this.name,
+            id: this.id,
+            path: this.path,
+            isDirectory: this.isDirectory,
+            tagsGroups: this.tagsGroups,
+        };
+
+        await fs.mkdirp(this._cachePath);
+        await fs.writeJSON(join(this._cachePath, 'meta.json'), mangaData);
 
         // 当前漫画是文件夹
         if (this.isDirectory) {
@@ -91,37 +110,22 @@ class Manga implements MangaData {
         else {
             const zip = await Zip.loadZip(this.path);
 
-            for await (const file of zip.files()) {
-                images.push({
-                    name: file.name,
-                    buffer: file.buffer,
-                });
+            for await (const image of zip.files()) {
+                // 封面
+                if (image.index === 0) {
+                    await fs.writeFile(
+                        join(this._cachePath, 'cover.jpg'),
+                        await compress(image.buffer, 'jpg', coverOption),
+                    );
+                }
+                
+                // 内容
+                await fs.writeFile(
+                    join(this._cachePath, image.path),
+                    await compress(image.buffer, 'jpg', contentOption),
+                );
             }
         }
-
-        // const coverBuffer = await compress(images[0].buffer, 'jpg', {
-        //     quality: 90,
-        //     size: {
-        //         height: 280,
-        //     },
-        // });
-
-        const mangaData: MangaData = {
-            name: this.name,
-            id: this.id,
-            path: this.path,
-            isDirectory: this.isDirectory,
-            tagsGroups: this.tagsGroups,
-        };
-
-        await fs.mkdirp(this.cachePath);
-        await fs.writeJSON(this.path, mangaData);
-
-        // await fs.writeFile(join(this.cachePath, 'cover.jpg'), images[0].buffer);
-
-        // debugger;
-        // const coverImage = images[0];
-
     }
 }
 
@@ -176,6 +180,7 @@ class AppCache {
             this.checkCacheData(data);
             this.tags = data.tags;
             this.tagsGroups = data.tagsGroups;
+            this.directories = data.directories;
 
             // 读取所有漫画缓存数据
             const metas = await Promise.all(
@@ -183,7 +188,7 @@ class AppCache {
                     (id) =>
                         fs.readJSON(join(this.dirPath, id, 'meta.json'))
                             .then((data: MangaData) => Promise.resolve(new Manga(data)))
-                            .catch(() => {})
+                            .catch(() => void 0)
                 ),
             );
 
