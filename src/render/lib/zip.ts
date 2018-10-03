@@ -2,65 +2,71 @@ import fs from 'fs-extra';
 import path from 'path';
 import JSZip from 'jszip';
 
-import { isString, isArray, handleError } from './utils';
+import {
+    isArray,
+    isString,
+    handleError,
+} from 'lib/utils';
 
-/** 读取文件夹内所有文件的路径 */
+/**
+ * 读取文件子路径
+ * @param {string} dir 输入路径
+ *  - 如果 dir 是文件，那么返回只包含它本身的数组
+ *  - 如果 dir 是文件夹，则返回它内部所有文件的路径（子文件夹不包含在内）
+ */
 async function readDir(dir: string) {
-    const result: string[] = [];
     const stat = await fs.stat(dir);
 
     // 该路径是目录
     if (stat.isDirectory()) {
+        const result: string[] = [];
         const files = await fs.readdir(dir);
 
         for (const file of files) {
-            result.push(...await readDir(path.join(dir, file)))
+            const child = path.join(dir, file);
+            const childStat = await fs.stat(child);
+
+            if (!childStat.isDirectory()) {
+                result.push(child);
+            }
         }
+
+        return result;
     }
     // 该路径是文件
     else {
-        result.push(dir);
+        return [dir];
     }
-
-    return result;
 }
 
+/**
+ * Zip 压缩包类
+ */
 export default class Zip {
     /** 读取 zip 文件 */
     static async loadZip(zipPath: string) {
         const zip = new Zip(path.parse(zipPath).name);
-        const zipContent = await fs.readFile(zipPath);
 
-        await zip._zip.loadAsync(zipContent);
+        await zip._zip.loadAsync(fs.createReadStream(zipPath));
 
         return zip;
     }
-    /** 读取需要压缩的文件 */
-    static async loadFiles(filesPath: string | string[]) {
-        let currentDir: string;
+    /** 读取需要压缩的文件夹 */
+    static async loadDirectory(directory: string) {
+        const { name } = path.parse(directory);
+        const zipper = new Zip(name);
 
-        if (isString(filesPath)) {
-            const stat = await fs.stat(filesPath);
-            if (stat.isDirectory()) {
-                currentDir = filesPath;
-            }
-            else {
-                currentDir = path.resolve(filesPath, '..');
-            }
-        }
-        else {
-            currentDir = path.resolve(filesPath[0], '..');
-        }
-
-        const zipper = new Zip(path.parse(currentDir).name);
-
-        await zipper.append(filesPath);
+        await zipper.append(directory, directory);
         return zipper;
     }
 
     /** 压缩包数据本体 */
     private _zip: JSZip;
-    /** 压缩包名称 */
+
+    /**
+     * 压缩包名称
+     *  - 不包含 .zip 后缀
+     */
     name: string;
 
     constructor(name: string) {
@@ -69,17 +75,11 @@ export default class Zip {
     }
 
     /** 添加文件或者文件夹到压缩包 */
-    async append(filePaths: string | string[], basePath?: string) {
-        const files: string[] = [];
+    async append(inputs: string | string[], basePath?: string) {
+        const paths = isString(inputs) ? [inputs] : inputs;
+        const deepPaths = await Promise.all(paths.map(readDir));
+        const files = deepPaths.reduce((ans, item) => ans.concat(item), []);
 
-        if (typeof filePaths === 'string') {
-            files.push(...await readDir(filePaths));
-        }
-        else {
-            const deepPaths = await Promise.all(filePaths.map(readDir));
-            files.push(...deepPaths.reduce((ans, item) => ans.concat(item), []));
-        }
-        
         for (const filePath of files) {
             const content = await fs.readFile(filePath);
             const pathInZip = path.normalize(
@@ -150,7 +150,16 @@ export default class Zip {
     }
     /** 生成异步的文件列表迭代器 */
     async * files() {
-        for (const [innerPath, data] of Object.entries(this._zip.files)) {
+        let index = 0;
+
+        // 所有文件
+        // TODO: 这里需要做排序，排序规则未定
+        const files = Object.keys(this._zip);
+
+        // 异步迭代所有文件
+        for (const key of files) {
+            const data = this._zip.files[key];
+
             if (data.dir) {
                 continue;
             }
@@ -159,8 +168,9 @@ export default class Zip {
 
             yield {
                 buffer,
-                path: innerPath,
-                name: path.basename(innerPath),
+                path: key,
+                index: index++,
+                name: path.basename(key),
                 lastModify: new Date(data.date).getTime(),
             };
         }
