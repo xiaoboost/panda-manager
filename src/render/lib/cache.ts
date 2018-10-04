@@ -1,5 +1,6 @@
 import uuid from 'uuid';
 import Zip from 'lib/zip';
+import sizeOf from 'image-size';
 import * as fs from 'fs-extra';
 import { join, dirname, parse, extname } from 'path';
 import { compress, imageExtend } from './image';
@@ -58,10 +59,27 @@ class Manga implements MangaData {
     readonly id: string;
     readonly path: string;
 
+    /** 预览图片位置列表 */
+    readonly previewPositions: number[][] = [];
     /** 当前漫画的缓存数据路径 */
     private readonly _cachePath: string;
-    /** 预览图片位置列表 */
-    private readonly _imagePositions: number[][] = [];
+
+    /** 静态属性配置 */
+    static option = {
+        /** 压缩配置 */
+        compressOption: {
+            cover: {
+                quality: 95,
+                size: { height: 350 },
+            },
+            content: {
+                quality: 80,
+                size: { height: 200 },
+            },
+        },
+        /** 预览分页数量 */
+        pageCount: 40,
+    };
 
     constructor({
         name,
@@ -78,18 +96,56 @@ class Manga implements MangaData {
         this._cachePath = join(appRoot, 'cache', this.id);
     }
 
+    /** 从文件夹生成预览 */
+    createPreviewFromDirectory() {
+
+    }
+    /** 从压缩包生成预览 */
+    async createPreviewFromZip() {
+        this.previewPositions.length = 0;
+
+        let image: Buffer;
+        const zip = await Zip.loadZip(this.path);
+
+        for await (const file of zip.files()) {
+            // 封面
+            if (file.index === 0) {
+                await fs.writeFile(
+                    join(this._cachePath, 'cover.jpg'),
+                    await compress(file.buffer, 'jpg', Manga.option.compressOption.cover),
+                );
+            }
+
+            const currentImage = await compress(file.buffer, 'jpg', Manga.option.compressOption.content);
+            const page = Math.floor(file.index / Manga.option.pageCount);
+            const index = file.index % Manga.option.pageCount;
+
+            // 当前页面的第一幅预览
+            if (index === 0) {
+                image = currentImage;
+                this.previewPositions[page] = [0];
+            }
+            // 其他预览图
+            else {
+                this.previewPositions[page].push(sizeOf(image!).width);
+                image = await imageExtend(image!, currentImage);
+
+                // 当前页面的最后一幅预览
+                if (
+                    index === file.count - 1 ||
+                    index === Manga.option.pageCount - 1
+                ) {
+                    await fs.writeFile(
+                        join(this._cachePath, String(page).padStart(3, '0') + '.jpg'),
+                        image,
+                    );
+                }
+            }
+        }
+    }
+
     /** 生成缓存并将其写入硬盘 */
     async writeCache() {
-        // 封面配置
-        const coverOption = {
-            quality: 90,
-            size: { height: 280 },
-        };
-        // 内容配置
-        const contentOption = {
-            quality: 90,
-            size: { height: 200 },
-        };
         // 漫画 meta 信息
         const mangaData: MangaData = {
             name: this.name,
@@ -104,27 +160,11 @@ class Manga implements MangaData {
 
         // 当前漫画是文件夹
         if (this.isDirectory) {
-
+            this.createPreviewFromDirectory();
         }
         // 当前漫画是压缩包
         else {
-            const zip = await Zip.loadZip(this.path);
-
-            for await (const image of zip.files()) {
-                // 封面
-                if (image.index === 0) {
-                    await fs.writeFile(
-                        join(this._cachePath, 'cover.jpg'),
-                        await compress(image.buffer, 'jpg', coverOption),
-                    );
-                }
-                
-                // 内容
-                await fs.writeFile(
-                    join(this._cachePath, image.path),
-                    await compress(image.buffer, 'jpg', contentOption),
-                );
-            }
+            this.createPreviewFromZip();
         }
     }
 }
@@ -265,6 +305,11 @@ class AppCache {
         }
 
         await this.writeCache();
+    }
+
+    /** 刷新缓存 */
+    async refresh() {
+
     }
 }
 

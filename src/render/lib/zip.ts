@@ -171,6 +171,7 @@ export default class Zip {
                 buffer,
                 path: key,
                 index: index++,
+                count: files.length,
                 name: path.basename(key),
                 lastModify: new Date(data.date).getTime(),
             };
