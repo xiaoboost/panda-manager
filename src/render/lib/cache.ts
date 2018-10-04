@@ -18,12 +18,18 @@ export interface MangaData {
     name: string;
     /** 当前同人志的 ID */
     id: string;
-    /** 真实文件存在的路径 */
-    path: string;
-    /** 当前同人志是否是文件夹 */
-    isDirectory: boolean;
     /** 当前漫画的 tag 集合 */
     tagsGroups: TagsGroupData[];
+
+    /** 对应的实际文件属性 */
+    file: {
+        /** 真实文件的路径 */
+        path: string;
+        /** 此路径是否是文件夹 */
+        isDirectory: boolean;
+        /**此文件（夹）最后修改的时间 */
+        lastModified: number;
+    };
 }
 
 /** 标签数据 */
@@ -43,7 +49,7 @@ export interface TagsGroupData extends TagData {
 }
 
 type MangaInput =
-    Pick<MangaData, 'name' | 'path' | 'isDirectory'> &
+    Pick<MangaData, 'name' | 'file'> &
     Partial<Pick<MangaData, 'id' | 'tagsGroups'>>;
 
 type CacheFileData =
@@ -53,12 +59,16 @@ type CacheFileData =
 /** 同人志数据 */
 class Manga implements MangaData {
     name: string;
-    isDirectory: boolean;
     tagsGroups: TagsGroupData[];
 
-    readonly id: string;
-    readonly path: string;
+    file: {
+        path: string;
+        isDirectory: boolean;
+        lastModified: number;
+    };
 
+    /** 漫画的唯一编号 */
+    readonly id: string;
     /** 预览图片位置列表 */
     readonly previewPositions: number[][] = [];
     /** 当前漫画的缓存数据路径 */
@@ -83,15 +93,13 @@ class Manga implements MangaData {
 
     constructor({
         name,
-        path,
-        isDirectory,
+        file,
         id = uuid(),
         tagsGroups = [],
     }: MangaInput) {
         this.name = parse(name).name;
         this.id = id;
-        this.path = path;
-        this.isDirectory = isDirectory;
+        this.file = { ... file };
         this.tagsGroups = tagsGroups;
         this._cachePath = join(appRoot, 'cache', this.id);
     }
@@ -105,7 +113,7 @@ class Manga implements MangaData {
         this.previewPositions.length = 0;
 
         let image: Buffer;
-        const zip = await Zip.loadZip(this.path);
+        const zip = await Zip.loadZip(this.file.path);
 
         for await (const file of zip.files()) {
             // 封面
@@ -150,8 +158,7 @@ class Manga implements MangaData {
         const mangaData: MangaData = {
             name: this.name,
             id: this.id,
-            path: this.path,
-            isDirectory: this.isDirectory,
+            file: this.file,
             tagsGroups: this.tagsGroups,
         };
 
@@ -159,14 +166,18 @@ class Manga implements MangaData {
         await fs.writeJSON(join(this._cachePath, 'meta.json'), mangaData);
 
         // 当前漫画是文件夹
-        if (this.isDirectory) {
-            this.createPreviewFromDirectory();
+        if (this.file.isDirectory) {
+            await this.createPreviewFromDirectory();
         }
         // 当前漫画是压缩包
         else {
-            this.createPreviewFromZip();
+            await this.createPreviewFromZip();
         }
+
+        console.log('over');
     }
+
+    /** 检查 */
 }
 
 /** 缓存数据 */
@@ -290,14 +301,18 @@ class AppCache {
             const stat = await fs.stat(fullPath);
             const isDirectory = stat.isDirectory();
 
+            // 跳过非 zip 后缀的文件
             if (!isDirectory && extname(name) !== '.zip') {
                 continue;
             }
 
             const manga = new Manga({
                 name,
-                path: fullPath,
-                isDirectory: stat.isDirectory(),
+                file: {
+                    path: fullPath,
+                    isDirectory: stat.isDirectory(),
+                    lastModified: new Date(stat.mtime).getTime(),
+                },
             });
 
             await manga.writeCache();
@@ -308,7 +323,7 @@ class AppCache {
     }
 
     /** 刷新缓存 */
-    async refresh() {
+    async refresh(force: false) {
 
     }
 }
