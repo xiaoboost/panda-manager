@@ -1,184 +1,24 @@
-import uuid from 'uuid';
-import Zip from 'lib/zip';
-import sizeOf from 'image-size';
 import * as fs from 'fs-extra';
-import { join, dirname, parse, extname } from 'path';
-import { compress, imageExtend } from './image';
+import Manga, { MangaData, TagData, TagsGroupData } from './manga';
+
+import {
+    join,
+    basename,
+    dirname,
+    extname,
+} from 'path';
 
 import {
     appRoot,
+    remove,
     isArray,
     isStrictObject,
     handleError,
 } from './utils';
 
-/** 同人志元数据 */
-export interface MangaData {
-    /** 显示名称 */
-    name: string;
-    /** 当前同人志的 ID */
-    id: string;
-    /** 当前漫画的 tag 集合 */
-    tagsGroups: TagsGroupData[];
-
-    /** 对应的实际文件属性 */
-    file: {
-        /** 真实文件的路径 */
-        path: string;
-        /** 此路径是否是文件夹 */
-        isDirectory: boolean;
-        /**此文件（夹）最后修改的时间 */
-        lastModified: number;
-    };
-}
-
-/** 标签数据 */
-export interface TagData {
-    /** 标签的唯一 ID */
-    id: string;
-    /** 标签的真实名称 */
-    name: string;
-    /** 标签的显示名称 */
-    display: string;
-}
-
-/** 标签元数据 */
-export interface TagsGroupData extends TagData {
-    /** 标签集合内含的标签 */
-    tags: string[];
-}
-
-type MangaInput =
-    Pick<MangaData, 'name' | 'file'> &
-    Partial<Pick<MangaData, 'id' | 'tagsGroups'>>;
-
 type CacheFileData =
     Pick<AppCache, 'tags' | 'tagsGroups' | 'directories'> &
     { mangas: string[] };
-
-/** 同人志数据 */
-class Manga implements MangaData {
-    name: string;
-    tagsGroups: TagsGroupData[];
-
-    file: {
-        path: string;
-        isDirectory: boolean;
-        lastModified: number;
-    };
-
-    /** 漫画的唯一编号 */
-    readonly id: string;
-    /** 预览图片位置列表 */
-    readonly previewPositions: number[][] = [];
-    /** 当前漫画的缓存数据路径 */
-    private readonly _cachePath: string;
-
-    /** 静态属性配置 */
-    static option = {
-        /** 压缩配置 */
-        compressOption: {
-            cover: {
-                quality: 95,
-                size: { height: 350 },
-            },
-            content: {
-                quality: 80,
-                size: { height: 200 },
-            },
-        },
-        /** 预览分页数量 */
-        pageCount: 40,
-    };
-
-    constructor({
-        name,
-        file,
-        id = uuid(),
-        tagsGroups = [],
-    }: MangaInput) {
-        this.name = parse(name).name;
-        this.id = id;
-        this.file = { ... file };
-        this.tagsGroups = tagsGroups;
-        this._cachePath = join(appRoot, 'cache', this.id);
-    }
-
-    /** 从文件夹生成预览 */
-    createPreviewFromDirectory() {
-
-    }
-    /** 从压缩包生成预览 */
-    async createPreviewFromZip() {
-        this.previewPositions.length = 0;
-
-        let image: Buffer;
-        const zip = await Zip.loadZip(this.file.path);
-
-        for await (const file of zip.files()) {
-            // 封面
-            if (file.index === 0) {
-                await fs.writeFile(
-                    join(this._cachePath, 'cover.jpg'),
-                    await compress(file.buffer, 'jpg', Manga.option.compressOption.cover),
-                );
-            }
-
-            const currentImage = await compress(file.buffer, 'jpg', Manga.option.compressOption.content);
-            const page = Math.floor(file.index / Manga.option.pageCount);
-            const index = file.index % Manga.option.pageCount;
-
-            // 当前页面的第一幅预览
-            if (index === 0) {
-                image = currentImage;
-                this.previewPositions[page] = [0];
-            }
-            // 其他预览图
-            else {
-                this.previewPositions[page].push(sizeOf(image!).width);
-                image = await imageExtend(image!, currentImage);
-
-                // 当前页面的最后一幅预览
-                if (
-                    index === file.count - 1 ||
-                    index === Manga.option.pageCount - 1
-                ) {
-                    await fs.writeFile(
-                        join(this._cachePath, String(page).padStart(3, '0') + '.jpg'),
-                        image,
-                    );
-                }
-            }
-        }
-    }
-
-    /** 生成缓存并将其写入硬盘 */
-    async writeCache() {
-        // 漫画 meta 信息
-        const mangaData: MangaData = {
-            name: this.name,
-            id: this.id,
-            file: this.file,
-            tagsGroups: this.tagsGroups,
-        };
-
-        await fs.mkdirp(this._cachePath);
-        await fs.writeJSON(join(this._cachePath, 'meta.json'), mangaData);
-
-        // 当前漫画是文件夹
-        if (this.file.isDirectory) {
-            await this.createPreviewFromDirectory();
-        }
-        // 当前漫画是压缩包
-        else {
-            await this.createPreviewFromZip();
-        }
-
-        console.log('over');
-    }
-
-    /** 检查 */
-}
 
 /** 缓存数据 */
 class AppCache {
@@ -277,29 +117,63 @@ class AppCache {
     /** 添加文件夹 */
     async addDirectory(dirInput: string) {
         if (this.directories.includes(dirInput)) {
-            handleError(new Error(`This directory is already added: ${dirInput}`));
+            handleError(101, dirInput);
             return;
         }
 
-        const dirs: string[] = [];
-
-        try {
-            const result = await fs.readdir(dirInput);
-            dirs.push(...result);
-        }
-        catch (e) {
-            handleError(e);
-            return;
-        }
-
-        /** 添加文件夹 */
         this.directories.push(dirInput);
 
-        /** 逐个添加文件 */
-        for (const name of dirs) {
+        await this.refreshDirectories(dirInput);
+        await this.writeCache();
+    }
+
+    /**
+     * 刷新所有现存文件的缓存
+     * @param {boolean} force 是否强制刷新
+     *  - true 将会强制刷新所有漫画缓存（慎用）
+     *  - false 只会刷新有修改记录的漫画缓存
+     */
+    async refreshCache(force = false) {
+
+    }
+
+    /**
+     * 刷新文件夹中所包含的文件
+     * @param {boolean} force 是否强制刷新
+     *  - true 将会强制刷新该文件夹下所有漫画的缓存（慎用）
+     *  - false 只会刷新有修改记录的漫画缓存
+     */
+    async refreshDirectories(dirInput: string, force = false) {
+        if (!this.directories.includes(dirInput)) {
+            handleError(102, dirInput);
+            return;
+        }
+
+        // 当前文件夹下已经被缓存的漫画
+        const cacheMangas = this.mangas.filter((item) => dirname(item.file.path) === dirInput);
+        // 当前文件夹下实际存在的漫画
+        const dirMangas: string[] | Error = await fs.readdir(dirInput).catch((e) => e);
+
+        // 发生错误
+        if (!isArray(dirMangas)) {
+            handleError(100, dirInput);
+            remove(this.directories, dirInput);
+            return;
+        }
+        
+        // 删除已经不存在的缓存
+        await Promise.all(
+            cacheMangas
+                .filter((item) => !dirMangas.includes(basename(item.file.path)))
+                .map((item) => item.remove()),
+        );
+
+        // 刷新实际存在的漫画缓存
+        for (const name of dirMangas) {
             const fullPath = join(dirInput, name);
             const stat = await fs.stat(fullPath);
             const isDirectory = stat.isDirectory();
+            const lastModified = new Date(stat.mtime).getTime();
 
             // 跳过非 zip 后缀的文件
             if (!isDirectory && extname(name) !== '.zip') {
@@ -318,13 +192,6 @@ class AppCache {
             await manga.writeCache();
             this.mangas.push(manga);
         }
-
-        await this.writeCache();
-    }
-
-    /** 刷新缓存 */
-    async refresh(force: false) {
-
     }
 }
 
