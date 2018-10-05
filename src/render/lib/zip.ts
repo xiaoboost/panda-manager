@@ -86,9 +86,9 @@ export default class Zip {
             const pathInZip = path.normalize(
                 basePath
                     ? path.relative(basePath, filePath)
-                    : filePath
+                    : filePath,
             );
-            
+
             this._zip.file(pathInZip, content);
         }
     }
@@ -121,12 +121,12 @@ export default class Zip {
                         .on('error', () => {
                             errorFiles.push(innerPath);
                             resolve();
-                        })
+                        }),
                     )
                     .catch(() => {
                         errorFiles.push(innerPath);
                         resolve();
-                    })
+                    });
             }));
         }
     }
@@ -143,8 +143,8 @@ export default class Zip {
                 })
                 .pipe(fs.createWriteStream(targetFile))
                 .on('finish', () => resolve(true))
-                .on('error', (err: Error) => {
-                    handleError(err, `Can not write this file: ${targetFile}`);
+                .on('error', () => {
+                    handleError(104, targetFile);
                     resolve(false);
                 });
         });

@@ -13,8 +13,8 @@ appCache.readCache();
 render(
     <HashRouter>
         <Switch>
-            <Route exact path="/" component={MainList} />
-            <Route path="/detail/:id(\d+)" component={ItemDetail} />
+            <Route exact path='/' component={MainList} />
+            <Route path='/detail/:id(\d+)' component={ItemDetail} />
         </Switch>
     </HashRouter>,
     document.getElementById('app')!,

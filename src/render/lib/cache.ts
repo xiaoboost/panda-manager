@@ -78,8 +78,8 @@ class AppCache {
                 data.mangas.map(
                     (id) =>
                         fs.readJSON(join(this.dirPath, id, 'meta.json'))
-                            .then((data: MangaData) => Promise.resolve(new Manga(data)))
-                            .catch(() => void 0)
+                            .then((item: MangaData) => Promise.resolve(new Manga(item)))
+                            .catch(() => void 0),
                 ),
             );
 
@@ -160,7 +160,7 @@ class AppCache {
             remove(this.directories, dirInput);
             return;
         }
-        
+
         // 删除已经不存在的缓存
         await Promise.all(
             cacheMangas

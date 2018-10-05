@@ -24,7 +24,7 @@ export interface MangaData {
         path: string;
         /** 此路径是否是文件夹 */
         isDirectory: boolean;
-        /**此文件（夹）最后修改的时间 */
+        /** 此文件（夹）最后修改的时间 */
         lastModified: number;
     };
 }

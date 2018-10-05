@@ -6,7 +6,7 @@ type CompressOption = (JpegOptions | PngOptions) & {
         width?: number;
         height?: number;
     };
-}
+};
 
 /** 压缩图片 */
 export function compress(

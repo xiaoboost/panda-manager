@@ -1,5 +1,5 @@
 import './component.styl';
-import 'antd/lib/button/style'
+import 'antd/lib/button/style';
 
 import * as React from 'react';
 import Button from 'antd/lib/button';
@@ -35,13 +35,13 @@ export default class MainList extends React.Component<{}, State> {
     render() {
         const { mangas } = this.state;
 
-        return <div id="main-list">
-            <header className="main-list-header">
+        return <div id='main-list'>
+            <header className='main-list-header'>
                 <Button onClick={this.addFolder}>添加文件夹</Button>
             </header>
-            <article className="main-list-article">
+            <article className='main-list-article'>
                 {mangas.map((item) =>
-                    <div key={item.id}>{ item.name }</div>
+                    <div key={item.id}>{ item.name }</div>,
                 )}
             </article>
         </div>;

@@ -1,4 +1,5 @@
-export function omit<T>(from: T, keys: string[]) {
+export function omit<T extends object>(from: T, keys: string[]) {
+    // tslint:disable-next-line prefer-object-spread
     const result = Object.assign({}, from);
 
     for (const key of keys) {
@@ -23,7 +24,7 @@ export const $eval: typeof eval = (window as any).eval;
 
 // disabled eval
 if (process.env.NODE_ENV !== 'development') {
-    (window as any).eval = global.eval = function() {
-        throw new Error(`Sorry, this app does not support window.eval().`)
-    }
+    (window as any).eval = global.eval = () => {
+        throw new Error(`Sorry, this app does not support window.eval().`);
+    };
 }
