@@ -1,4 +1,5 @@
 .vscode/
 dist/
 doc/
+_temp/
 node_modules/
