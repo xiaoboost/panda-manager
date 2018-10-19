@@ -153,11 +153,3 @@ export function isPrimitive(x: any): x is number | string | boolean | symbol {
         type === 'boolean'
     );
 }
-
-/**
- * Check if val is a valid array index.
- */
-export function isValidArrayIndex(x: any): x is number {
-    const n = parseFloat(String(x));
-    return n >= 0 && Math.floor(n) === n && isFinite(x);
-}
