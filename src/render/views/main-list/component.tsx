@@ -4,18 +4,20 @@ import 'antd/lib/button/style';
 import * as React from 'react';
 import Button from 'antd/lib/button';
 
+import store from 'src/render/store';
 import { clone } from 'lib/utils';
-import { appCache } from 'lib/cache';
-import { MangaData } from 'lib/manga';
+import { MangaData } from 'src/render/store/manga';
 import { selectDirectory } from 'lib/com';
 
 interface State {
+    loading: boolean;
     mangas: MangaData[];
 }
 
 export default class MainList extends React.Component<{}, State> {
     state: State = {
-        mangas: clone(appCache.mangas),
+        loading: false,
+        mangas: [],
     };
 
     addFolder = async () => {
@@ -25,11 +27,18 @@ export default class MainList extends React.Component<{}, State> {
             return;
         }
 
-        await appCache.addDirectory(directories);
+        await store.addDirectory(directories);
 
         this.setState({
-            mangas: clone(appCache.mangas),
+            mangas: clone(store.mangas),
         });
+    }
+
+    componentWillMount() {
+        if (!store.isLoaded) {
+            store.readCache()
+                .then(() => this.setState({ loading: true }));
+        }
     }
 
     render() {

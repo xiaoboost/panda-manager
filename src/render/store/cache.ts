@@ -14,14 +14,14 @@ import {
     isArray,
     isStrictObject,
     handleError,
-} from './utils';
+} from '../lib/utils';
 
 type CacheFileData =
     Pick<AppCache, 'tags' | 'tagsGroups' | 'directories'> &
     { mangas: string[] };
 
 /** 缓存数据 */
-class AppCache {
+export default class AppCache {
     /** 所有同人志 */
     mangas: Manga[] = [];
     /** 所有标签 */
@@ -30,6 +30,8 @@ class AppCache {
     tagsGroups: AnyObject<TagsGroupData> = {};
     /** 当前所有文件夹 */
     directories: string[] = [];
+    /** 初始化是否完成 */
+    isLoaded = false;
 
     /** 缓存文件名称 */
     readonly fileName = 'meta.json';
@@ -99,6 +101,9 @@ class AppCache {
         // 重写缓存
         await fs.mkdirp(this.dirPath);
         await this.writeCache();
+
+        // 完成加载
+        this.isLoaded = true;
     }
 
     /** 讲缓存写入硬盘 */
@@ -165,7 +170,10 @@ class AppCache {
         await Promise.all(
             cacheMangas
                 .filter((item) => !dirMangas.includes(basename(item.file.path)))
-                .map((item) => item.remove()),
+                .map((item) => {
+                    remove(this.mangas, item);
+                    return fs.remove(item.cachePath);
+                }),
         );
 
         // 刷新实际存在的漫画缓存
@@ -194,6 +202,3 @@ class AppCache {
         }
     }
 }
-
-/** 全局缓存 */
-export const appCache = new AppCache();

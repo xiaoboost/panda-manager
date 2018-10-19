@@ -3,9 +3,8 @@ import Zip from 'lib/zip';
 import sizeOf from 'image-size';
 import * as fs from 'fs-extra';
 import { join, parse } from 'path';
-import { appCache } from './cache';
-import { appRoot, remove } from 'lib/utils';
-import { compress, imageExtend } from './image';
+import { appRoot } from 'lib/utils';
+import { compress, imageExtend } from '../lib/image';
 
 /** 同人志元数据 */
 export interface MangaData {
@@ -65,7 +64,7 @@ export default class Manga implements MangaData {
     /** 预览图片位置列表 */
     readonly previewPositions: number[] = [];
     /** 当前漫画的缓存数据路径 */
-    private readonly _cachePath: string;
+    readonly cachePath: string;
 
     /** 静态属性配置 */
     static option = {
@@ -94,7 +93,7 @@ export default class Manga implements MangaData {
         this.id = id;
         this.file = { ... file };
         this.tagsGroups = tagsGroups;
-        this._cachePath = join(appRoot, 'cache', this.id);
+        this.cachePath = join(appRoot, 'cache', this.id);
     }
 
     /** 从文件夹生成预览 */
@@ -112,7 +111,7 @@ export default class Manga implements MangaData {
             // 封面
             if (file.index === 0) {
                 await fs.writeFile(
-                    join(this._cachePath, 'cover.jpg'),
+                    join(this.cachePath, 'cover.jpg'),
                     await compress(file.buffer, 'jpg', Manga.option.compressOption.cover),
                 );
             }
@@ -133,7 +132,7 @@ export default class Manga implements MangaData {
                 // 最后一幅预览
                 if (file.index === file.count - 1) {
                     await fs.writeFile(
-                        join(this._cachePath, 'preview.jpg'),
+                        join(this.cachePath, 'preview.jpg'),
                         image,
                     );
                 }
@@ -152,8 +151,8 @@ export default class Manga implements MangaData {
             previewPositions: this.previewPositions,
         };
 
-        await fs.mkdirp(this._cachePath);
-        await fs.writeJSON(join(this._cachePath, 'meta.json'), mangaData);
+        await fs.mkdirp(this.cachePath);
+        await fs.writeJSON(join(this.cachePath, 'meta.json'), mangaData);
 
         // 当前漫画是文件夹
         if (this.file.isDirectory) {
@@ -165,11 +164,5 @@ export default class Manga implements MangaData {
         }
 
         console.log('over');
-    }
-
-    /** 移除自身缓存 */
-    remove() {
-        remove(appCache.mangas, this);
-        return fs.remove(this._cachePath);
     }
 }
