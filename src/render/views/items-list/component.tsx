@@ -1,13 +1,11 @@
 import './component.styl';
-import 'antd/lib/button/style';
+// import 'antd/lib/button/style';
 
 import * as React from 'react';
-import Button from 'antd/lib/button';
+// import Button from 'antd/lib/button';
 
-import store from 'src/render/store';
+import store, { MangaData } from 'src/render/store';
 import { clone } from 'lib/utils';
-import { MangaData } from 'src/render/store/manga';
-import { selectDirectory } from 'lib/com';
 
 interface State {
     loading: boolean;
@@ -20,24 +18,22 @@ export default class MainList extends React.Component<{}, State> {
         mangas: [],
     };
 
-    addFolder = async () => {
-        const directories = await selectDirectory();
-
-        if (!directories) {
-            return;
+    async componentWillMount() {
+        // 已经读取了缓存
+        if (store.isLoaded) {
+            this.setState({
+                mangas: clone(store.mangas),
+            });
         }
+        else {
+            this.setState({ loading: true });
 
-        await store.addDirectory(directories);
+            await store.readCache();
 
-        this.setState({
-            mangas: clone(store.mangas),
-        });
-    }
-
-    componentWillMount() {
-        if (!store.isLoaded) {
-            store.readCache()
-                .then(() => this.setState({ loading: true }));
+            this.setState({
+                loading: false,
+                mangas: clone(store.mangas),
+            });
         }
     }
 
@@ -46,7 +42,6 @@ export default class MainList extends React.Component<{}, State> {
 
         return <div id='main-list'>
             <header className='main-list-header'>
-                <Button onClick={this.addFolder}>添加文件夹</Button>
             </header>
             <article className='main-list-article'>
                 {mangas.map((item) =>

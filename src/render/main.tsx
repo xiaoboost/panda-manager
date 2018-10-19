@@ -4,13 +4,13 @@ import * as React from 'react';
 import { render } from 'react-dom';
 import { HashRouter, Route, Switch } from 'react-router-dom';
 
-import MainList from 'views/main-list/component';
+import ItemsList from 'views/items-list/component';
 import ItemDetail from 'views/item-detail/component';
 
 render(
     <HashRouter>
         <Switch>
-            <Route exact path='/' component={MainList} />
+            <Route exact path='/' component={ItemsList} />
             <Route path='/detail/:id(\d+)' component={ItemDetail} />
         </Switch>
     </HashRouter>,
