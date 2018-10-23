@@ -9,8 +9,8 @@ interface Props {
 
 export default class ItemDetail extends React.Component<Props> {
     render() {
-        return <div id='item-detail'>
+        return <main id='item-detail'>
             项目详情
-        </div>;
+        </main>;
     }
 }

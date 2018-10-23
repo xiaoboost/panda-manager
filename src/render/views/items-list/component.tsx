@@ -1,8 +1,9 @@
 import './component.styl';
-// import 'antd/lib/button/style';
+import 'antd/lib/icon/style';
 
 import * as React from 'react';
-// import Button from 'antd/lib/button';
+import Icon from 'antd/lib/icon';
+import { Link } from 'react-router-dom';
 
 import store, { MangaData } from 'src/render/store';
 import { clone } from 'lib/utils';
@@ -40,14 +41,17 @@ export default class MainList extends React.Component<{}, State> {
     render() {
         const { mangas } = this.state;
 
-        return <div id='main-list'>
+        return <main id='main-list'>
             <header className='main-list-header'>
+                <Link to={'/setting'}>
+                    <Icon type='setting' theme='outlined' />
+                </Link>
             </header>
             <article className='main-list-article'>
                 {mangas.map((item) =>
-                    <div key={item.id}>{ item.name }</div>,
+                    <div key={item.id}>{item.name}</div>,
                 )}
             </article>
-        </div>;
+        </main>;
     }
 }
