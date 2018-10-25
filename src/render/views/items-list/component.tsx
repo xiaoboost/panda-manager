@@ -42,7 +42,7 @@ export default class MainList extends React.Component<{}, State> {
         const { mangas } = this.state;
 
         return <main id='main-list'>
-            <header className='main-list-header'>
+            <header className='page-header main-list-header'>
                 <Link to={'/setting'}>
                     <Icon type='setting' theme='outlined' />
                 </Link>
