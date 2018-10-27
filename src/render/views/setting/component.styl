@@ -20,13 +20,30 @@ main#main-setting {
             box-shadow: 0 1px 5px #aaa;
         }
 
-        .settings-box {
+        .settings-line, .settings-subline {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            cursor: pointer;
             min-height: 48px;
-            padding: 0 20px;
+            padding: 14px 20px;
+        }
+
+        .settings-subline {
+            padding: 12px 20px 12px 24px;
+            min-height: 44px;
+        }
+
+        .anticon {
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .settings-line__name, .settings-line__subname {
+            line-height: 140%;
+        }
+
+        .settings-line__subname {
+            color: rgb(95, 99, 104);
         }
     }
 }
