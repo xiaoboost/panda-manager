@@ -1,4 +1,6 @@
 import * as fs from 'fs-extra';
+import { observable  } from 'mobx';
+
 import Manga, { MangaData, TagData, TagsGroupData } from './manga';
 
 import {
@@ -23,15 +25,24 @@ type CacheFileData =
 /** 缓存数据 */
 export default class AppCache {
     /** 所有同人志 */
+    @observable
     mangas: Manga[] = [];
+
     /** 所有标签 */
+    @observable
     tags: AnyObject<TagData> = {};
+
     /** 所有标签集合 */
+    @observable
     tagsGroups: AnyObject<TagsGroupData> = {};
+
     /** 当前所有文件夹 */
+    @observable
     directories: string[] = [];
+
     /** 初始化是否完成 */
-    isLoaded = false;
+    @observable
+    isLoading = false;
 
     /** 缓存文件名称 */
     readonly fileName = 'meta.json';
@@ -103,7 +114,7 @@ export default class AppCache {
         await this.writeCache();
 
         // 完成加载
-        this.isLoaded = true;
+        this.isLoading = true;
     }
 
     /** 讲缓存写入硬盘 */

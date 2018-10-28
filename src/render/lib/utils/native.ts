@@ -1,14 +1,6 @@
-export function omit<T extends object>(from: T, keys: string[]) {
-    // tslint:disable-next-line prefer-object-spread
-    const result = Object.assign({}, from);
-
-    for (const key of keys) {
-        delete result[key];
-    }
-
-    return result as T;
-}
-
+/**
+ * 移除数组中的某个值
+ */
 export function remove<T>(arr: T[], item: T) {
     if (arr.length) {
         const index = arr.indexOf(item);
@@ -17,6 +9,18 @@ export function remove<T>(arr: T[], item: T) {
             return;
         }
     }
+}
+
+/**
+ * Define a property.
+ */
+export function def(obj: object, key: string | symbol, val: any, enumerable = false) {
+    Object.defineProperty(obj, key, {
+        value: val,
+        enumerable,
+        writable: true,
+        configurable: true,
+    });
 }
 
 // 原生 eval 函数重命名

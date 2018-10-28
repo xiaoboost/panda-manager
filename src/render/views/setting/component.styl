@@ -20,21 +20,35 @@ main#main-setting {
             box-shadow: 0 1px 5px #aaa;
         }
 
-        .settings-line, .settings-subline {
+        .settings-line,
+        .settings-subline {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
+        }
+
+        .setting-box,
+        .settings-line,
+        .settings-subline {
+            border-bottom: 1px solid #eee;
+            
+            &:last-child {
+                border-bottom: none;
+            }
+        }
+
+        .settings-line {
             min-height: 48px;
             padding: 14px 20px;
         }
 
         .settings-subline {
-            padding: 12px 20px 12px 24px;
-            min-height: 44px;
+            padding: 10px 20px 10px 30px;
+            font-size: 12px;
+            min-height: 38px;
         }
 
         .anticon {
-            font-size: 20px;
             cursor: pointer;
         }
 

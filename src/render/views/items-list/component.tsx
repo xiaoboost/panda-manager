@@ -21,7 +21,7 @@ export default class MainList extends React.Component<{}, State> {
 
     async componentWillMount() {
         // 已经读取了缓存
-        if (store.isLoaded) {
+        if (store.isLoading) {
             this.setState({
                 mangas: clone(store.mangas),
             });
