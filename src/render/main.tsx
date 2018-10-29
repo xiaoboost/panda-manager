@@ -12,7 +12,7 @@ import ItemsList from 'views/items-list/component';
 import ItemDetail from 'views/item-detail/component';
 
 render(
-    <Provider $store={store}>
+    <Provider store={store}>
         <HashRouter>
             <Switch>
                 <Route exact path='/' component={ItemsList} />

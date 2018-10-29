@@ -5,40 +5,26 @@ import 'antd/lib/button/style';
 import Icon from 'antd/lib/icon';
 import Button from 'antd/lib/button';
 
-// import store from 'store';
-import { AppCache, Reactive, State, Inject, Computed } from 'store';
-
 import * as React from 'react';
+import { shell } from 'electron';
 import { Link } from 'react-router-dom';
 import { selectDirectory } from 'lib/com';
+import { AppCache, Reactive, State } from 'store';
 
-type Props = { $store: AppCache };
+type Props = { store: AppCache };
 
-@Inject('$store')
 @Reactive
 export default class Setting extends React.Component<Props> {
-    @Computed
-    get loading() {
-        return this.props.$store.isLoading;
-    }
-
-    @Computed
-    get paths() {
-        return this.props.$store.directories;
-    }
 
     addDirectory = async () => {
-    //     const directory = await selectDirectory();
-    //     store.addDirectory(directory);
-    }
-
-    UNSAFE_componentWillMount() {
-        // setTimeout(() => this.loading = true, 2000);
-        // setTimeout(() => this.paths.push('C:\\Project Sources\\Software'), 4000);
-        // setTimeout(() => this.loading = false, 5000);
+        const directory = await selectDirectory();
+        // this.props.store.addDirectory(directory);
+        this.props.store.directories.push(directory);
     }
 
     render() {
+        const { isLoading, directories } = this.props.store;
+
         return <main id='main-setting'>
             <header className='page-header setting-header'>
                 <Link to={'/'}>
@@ -65,11 +51,11 @@ export default class Setting extends React.Component<Props> {
                                     theme='outlined'
                                 />
                             </div>
-                            {this.paths.length === 0
+                            {directories.length === 0
                                 ? <div className='settings-subline'>
                                     <div className='settings-line__name' style={{ textAlign: 'center' }}>尚未添加目录</div>
                                 </div>
-                                : this.paths.map((path, i) =>
+                                : directories.map((path, i) =>
                                     <div className='settings-subline' key={i}>
                                         <div className='settings-line__name'>{path}</div>
                                         <span>
@@ -78,6 +64,7 @@ export default class Setting extends React.Component<Props> {
                                                     color: 'rgba(0, 0, 0, .4)',
                                                     fontSize: '14px',
                                                 }}
+                                                onClick={() => shell.openItem(path)}
                                                 type='folder-open'
                                                 theme='outlined'
                                             />
@@ -101,7 +88,7 @@ export default class Setting extends React.Component<Props> {
                                 <div className='settings-line__name'>刷新预览缓存</div>
                                 <div className='settings-line__subname'>刷新目录内有被增、删、改操作的项目</div>
                             </span>
-                            <Button loading={this.loading}>刷新</Button>
+                            <Button loading={isLoading}>刷新</Button>
                         </div>
                     </article>
                 </section>
