@@ -9,13 +9,11 @@ import * as React from 'react';
 import { shell } from 'electron';
 import { Link } from 'react-router-dom';
 import { selectDirectory } from 'lib/com';
-import { AppCache, Reactive, State } from 'store';
-
-type Props = { store: AppCache };
+import { Reactive, StoreProps } from 'store';
 
 @Reactive
-export default class Setting extends React.Component<Props> {
-
+export default class Setting extends React.Component<StoreProps> {
+    /** 选择文件夹 */
     addDirectory = async () => {
         const directory = await selectDirectory();
         // this.props.store.addDirectory(directory);
@@ -42,7 +40,7 @@ export default class Setting extends React.Component<Props> {
                             <div className='settings-line'>
                                 <span>
                                     <div className='settings-line__name'>文件目录</div>
-                                    <div className='settings-line__subname'>目录内的所有 zip 压缩包以及文件夹（不包含再次一级文件夹）</div>
+                                    <div className='settings-line__subname'>目录内的所有 zip 压缩包以及文件夹（不包含子文件夹内容）</div>
                                 </span>
                                 <Icon
                                     onClick={this.addDirectory}

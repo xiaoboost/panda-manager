@@ -9,6 +9,8 @@ export { AppCache };
 export { observable as State, computed as Computed } from 'mobx';
 export { inject as Inject } from 'mobx-react';
 
+export type StoreProps = { store: AppCache };
+
 export function Reactive<T extends IReactComponent>(target: T): T {
     return inject('store')(observer(target));
 }

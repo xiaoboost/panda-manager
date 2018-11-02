@@ -1,5 +1,5 @@
 import * as fs from 'fs-extra';
-import { observable  } from 'mobx';
+import { State  } from './index';
 
 import Manga, { MangaData, TagData, TagsGroupData } from './manga';
 
@@ -25,23 +25,23 @@ type CacheFileData =
 /** 缓存数据 */
 export default class AppCache {
     /** 所有同人志 */
-    @observable
+    @State
     mangas: Manga[] = [];
 
     /** 所有标签 */
-    @observable
+    @State
     tags: AnyObject<TagData> = {};
 
     /** 所有标签集合 */
-    @observable
+    @State
     tagsGroups: AnyObject<TagsGroupData> = {};
 
     /** 当前所有文件夹 */
-    @observable
+    @State
     directories: string[] = [];
 
     /** 初始化是否完成 */
-    @observable
+    @State
     isLoading = false;
 
     /** 缓存文件名称 */
