@@ -16,8 +16,7 @@ export default class Setting extends React.Component<StoreProps> {
     /** 选择文件夹 */
     addDirectory = async () => {
         const directory = await selectDirectory();
-        // this.props.store.addDirectory(directory);
-        this.props.store.directories.push(directory);
+        this.props.store.addDirectory(directory);
     }
 
     render() {
