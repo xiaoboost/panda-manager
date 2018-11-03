@@ -199,17 +199,30 @@ export default class AppCache {
                 continue;
             }
 
-            const manga = new Manga({
-                name,
-                file: {
-                    path: fullPath,
-                    isDirectory: stat.isDirectory(),
-                    lastModified: new Date(stat.mtime).getTime(),
-                },
-            });
+            // 从已有缓存中搜索当前漫画
+            const cacheManga = cacheMangas.find((item) => item.file.path === fullPath);
 
-            await manga.writeCache();
-            this.mangas.push(manga);
+            // 已有缓存
+            if (cacheManga) {
+                // 强制刷新或者漫画被修改过
+                if (force || cacheManga.file.lastModified < lastModified) {
+                    await cacheManga.writeCache();
+                }
+            }
+            // 新漫画
+            else {
+                const manga = new Manga({
+                    name,
+                    file: {
+                        path: fullPath,
+                        lastModified,
+                        isDirectory: stat.isDirectory(),
+                    },
+                });
+
+                await manga.writeCache();
+                this.mangas.push(manga);
+            }
         }
     }
 }
