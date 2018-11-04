@@ -1,6 +1,7 @@
 import fs from 'fs-extra';
 import path from 'path';
 import JSZip from 'jszip';
+import naturalCompare from 'string-natural-compare';
 
 import {
     isArray,
@@ -151,11 +152,8 @@ export default class Zip {
     }
     /** 生成异步的文件列表迭代器 */
     async * files() {
-        let index = 0;
-
         // 所有文件
-        // TODO: 这里需要做排序，排序规则未定
-        const files = Object.keys(this._zip.files);
+        const files = Object.keys(this._zip.files).sort(naturalCompare);
 
         // 异步迭代所有文件
         for (const key of files) {
@@ -170,7 +168,6 @@ export default class Zip {
             yield {
                 buffer,
                 path: key,
-                index: index++,
                 count: files.length,
                 name: path.basename(key),
                 lastModify: new Date(data.date).getTime(),

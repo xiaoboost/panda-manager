@@ -5,6 +5,7 @@ import * as fs from 'fs-extra';
 import { appRoot } from 'lib/utils';
 import { join, parse, extname } from 'path';
 import { compress, imageExtend } from '../lib/image';
+import naturalCompare from 'string-natural-compare';
 
 /** 同人志元数据 */
 export interface MangaData {
@@ -104,8 +105,8 @@ export default class Manga implements MangaData {
         this.previewPositions.length = 0;
 
         let preview = Buffer.from('');
-        const allFiles = await fs.readdir(this.file.path);
         const { content, cover } = Manga.option.compressOption;
+        const allFiles = (await fs.readdir(this.file.path)).sort(naturalCompare);
 
         for (const file of allFiles) {
             const fullPath = join(this.file.path, file);
