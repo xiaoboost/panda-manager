@@ -17,7 +17,7 @@ render(
             <Switch>
                 <Route exact path='/' component={ItemsList} />
                 <Route path='/setting' component={Setting} />
-                <Route path='/detail/:id(\d+)' component={ItemDetail} />
+                <Route path='/detail/:id' component={ItemDetail} />
             </Switch>
         </HashRouter>
     </Provider>,

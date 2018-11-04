@@ -29,7 +29,7 @@ export default class Setting extends React.Component<StoreProps> {
 
         return <main id='main-setting'>
             <header className='page-header setting-header'>
-                <Link to={'/'}>
+                <Link to='/'>
                     <Icon type='arrow-left' theme='outlined' />
                 </Link>
                 <span className='page-title'>设置</span>
