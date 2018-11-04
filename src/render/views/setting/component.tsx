@@ -6,17 +6,22 @@ import Icon from 'antd/lib/icon';
 import Button from 'antd/lib/button';
 
 import * as React from 'react';
+import * as com from 'lib/com';
 import { shell } from 'electron';
 import { Link } from 'react-router-dom';
-import { selectDirectory } from 'lib/com';
 import { Reactive, StoreProps } from 'store';
 
 @Reactive
 export default class Setting extends React.Component<StoreProps> {
     /** 选择文件夹 */
     addDirectory = async () => {
-        const directory = await selectDirectory();
+        const directory = await com.selectDirectory();
         this.props.store.addDirectory(directory);
+    }
+    /** 删除文件夹 */
+    removeDirectory = async (path: string) => {
+        await com.confirmDialog('确认删除', `确定要删除此文件夹？\n${path}`);
+        this.props.store.removeDirectory(path);
     }
 
     render() {
@@ -71,6 +76,7 @@ export default class Setting extends React.Component<StoreProps> {
                                                     fontSize: '14px',
                                                     marginLeft: '8px',
                                                 }}
+                                                onClick={() => this.removeDirectory(path)}
                                                 type='delete'
                                                 theme='outlined'
                                             />

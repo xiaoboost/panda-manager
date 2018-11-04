@@ -167,6 +167,26 @@ export default class AppCache {
         await this.writeCache();
     }
 
+    /** 删除文件夹 */
+    async removeDirectory(dirInput: string) {
+        if (!this.directories.includes(dirInput)) {
+            handleError(100, dirInput);
+            return;
+        }
+
+        remove(this.directories, dirInput);
+
+        const deleteMangas = this.mangas.filter((item) => item.file.path.includes(dirInput));
+
+        for (const manga of deleteMangas) {
+            remove(this.mangas, manga);
+            await fs.remove(manga.cachePath);
+        }
+
+        await this.removeExtraCache();
+        await this.writeCache();
+    }
+
     /**
      * 刷新所有现存文件的缓存
      * @param {boolean} force 是否强制刷新
