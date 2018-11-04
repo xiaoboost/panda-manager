@@ -80,6 +80,8 @@ export default class AppCache {
 
     /** 从硬盘读取缓存 */
     async readCache() {
+        this.isLoading = true;
+
         const data = await fs.readJSON(this.path).catch(() => void 0) as CacheFileData;
 
         // 缓存数据存在
@@ -117,7 +119,7 @@ export default class AppCache {
         await this.writeCache();
 
         // 完成加载
-        this.isLoading = true;
+        this.isLoading = false;
     }
 
     /** 讲缓存写入硬盘 */
@@ -130,7 +132,13 @@ export default class AppCache {
         };
 
         await fs.mkdirp(dirname(this.path));
-        await fs.writeJSON(this.path, data);
+        await fs.writeJSON(
+            this.path,
+            data,
+            process.env.NODE_ENV === 'development'
+                ? { replacer: null, spaces: 2 }
+                : undefined,
+        );
     }
 
     /** 添加文件夹 */
@@ -153,7 +161,15 @@ export default class AppCache {
      *  - false 只会刷新有修改记录的漫画缓存
      */
     async refreshCache(force = false) {
+        const notice = new Message();
 
+        notice.mount();
+
+        for (const dir of this.directories) {
+            await this.refreshDirectories(dir, notice, force);
+        }
+
+        await notice.destroy();
     }
 
     /**
@@ -262,7 +278,10 @@ export default class AppCache {
 
         // 销毁消息提示
         if (notice !== message) {
-            notice.destroy();
+            await notice.destroy();
         }
+
+        // 重写缓存
+        await this.writeCache();
     }
 }

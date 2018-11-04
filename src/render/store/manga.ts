@@ -130,10 +130,11 @@ export default class Manga implements MangaData {
                 );
 
                 preview = currentImage;
+                this.previewPositions.push(0, sizeOf(preview).width);
             }
             else {
-                this.previewPositions.push(sizeOf(preview).width);
                 preview = await imageExtend(preview, currentImage);
+                this.previewPositions.push(sizeOf(preview).width);
             }
         }
 
@@ -145,7 +146,7 @@ export default class Manga implements MangaData {
     }
     /** 从压缩包生成预览 */
     async createPreviewFromZip() {
-        this.previewPositions.length = 1;
+        this.previewPositions.length = 0;
 
         let preview = Buffer.from('');
         const zip = await Zip.loadZip(this.file.path);
@@ -164,10 +165,11 @@ export default class Manga implements MangaData {
                 );
 
                 preview = currentImage;
+                this.previewPositions.push(0, sizeOf(preview).width);
             }
             else {
-                this.previewPositions.push(sizeOf(preview).width);
                 preview = await imageExtend(preview, currentImage);
+                this.previewPositions.push(sizeOf(preview).width);
             }
         }
 
@@ -191,7 +193,6 @@ export default class Manga implements MangaData {
 
         await fs.remove(this.cachePath);
         await fs.mkdirp(this.cachePath);
-        await fs.writeJSON(join(this.cachePath, 'meta.json'), mangaData);
 
         // 当前漫画是文件夹
         if (this.file.isDirectory) {
@@ -201,5 +202,14 @@ export default class Manga implements MangaData {
         else {
             await this.createPreviewFromZip();
         }
+
+        // 写入漫画 metadata 缓存
+        await fs.writeJSON(
+            join(this.cachePath, 'meta.json'),
+            mangaData,
+            process.env.NODE_ENV === 'development'
+                ? { replacer: null, spaces: 2 }
+                : undefined,
+        );
     }
 }

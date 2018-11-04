@@ -3,43 +3,14 @@ import 'antd/lib/icon/style';
 
 import * as React from 'react';
 import Icon from 'antd/lib/icon';
+import { join } from 'path';
 import { Link } from 'react-router-dom';
+import { Reactive, StoreProps } from 'store';
 
-import store, { MangaData } from 'src/render/store';
-import { clone } from 'lib/utils';
-
-interface State {
-    loading: boolean;
-    mangas: MangaData[];
-}
-
-export default class MainList extends React.Component<{}, State> {
-    state: State = {
-        loading: false,
-        mangas: [],
-    };
-
-    async componentWillMount() {
-        // 已经读取了缓存
-        if (store.isLoading) {
-            this.setState({
-                mangas: clone(store.mangas),
-            });
-        }
-        else {
-            this.setState({ loading: true });
-
-            await store.readCache();
-
-            this.setState({
-                loading: false,
-                mangas: clone(store.mangas),
-            });
-        }
-    }
-
+@Reactive
+export default class MainList extends React.Component<StoreProps> {
     render() {
-        const { mangas } = this.state;
+        const { isLoading, mangas } = this.props.store;
 
         return <main id='main-list'>
             <header className='page-header main-list-header'>
@@ -49,7 +20,9 @@ export default class MainList extends React.Component<{}, State> {
             </header>
             <article className='main-list-article'>
                 {mangas.map((item) =>
-                    <div key={item.id}>{item.name}</div>,
+                    <div key={item.id} className='manga-item'>
+                        <img src={join(item.cachePath, 'cover.jpg')} height='200'/>
+                    </div>,
                 )}
             </article>
         </main>;

@@ -85,7 +85,7 @@ export default class Setting extends React.Component<StoreProps> {
                                 <div className='settings-line__name'>刷新预览缓存</div>
                                 <div className='settings-line__subname'>刷新目录内有被增、删、改操作的项目</div>
                             </span>
-                            <Button loading={isLoading}>刷新</Button>
+                            <Button loading={isLoading} onClick={() => this.props.store.refreshCache()}>刷新</Button>
                         </div>
                     </article>
                 </section>
