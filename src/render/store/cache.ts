@@ -1,5 +1,5 @@
 import * as fs from 'fs-extra';
-import { State  } from './index';
+import { observable as State } from 'mobx';
 import Message from 'components/progress/component';
 
 import Manga, { MangaData, TagData, TagsGroupData } from './manga';
