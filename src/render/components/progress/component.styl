@@ -1,0 +1,44 @@
+#footer-message {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 26px;
+    box-shadow: 0 -2px 2px #eee;
+    background-color: #E6A23C;
+    color: #fff;
+    padding: 0 5px;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+
+    .footer-message__path {
+        flex-shrink: 1;
+        flex-grow: 0;
+    }
+
+    .footer-message__name,
+    .footer-message__progress {
+        flex-shrink: 0;
+        flex-grow: 0;
+    }
+
+    .footer-message__progress {
+        margin-left: 6px;
+    }
+}
+
+// 动画设置
+.message-enter,
+.message-leave-to {
+    transform: translateY(30px);
+}
+
+.message-enter-to,
+.message-enter-active,
+.message-leave,
+.message-leave-active {
+    transition: transform 200ms linear;
+    transform: translateY(0);
+}

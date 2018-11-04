@@ -24,11 +24,18 @@ export function def(obj: object, key: string | symbol, val: any, enumerable = fa
 }
 
 // 原生 eval 函数重命名
-export const $eval: typeof eval = (window as any).eval;
+export const _eval: typeof eval = (window as any).eval;
 
-// disabled eval
+// 原生 write 函数重命名
+export const _write = document.write;
+
+// disabled dangerous api
 if (process.env.NODE_ENV !== 'development') {
     (window as any).eval = global.eval = () => {
         throw new Error(`Sorry, this app does not support window.eval().`);
+    };
+
+    document.write = () => {
+        throw new Error(`Sorry, this app does not support document.write().`);
     };
 }

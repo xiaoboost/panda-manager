@@ -1,7 +1,5 @@
 /** Ignoring some properties in an interface */
-declare type Omit<T, K extends keyof T> = {
-    [U in Exclude<keyof T, K>]: T[U];
-};
+declare type Omit<T, K extends keyof T> = { [key in Exclude<keyof T, K>]: T[key] };
 
 /** To overwrite a read-only interface as writable */
 declare type Writeable<T extends object, K extends keyof T> = Omit<T, K> & { -readonly [P in K]: T[P] };

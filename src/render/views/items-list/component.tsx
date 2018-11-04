@@ -3,53 +3,29 @@ import 'antd/lib/icon/style';
 
 import * as React from 'react';
 import Icon from 'antd/lib/icon';
-import { Link } from 'react-router-dom';
+import { join } from 'path';
+import { Reactive, StoreProps } from 'store';
+import { Link, RouteComponentProps } from 'react-router-dom';
 
-import store, { MangaData } from 'src/render/store';
-import { clone } from 'lib/utils';
+type Props = StoreProps & RouteComponentProps;
 
-interface State {
-    loading: boolean;
-    mangas: MangaData[];
-}
-
-export default class MainList extends React.Component<{}, State> {
-    state: State = {
-        loading: false,
-        mangas: [],
-    };
-
-    async componentWillMount() {
-        // 已经读取了缓存
-        if (store.isLoading) {
-            this.setState({
-                mangas: clone(store.mangas),
-            });
-        }
-        else {
-            this.setState({ loading: true });
-
-            await store.readCache();
-
-            this.setState({
-                loading: false,
-                mangas: clone(store.mangas),
-            });
-        }
-    }
-
+@Reactive
+export default class MainList extends React.Component<Props> {
     render() {
-        const { mangas } = this.state;
+        const { mangas } = this.props.store;
 
         return <main id='main-list'>
             <header className='page-header main-list-header'>
-                <Link to={'/setting'}>
+                <Link to='/setting'>
                     <Icon type='setting' theme='outlined' />
                 </Link>
+                <span className='page-title'></span>
             </header>
             <article className='main-list-article'>
                 {mangas.map((item) =>
-                    <div key={item.id}>{item.name}</div>,
+                    <div key={item.id} className='manga-item' onClick={() => this.props.history.push(`/detail/${item.id}`)}>
+                        <img src={join(item.cachePath, 'cover.jpg')} height='200'/>
+                    </div>,
                 )}
             </article>
         </main>;

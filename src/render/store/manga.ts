@@ -2,9 +2,10 @@ import uuid from 'uuid';
 import Zip from 'lib/zip';
 import sizeOf from 'image-size';
 import * as fs from 'fs-extra';
-import { join, parse } from 'path';
 import { appRoot } from 'lib/utils';
+import { join, parse, extname } from 'path';
 import { compress, imageExtend } from '../lib/image';
+import naturalCompare from 'string-natural-compare';
 
 /** 同人志元数据 */
 export interface MangaData {
@@ -48,6 +49,9 @@ type MangaInput =
     Pick<MangaData, 'name' | 'file'> &
     Partial<Pick<MangaData, 'id' | 'tagsGroups'>>;
 
+// 允许的图片后缀
+const allowImageExt = ['.bmp', '.jpeg', '.jpg', '.png', '.tiff', '.webp', '.svg'];
+
 /** 同人志数据 */
 export default class Manga implements MangaData {
     name: string;
@@ -73,7 +77,7 @@ export default class Manga implements MangaData {
             /** 封面 */
             cover: {
                 quality: 95,
-                size: { height: 350 },
+                size: { height: 380 },
             },
             /** 内容 */
             content: {
@@ -97,47 +101,84 @@ export default class Manga implements MangaData {
     }
 
     /** 从文件夹生成预览 */
-    createPreviewFromDirectory() {
+    async createPreviewFromDirectory() {
+        this.previewPositions.length = 0;
 
+        let preview = Buffer.from('');
+        const { content, cover } = Manga.option.compressOption;
+        const allFiles = (await fs.readdir(this.file.path)).sort(naturalCompare);
+
+        for (const file of allFiles) {
+            const fullPath = join(this.file.path, file);
+            const stat = await fs.stat(fullPath);
+
+            // 跳过目录和不允许的文件后缀
+            if (stat.isDirectory() || !allowImageExt.includes(extname(file).toLowerCase())) {
+                continue;
+            }
+
+            // 读取当前图片
+            const image = await fs.readFile(fullPath);
+            // 当前图片预览
+            const currentImage = await compress(image, 'jpg', content);
+
+            // 第一页
+            if (preview.length === 0) {
+                // 制作封面
+                await fs.writeFile(
+                    join(this.cachePath, 'cover.jpg'),
+                    await compress(image, 'jpg', cover),
+                );
+
+                preview = currentImage;
+                this.previewPositions.push(0, sizeOf(preview).width);
+            }
+            else {
+                preview = await imageExtend(preview, currentImage);
+                this.previewPositions.push(sizeOf(preview).width);
+            }
+        }
+
+        // 预览文件写入硬盘
+        await fs.writeFile(
+            join(this.cachePath, 'preview.jpg'),
+            preview,
+        );
     }
     /** 从压缩包生成预览 */
     async createPreviewFromZip() {
         this.previewPositions.length = 0;
 
-        let image: Buffer;
+        let preview = Buffer.from('');
         const zip = await Zip.loadZip(this.file.path);
+        const { content, cover } = Manga.option.compressOption;
 
         for await (const file of zip.files()) {
-            // 封面
-            if (file.index === 0) {
+            // 当前图片预览
+            const currentImage = await compress(file.buffer, 'jpg', content);
+
+            // 第一页
+            if (preview.length === 0) {
+                // 制作封面
                 await fs.writeFile(
                     join(this.cachePath, 'cover.jpg'),
-                    await compress(file.buffer, 'jpg', Manga.option.compressOption.cover),
+                    await compress(file.buffer, 'jpg', cover),
                 );
-            }
 
-            /** 当前图片预览 */
-            const currentImage = await compress(file.buffer, 'jpg', Manga.option.compressOption.content);
-
-            // 第一幅预览
-            if (file.index === 0) {
-                image = currentImage;
-                this.previewPositions.push(0);
+                preview = currentImage;
+                this.previewPositions.push(0, sizeOf(preview).width);
             }
-            // 其他预览图
             else {
-                this.previewPositions.push(sizeOf(image!).width);
-                image = await imageExtend(image!, currentImage);
-
-                // 最后一幅预览
-                if (file.index === file.count - 1) {
-                    await fs.writeFile(
-                        join(this.cachePath, 'preview.jpg'),
-                        image,
-                    );
-                }
+                preview = await imageExtend(preview, currentImage);
+                this.previewPositions.push(sizeOf(preview).width);
             }
         }
+
+        // 预览文件写入硬盘
+        await fs.writeFile(
+            join(this.cachePath, 'preview.jpg'),
+            preview,
+        );
     }
 
     /** 生成缓存并将其写入硬盘 */
@@ -151,8 +192,8 @@ export default class Manga implements MangaData {
             previewPositions: this.previewPositions,
         };
 
+        await fs.remove(this.cachePath);
         await fs.mkdirp(this.cachePath);
-        await fs.writeJSON(join(this.cachePath, 'meta.json'), mangaData);
 
         // 当前漫画是文件夹
         if (this.file.isDirectory) {
@@ -163,6 +204,13 @@ export default class Manga implements MangaData {
             await this.createPreviewFromZip();
         }
 
-        console.log('over');
+        // 写入漫画 metadata 缓存
+        await fs.writeJSON(
+            join(this.cachePath, 'meta.json'),
+            mangaData,
+            process.env.NODE_ENV === 'development'
+                ? { replacer: null, spaces: 2 }
+                : undefined,
+        );
     }
 }

@@ -7,7 +7,13 @@ import { devHttpPort } from '../../build/config';
 let win: BrowserWindow | null;
 
 function createWindow() {
-    win = new BrowserWindow({ width: 800, height: 600 });
+    win = new BrowserWindow({
+        width: 800,
+        height: 600,
+        webPreferences: {
+            webSecurity: process.env.NODE_ENV !== 'development',
+        },
+    });
 
     if (process.env.NODE_ENV === 'development') {
         win.loadURL(`http://localhost:${devHttpPort}`);
@@ -17,7 +23,7 @@ function createWindow() {
         win.loadURL(url.format({
             pathname: path.join(__dirname, '../render/index.html'),
             protocol: 'file:',
-            slashes: true
+            slashes: true,
         }));
     }
 

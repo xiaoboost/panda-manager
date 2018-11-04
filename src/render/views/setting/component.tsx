@@ -6,20 +6,22 @@ import Icon from 'antd/lib/icon';
 import Button from 'antd/lib/button';
 
 import * as React from 'react';
+import * as com from 'lib/com';
 import { shell } from 'electron';
 import { Link } from 'react-router-dom';
-import { selectDirectory } from 'lib/com';
-import { AppCache, Reactive, State } from 'store';
-
-type Props = { store: AppCache };
+import { Reactive, StoreProps } from 'store';
 
 @Reactive
-export default class Setting extends React.Component<Props> {
-
+export default class Setting extends React.Component<StoreProps> {
+    /** 选择文件夹 */
     addDirectory = async () => {
-        const directory = await selectDirectory();
-        // this.props.store.addDirectory(directory);
-        this.props.store.directories.push(directory);
+        const directory = await com.selectDirectory();
+        this.props.store.addDirectory(directory);
+    }
+    /** 删除文件夹 */
+    removeDirectory = async (path: string) => {
+        await com.confirmDialog('确认删除', `确定要删除此文件夹？\n${path}`);
+        this.props.store.removeDirectory(path);
     }
 
     render() {
@@ -27,7 +29,7 @@ export default class Setting extends React.Component<Props> {
 
         return <main id='main-setting'>
             <header className='page-header setting-header'>
-                <Link to={'/'}>
+                <Link to='/'>
                     <Icon type='arrow-left' theme='outlined' />
                 </Link>
                 <span className='page-title'>设置</span>
@@ -42,7 +44,7 @@ export default class Setting extends React.Component<Props> {
                             <div className='settings-line'>
                                 <span>
                                     <div className='settings-line__name'>文件目录</div>
-                                    <div className='settings-line__subname'>目录内的所有 zip 压缩包以及文件夹（不包含再次一级文件夹）</div>
+                                    <div className='settings-line__subname'>目录内的所有 zip 压缩包以及文件夹（不包含子文件夹内容）</div>
                                 </span>
                                 <Icon
                                     onClick={this.addDirectory}
@@ -74,6 +76,7 @@ export default class Setting extends React.Component<Props> {
                                                     fontSize: '14px',
                                                     marginLeft: '8px',
                                                 }}
+                                                onClick={() => this.removeDirectory(path)}
                                                 type='delete'
                                                 theme='outlined'
                                             />
@@ -88,7 +91,7 @@ export default class Setting extends React.Component<Props> {
                                 <div className='settings-line__name'>刷新预览缓存</div>
                                 <div className='settings-line__subname'>刷新目录内有被增、删、改操作的项目</div>
                             </span>
-                            <Button loading={isLoading}>刷新</Button>
+                            <Button loading={isLoading} onClick={() => this.props.store.refreshCache()}>刷新</Button>
                         </div>
                     </article>
                 </section>
