@@ -49,7 +49,7 @@ type MangaInput =
     Partial<Pick<MangaData, 'id' | 'tagsGroups'>>;
 
 // 允许的图片后缀
-const allowImageExt = ['bmp', 'jpeg', 'jpg', 'png', 'tiff', 'webp', 'svg'];
+const allowImageExt = ['.bmp', '.jpeg', '.jpg', '.png', '.tiff', '.webp', '.svg'];
 
 /** 同人志数据 */
 export default class Manga implements MangaData {
@@ -76,7 +76,7 @@ export default class Manga implements MangaData {
             /** 封面 */
             cover: {
                 quality: 95,
-                size: { height: 350 },
+                size: { height: 380 },
             },
             /** 内容 */
             content: {
@@ -112,10 +112,7 @@ export default class Manga implements MangaData {
             const stat = await fs.stat(fullPath);
 
             // 跳过目录和不允许的文件后缀
-            if (
-                stat.isDirectory() ||
-                !allowImageExt.includes(extname(file))
-            ) {
+            if (stat.isDirectory() || !allowImageExt.includes(extname(file).toLowerCase())) {
                 continue;
             }
 

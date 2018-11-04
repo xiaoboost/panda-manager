@@ -1,5 +1,6 @@
 import * as fs from 'fs-extra';
 import { State  } from './index';
+import Message from 'components/progress/component';
 
 import Manga, { MangaData, TagData, TagsGroupData } from './manga';
 
@@ -14,6 +15,8 @@ import {
     appRoot,
     remove,
     isArray,
+    isBoolean,
+    isUndef,
     isStrictObject,
     handleError,
 } from '../lib/utils';
@@ -155,11 +158,17 @@ export default class AppCache {
 
     /**
      * 刷新文件夹中所包含的文件
+     * @param {string} dirInput 要刷新的文件夹
+     * @param {Message} message 消息提示
+     *  - 外部传入的消息提示组件
      * @param {boolean} force 是否强制刷新
      *  - true 将会强制刷新该文件夹下所有漫画的缓存（慎用）
      *  - false 只会刷新有修改记录的漫画缓存
      */
-    async refreshDirectories(dirInput: string, force = false) {
+    async refreshDirectories(dirInput: string, force?: boolean): Promise<void>;
+    async refreshDirectories(dirInput: string, message?: Message, force?: boolean): Promise<void>;
+    async refreshDirectories(dirInput: string, message?: Message | boolean, force?: boolean) {
+        // 输入文件夹不再包含的文件夹之中
         if (!this.directories.includes(dirInput)) {
             handleError(102, dirInput);
             return;
@@ -187,8 +196,26 @@ export default class AppCache {
                 }),
         );
 
+        // 输入默认值处理
+        let notice: Message;
+        if (isUndef(message)) {
+            force = false;
+            notice = new Message();
+            notice.mount();
+        }
+        else if (isBoolean(message)) {
+            force = message;
+            notice = new Message();
+            notice.mount();
+        }
+        else {
+            notice = message;
+            force = Boolean(force);
+        }
+
         // 刷新实际存在的漫画缓存
-        for (const name of dirMangas) {
+        for (let i = 0; i < dirMangas.length; i++) {
+            const name = dirMangas[i];
             const fullPath = join(dirInput, name);
             const stat = await fs.stat(fullPath);
             const isDirectory = stat.isDirectory();
@@ -198,6 +225,14 @@ export default class AppCache {
             if (!isDirectory && extname(name) !== '.zip') {
                 continue;
             }
+
+            notice.setProgress({
+                message: fullPath,
+                progress: {
+                    total: dirMangas.length,
+                    finish: i + 1,
+                },
+            });
 
             // 从已有缓存中搜索当前漫画
             const cacheManga = cacheMangas.find((item) => item.file.path === fullPath);
@@ -223,6 +258,11 @@ export default class AppCache {
                 await manga.writeCache();
                 this.mangas.push(manga);
             }
+        }
+
+        // 销毁消息提示
+        if (notice !== message) {
+            notice.destroy();
         }
     }
 }
