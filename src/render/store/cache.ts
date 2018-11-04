@@ -105,13 +105,7 @@ export default class AppCache {
             this.mangas = metas.filter((item): item is Manga => !!item);
 
             // 删除多余缓存文件
-            const mangaFiles = (await fs.readdir(this.dirPath)).filter((file) => file !== this.fileName);
-
-            await Promise.all(
-                mangaFiles
-                    .filter((id) => !data.mangas.includes(id))
-                    .map((id) => fs.remove(join(this.dirPath, id))),
-            );
+            await this.removeExtraCache();
         }
 
         // 重写缓存
@@ -120,6 +114,25 @@ export default class AppCache {
 
         // 完成加载
         this.isLoading = false;
+    }
+
+    /** 删除多余的缓存文件 */
+    async removeExtraCache() {
+        const dirs = await fs.readdir(this.dirPath);
+
+        // 删除多余的实际存在的缓存文件（夹）
+        for (const dir of dirs) {
+            const fullPath = join(this.dirPath, dir);
+            const stat = await fs.stat(fullPath);
+            const isDirectory = stat.isDirectory();
+
+            if (
+                (isDirectory && !this.mangas.find((item) => item.id === dir)) ||
+                (!isDirectory && dir !== 'meta.json')
+            ) {
+                await fs.remove(fullPath);
+            }
+        }
     }
 
     /** 讲缓存写入硬盘 */
@@ -164,16 +177,21 @@ export default class AppCache {
         const notice = new Message();
 
         notice.mount();
+        this.isLoading = true;
+
+        await this.removeExtraCache();
 
         for (const dir of this.directories) {
             await this.refreshDirectories(dir, notice, force);
         }
 
+        this.isLoading = false;
         await notice.destroy();
     }
 
     /**
      * 刷新文件夹中所包含的文件
+     *  - 该刷新将会把某文件夹下的 meta.json 中的多余缓存删除
      * @param {string} dirInput 要刷新的文件夹
      * @param {Message} message 消息提示
      *  - 外部传入的消息提示组件
@@ -189,6 +207,8 @@ export default class AppCache {
             handleError(102, dirInput);
             return;
         }
+
+        this.isLoading = true;
 
         // 当前文件夹下已经被缓存的漫画
         const cacheMangas = this.mangas.filter((item) => dirname(item.file.path) === dirInput);
@@ -279,6 +299,7 @@ export default class AppCache {
         // 销毁消息提示
         if (notice !== message) {
             await notice.destroy();
+            this.isLoading = false;
         }
 
         // 重写缓存
