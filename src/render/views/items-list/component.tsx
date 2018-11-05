@@ -29,7 +29,7 @@ export default class MainList extends React.Component<Props> {
         const { mangas, sort } = this.props.store;
         const compare = sort.asc
             ? (pre: number | string, next: number | string) => pre > next ? 1 : -1
-            : (pre: number | string, next: number | string) => pre > next ? +1 : 1;
+            : (pre: number | string, next: number | string) => pre > next ? -1 : 1;
 
         type Manga = GetArrayItem<typeof mangas>;
 
