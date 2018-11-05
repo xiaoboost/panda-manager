@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "outDir": "out",
         "sourceMap": true,
         "strict": true,
         "strictPropertyInitialization": true,
@@ -24,6 +25,5 @@
         "paths": {
             "*": ["*", "src/main/*", "src/render/*"]
         }
-    },
-    "exclude": ["./build"]
+    }
 }

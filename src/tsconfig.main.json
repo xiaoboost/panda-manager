@@ -11,5 +11,5 @@
         }
     },
     "include": ["./main", "./shared", "../types"],
-    "exclude": ["../node_modules", "../dist", "./render"]
+    "exclude": ["../node_modules", "./render", "../dist", "../build"]
 }
