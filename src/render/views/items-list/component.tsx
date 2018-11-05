@@ -81,6 +81,17 @@ export default class MainList extends React.Component<Props> {
                 <Link to='/setting'>
                     <Icon type='setting' theme='outlined' />
                 </Link>
+                <Link to='/tags'>
+                    <Icon
+                        type='tags'
+                        theme='outlined'
+                        style={{
+                            fontSize: '20px',
+                            top: '2px',
+                            left: '2px',
+                        }}
+                    />
+                </Link>
                 <Dropdown overlay={sortMenu} trigger={['click']}>
                     <Icon type='sort-ascending' theme='outlined' style={{ fontSize: '24px' }} />
                 </Dropdown>
