@@ -10,5 +10,8 @@ declare type Overwrite<T extends object, K extends object> = Omit<T, Extract<key
 /** return the array type */
 declare type GetArray<T> = T extends (any | (infer R)[]) ? R[] : never;
 
+/** return the array type */
+declare type GetArrayItem<T> = T extends (infer R)[] ? R : never;
+
 /** any object */
 declare type AnyObject<T = any> = { [key: string]: T };

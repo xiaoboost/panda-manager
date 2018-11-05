@@ -21,12 +21,20 @@ import {
     handleError,
 } from '../lib/utils';
 
-type CacheFileData =
-    Pick<AppCache, 'tags' | 'tagsGroups' | 'directories'> &
-    { mangas: string[] };
+/** 缓存数据格式 */
+interface CacheFileData {
+    mangas: string[];
+    directories: string[];
+    tags: AnyObject<TagData>;
+    tagsGroups: AnyObject<TagsGroupData>;
+    sort: {
+        by: 'name' | 'lastModified';
+        asc: boolean;
+    };
+}
 
 /** 缓存数据 */
-export default class AppCache {
+export default class AppCache implements Omit<CacheFileData, 'mangas'> {
     /** 所有同人志 */
     @State
     mangas: Manga[] = [];
@@ -46,6 +54,13 @@ export default class AppCache {
     /** 初始化是否完成 */
     @State
     isLoading = false;
+
+    /** 排序方式 */
+    @State
+    sort: CacheFileData['sort'] = {
+        by: 'name',
+        asc: true,
+    };
 
     /** 缓存文件名称 */
     readonly fileName = 'meta.json';
@@ -73,6 +88,13 @@ export default class AppCache {
                 result = false;
                 data[key] = {};
             }
+        }
+
+        if (!data.sort) {
+            data.sort = {
+                by: 'name',
+                asc: true,
+            };
         }
 
         return result;
@@ -142,6 +164,7 @@ export default class AppCache {
             tags: this.tags,
             tagsGroups: this.tagsGroups,
             directories: this.directories,
+            sort: this.sort,
         };
 
         await fs.mkdirp(dirname(this.path));
