@@ -8,5 +8,5 @@
         }
     },
     "include": ["./render", "./shared", "../types"],
-    "exclude": ["../node_modules", "../dist", "./main"]
+    "exclude": ["../node_modules", "./main", "../dist", "../build"]
 }
