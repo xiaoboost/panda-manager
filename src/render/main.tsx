@@ -10,6 +10,7 @@ import store from 'store';
 import Setting from 'views/setting/component';
 import ItemsList from 'views/items-list/component';
 import ItemDetail from 'views/item-detail/component';
+import TagCollection from 'views/tag-collection/component';
 
 render(
     <Provider store={store}>
@@ -17,6 +18,7 @@ render(
             <Switch>
                 <Route exact path='/' component={ItemsList} />
                 <Route path='/setting' component={Setting} />
+                <Route path='/tags' component={TagCollection} />
                 <Route path='/detail/:id' component={ItemDetail} />
             </Switch>
         </HashRouter>
