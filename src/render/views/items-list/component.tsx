@@ -9,7 +9,8 @@ import Menu from 'antd/lib/menu';
 import Dropdown from 'antd/lib/dropdown';
 
 import { join } from 'path';
-import { Reactive, Computed, StoreProps } from 'store';
+import { stringifyClass } from 'lib/utils';
+import { Reactive, State, Computed, StoreProps } from 'store';
 import { Link, RouteComponentProps } from 'react-router-dom';
 
 type Props = StoreProps & RouteComponentProps;
@@ -23,6 +24,9 @@ export default class MainList extends React.Component<Props> {
         { key: 'name', label: '按名称' },
         { key: 'lastModified', label: '按修改时间' },
     ];
+
+    @State
+    selectMangas: AnyObject<boolean> = {};
 
     @Computed
     get mangas() {
@@ -48,6 +52,32 @@ export default class MainList extends React.Component<Props> {
         return mangas.sort((pre, next) => {
             return compare(getValue(pre), getValue(next));
         });
+    }
+
+    /** 点击漫画 */
+    clickMangaHandler(event: React.MouseEvent<HTMLDivElement>, id: string) {
+        // 停止冒泡
+        event.stopPropagation();
+
+        // 点击漫画已经被选中
+        if (this.selectMangas[id]) {
+            return;
+        }
+
+        // TODO: 用键盘的 shift 和 ctrl 多选
+        this.selectMangas[id] = true;
+    }
+
+    /** 点击空白 */
+    clickSpaceHandler(event: React.MouseEvent<HTMLElement>) {
+        // 停止冒泡
+        event.stopPropagation();
+        // 必须是自身
+        if (event.currentTarget !== event.target) {
+            return;
+        }
+
+        this.selectMangas = {};
     }
 
     render() {
@@ -76,7 +106,7 @@ export default class MainList extends React.Component<Props> {
             </Menu>
         );
 
-        return <main id='main-list'>
+        return <main id='main-list' onClick={(e) => this.clickSpaceHandler(e)}>
             <header className='page-header main-list-header'>
                 <Link to='/setting'>
                     <Icon type='setting' theme='outlined' />
@@ -98,7 +128,16 @@ export default class MainList extends React.Component<Props> {
             </header>
             <article className='main-list-article'>
                 {this.mangas.map((item) =>
-                    <div key={item.id} className='manga-item' onDoubleClick={() => this.props.history.push(`/detail/${item.id}`)}>
+                    <div
+                        key={item.id}
+                        className={stringifyClass([
+                            'manga-item',
+                            {
+                                'manga-item__selected': this.selectMangas[item.id],
+                            },
+                        ])}
+                        onClick={(e) => this.clickMangaHandler(e, item.id)}
+                        onDoubleClick={() => this.props.history.push(`/detail/${item.id}`)}>
                         <img src={join(item.cachePath, 'cover.jpg')} height='200'/>
                     </div>,
                 )}
