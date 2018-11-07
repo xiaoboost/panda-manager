@@ -52,13 +52,6 @@ export function imageExtend(main: Buffer, extend: Buffer) {
         const { width } = sizeOf(extend);
 
         Sharp(main)
-            .extend({
-                top: 0, bottom: 0, left: 0, right: width,
-                background: { r: 255, g: 255, b: 255, alpha: 1 },
-            })
-            .overlayWith(extend, {
-                gravity: Sharp.gravity.east,
-            })
             .toBuffer()
             .then(resolve)
             .catch(reject);
