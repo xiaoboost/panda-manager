@@ -6,16 +6,27 @@ const { render } = require('../config');
 
 const webpack = require('webpack');
 const baseConfig = require('./webpack.base');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
 
 baseConfig.plugins.push(
     new webpack.optimize.ModuleConcatenationPlugin(),
-    new OptimizeCSSPlugin(),
-    new UglifyJSPlugin({
+    new OptimizeCSSPlugin()
+);
+
+if (!baseConfig.optimization) {
+    baseConfig.optimization = {};
+}
+
+if (!baseConfig.optimization.minimizer) {
+    baseConfig.optimization.minimizer = [];
+}
+
+baseConfig.optimization.minimizer.push(
+    new TerserPlugin({
         test: /\.js$/i,
         cache: false,
-        uglifyOptions: {
+        terserOptions: {
             ecma: 7,
             ie8: false,
             safari10: false,
@@ -42,6 +53,7 @@ webpack(baseConfig, (err, stats) => {
         colors: true,
         modules: false,
         children: false,
+        optimizationBailout: true,
     }));
 
     console.log(cyan('\n  Build complete.\n'));
