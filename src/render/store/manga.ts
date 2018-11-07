@@ -26,6 +26,8 @@ export interface MangaData {
         isDirectory: boolean;
         /** 此文件（夹）最后修改的时间 */
         lastModified: number;
+
+        a: number;
     };
 }
 
