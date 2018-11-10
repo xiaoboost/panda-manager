@@ -1,12 +1,7 @@
 process.env.NODE_ENV = 'development';
 
-const host = 'localhost';
-const app = new (require('koa'))();
-
 const { rm } = require('shelljs');
 const { render } = require('../config');
-const { ramMiddleware } = require('../utils');
-const { devHttpPort: port } = require('../config');
 
 const webpack = require('webpack');
 const baseConfig = require('./webpack.base');
@@ -23,20 +18,12 @@ baseConfig.plugins.push(
     new webpack.NoEmitOnErrorsPlugin(),
     new FriendlyErrorsPlugin({
         compilationSuccessInfo: {
-            messages: [`Your application is already set at http://${host}:${port}/.\n`],
+            messages: [`Render script compiled.`],
         },
     })
 );
 
 const compiler = webpack(baseConfig);
-
-let fs;
-if (process.env.SERVER_TYPE === 'memory') {
-    compiler.outputFileSystem = fs = new MemoryFS();
-}
-else {
-    fs = require('fs');
-}
 
 compiler.watch(
     { ignored: /node_modules/ },
@@ -45,7 +32,3 @@ compiler.watch(
         (err && err.details && console.error(err.details))
     )
 );
-
-app
-    .use(ramMiddleware(fs, render.output))
-    .listen(port);

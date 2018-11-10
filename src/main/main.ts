@@ -15,16 +15,14 @@ function createWindow() {
         },
     });
 
+    win.loadURL(url.format({
+        pathname: path.join(__dirname, '../render/index.html'),
+        protocol: 'file:',
+        slashes: true,
+    }));
+
     if (process.env.NODE_ENV === 'development') {
-        win.loadURL(`http://localhost:${devHttpPort}`);
         win.webContents.openDevTools();
-    }
-    else {
-        win.loadURL(url.format({
-            pathname: path.join(__dirname, '../render/index.html'),
-            protocol: 'file:',
-            slashes: true,
-        }));
     }
 
     win.on('closed', () => {
