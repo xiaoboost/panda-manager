@@ -33,15 +33,15 @@ export interface MangaData {
 export interface TagData {
     /** 标签的唯一 ID */
     id: string;
-    /** 标签的真实名称 */
+    /** 标签名称 */
     name: string;
-    /** 标签的显示名称 */
-    display: string;
+    /** 标签别名 */
+    alias: string[];
 }
 
 /** 标签元数据 */
 export interface TagsGroupData extends TagData {
-    /** 标签集合内含的标签 */
+    /** 标签集合内含标签的 id */
     tags: string[];
 }
 
