@@ -1,16 +1,16 @@
 import './component.styl';
 
-import * as fs from 'fs-extra';
 import * as React from 'react';
-import Icon from 'antd/lib/icon';
-import { Reactive, StoreProps } from 'store';
-import { Link, RouteComponentProps } from 'react-router-dom';
 
-type Props = StoreProps & RouteComponentProps<{ id: string }>;
+import { Icon } from 'antd';
+import { Link } from 'react-router-dom';
+import { Reactive, StoreProps } from 'store';
 
 @Reactive
-export default class TagCollection extends React.Component<Props> {
+export default class TagCollection extends React.Component<StoreProps> {
     render() {
+        const { tagsGroups } = this.props.store;
+
         return <main id='tag-collection'>
             <header className='page-header tag-collection-header'>
                 <Link to='/'>

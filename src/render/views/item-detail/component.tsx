@@ -1,9 +1,9 @@
 import './component.styl';
-import 'antd/lib/icon/style';
 
 import * as fs from 'fs-extra';
 import * as React from 'react';
-import Icon from 'antd/lib/icon';
+
+import { Icon } from 'antd';
 import { Reactive, Computed, StoreProps } from 'store';
 import { Link, RouteComponentProps } from 'react-router-dom';
 

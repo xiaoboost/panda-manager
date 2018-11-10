@@ -1,14 +1,11 @@
 import './component.styl';
-import 'antd/lib/icon/style';
-import 'antd/lib/button/style';
-
-import Icon from 'antd/lib/icon';
-import Button from 'antd/lib/button';
 
 import * as React from 'react';
 import * as com from 'lib/com';
+
 import { shell } from 'electron';
 import { Link } from 'react-router-dom';
+import { Icon, Button } from 'antd';
 import { Reactive, StoreProps } from 'store';
 
 @Reactive

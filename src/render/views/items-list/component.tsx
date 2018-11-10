@@ -1,12 +1,7 @@
 import './component.styl';
-import 'antd/lib/icon/style';
-import 'antd/lib/menu/style';
-import 'antd/lib/dropdown/style';
 
 import * as React from 'react';
-import Icon from 'antd/lib/icon';
-import Menu from 'antd/lib/menu';
-import Dropdown from 'antd/lib/dropdown';
+import { Icon, Menu, Dropdown } from 'antd';
 
 import { join } from 'path';
 import { stringifyClass } from 'lib/utils';
