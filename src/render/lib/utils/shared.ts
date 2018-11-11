@@ -38,11 +38,3 @@ export function stringifyClass(opt: ClassInput) {
 export function delay(time = 0) {
     return new Promise((resolve) => setTimeout(resolve, time));
 }
-
-/**
- * 对象是否为空
- * @param obj 待检测对象
- */
-export function isEmpty(obj: object): boolean {
-    return Object.keys(obj).length > 0;
-}
