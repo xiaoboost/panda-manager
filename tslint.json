@@ -2,6 +2,8 @@
     "defaultSeverity": "error",
     "extends":"tslint:recommended",
     "rules": {
+        "array-type": false,
+        "ban-types": false,
         // 不强制使用 interface 字面量
         "interface-over-type-literal": false,
         // 函数重载不强制合并
