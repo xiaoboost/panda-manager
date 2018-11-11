@@ -3,7 +3,7 @@ import './component.styl';
 import * as React from 'react';
 
 import { TagData } from 'store';
-import { remove } from 'lib/utils';
+import { remove, stringifyClass } from 'lib/utils';
 import { Row, Col, Modal, Input, Icon, Tag, Tooltip } from 'antd';
 
 type TagType = Omit<TagData, 'id'>;
@@ -12,10 +12,11 @@ interface State {
     tags: string[];
     tagInput: string;
     nameInput: string;
-    isGroup?: boolean;
-    isCreate?: boolean;
+    nameInputError: boolean;
     modalVisible: boolean;
     inputVisible: boolean;
+    isGroup?: boolean;
+    isCreate?: boolean;
 }
 
 export default class TagEditer extends React.Component<{}, State> {
@@ -25,6 +26,7 @@ export default class TagEditer extends React.Component<{}, State> {
         nameInput: '',
         modalVisible: false,
         inputVisible: false,
+        nameInputError: false,
     };
 
     /** 新 tag 文本输入 */
@@ -50,6 +52,15 @@ export default class TagEditer extends React.Component<{}, State> {
     }
 
     private modalConfirm = () => {
+        if (!this.state.nameInput) {
+            this.setState({ nameInputError: true });
+            return;
+        }
+
+        if (this.state.tagInput) {
+            this.tagInputConfirm();
+        }
+
         this._switch({
             name: this.state.nameInput,
             alias: this.state.tags.slice(),
@@ -66,6 +77,7 @@ export default class TagEditer extends React.Component<{}, State> {
                 nameInput: name,
                 modalVisible: true,
                 inputVisible: false,
+                nameInputError: false,
             });
 
             this._switch = resolve;
@@ -73,7 +85,16 @@ export default class TagEditer extends React.Component<{}, State> {
     }
 
     render() {
-        const { tags, nameInput, tagInput, modalVisible, inputVisible, isGroup, isCreate } = this.state;
+        const {
+            tags,
+            nameInput,
+            tagInput,
+            nameInputError,
+            modalVisible,
+            inputVisible,
+            isGroup,
+            isCreate,
+        } = this.state;
 
         const tagText = `标签${isGroup ? '集' : ''}`;
         const title = `${isCreate ? '创建' : '编辑'}${tagText}`;
@@ -94,13 +115,18 @@ export default class TagEditer extends React.Component<{}, State> {
             onCancel={() => this.setState({ modalVisible: false })}
         >
             <Row gutter={6} type='flex'>
-                <Col span={4}>名称</Col>
+                <Col span={4} className='ant-form-item-required'>名称</Col>
                 <Col span={20}>
-                    <Input
-                        value={nameInput}
-                        placeholder={`请输入${tagText}名称`}
-                        onChange={inputNameChange}
-                    />
+                    <div
+                        style={{ width: '100%' }}
+                        className={stringifyClass({ 'has-error': nameInputError })}
+                    >
+                        <Input
+                            value={nameInput}
+                            placeholder={`请输入${tagText}名称`}
+                            onChange={inputNameChange}
+                        />
+                    </div>
                 </Col>
             </Row>
             <Row gutter={6} type='flex'>
@@ -128,6 +154,7 @@ export default class TagEditer extends React.Component<{}, State> {
                             size='small'
                             style={{ width: 78 }}
                             value={tagInput}
+                            className='tag-input'
                             onChange={inputTagChange}
                             onBlur={this.tagInputConfirm}
                             onPressEnter={this.tagInputConfirm}
