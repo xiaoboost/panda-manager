@@ -1,8 +1,8 @@
 process.env.NODE_ENV = 'production';
 
-const { rm } = require('shelljs');
 const { cyan } = require('chalk');
 const { main } = require('../config');
+const { removeSync: rm } = require('fs-extra');
 
 const webpack = require('webpack');
 const baseConfig = require('./webpack.base');
@@ -21,7 +21,7 @@ baseConfig.plugins.push(
     })
 );
 
-rm('-rf', main.output);
+rm(main.output);
 
 webpack(baseConfig, (err, stats) => {
     if (err) {

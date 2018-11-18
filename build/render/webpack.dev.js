@@ -1,14 +1,14 @@
 process.env.NODE_ENV = 'development';
 
-const { rm } = require('shelljs');
 const { render } = require('../config');
+const { removeSync: rm } = require('fs-extra');
 
 const webpack = require('webpack');
 const baseConfig = require('./webpack.base');
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 
 // 删除输出文件夹
-rm('-rf', render.output);
+rm(render.output);
 
 // 每个模块用 eval() 执行, SourceMap 作为 DataUrl 添加到文件末尾
 baseConfig.devtool = 'eval-source-map';
