@@ -1,6 +1,8 @@
 /** Ignoring some properties in an interface */
 declare type Omit<T, K extends keyof T> = { [key in Exclude<keyof T, K>]: T[key] };
 
+declare type PartPartial<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+
 /** To overwrite a read-only interface as writable */
 declare type Writeable<T extends object> = { -readonly [P in keyof T]: T[P] };
 

@@ -93,9 +93,9 @@ export default class Manga implements MangaData {
         id = uuid(),
         tagsGroups = [],
     }: MangaInput) {
-        this.name = parse(name).name;
         this.id = id;
-        this.file = { ... file };
+        this.file = { ...file };
+        this.name = parse(name).name;
         this.tagsGroups = tagsGroups;
         this.cachePath = join(appRoot, 'cache', this.id);
     }

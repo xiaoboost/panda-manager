@@ -1,175 +1,159 @@
-import './component.styl';
-
 import * as React from 'react';
 
-import { TagData } from 'store';
-import { remove, stringifyClass } from 'lib/utils';
-import { Row, Col, Modal, Input, Icon, Tag, Tooltip } from 'antd';
+import { ValidationRule } from 'antd/lib/form';
+import { stringifyClass, remove } from 'lib/utils';
+import { Row, Col, Input, Tooltip, Tag, Icon } from 'antd';
 
-type TagType = Omit<TagData, 'id'>;
-
-interface State {
-    tags: string[];
-    tagInput: string;
-    nameInput: string;
-    nameInputError: boolean;
-    modalVisible: boolean;
-    inputVisible: boolean;
-    isGroup?: boolean;
-    isCreate?: boolean;
+interface FormData {
+    name: string;
+    alias: string[];
+    nameRules: ValidationRule[];
 }
 
-export default class TagEditer extends React.Component<{}, State> {
+interface State extends Omit<FormData, 'name'> {
+    nameInput: string;
+    tagInput: string;
+    nameInputError: boolean;
+    nameInputErrorMessage: string;
+    tagInputVisible: boolean;
+}
+
+type InputEvent = React.ChangeEvent<HTMLInputElement>;
+
+export default class TagEditForm extends React.Component<{}, State> {
+    static baseNameRule: ValidationRule[] = [{
+        required: true,
+        message: '请输入名称',
+    }];
+
+    static tagLengthLimit = 12;
+
+    // 组件状态
     state: State = {
-        tags: [],
-        tagInput: '',
         nameInput: '',
-        modalVisible: false,
-        inputVisible: false,
+        tagInput: '',
         nameInputError: false,
+        tagInputVisible: false,
+        nameInputErrorMessage: '',
+
+        alias: [],
+        nameRules: [],
     };
 
-    /** 新 tag 文本输入 */
-    private tagInput!: Input;
-
-    /** 内部 Promise 状态保存 */
-    private _switch!: (val: TagType) => void;
+    // tag input 元素
+    private tagInputEle!: Input;
 
     /** 新标签输入确认 */
     private tagInputConfirm = () => {
-        const { tagInput, tags } = this.state;
+        const { tagInput, alias } = this.state;
 
-        if (tagInput && tags.indexOf(tagInput) === -1) {
+        if (tagInput && alias.indexOf(tagInput) === -1) {
             this.setState({
-                tags: tags.concat([tagInput]),
+                alias: alias.concat([tagInput]),
             });
         }
 
         this.setState({
             tagInput: '',
-            inputVisible: false,
+            tagInputVisible: false,
         });
     }
 
-    private modalConfirm = () => {
-        if (!this.state.nameInput) {
-            this.setState({ nameInputError: true });
-            return;
-        }
+    // 设置表单数据
+    setData({ name, alias, nameRules = [] }: PartPartial<FormData, 'nameRules'>) {
+        this.setState({
+            alias,
+            nameInput: name,
+            nameRules: TagEditForm.baseNameRule.concat(nameRules),
+            nameInputError: false,
+            tagInputVisible: false,
+            nameInputErrorMessage: '',
+        });
+    }
 
-        if (this.state.tagInput) {
-            this.tagInputConfirm();
-        }
+    // 验证
+    validate() {
 
-        this._switch({
+    }
+
+    // 取出当前数据
+    getData(): Omit<FormData, 'nameRules'> {
+        return {
             name: this.state.nameInput,
-            alias: this.state.tags.slice(),
-        });
-
-        this.setState({ modalVisible: false });
-    }
-
-    setModal({ name = '', alias = [] }: Partial<TagType> = {}) {
-        return new Promise<TagType>((resolve) => {
-            this.setState({
-                tags: alias.slice(),
-                tagInput: '',
-                nameInput: name,
-                modalVisible: true,
-                inputVisible: false,
-                nameInputError: false,
-            });
-
-            this._switch = resolve;
-        });
+            alias: this.state.alias.slice(),
+        };
     }
 
     render() {
         const {
-            tags,
             nameInput,
-            tagInput,
             nameInputError,
-            modalVisible,
-            inputVisible,
-            isGroup,
-            isCreate,
+            alias: tags,
+            tagInput,
+            tagInputVisible,
+            nameInputErrorMessage,
         } = this.state;
 
-        const tagText = `标签${isGroup ? '集' : ''}`;
-        const title = `${isCreate ? '创建' : '编辑'}${tagText}`;
+        const saveInput = (input: Input) => this.tagInputEle = input;
+        const showInput = () => this.setState({ tagInputVisible: true }, () => this.tagInputEle.focus());
+        const inputTagChange = (ev: InputEvent) => this.setState({ tagInput: ev.target.value });
+        const inputNameChange = (ev: InputEvent) => this.setState({ nameInput: ev.target.value }, () => this.validate());
 
-        const saveInput = (input: Input) => this.tagInput = input;
-        const showInput = () => this.setState({ inputVisible: true }, () => this.tagInput.focus());
-        const inputNameChange = (ev: React.ChangeEvent<HTMLInputElement>) => this.setState({ nameInput: ev.target.value });
-        const inputTagChange = (ev: React.ChangeEvent<HTMLInputElement>) => this.setState({ tagInput: ev.target.value });
-
-        return <Modal
-            visible={modalVisible}
-            title={title}
-            wrapClassName='tag-editer'
-            width='420px'
-            cancelText='取消'
-            okText='保存'
-            onOk={this.modalConfirm}
-            onCancel={() => this.setState({ modalVisible: false })}
-        >
-            <Row gutter={6} type='flex'>
-                <Col span={4} className='ant-form-item-required'>名称</Col>
-                <Col span={20}>
-                    <div
-                        style={{ width: '100%' }}
-                        className={stringifyClass({ 'has-error': nameInputError })}
-                    >
+        return (
+            <div id='tag-edit-form' className='ant-form'>
+                <Row gutter={6} type='flex' className='ant-form-item'>
+                    <Col span={5} className='ant-form-item-label'>
+                        <label className='ant-form-item-required'>名称</label>
+                    </Col>
+                    <Col span={19} className={stringifyClass(['ant-form-item-control', { 'has-error': nameInputError }])}>
                         <Input
                             value={nameInput}
-                            placeholder={`请输入${tagText}名称`}
+                            placeholder='请输入'
                             onChange={inputNameChange}
                         />
-                    </div>
-                </Col>
-            </Row>
-            <Row gutter={6} type='flex'>
-                <Col span={4}>
-                    <span>别名</span>
-                    <Tooltip title='用于兼容不同情况下的同一个标签'>
-                        <Icon type='question-circle' style={{ marginLeft: '4px', fontSize: '80%' }} />
-                    </Tooltip>
-                </Col>
-                <Col span={20}>
-                    {tags.map((tag) => {
-                        const longLimit = 12;
-                        const isLongTag = tag.length > longLimit;
-                        const tagElem = (
-                            <Tag closable key={tag} afterClose={() => remove(tags, tag)}>
-                                {isLongTag ? `${tag.slice(0, longLimit)}...` : tag}
+                        {nameInputError && <div className='ant-form-explain'>{nameInputErrorMessage}</div>}
+                    </Col>
+                </Row>
+                <Row gutter={6} type='flex'>
+                    <Col span={5}>
+                        <span>别名</span>
+                        <Tooltip title='用于兼容不同情况'>
+                            <Icon type='question-circle' style={{ marginLeft: '4px', fontSize: '80%' }} />
+                        </Tooltip>
+                    </Col>
+                    <Col span={19}>
+                        {tags.map((tag) => {
+                            const longLimit = TagEditForm.tagLengthLimit;
+                            const isLongTag = tag.length > longLimit;
+                            const tagElem = (
+                                <Tag closable key={tag} afterClose={() => remove(tags, tag)}>
+                                    {isLongTag ? `${tag.slice(0, longLimit)}...` : tag}
+                                </Tag>
+                            );
+                            return isLongTag ? <Tooltip title={tag} key={tag}>{tagElem}</Tooltip> : tagElem;
+                        })}
+                        {tagInputVisible
+                            ? <Input
+                                ref={saveInput}
+                                type='text'
+                                size='small'
+                                style={{ width: 78 }}
+                                value={tagInput}
+                                className='tag-input'
+                                onChange={inputTagChange}
+                                onBlur={this.tagInputConfirm}
+                                onPressEnter={this.tagInputConfirm}
+                            />
+                            : <Tag
+                                onClick={showInput}
+                                style={{ background: '#fff', borderStyle: 'dashed' }}
+                            >
+                                <Icon type='plus' /> 新别名
                             </Tag>
-                        );
-                        return isLongTag ? <Tooltip title={tag} key={tag}>{tagElem}</Tooltip> : tagElem;
-                    })}
-                    {inputVisible && (
-                        <Input
-                            ref={saveInput}
-                            type='text'
-                            size='small'
-                            style={{ width: 78 }}
-                            value={tagInput}
-                            className='tag-input'
-                            onChange={inputTagChange}
-                            onBlur={this.tagInputConfirm}
-                            onPressEnter={this.tagInputConfirm}
-                        />
-                    )}
-                    {!inputVisible && (
-                        <Tag
-                            onClick={showInput}
-                            style={{ background: '#fff', borderStyle: 'dashed' }}
-                        >
-                            <Icon type='plus' /> 新别名
-                        </Tag>
-                    )}
-                </Col>
-            </Row>
-        </Modal>;
+                        }
+                    </Col>
+                </Row>
+            </div>
+        );
     }
 }

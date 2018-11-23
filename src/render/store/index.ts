@@ -5,8 +5,8 @@ export * from './manga';
 export * from './cache';
 
 export { AppCache };
-export { inject as Inject } from 'mobx-react';
 export { observable as State, computed as Computed } from 'mobx';
+export { inject as Inject, observer as ReactiveNoInject } from 'mobx-react';
 
 export type StoreProps = { store: AppCache };
 
