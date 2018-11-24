@@ -1,30 +1,11 @@
-.tag-editer {
-    .ant-modal-body {
-        padding-top: 14px;
-        padding-bottom: 10px;
+#tag-edit-form {
+    .ant-form-item-label label {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
 
-        [class|="ant-row"], [class|="ant-col"] {
-            min-height: 32px;
-        }
-
-        [class|="ant-row"]+[class|="ant-row"] {
-            margin-top: 4px;
-        }
-        
-        .ant-row-flex [class|="ant-col"] {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            height: 100%;
-        }
-
-        .ant-tag {
-            margin-top: 4px;
-            margin-bottom: 4px;
-        }
-        .tag-input {
-            margin-top: 2px;
-            margin-bottom: 4px;
-        }
+    .ant-form-item:last-child {
+        margin-bottom: 0;
     }
 }

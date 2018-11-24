@@ -1,16 +1,19 @@
+import './component.styl';
+
 import * as React from 'react';
 
 import { ValidationRule } from 'antd/lib/form';
 import { stringifyClass, remove } from 'lib/utils';
 import { Row, Col, Input, Tooltip, Tag, Icon } from 'antd';
 
-interface FormData {
+export interface Props {
     name: string;
-    alias: string[];
-    nameRules: ValidationRule[];
+    alias?: string[];
+    nameRules?: ValidationRule[];
 }
 
-interface State extends Omit<FormData, 'name'> {
+export interface State {
+    alias: string[];
     nameInput: string;
     tagInput: string;
     nameInputError: boolean;
@@ -20,7 +23,7 @@ interface State extends Omit<FormData, 'name'> {
 
 type InputEvent = React.ChangeEvent<HTMLInputElement>;
 
-export default class TagEditForm extends React.Component<{}, State> {
+export default class TagEditForm extends React.Component<Props, State> {
     static baseNameRule: ValidationRule[] = [{
         required: true,
         message: '请输入名称',
@@ -30,14 +33,12 @@ export default class TagEditForm extends React.Component<{}, State> {
 
     // 组件状态
     state: State = {
-        nameInput: '',
+        alias: this.props.alias || [],
+        nameInput: this.props.name,
         tagInput: '',
         nameInputError: false,
         tagInputVisible: false,
         nameInputErrorMessage: '',
-
-        alias: [],
-        nameRules: [],
     };
 
     // tag input 元素
@@ -60,24 +61,24 @@ export default class TagEditForm extends React.Component<{}, State> {
     }
 
     // 设置表单数据
-    setData({ name, alias, nameRules = [] }: PartPartial<FormData, 'nameRules'>) {
-        this.setState({
-            alias,
-            nameInput: name,
-            nameRules: TagEditForm.baseNameRule.concat(nameRules),
-            nameInputError: false,
-            tagInputVisible: false,
-            nameInputErrorMessage: '',
-        });
-    }
+    // setData({ name, alias, nameRules = [] }: PartPartial<FormData, 'nameRules'>) {
+    //     this.setState({
+    //         alias,
+    //         nameInput: name,
+    //         nameRules: TagEditForm.baseNameRule.concat(nameRules),
+    //         nameInputError: false,
+    //         tagInputVisible: false,
+    //         nameInputErrorMessage: '',
+    //     });
+    // }
 
     // 验证
     validate() {
-
+        return true;
     }
 
     // 取出当前数据
-    getData(): Omit<FormData, 'nameRules'> {
+    getData() {
         return {
             name: this.state.nameInput,
             alias: this.state.alias.slice(),
@@ -114,14 +115,16 @@ export default class TagEditForm extends React.Component<{}, State> {
                         {nameInputError && <div className='ant-form-explain'>{nameInputErrorMessage}</div>}
                     </Col>
                 </Row>
-                <Row gutter={6} type='flex'>
-                    <Col span={5}>
-                        <span>别名</span>
-                        <Tooltip title='用于兼容不同情况'>
-                            <Icon type='question-circle' style={{ marginLeft: '4px', fontSize: '80%' }} />
-                        </Tooltip>
+                <Row gutter={6} type='flex' className='ant-form-item'>
+                    <Col span={5} className='ant-form-item-label'>
+                        <label>
+                            <span>别名</span>
+                            <Tooltip title='用于兼容不同情况'>
+                                <Icon type='question-circle' style={{ marginLeft: '4px', fontSize: '80%' }} />
+                            </Tooltip>
+                        </label>
                     </Col>
-                    <Col span={19}>
+                    <Col span={19} className='ant-form-item-control'>
                         {tags.map((tag) => {
                             const longLimit = TagEditForm.tagLengthLimit;
                             const isLongTag = tag.length > longLimit;
