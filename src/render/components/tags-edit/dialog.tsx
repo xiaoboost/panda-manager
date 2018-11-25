@@ -4,37 +4,16 @@ import * as ReactDOM from 'react-dom';
 import { Modal } from 'antd';
 import { ModalProps } from 'antd/lib/modal';
 
-import { default as TagEditForm, Props as TagEditerProps } from './component';
+import {
+    default as TagEditForm,
+    Props as TagEditerProps,
+} from './component';
 
-interface DialogProps {
-    modalProps: ModalProps;
-    formProps: TagEditerProps;
-}
-
-const ConfirmDialog = (config: DialogProps) => {
-    let form: TagEditForm;
-
-    const { modalProps, formProps } = config;
-    const okCallback = modalProps.onOk;
-
-    modalProps.onOk = (e: React.MouseEvent<HTMLButtonElement>) => {
-        if (form && form.validate()) {
-            okCallback && okCallback(e);
-        }
-    };
-
-    return (
-        <Modal {...modalProps}>
-            <TagEditForm
-                {...formProps}
-                ref={(el: TagEditForm) => form = el}
-            />
-        </Modal>
-    );
-};
-
-export function editTag(title: string, data: Partial<TagEditerProps> = { name: '' }) {
+export function editTag(title: string, formData: TagEditerProps = {}) {
     return new Promise((resolve) => {
+        // 表格组件引用
+        let formEle: TagEditForm;
+
         const div = document.createElement('div');
         const baseConfig: ModalProps = {
             title,
@@ -43,8 +22,15 @@ export function editTag(title: string, data: Partial<TagEditerProps> = { name: '
             onCancel: close,
             afterClose: destroy,
             getContainer: () => div,
+            onOk: () => {
+                if (formEle && formEle.validate()) {
+                    resolve(formEle.getData());
+                    close();
+                }
+            },
         };
 
+        /** 销毁当前对话框 */
         function destroy() {
             const unmountResult = ReactDOM.unmountComponentAtNode(div);
 
@@ -53,6 +39,7 @@ export function editTag(title: string, data: Partial<TagEditerProps> = { name: '
             }
         }
 
+        /** 关闭对话框 */
         function close() {
             render({
                 ...baseConfig,
@@ -60,12 +47,15 @@ export function editTag(title: string, data: Partial<TagEditerProps> = { name: '
             });
         }
 
+        /** 渲染对话框 */
         function render(props: ModalProps) {
             ReactDOM.render(
-                <ConfirmDialog
-                    modalProps={props}
-                    formProps={data}
-                />,
+                <Modal {...props}>
+                    <TagEditForm
+                        {...formData}
+                        ref={(el: TagEditForm) => formEle = el}
+                    />
+                </Modal>,
                 div,
             );
         }
