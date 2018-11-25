@@ -1,5 +1,3 @@
-import './component.styl';
-
 import * as React from 'react';
 
 import { ValidationRule } from 'antd/lib/form';

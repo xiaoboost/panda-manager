@@ -5,8 +5,8 @@ import { Icon, Menu, Dropdown } from 'antd';
 
 import { join } from 'path';
 import { stringifyClass } from 'lib/utils';
-import { Reactive, State, Computed, StoreProps } from 'store';
 import { Link, RouteComponentProps } from 'react-router-dom';
+import { Reactive, State, Computed, StoreProps } from 'store';
 
 type Props = StoreProps & RouteComponentProps;
 type SortKey = StoreProps['store']['sort']['by'];

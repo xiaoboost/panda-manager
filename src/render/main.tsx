@@ -10,7 +10,7 @@ import store from 'store';
 import Setting from 'views/setting/component';
 import ItemsList from 'views/items-list/component';
 import ItemDetail from 'views/item-detail/component';
-import TagCollection from 'views/tag-collection/component';
+import TagCollection from 'views/tag-collection';
 
 render(
     <Provider store={store}>
