@@ -1,6 +1,3 @@
-import './component.styl';
-
-import * as fs from 'fs-extra';
 import * as React from 'react';
 
 import { Icon } from 'antd';

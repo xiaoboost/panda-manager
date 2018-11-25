@@ -1,5 +1,3 @@
-import './component.styl';
-
 import * as React from 'react';
 import * as com from 'lib/com';
 

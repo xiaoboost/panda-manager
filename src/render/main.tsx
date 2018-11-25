@@ -7,9 +7,9 @@ import { HashRouter, Route, Switch } from 'react-router-dom';
 
 import store from 'store';
 
-import Setting from 'views/setting/component';
-import ItemsList from 'views/items-list/component';
-import ItemDetail from 'views/item-detail/component';
+import Setting from 'views/setting';
+import ItemsList from 'views/items-list';
+import ItemDetail from 'views/item-detail';
 import TagCollection from 'views/tag-collection';
 
 render(

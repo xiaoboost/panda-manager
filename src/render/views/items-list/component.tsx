@@ -1,5 +1,3 @@
-import './component.styl';
-
 import * as React from 'react';
 import { Icon, Menu, Dropdown } from 'antd';
 
