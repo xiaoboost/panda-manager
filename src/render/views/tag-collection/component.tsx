@@ -3,22 +3,17 @@ import './component.styl';
 import * as React from 'react';
 
 import uuid from 'uuid';
-import { confirmDialog } from 'lib/com';
 import { Link } from 'react-router-dom';
-import { Reactive, StoreProps } from 'store';
 import { Icon, Button, Dropdown, Menu } from 'antd';
 
-import TagEditer from 'components/tags-edit/component';
-
-// type EditData = Writeable<Pick<TagEditer['props'], 'name' | 'alias' | 'isGroup' | 'isCreate'>>;
-type TagGroupData = StoreProps['store']['tagsGroups']['key'];
+import { editTag } from 'components/tags-edit';
+import { confirmDialog } from 'lib/com';
+import { Reactive, StoreProps, TagsGroupData } from 'store';
 
 @Reactive
 export default class TagCollection extends React.Component<StoreProps> {
-    editer!: TagEditer;
-
     addTagGroup = async () => {
-        const result = await this.editer.setModal();
+        const result = await editTag('创建标签集');
         const id = uuid();
 
         this.props.store.tagsGroups[id] = {
@@ -27,12 +22,8 @@ export default class TagCollection extends React.Component<StoreProps> {
         };
     }
 
-    async editTagGroup(data: TagGroupData) {
-        const result = await this.editer.setModal({
-            name: data.name,
-            alias: data.alias,
-        });
-
+    async editTagGroup(data: TagsGroupData) {
+        const result = await editTag('编辑标签集', data);
         const { tagsGroups } = this.props.store;
 
         tagsGroups[data.id] = {
@@ -43,7 +34,7 @@ export default class TagCollection extends React.Component<StoreProps> {
         // TODO: 影响所有的漫画
     }
 
-    async deleteTagGroup(data: TagGroupData) {
+    async deleteTagGroup(data: TagsGroupData) {
         await confirmDialog(
             '删除确认',
             `确认删除 ${data.name} 标签集？`,
@@ -56,8 +47,7 @@ export default class TagCollection extends React.Component<StoreProps> {
 
     render() {
         const { tagsGroups } = this.props.store;
-        const saveEditerModal = (editer: TagEditer) => this.editer = editer;
-        const GroupMenu = (data: TagGroupData) => (
+        const GroupMenu = (data: TagsGroupData) => (
             <Menu className='tags-group-menu'>
                 <Menu.Item index-data='edit' onClick={() => this.editTagGroup(data)}>编辑</Menu.Item>
                 <Menu.Item index-data='delete' onClick={() => this.deleteTagGroup(data)}>删除</Menu.Item>
@@ -91,8 +81,6 @@ export default class TagCollection extends React.Component<StoreProps> {
                 </div>
                 <Button onClick={this.addTagGroup}><Icon type='plus-circle' />添加标签集</Button>
             </article>
-
-            <TagEditer ref={saveEditerModal} />
         </main>;
     }
 }

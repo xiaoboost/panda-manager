@@ -6,11 +6,12 @@ import { ModalProps } from 'antd/lib/modal';
 
 import {
     default as TagEditForm,
-    Props as TagEditerProps,
+    Props,
+    FormData,
 } from './component';
 
-export function editTag(title: string, formData: TagEditerProps = {}) {
-    return new Promise((resolve) => {
+export function editTag(title: string, formData: Props = {}) {
+    return new Promise<FormData>((resolve) => {
         // 表格组件引用
         let formEle: TagEditForm;
 

@@ -6,9 +6,12 @@ import { ValidationRule } from 'antd/lib/form';
 import { stringifyClass, remove } from 'lib/utils';
 import { Row, Col, Input, Tooltip, Tag, Icon } from 'antd';
 
-export interface Props {
-    name?: string;
-    alias?: string[];
+export interface FormData {
+    name: string;
+    alias: string[];
+}
+
+export interface Props extends Partial<FormData> {
     nameRules?: ValidationRule[];
 }
 
@@ -93,7 +96,7 @@ export default class TagEditForm extends React.Component<Props, State> {
     }
 
     // 取出当前数据
-    getData() {
+    getData(): FormData {
         return {
             name: this.state.nameInput,
             alias: this.state.alias.slice(),
