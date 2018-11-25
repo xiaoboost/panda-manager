@@ -20,6 +20,7 @@ export function editTag(title: string, formData: Props = {}) {
             title,
             width: 400,
             visible: true,
+            maskClosable: false,
             onCancel: close,
             afterClose: destroy,
             getContainer: () => div,

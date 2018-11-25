@@ -92,7 +92,7 @@ export default class TagEditForm extends React.Component<Props, State> {
             nameInputErrorMessage: state.nameInputErrorMessage,
         });
 
-        return Boolean(state.nameInputErrorMessage);
+        return !(state.nameInputErrorMessage);
     }
 
     // 取出当前数据
