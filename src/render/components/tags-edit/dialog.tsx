@@ -23,6 +23,8 @@ export function editTag(title: string, formData: Props = {}) {
             maskClosable: false,
             onCancel: close,
             afterClose: destroy,
+            okText: '确定',
+            cancelText: '取消',
             getContainer: () => div,
             onOk: () => {
                 if (formEle && formEle.validate()) {

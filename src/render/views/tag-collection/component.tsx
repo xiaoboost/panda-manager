@@ -37,7 +37,7 @@ export default class TagCollection extends React.Component<StoreProps> {
     async deleteTagGroup(data: TagsGroupData) {
         await confirmDialog(
             '删除确认',
-            `确认删除 ${data.name} 标签集？`,
+            `确认删除标签集：${data.name}？`,
         );
 
         delete this.props.store.tagsGroups[data.id];
