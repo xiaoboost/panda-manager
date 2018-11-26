@@ -16,7 +16,7 @@ export interface MangaData {
     /** 预览文件坐标 */
     previewPositions: number[];
     /** 当前漫画的 tag 集合 */
-    tagsGroups: TagsGroupData[];
+    tagGroups: TagGroupData[];
 
     /** 对应的实际文件属性 */
     file: {
@@ -40,14 +40,14 @@ export interface TagData {
 }
 
 /** 标签元数据 */
-export interface TagsGroupData extends TagData {
+export interface TagGroupData extends TagData {
     /** 标签集合内含标签的 id */
-    tags: string[];
+    tags: TagData[];
 }
 
 type MangaInput =
     Pick<MangaData, 'name' | 'file'> &
-    Partial<Pick<MangaData, 'id' | 'tagsGroups'>>;
+    Partial<Pick<MangaData, 'id' | 'tagGroups'>>;
 
 // 允许的图片后缀
 const allowImageExt = ['.bmp', '.jpeg', '.jpg', '.png', '.tiff', '.webp', '.svg'];
@@ -55,7 +55,7 @@ const allowImageExt = ['.bmp', '.jpeg', '.jpg', '.png', '.tiff', '.webp', '.svg'
 /** 同人志数据 */
 export default class Manga implements MangaData {
     name: string;
-    tagsGroups: TagsGroupData[];
+    tagGroups: TagGroupData[];
 
     file: {
         path: string;
@@ -91,12 +91,12 @@ export default class Manga implements MangaData {
         name,
         file,
         id = uuid(),
-        tagsGroups = [],
+        tagGroups = [],
     }: MangaInput) {
         this.id = id;
         this.file = { ...file };
         this.name = parse(name).name;
-        this.tagsGroups = tagsGroups;
+        this.tagGroups = tagGroups;
         this.cachePath = join(appRoot, 'cache', this.id);
     }
 
@@ -188,7 +188,7 @@ export default class Manga implements MangaData {
             id: this.id,
             name: this.name,
             file: this.file,
-            tagsGroups: this.tagsGroups,
+            tagGroups: this.tagGroups,
             previewPositions: this.previewPositions,
         };
 

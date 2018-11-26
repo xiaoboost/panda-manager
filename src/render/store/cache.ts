@@ -2,7 +2,7 @@ import * as fs from 'fs-extra';
 import { observable as State } from 'mobx';
 import Message from 'components/progress/component';
 
-import Manga, { MangaData, TagData, TagsGroupData } from './manga';
+import Manga, { MangaData, TagData, TagGroupData } from './manga';
 
 import {
     join,
@@ -25,8 +25,7 @@ import {
 interface CacheFileData {
     mangas: string[];
     directories: string[];
-    tags: AnyObject<TagData>;
-    tagsGroups: AnyObject<TagsGroupData>;
+    tagGroups: AnyObject<TagGroupData>;
     sort: {
         by: 'name' | 'lastModified';
         asc: boolean;
@@ -39,13 +38,9 @@ export default class AppCache implements Omit<CacheFileData, 'mangas'> {
     @State
     mangas: Manga[] = [];
 
-    /** 所有标签 */
-    @State
-    tags: AnyObject<TagData> = {};
-
     /** 所有标签集合 */
     @State
-    tagsGroups: AnyObject<TagsGroupData> = {};
+    tagGroups: AnyObject<TagGroupData> = {};
 
     /** 当前所有文件夹 */
     @State
@@ -74,7 +69,7 @@ export default class AppCache implements Omit<CacheFileData, 'mangas'> {
         let result = true;
 
         const arrs = ['mangas', 'directories'];
-        const objs = ['tags', 'tagsGroups'];
+        const objs = ['tagGroups'];
 
         for (const key of arrs) {
             if (!isArray(data[key])) {
@@ -109,8 +104,7 @@ export default class AppCache implements Omit<CacheFileData, 'mangas'> {
         // 缓存数据存在
         if (data) {
             this.checkCacheData(data);
-            this.tags = data.tags;
-            this.tagsGroups = data.tagsGroups;
+            this.tagGroups = data.tagGroups;
             this.directories = data.directories;
 
             // 读取所有漫画缓存数据
@@ -161,8 +155,7 @@ export default class AppCache implements Omit<CacheFileData, 'mangas'> {
     async writeCache() {
         const data: CacheFileData =  {
             mangas: this.mangas.map((item) => item.id),
-            tags: this.tags,
-            tagsGroups: this.tagsGroups,
+            tagGroups: this.tagGroups,
             directories: this.directories,
             sort: this.sort,
         };

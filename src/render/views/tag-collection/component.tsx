@@ -14,7 +14,7 @@ import { Reactive, StoreProps, Computed } from 'store';
 export default class TagCollection extends React.Component<StoreProps> {
     @Computed
     get groups() {
-        return Object.values(this.props.store.tagsGroups).sort((pre, next) => {
+        return Object.values(this.props.store.tagGroups).sort((pre, next) => {
             return naturalCompare(pre.name, next.name);
         });
     }
@@ -23,7 +23,7 @@ export default class TagCollection extends React.Component<StoreProps> {
         const result = await editTag('创建标签集');
         const id = uuid();
 
-        this.props.store.tagsGroups[id] = {
+        this.props.store.tagGroups[id] = {
             ...result,
             id, tags: [],
         };
