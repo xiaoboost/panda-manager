@@ -4,13 +4,17 @@ import { checkCircularStructure } from './clone';
 /**
  * 移除数组中的某个值
  */
-export function remove<T>(arr: T[], item: T) {
-    if (arr.length) {
-        const index = arr.indexOf(item);
-        if (index > -1) {
-            arr.splice(index, 1);
-            return;
-        }
+export function remove<T>(arr: T[], item: T | ((item: T) => boolean)) {
+    const index = isFunc(item)
+        ? arr.findIndex(item)
+        : arr.indexOf(item);
+
+    if (index > -1) {
+        arr.splice(index, 1);
+        return true;
+    }
+    else {
+        return false;
     }
 }
 
