@@ -2,8 +2,8 @@ import * as React from 'react';
 
 import { editTag } from 'components/tags-edit';
 import { confirmDialog } from 'lib/com';
-import { Icon, Button, Dropdown, Menu } from 'antd';
-import { default as Store, ReactiveNoInject, Computed } from 'store';
+import { Icon, Button, Dropdown, Menu, Tag } from 'antd';
+import { default as Store, ReactiveNoInject, State, Computed, TagData } from 'store';
 
 interface Props {
     id: string;
@@ -13,17 +13,22 @@ interface Props {
 export default class TagsGroup extends React.Component<Props> {
     @Computed
     get group() {
-        return Store.tagsGroups[this.props.id];
+        return Store.tagGroups[this.props.id];
+    }
+
+    @Computed
+    get tags() {
+        return this.group.tags.sort((pre, next) => pre.name > next.name ? -1 : 1);
     }
 
     /** 编辑当前标签集 */
     editTagGroup = async () => {
         const result = await editTag('编辑标签集', this.group);
-        const { tagsGroups } = Store;
+        const { tagGroups } = Store;
         const { id } = this.group;
 
-        tagsGroups[id] = {
-            ...tagsGroups[id],
+        tagGroups[id] = {
+            ...tagGroups[id],
             ...result,
         };
 
@@ -39,11 +44,26 @@ export default class TagsGroup extends React.Component<Props> {
 
         // TODO: 所有漫画中需要删除所有记录
 
-        delete Store.tagsGroups[this.props.id];
+        delete Store.tagGroups[this.props.id];
+    }
+
+    /** 创建标签 */
+    createTag() {
+
+    }
+
+    /** 编辑当前标签 */
+    editTag = async (id: string) => {
+
+    }
+
+    /** 删除当前标签 */
+    deleteTag = async (id: string) => {
+
     }
 
     render() {
-        const { group } = this;
+        const { group, tags } = this;
         const GroupMenu = (
             <Menu className='tags-group-menu'>
                 <Menu.Item index-data='edit' onClick={this.editTagGroup}>编辑</Menu.Item>
@@ -61,9 +81,15 @@ export default class TagsGroup extends React.Component<Props> {
                 </div>
             </header>
             <article className='tags-group-card__content'>
-                {group.tags.map((tag) =>
-                    <span>{tag}</span>,
+                {tags.map((tag) =>
+                    <Tag>{tag.name}</Tag>,
                 )}
+                <Tag
+                    onClick={this.createTag}
+                    style={{ background: '#fff', borderStyle: 'dashed' }}
+                >
+                    <Icon type='plus' /> 新标签
+                </Tag>
             </article>
         </section>;
     }
