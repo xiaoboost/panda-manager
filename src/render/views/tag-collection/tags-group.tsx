@@ -1,9 +1,12 @@
 import * as React from 'react';
 
+import uuid from 'uuid';
+
+import { remove } from 'lib/utils';
 import { editTag } from 'components/tags-edit';
-import { confirmDialog } from 'lib/com';
-import { Icon, Button, Dropdown, Menu, Tag } from 'antd';
-import { default as Store, ReactiveNoInject, State, Computed, TagData } from 'store';
+import { confirmDialog } from 'components/dialog';
+import { Icon, Dropdown, Menu, Tag } from 'antd';
+import { default as Store, ReactiveNoInject, Computed } from 'store';
 
 interface Props {
     id: string;
@@ -32,34 +35,59 @@ export default class TagsGroup extends React.Component<Props> {
             ...result,
         };
 
-        // TODO: 影响所有的漫画
+        await Store.writeCache();
     }
 
     /** 删除当前标签集 */
     deleteTagGroup = async () => {
         await confirmDialog(
-            '删除确认',
-            `确认删除标签集：${this.group.name}？`,
+            <span>删除标签集<Tag>{this.group.name}</Tag></span>,
+            '所有漫画中的此标签集都将会被删除\n当前操作无法撤销，确认删除？',
         );
 
         // TODO: 所有漫画中需要删除所有记录
 
         delete Store.tagGroups[this.props.id];
+
+        await Store.writeCache();
     }
 
     /** 创建标签 */
-    createTag() {
+    createTag = async () => {
+        const result = await editTag('创建新标签');
 
+        this.group.tags.push({
+            ...result,
+            id: uuid(),
+        });
+
+        await Store.writeCache();
     }
 
     /** 编辑当前标签 */
     editTag = async (id: string) => {
+        const tag = this.group.tags.find((item) => item.id === id)!;
+        const result = await editTag('编辑标签', tag);
 
+        Object.assign(tag, result);
+
+        await Store.writeCache();
     }
 
     /** 删除当前标签 */
     deleteTag = async (id: string) => {
+        const tag = this.group.tags.find((item) => item.id === id)!;
 
+        await confirmDialog(
+            <span>删除标签<Tag>{this.group.name}:{tag.name}</Tag></span>,
+            '所有漫画中的此标签都将会被删除\n当前操作无法撤销，确认删除？',
+        );
+
+        remove(this.group.tags, tag);
+
+        // TODO: 所有漫画中需要删除所有记录
+
+        await Store.writeCache();
     }
 
     render() {
@@ -82,7 +110,12 @@ export default class TagsGroup extends React.Component<Props> {
             </header>
             <article className='tags-group-card__content'>
                 {tags.map((tag) =>
-                    <Tag>{tag.name}</Tag>,
+                    <Tag
+                        key={tag.id}
+                        onDoubleClick={() => this.editTag(tag.id)}
+                    >
+                        {tag.name} <Icon type='close' onClick={() => this.deleteTag(tag.id)}/>
+                    </Tag>,
                 )}
                 <Tag
                     onClick={this.createTag}
