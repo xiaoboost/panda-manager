@@ -55,17 +55,16 @@ class WorkerProcess {
         }
         // 繁忙标志位置低，设定自毁定时器
         else {
-            const { min: limit } = this.manager.options;
-            const { length: count } = this.manager.pool;
+            const { pool, options } = this.manager;
 
             // 进程数量少于最小数量，不用销毁
-            if (count <= limit) {
+            if (pool.length <= options.min) {
                 return;
             }
 
             this._timer = window.setTimeout(
                 () => this.destroy(),
-                this.manager.options.timeout * 1000,
+                options.timeout * 1000,
             );
         }
     }
@@ -76,7 +75,7 @@ class WorkerProcess {
 
         this.worker.postMessage(args);
 
-        const { data } = await onceEvent<workerApi.Response<T>>(this.worker, 'message');
+        const { data } = await onceEvent<WorkerApi.Response<T>>(this.worker, 'message');
         const releaseEvent = this._freeEvents.shift();
 
         this.isBusy = false;
