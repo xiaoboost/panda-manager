@@ -54,7 +54,6 @@ async function setMessageAnimeClass(dom: Element, clas: translationClass[], time
 export function createMessage() {
     const contentDiv = document.createElement('div');
     const warpperDiv = document.createElement('div');
-    const state: MessageState = { currentPath: '' };
 
     warpperDiv.appendChild(contentDiv);
     document.body.appendChild(warpperDiv);

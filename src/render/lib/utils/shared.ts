@@ -38,3 +38,19 @@ export function stringifyClass(opt: ClassInput) {
 export function delay(time = 0) {
     return new Promise((resolve) => setTimeout(resolve, time));
 }
+
+/**
+ * 生成一个一次性的事件
+ * @export
+ * @param {(HTMLElement | Worker)} el
+ * @param {string} type
+ * @returns {Promise<Event>}
+ */
+export function onceEvent<T extends Event>(el: HTMLElement | Worker, type: string): Promise<T> {
+    return new Promise<T>((resolve) => {
+        el.addEventListener(type, (resolve as any), {
+            passive: true,
+            once: true,
+        });
+    });
+}

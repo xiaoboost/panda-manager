@@ -1,8 +1,7 @@
 import * as fs from 'fs-extra';
 import { observable as State } from 'mobx';
-import Message from 'components/progress/component';
-
-import Manga, { MangaData, TagData, TagGroupData } from './manga';
+import { setProgress } from 'components/progress';
+import { default as Manga, MangaData, TagGroupData } from './manga';
 
 import {
     join,
@@ -210,34 +209,26 @@ export default class AppCache implements Omit<CacheFileData, 'mangas'> {
      *  - false 只会刷新有修改记录的漫画缓存
      */
     async refreshCache(force = false) {
-        const notice = new Message();
-
-        notice.mount();
         this.isLoading = true;
 
         await this.removeExtraCache();
 
         for (const dir of this.directories) {
-            await this.refreshDirectories(dir, notice, force);
+            await this.refreshDirectories(dir, force);
         }
 
         this.isLoading = false;
-        await notice.destroy();
     }
 
     /**
      * 刷新文件夹中所包含的文件
      *  - 该刷新将会把某文件夹下的 meta.json 中的多余缓存删除
      * @param {string} dirInput 要刷新的文件夹
-     * @param {Message} message 消息提示
-     *  - 外部传入的消息提示组件
      * @param {boolean} force 是否强制刷新
      *  - true 将会强制刷新该文件夹下所有漫画的缓存（慎用）
      *  - false 只会刷新有修改记录的漫画缓存
      */
-    async refreshDirectories(dirInput: string, force?: boolean): Promise<void>;
-    async refreshDirectories(dirInput: string, message?: Message, force?: boolean): Promise<void>;
-    async refreshDirectories(dirInput: string, message?: Message | boolean, force?: boolean) {
+    async refreshDirectories(dirInput: string, force?: boolean) {
         // 输入文件夹不再包含的文件夹之中
         if (!this.directories.includes(dirInput)) {
             handleError(102, dirInput);
@@ -268,23 +259,6 @@ export default class AppCache implements Omit<CacheFileData, 'mangas'> {
                 }),
         );
 
-        // 输入默认值处理
-        let notice: Message;
-        if (isUndef(message)) {
-            force = false;
-            notice = new Message();
-            notice.mount();
-        }
-        else if (isBoolean(message)) {
-            force = message;
-            notice = new Message();
-            notice.mount();
-        }
-        else {
-            notice = message;
-            force = Boolean(force);
-        }
-
         // 刷新实际存在的漫画缓存
         for (let i = 0; i < dirMangas.length; i++) {
             const name = dirMangas[i];
@@ -298,11 +272,11 @@ export default class AppCache implements Omit<CacheFileData, 'mangas'> {
                 continue;
             }
 
-            notice.setProgress({
-                message: fullPath,
-                progress: {
+            setProgress({
+                currentPath: fullPath,
+                jobProgress: {
                     total: dirMangas.length,
-                    finish: i + 1,
+                    current: i + 1,
                 },
             });
 
@@ -330,12 +304,6 @@ export default class AppCache implements Omit<CacheFileData, 'mangas'> {
                 await manga.writeCache();
                 this.mangas.push(manga);
             }
-        }
-
-        // 销毁消息提示
-        if (notice !== message) {
-            await notice.destroy();
-            this.isLoading = false;
         }
 
         // 重写缓存
