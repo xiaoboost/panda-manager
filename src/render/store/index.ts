@@ -4,7 +4,9 @@ import { IReactComponent, observer, inject } from 'mobx-react';
 export * from './manga';
 export * from './cache';
 
-export { AppCache };
+export { default as Manga } from './manga';
+export { default as AppCache } from './cache';
+
 export { observable as State, computed as Computed } from 'mobx';
 export { inject as Inject, observer as ReactiveNoInject } from 'mobx-react';
 

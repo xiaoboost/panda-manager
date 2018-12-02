@@ -3,7 +3,7 @@ import Zip from 'lib/zip';
 import sizeOf from 'image-size';
 import * as fs from 'fs-extra';
 import { appRoot } from 'lib/utils';
-import { join, parse, extname } from 'path';
+import { join, extname, basename } from 'path';
 import { compress, imageExtend } from '../lib/image';
 import naturalCompare from 'string-natural-compare';
 
@@ -47,7 +47,7 @@ export interface TagGroupData extends TagData {
 
 type MangaInput =
     Pick<MangaData, 'name' | 'file'> &
-    Partial<Pick<MangaData, 'id' | 'tagGroups'>>;
+    Partial<Pick<MangaData, 'id' | 'tagGroups' | 'previewPositions'>>;
 
 // 允许的图片后缀
 const allowImageExt = ['.bmp', '.jpeg', '.jpg', '.png', '.tiff', '.webp', '.svg'];
@@ -66,7 +66,7 @@ export default class Manga implements MangaData {
     /** 漫画的唯一编号 */
     readonly id: string;
     /** 预览图片位置列表 */
-    readonly previewPositions: number[] = [];
+    readonly previewPositions: number[];
     /** 当前漫画的缓存数据路径 */
     readonly cachePath: string;
 
@@ -82,7 +82,7 @@ export default class Manga implements MangaData {
             /** 内容 */
             content: {
                 quality: 80,
-                size: { height: 200 },
+                size: { height: 180 },
             },
         },
     };
@@ -92,11 +92,13 @@ export default class Manga implements MangaData {
         file,
         id = uuid(),
         tagGroups = [],
+        previewPositions = [],
     }: MangaInput) {
         this.id = id;
         this.file = { ...file };
-        this.name = parse(name).name;
+        this.name = basename(name);
         this.tagGroups = tagGroups;
+        this.previewPositions = previewPositions;
         this.cachePath = join(appRoot, 'cache', this.id);
     }
 

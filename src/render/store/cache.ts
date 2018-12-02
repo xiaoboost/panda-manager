@@ -14,8 +14,6 @@ import {
     appRoot,
     remove,
     isArray,
-    isBoolean,
-    isUndef,
     isStrictObject,
     handleError,
 } from '../lib/utils';
@@ -111,7 +109,7 @@ export default class AppCache implements Omit<CacheFileData, 'mangas'> {
                 data.mangas.map(
                     (id) =>
                         fs.readJSON(join(this.dirPath, id, 'meta.json'))
-                            .then((item: MangaData) => Promise.resolve(new Manga(item)))
+                            .then((item: MangaData) => new Manga(item))
                             .catch(() => void 0),
                 ),
             );

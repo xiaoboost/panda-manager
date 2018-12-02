@@ -1,11 +1,21 @@
 #manga-detail .manga-detail-header .page-title {
-    transform: translateY(-3px);
+    transform: translateY(-1px);
 }
 
 #manga-detail .manga-detail-article {
     width: 100%;
     min-width: 720px;
-    max-width: 1000px;
+    max-width: 1200px;
     margin: 20px auto;
     padding: 4px;
+    overflow-y: auto;
+
+    .manga-preview {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .manga-preview-item {
+        margin: 10px;
+    }
 }
