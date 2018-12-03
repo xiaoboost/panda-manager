@@ -1,6 +1,6 @@
 import * as fs from 'fs-extra';
 import { observable as State } from 'mobx';
-import { setProgress } from 'components/progress';
+import { setProgress, closeProgress } from 'components/progress';
 import { default as Manga, MangaData, TagGroupData } from './manga';
 
 import {
@@ -306,5 +306,12 @@ export default class AppCache implements Omit<CacheFileData, 'mangas'> {
 
         // 重写缓存
         await this.writeCache();
+
+        // 延迟判断是否关闭进度提示
+        setTimeout(() => {
+            if (!this.isLoading) {
+                closeProgress();
+            }
+        }, 100);
     }
 }

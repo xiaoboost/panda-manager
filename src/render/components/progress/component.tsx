@@ -91,7 +91,7 @@ export function createMessage() {
     }
 
     function show() {
-        setMessageAnimeClass(warpperDiv, enterAnimations, enterTime);
+        return setMessageAnimeClass(warpperDiv, enterAnimations, enterTime);
     }
 
     function close() {

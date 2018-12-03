@@ -31,14 +31,18 @@
 
 // 动画设置
 .message-enter,
-.message-leave-to {
+.message-leave-to,
+.message-leave-active {
     transform: translateY(30px);
 }
 
 .message-enter-to,
 .message-enter-active,
-.message-leave,
+.message-leave {
+    transform: translateY(0);
+}
+
+.message-enter-active,
 .message-leave-active {
     transition: transform 200ms linear;
-    transform: translateY(0);
 }
