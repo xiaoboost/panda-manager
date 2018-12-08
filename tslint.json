@@ -77,7 +77,7 @@
         // 接口名不做强制规范
         "interface-name": false,
         // 强制对齐
-        "align": [true, "parameters", "arguments", "statements", "members", "elements"],
+        "align": [true, "parameters", "statements", "members", "elements"],
         // 强制使用 UTF-8 编码
         "encoding": true,
         // 禁止不必要的回掉函数封装
