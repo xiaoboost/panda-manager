@@ -94,8 +94,12 @@ export default class TagsGroup extends React.Component<Props> {
         const { group, tags } = this;
         const GroupMenu = (
             <Menu className='tags-group-menu'>
-                <Menu.Item index-data='edit' onClick={this.editTagGroup}>编辑</Menu.Item>
-                <Menu.Item index-data='delete' onClick={this.deleteTagGroup}>删除</Menu.Item>
+                <Menu.Item index-data='edit'>
+                    <a onClick={this.editTagGroup}>编辑</a>
+                </Menu.Item>
+                <Menu.Item index-data='delete'>
+                    <a onClick={this.deleteTagGroup}>删除</a>
+                </Menu.Item>
             </Menu>
         );
 

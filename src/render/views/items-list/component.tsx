@@ -78,22 +78,26 @@ export default class MainList extends React.Component<Props> {
         const sortMenu = (
             <Menu id='sort-menu'>
                 {this.sortByList.map(({ key, label }) =>
-                    <Menu.Item key={key} onClick={() => sort.by = key}>
-                        {sort.by === key
-                            ? <Icon type='check' theme='outlined' />
-                            : <i className='anticon' />
-                        }
-                        <span>{label}</span>
+                    <Menu.Item key={key}>
+                        <a onClick={() => sort.by = key}>
+                            {sort.by === key
+                                ? <Icon type='check' theme='outlined' />
+                                : <i className='anticon' />
+                            }
+                            <span>{label}</span>
+                        </a>
                     </Menu.Item>,
                 )}
                 <Menu.Divider />
                 {[true, false].map((asc) =>
-                    <Menu.Item key={+asc} onClick={() => sort.asc = asc}>
-                        {sort.asc === asc
-                            ? <Icon type='check' theme='outlined' />
-                            : <i className='anticon' />
-                        }
-                        <span>{asc ? '顺序' : '倒序'}</span>
+                    <Menu.Item key={+asc}>
+                        <a onClick={() => sort.asc = asc}>
+                            {sort.asc === asc
+                                ? <Icon type='check' theme='outlined' />
+                                : <i className='anticon' />
+                            }
+                            <span>{asc ? '顺序' : '倒序'}</span>
+                        </a>
                     </Menu.Item>,
                 )}
             </Menu>
