@@ -2,8 +2,8 @@ import * as React from 'react';
 
 import { Icon } from 'antd';
 import { join } from 'path';
-import { Manga, Reactive, Computed, StoreProps } from 'store';
 import { Link, RouteComponentProps } from 'react-router-dom';
+import { Manga, Reactive, Computed, StoreProps } from 'store';
 
 type Props = StoreProps & RouteComponentProps<{ id: string }>;
 
@@ -31,6 +31,17 @@ export default class ItemDetail extends React.Component<Props> {
     }
 
     render() {
+        if (process.env.NODE_ENV === 'development' && this.props.store.isLoading) {
+            return (
+                <main id='manga-detail'>
+                    <div style={{
+                        margin: '20px auto',
+                        textAlign: 'center',
+                    }} />加载中
+                </main>
+            );
+        }
+
         const mangaName = this.manga ? this.manga.name : 'ID 不存在';
         const previewImage = join(this.manga.cachePath, 'preview.jpg').replace(/\\/g, '/');
         const previewHeight = Manga.option.compressOption.content.size.height;

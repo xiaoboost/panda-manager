@@ -36,7 +36,7 @@ export function stringifyClass(opt: ClassInput) {
  * @returns {Promise<void>}
  */
 export function delay(time = 0) {
-    return new Promise((resolve) => setTimeout(resolve, time));
+    return new Promise<void>((resolve) => setTimeout(resolve, time));
 }
 
 /**
@@ -53,4 +53,33 @@ export function onceEvent<T extends Event>(el: HTMLElement | Worker, type: strin
             once: true,
         });
     });
+}
+
+/**
+ * Waiting fn return true
+ * @param {() => boolean} fn
+ * @param {number} [interval=200]
+ * @param {number} [stopTimeout=60000]
+ * @returns {Promise<void>}
+ */
+export function wait(fn: () => boolean, interval = 200, stopTimeout = 60000): Promise<void> {
+    let timeout = false;
+
+    const timer = setTimeout(() => timeout = true, stopTimeout);
+
+    return (function check(): Promise<void> {
+        // 断言结束
+        if (fn()) {
+            clearTimeout(timer);
+            return Promise.resolve();
+        }
+        // 超时，立即退出
+        else if (timeout) {
+            return Promise.resolve();
+        }
+        // 未超时，设定下一次轮询
+        else {
+            return delay(interval).then(check);
+        }
+    })();
 }
