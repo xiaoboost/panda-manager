@@ -218,6 +218,33 @@ export default class AppCache implements Omit<CacheFileData, 'mangas'> {
         this.isLoading = false;
     }
 
+    /** 读取文件夹下的所有漫画基本信息 */
+    async readMangaStatFromDirectory(dirInput: string) {
+        const allFiles: string[] | Error = await fs.readdir(dirInput).catch((e) => e);
+
+        // 发生错误
+        if (!isArray(allFiles)) {
+            handleError(100, dirInput);
+            remove(this.directories, dirInput);
+            return [];
+        }
+
+        // 生成目录下所有文件信息
+        const fileStat = await Promise.all(allFiles.map(async (name) => {
+            const fullPath = join(dirInput, name);
+            const stat = await fs.stat(fullPath);
+
+            return {
+                name, fullPath,
+                isDirectory: stat.isDirectory(),
+                lastModified: new Date(stat.mtime).getTime(),
+            };
+        }));
+
+        // 只需要“文件夹”或者“zip 后缀的文件”
+        return fileStat.filter(({ isDirectory, name }) => isDirectory || extname(name) === '.zip');
+    }
+
     /**
      * 刷新文件夹中所包含的文件
      *  - 该刷新将会把某文件夹下的 meta.json 中的多余缓存删除
@@ -238,19 +265,17 @@ export default class AppCache implements Omit<CacheFileData, 'mangas'> {
         // 当前文件夹下已经被缓存的漫画
         const cacheMangas = this.mangas.filter((item) => dirname(item.file.path) === dirInput);
         // 当前文件夹下实际存在的漫画
-        const dirMangas: string[] | Error = await fs.readdir(dirInput).catch((e) => e);
-
-        // 发生错误
-        if (!isArray(dirMangas)) {
-            handleError(100, dirInput);
-            remove(this.directories, dirInput);
-            return;
-        }
+        const mangaStats = await this.readMangaStatFromDirectory(dirInput);
 
         // 删除已经不存在的缓存
         await Promise.all(
             cacheMangas
-                .filter((item) => !dirMangas.includes(basename(item.file.path)))
+                .filter(
+                    (item) => !mangaStats.find(
+                        ({ fullPath }) =>
+                            fullPath === basename(item.file.path),
+                    ),
+                )
                 .map((item) => {
                     remove(this.mangas, item);
                     return fs.remove(item.cachePath);
@@ -258,22 +283,18 @@ export default class AppCache implements Omit<CacheFileData, 'mangas'> {
         );
 
         // 刷新实际存在的漫画缓存
-        for (let i = 0; i < dirMangas.length; i++) {
-            const name = dirMangas[i];
-            const fullPath = join(dirInput, name);
-            const stat = await fs.stat(fullPath);
-            const isDirectory = stat.isDirectory();
-            const lastModified = new Date(stat.mtime).getTime();
-
-            // 跳过非 zip 后缀的文件
-            if (!isDirectory && extname(name) !== '.zip') {
-                continue;
-            }
+        for (let i = 0; i < mangaStats.length; i++) {
+            const {
+                name,
+                fullPath,
+                isDirectory,
+                lastModified,
+            } = mangaStats[i];
 
             setProgress({
                 currentPath: fullPath,
                 jobProgress: {
-                    total: dirMangas.length,
+                    total: mangaStats.length,
                     current: i + 1,
                 },
             });
@@ -295,7 +316,7 @@ export default class AppCache implements Omit<CacheFileData, 'mangas'> {
                     file: {
                         path: fullPath,
                         lastModified,
-                        isDirectory: stat.isDirectory(),
+                        isDirectory,
                     },
                 });
 
@@ -308,6 +329,7 @@ export default class AppCache implements Omit<CacheFileData, 'mangas'> {
         await this.writeCache();
 
         // 延迟判断是否关闭进度提示
+        this.isLoading = false;
         setTimeout(() => {
             if (!this.isLoading) {
                 closeProgress();
