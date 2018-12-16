@@ -1,9 +1,11 @@
 import * as React from 'react';
 
-import { Icon } from 'antd';
 import { join } from 'path';
+import { Icon, Input, Tag } from 'antd';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Manga, Reactive, Computed, StoreProps } from 'store';
+
+import AddTag from './add-tag';
 
 type Props = StoreProps & RouteComponentProps<{ id: string }>;
 
@@ -12,7 +14,7 @@ export default class ItemDetail extends React.Component<Props> {
     @Computed
     get manga() {
         const { match, store } = this.props;
-        return store.mangas.find((item) => item.id === match.params.id)!;
+        return store.mangas.find((item) => item.id === +match.params.id)!;
     }
 
     @Computed
@@ -30,6 +32,11 @@ export default class ItemDetail extends React.Component<Props> {
         return position;
     }
 
+    /** 添加标签 */
+    addTag = async (id: number) => {
+        debugger;
+    }
+
     render() {
         if (process.env.NODE_ENV === 'development' && this.props.store.isLoading) {
             return (
@@ -45,6 +52,7 @@ export default class ItemDetail extends React.Component<Props> {
         const mangaName = this.manga ? this.manga.name : 'ID 不存在';
         const previewImage = join(this.manga.cachePath, 'preview.jpg').replace(/\\/g, '/');
         const previewHeight = Manga.option.compressOption.content.size.height;
+        const tagGroups = this.props.store.searchTags(this.manga.tags);
 
         return <main id='manga-detail'>
             <header className='page-header manga-detail-header'>
@@ -53,26 +61,50 @@ export default class ItemDetail extends React.Component<Props> {
                 </Link>
                 <span className='page-title'>{ mangaName }</span>
             </header>
-            <article className='manga-detail-article'>
-                <section className='manga-info'>
-                    漫画信息
-                </section>
-                <section className='manga-preview'>
-                    {this.preview.map(({ start, width }, i) =>
-                        <div key={i} className='manga-preview-item'>
-                            <div
-                                className='manga-preview-item__image'
-                                style={{
-                                    backgroundImage: `url("file:///${previewImage}")`,
-                                    backgroundPositionX: `-${start}px`,
-                                    backgroundSize: 'cover',
-                                    height: `${previewHeight}px`,
-                                    width: `${width}px`,
-                                }}
-                            />
-                        </div>,
-                    )}
-                </section>
+            <article className='manga-detail-article__container'>
+                <div className='manga-detail-article'>
+                    <section className='manga-info-box'>
+                        <img
+                            height='320px'
+                            className='mange-cover'
+                            src={join(this.manga.cachePath, 'cover.jpg')}
+                        />
+                        <div className='manga-info'>
+                            <Input.TextArea rows={2} value={this.manga.name} />
+                        </div>
+                    </section>
+                    <section className='manga-tags'>
+                        {tagGroups.length > 0 && <ul className='manga-tags-list'>
+                            {tagGroups.map((group) =>
+                                <li className='manga-tag-group'>
+                                    <div className='manga-tag-group__name'>{group.name}：</div>
+                                    <div className='manga-tag-group__tsg-list'>
+                                        {group.tags.map((tag) =>
+                                            <span>{tag.name}</span>,
+                                        )}
+                                    </div>
+                                </li>,
+                            )}
+                        </ul>}
+                        <AddTag onInput={this.addTag} />
+                    </section>
+                    <section className='manga-preview'>
+                        {this.preview.map(({ start, width }, i) =>
+                            <div key={i} className='manga-preview-item'>
+                                <div
+                                    className='manga-preview-item__image'
+                                    style={{
+                                        backgroundImage: `url("file:///${previewImage}")`,
+                                        backgroundPositionX: `-${start}px`,
+                                        backgroundSize: 'cover',
+                                        height: `${previewHeight}px`,
+                                        width: `${width}px`,
+                                    }}
+                                />
+                            </div>,
+                        )}
+                    </section>
+                </div>
             </article>
         </main>;
     }
