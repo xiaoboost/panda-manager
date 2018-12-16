@@ -1,22 +1,23 @@
-import uuid from 'uuid';
 import Zip from 'lib/zip';
 import sizeOf from 'image-size';
 import * as fs from 'fs-extra';
-import { appRoot } from 'lib/utils';
 import { join, extname, basename } from 'path';
-import { compress, imageExtend } from '../lib/image';
 import naturalCompare from 'string-natural-compare';
+
+import { appRoot } from 'lib/utils';
+import { createId } from 'lib/id';
+import { compress, imageExtend } from 'lib/image';
 
 /** 同人志元数据 */
 export interface MangaData {
     /** 显示名称 */
     name: string;
     /** 当前同人志的 ID */
-    id: string;
+    id: number;
     /** 预览文件坐标 */
     previewPositions: number[];
-    /** 当前漫画的 tag 集合 */
-    tagGroups: TagGroupData[];
+    /** 当前漫画的 tag id 集合 */
+    tags: number[];
 
     /** 对应的实际文件属性 */
     file: {
@@ -32,7 +33,7 @@ export interface MangaData {
 /** 标签数据 */
 export interface TagData {
     /** 标签的唯一 ID */
-    id: string;
+    id: number;
     /** 标签名称 */
     name: string;
     /** 标签别名 */
@@ -47,7 +48,7 @@ export interface TagGroupData extends TagData {
 
 type MangaInput =
     Pick<MangaData, 'name' | 'file'> &
-    Partial<Pick<MangaData, 'id' | 'tagGroups' | 'previewPositions'>>;
+    Partial<Pick<MangaData, 'id' | 'tags' | 'previewPositions'>>;
 
 // 允许的图片后缀
 const allowImageExt = ['.bmp', '.jpeg', '.jpg', '.png', '.tiff', '.webp', '.svg'];
@@ -55,7 +56,7 @@ const allowImageExt = ['.bmp', '.jpeg', '.jpg', '.png', '.tiff', '.webp', '.svg'
 /** 同人志数据 */
 export default class Manga implements MangaData {
     name: string;
-    tagGroups: TagGroupData[];
+    tags: number[];
 
     file: {
         path: string;
@@ -64,7 +65,7 @@ export default class Manga implements MangaData {
     };
 
     /** 漫画的唯一编号 */
-    readonly id: string;
+    readonly id: number;
     /** 预览图片位置列表 */
     readonly previewPositions: number[];
     /** 当前漫画的缓存数据路径 */
@@ -90,16 +91,16 @@ export default class Manga implements MangaData {
     constructor({
         name,
         file,
-        id = uuid(),
-        tagGroups = [],
+        id = createId('manga'),
+        tags = [],
         previewPositions = [],
     }: MangaInput) {
         this.id = id;
+        this.tags = tags;
         this.file = { ...file };
         this.name = basename(name);
-        this.tagGroups = tagGroups;
         this.previewPositions = previewPositions;
-        this.cachePath = join(appRoot, 'cache', this.id);
+        this.cachePath = join(appRoot, 'cache', String(this.id));
     }
 
     /** 从文件夹生成预览 */
@@ -190,7 +191,7 @@ export default class Manga implements MangaData {
             id: this.id,
             name: this.name,
             file: this.file,
-            tagGroups: this.tagGroups,
+            tags: this.tags,
             previewPositions: this.previewPositions,
         };
 

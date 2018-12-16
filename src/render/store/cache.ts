@@ -20,9 +20,9 @@ import {
 
 /** 缓存数据格式 */
 interface CacheFileData {
-    mangas: string[];
+    mangas: number[];
     directories: string[];
-    tagGroups: AnyObject<TagGroupData>;
+    tagGroups: TagGroupData[];
     sort: {
         by: 'name' | 'lastModified';
         asc: boolean;
@@ -37,7 +37,7 @@ export default class AppCache implements Omit<CacheFileData, 'mangas'> {
 
     /** 所有标签集合 */
     @State
-    tagGroups: AnyObject<TagGroupData> = {};
+    tagGroups: TagGroupData[] = [];
 
     /** 当前所有文件夹 */
     @State
@@ -61,12 +61,34 @@ export default class AppCache implements Omit<CacheFileData, 'mangas'> {
     /** 缓存文件路径 */
     readonly path = join(this.dirPath, this.fileName);
 
+    /** 以 ID 检索所有标签 */
+    searchTags(ids: number[]) {
+        const result = [];
+
+        for (const group of this.tagGroups) {
+            const tags = group.tags
+                .filter((tag) => ids.includes(tag.id))
+                .map(({ name, id }) => ({ name, id }));
+
+            if (tags.length === 0) {
+                continue;
+            }
+
+            result.push({
+                tags,
+                name: group.name,
+            });
+        }
+
+        return result;
+    }
+
     /** 检查数据是否正确 */
     private checkCacheData(data: AnyObject = this) {
         let result = true;
 
-        const arrs = ['mangas', 'directories'];
-        const objs = ['tagGroups'];
+        const arrs = ['mangas', 'directories', 'tagGroups'];
+        const objs: string[] = [];
 
         for (const key of arrs) {
             if (!isArray(data[key])) {
@@ -108,7 +130,7 @@ export default class AppCache implements Omit<CacheFileData, 'mangas'> {
             const metas = await Promise.all(
                 data.mangas.map(
                     (id) =>
-                        fs.readJSON(join(this.dirPath, id, 'meta.json'))
+                        fs.readJSON(join(this.dirPath, String(id), 'meta.json'))
                             .then((item: MangaData) => new Manga(item))
                             .catch(() => void 0),
                 ),
@@ -140,7 +162,7 @@ export default class AppCache implements Omit<CacheFileData, 'mangas'> {
             const isDirectory = stat.isDirectory();
 
             if (
-                (isDirectory && !this.mangas.find((item) => item.id === dir)) ||
+                (isDirectory && !this.mangas.find((item) => +item.id === +dir)) ||
                 (!isDirectory && dir !== 'meta.json')
             ) {
                 await fs.remove(fullPath);

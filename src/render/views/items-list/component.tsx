@@ -48,7 +48,7 @@ export default class MainList extends React.Component<Props> {
     }
 
     /** 点击漫画 */
-    clickMangaHandler(event: React.MouseEvent<HTMLDivElement>, id: string) {
+    clickMangaHandler(event: React.MouseEvent<HTMLDivElement>, id: number) {
         // 停止冒泡
         event.stopPropagation();
 

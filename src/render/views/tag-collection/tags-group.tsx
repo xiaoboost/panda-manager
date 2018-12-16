@@ -1,10 +1,9 @@
 import * as React from 'react';
 
-import uuid from 'uuid';
-
 import { remove } from 'lib/utils';
 import { editTag } from 'components/tags-edit';
 import { confirmDialog } from 'components/dialog';
+import { createId, deleteId } from 'lib/id';
 import { Icon, Dropdown, Menu, Tag } from 'antd';
 import { default as Store, ReactiveNoInject, Computed } from 'store';
 
@@ -16,7 +15,7 @@ interface Props {
 export default class TagsGroup extends React.Component<Props> {
     @Computed
     get group() {
-        return Store.tagGroups[this.props.id];
+        return Store.tagGroups.find((group) => group.id === +this.props.id)!;
     }
 
     @Computed
@@ -58,14 +57,14 @@ export default class TagsGroup extends React.Component<Props> {
 
         this.group.tags.push({
             ...result,
-            id: uuid(),
+            id: createId('tag'),
         });
 
         await Store.writeCache();
     }
 
     /** 编辑当前标签 */
-    editTag = async (id: string) => {
+    editTag = async (id: number) => {
         const tag = this.group.tags.find((item) => item.id === id)!;
         const result = await editTag('编辑标签', tag);
 
@@ -75,7 +74,7 @@ export default class TagsGroup extends React.Component<Props> {
     }
 
     /** 删除当前标签 */
-    deleteTag = async (id: string) => {
+    deleteTag = async (id: number) => {
         const tag = this.group.tags.find((item) => item.id === id)!;
 
         await confirmDialog(
@@ -84,6 +83,7 @@ export default class TagsGroup extends React.Component<Props> {
         );
 
         remove(this.group.tags, tag);
+        deleteId('tag', tag.id);
 
         // TODO: 所有漫画中需要删除所有记录
 
