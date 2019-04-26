@@ -1,0 +1,14 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "outDir": "dist/main",
+        "module": "commonjs",
+        "jsx": "preserve",
+        "esModuleInterop": true,
+        "paths": {
+            "*": ["*", "src/main/*", "src/shared/*"]
+        }
+    },
+    "include": ["src/main", "src/shared", "typings"],
+    "exclude": ["node_modules", "dist", "build", "src/render"]
+}

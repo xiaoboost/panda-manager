@@ -1,30 +1,28 @@
-const { join } = require('path');
+import { join } from 'path';
 
 /**
  * 定位到项目根目录
  * @param {string} dir 路径
  */
-const resolveRoot = (dir) => join(__dirname, '../', dir);
+export const resolveRoot = (dir: string) => join(__dirname, '../', dir);
 
 /**
  * 定位到主进程模块目录
  * @param {string} dir 路径
  */
-const resolveMain = (dir) => join(__dirname, '../src/main/', dir);
+const resolveMain = (dir: string) => join(__dirname, '../src/main/', dir);
 
 /**
  * 定位到渲染模块目录
  * @param {string} dir 路径
  */
-const resolveRender = (dir) => join(__dirname, '../src/render/', dir);
-
-exports.resolveRoot = resolveRoot;
+const resolveRender = (dir: string) => join(__dirname, '../src/render/', dir);
 
 /** 调试时的网络端口 */
-exports.devHttpPort = 9090;
+export const devHttpPort = 9090;
 
 /** 渲染模块配置 */
-exports.render = {
+export const render = {
     /** 定位到渲染模块目录 */
     resolve: resolveRender,
     /** 静态资源 */
@@ -36,7 +34,7 @@ exports.render = {
 };
 
 /** 主进程模块配置 */
-exports.main = {
+export const main = {
     /** 定位到主进程模块目录 */
     resolve: resolveMain,
     /** 静态资源 */

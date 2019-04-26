@@ -1,0 +1,12 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "outDir": "dist/render",
+        "module": "esnext",
+        "paths": {
+            "*": ["*", "src/render/*", "src/shared/*"]
+        }
+    },
+    "include": ["src/render", "src/shared", "typings"],
+    "exclude": ["node_modules", "dist", "build", "src/main"]
+}

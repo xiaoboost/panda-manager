@@ -1,29 +1,32 @@
 process.env.NODE_ENV = 'production';
 
-const { cyan } = require('chalk');
-const { main } = require('../config');
-const { removeSync: rm } = require('fs-extra');
+import { main } from '../env';
+import { removeSync as rm } from 'fs-extra';
 
-const webpack = require('webpack');
-const baseConfig = require('./webpack.base');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+import Chalk from 'chalk';
+import Webpack from 'webpack';
+import BaseConfig from './webpack.base';
+import TerserPlugin from 'terser-webpack-plugin';
 
-baseConfig.plugins.push(
+BaseConfig.plugins!.push(
     new webpack.optimize.ModuleConcatenationPlugin(),
-    new UglifyJSPlugin({
+    new TerserPlugin({
         test: /\.js$/i,
         cache: false,
-        uglifyOptions: {
+        terserOptions: {
             ecma: 7,
             ie8: false,
             safari10: false,
+            output: {
+                comments: /^!/,
+            },
         },
-    })
+    }),
 );
 
 rm(main.output);
 
-webpack(baseConfig, (err, stats) => {
+Webpack(BaseConfig, (err, stats) => {
     if (err) {
         throw err;
     }
@@ -39,5 +42,5 @@ webpack(baseConfig, (err, stats) => {
         children: false,
     }));
 
-    console.log(cyan('\n  Build complete.\n'));
+    console.log(Chalk.cyan('\n  Build complete.\n'));
 });

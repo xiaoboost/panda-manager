@@ -1,25 +1,30 @@
-const webpack = require('webpack');
-const { main: config } = require('../config');
+import Webpack from 'webpack';
+
+import { resolveRoot, main } from '../env';
+
+const { resolve, output, publicPath } = main;
 const isDevelopment = process.env.NODE_ENV === 'development';
 
-module.exports = {
-    mode: process.env.NODE_ENV,
-    entry: config.resolve('main.ts'),
+type WebpackConfig = GetArrayItem<Parameters<typeof Webpack>[0]>;
+
+const baseConfig: WebpackConfig = {
+    mode: process.env.NODE_ENV as WebpackConfig['mode'],
+    entry: resolve('main.ts'),
     target: 'electron-main',
     node: {
         __dirname: false,
         __filename: false,
     },
     output: {
-        path: config.output,
-        publicPath: config.publicPath,
+        path: output,
+        publicPath,
         filename: 'main.js',
     },
     resolve: {
         extensions: ['.ts', '.js', '.json', '.styl'],
-        mainFiles: ['index.tsx', 'index.ts'],
+        mainFiles: ['index.ts'],
         alias: {
-            'src': config.resolve('./'),
+            src: resolve('src/main'),
         },
     },
     module: {
@@ -29,11 +34,7 @@ module.exports = {
                 exclude: /node_modules/,
                 loader: 'ts-loader',
                 options: {
-                    /** 
-                     * a relative path to the configuration file.
-                     * It will be resolved relative to the respective `.ts` entry file.
-                     */
-                    configFile: '../tsconfig.main.json',
+                    configFile: resolveRoot('tsconfig.build.main.json'),
                 },
             },
         ],
@@ -42,13 +43,15 @@ module.exports = {
         tslib: 'require("tslib/tslib.js")',
     },
     plugins: [
-        new webpack.HashedModuleIdsPlugin({
+        new Webpack.HashedModuleIdsPlugin({
             hashFunction: 'sha256',
             hashDigest: 'hex',
             hashDigestLength: 6,
         }),
-        new webpack.DefinePlugin({
+        new Webpack.DefinePlugin({
             'process.env.NODE_ENV': isDevelopment ? '"development"' : '"production"',
         }),
     ],
 };
+
+export default baseConfig;

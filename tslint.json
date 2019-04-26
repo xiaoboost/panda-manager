@@ -2,7 +2,13 @@
     "defaultSeverity": "error",
     "extends":"tslint:recommended",
     "rules": {
+        // 不强制要求使用 for of 循环
+        "prefer-for-of": false,
+        // 复杂数组类型，不强制使用 Array<T> 形式
         "array-type": false,
+        // 允许使用 namespace
+        "no-namespace": false,
+        // 允许使用类名代替类型
         "ban-types": false,
         // 不强制使用 interface 字面量
         "interface-over-type-literal": false,
@@ -41,8 +47,8 @@
         "no-invalid-template-strings": true,
         // 允许使用 null 关键字
         "no-null-keyword": false,
-        // 禁止对象字面量的类型断言
-        "no-object-literal-type-assertion": true,
+        // 允许对象字面量的类型断言
+        "no-object-literal-type-assertion": false,
         // 禁止稀疏数组
         "no-sparse-arrays": true,
         // 允许子模块的导入
@@ -61,7 +67,7 @@
         "triple-equals": true,
         // 循环复杂度限定在 20
         // @link: https://palantir.github.io/tslint/rules/cyclomatic-complexity/
-        "cyclomatic-complexity": [true, 20],
+        "cyclomatic-complexity": [true, 30],
         // 强制 LF 换行
         "linebreak-style": [true, "LF"],
         // 每个文件最多声明多少个类
@@ -77,7 +83,7 @@
         // 接口名不做强制规范
         "interface-name": false,
         // 强制对齐
-        "align": [true, "parameters", "statements", "members", "elements"],
+        "align": [true, "parameters", "arguments", "statements", "members", "elements"],
         // 强制使用 UTF-8 编码
         "encoding": true,
         // 禁止不必要的回掉函数封装

@@ -1,16 +1,17 @@
 {
     "compilerOptions": {
-        "outDir": "out",
+        "outDir": "dist",
         "sourceMap": true,
         "strict": true,
         "strictPropertyInitialization": true,
         "moduleResolution": "node",
-        "target": "es2016",
+        "target": "esnext",
         "jsx": "react",
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
         "isolatedModules": false,
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
-        "allowSyntheticDefaultImports": true,
         "noImplicitAny": true,
         "noImplicitThis": true,
         "noImplicitReturns": false,
@@ -23,7 +24,7 @@
         "lib": ["es2015", "es2016", "es2017", "dom"],
         "baseUrl": ".",
         "paths": {
-            "*": ["*", "src/main/*", "src/render/*"]
+            "*": ["*", "src/main/*", "src/render/*", "src/shared/*"]
         }
     }
 }
