@@ -106,7 +106,9 @@ export function isObject(x: any): x is object {
  * @param {*} x
  * @returns {x is any[]}
  */
-export const isArray = Array.isArray;
+export function isArray(x: any): x is any[] {
+    return Array.isArray(x);
+}
 
 /**
  * 断言：输入是否是正则表达式
@@ -122,10 +124,10 @@ export function isRegExp(x: any): x is RegExp {
  * 断言：输入是否是 DOM 元素
  *
  * @param {*} x
- * @returns {x is Element}
+ * @returns {x is HTMLElement}
  */
-export function isElement(x: any): x is Element {
-    return x.hasOwnProperty('nodeType') && x.hasOwnProperty('nodeName');
+export function isElement(x: any): x is HTMLElement {
+    return (/^\[object (HTML|SVG)([a-zA-Z]+)?Element\]$/.test(_toString.call(x) as string));
 }
 
 /**

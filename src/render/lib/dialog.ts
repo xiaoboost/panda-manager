@@ -2,7 +2,7 @@ import { resolveRender } from 'lib/utils';
 import { remote, MessageBoxOptions } from 'electron';
 
 const MainNativeImage = remote.nativeImage;
-const QuestionIcon = MainNativeImage.createFromPath(resolveRender('icons/question/icon.png'));
+// const QuestionIcon = MainNativeImage.createFromPath(resolveRender('icons/question/icon.png'));
 
 export function selectDirectory() {
     return new Promise<string>((resolve) => {
@@ -16,7 +16,7 @@ export function selectDirectory() {
     });
 }
 
-export function confirmDialog(title: string, message: string) {
+export function confirm(title: string, message: string) {
     return new Promise<void>((resolve) => {
         const win = remote.getCurrentWindow();
         const option: MessageBoxOptions = {
@@ -24,7 +24,7 @@ export function confirmDialog(title: string, message: string) {
             message,
             type: 'warning',
             buttons: ['取消', '确定'],
-            icon: QuestionIcon,
+            // icon: QuestionIcon,
         };
 
         remote.dialog.showMessageBox(win, option, (response) => {

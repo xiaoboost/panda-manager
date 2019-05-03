@@ -1,5 +1,5 @@
 import sizeOf from 'image-size';
-import Sharp, { JpegOptions, PngOptions } from 'sharp';
+import { default as Sharp, JpegOptions, PngOptions } from 'sharp';
 
 type CompressOption = (JpegOptions | PngOptions) & {
     size?: {
