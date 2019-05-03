@@ -9,7 +9,7 @@ import BaseConfig from './webpack.base';
 import TerserPlugin from 'terser-webpack-plugin';
 
 BaseConfig.plugins!.push(
-    new webpack.optimize.ModuleConcatenationPlugin(),
+    new Webpack.optimize.ModuleConcatenationPlugin(),
     new TerserPlugin({
         test: /\.js$/i,
         cache: false,

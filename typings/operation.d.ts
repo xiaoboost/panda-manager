@@ -19,5 +19,5 @@ declare type GetArrayItem<T> = T extends (infer R)[] ? R : never;
 /** any object */
 declare type AnyObject<T = any> = { [key: string]: T };
 
-/** remove readonly prop */
-declare type NotReadonly<T> = { -readonly [P in keyof T]: T[P] };
+/** any Function */
+declare type AnyFunction = (...args: any[]) => any;
