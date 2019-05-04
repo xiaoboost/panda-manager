@@ -1,4 +1,4 @@
-import { TagGroupData } from './tag-group';
+import { TagGroupData } from './tag';
 
 /** 排序方式 */
 export const enum SortBy {

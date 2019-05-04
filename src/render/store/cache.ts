@@ -29,7 +29,7 @@ export const resolveCache = (...paths: (string | number)[]) => {
 
 /** 读取缓存文件 */
 async function readCacheFile() {
-    const data = await fs.readJSON(cacheFilePath).catch(() => {}) as Partial<CacheFileData>;
+    const data = await fs.readJSON(cacheFilePath).catch(() => ({})) as Partial<CacheFileData>;
 
     tagGroups.dispatch({});
     directories.dispatch([]);
@@ -52,7 +52,7 @@ async function readCacheFile() {
 
 /** 读取所有漫画缓存文件夹列表 */
 async function readCacheMangaList() {
-    const dirs = await fs.readdir(cacheDir);
+    const dirs = await fs.readdir(cacheDir).catch(() => [] as string[]);
     const stats = await Promise.all(dirs.map((dir) => fs.stat(join(cacheDir, dir))));
 
     return dirs.filter((_, i) => stats[i].isDirectory());
@@ -60,7 +60,7 @@ async function readCacheMangaList() {
 
 /** 删除多余的缓存文件 */
 async function removeExtraCache() {
-    const dirs = await fs.readdir(cacheDir);
+    const dirs = await fs.readdir(cacheDir).catch(() => [] as string[]);
 
     // 删除多余的实际存在的缓存文件（夹）
     for (const dir of dirs) {
@@ -100,7 +100,6 @@ export async function readCache() {
     await removeExtraCache();
 
     // 重写缓存
-    await fs.mkdirp(cacheDir);
     await writeCache();
 
     loading.dispatch(false);
@@ -109,7 +108,7 @@ export async function readCache() {
 /** 写缓存 */
 export async function writeCache() {
     const data: CacheFileData =  {
-        tagGroups: Object.values(tagGroups),
+        tagGroups: Object.values(tagGroups.value),
         directories: directories.value,
         sort: sort.value,
     };
@@ -125,4 +124,4 @@ export async function writeCache() {
 }
 
 // 初始化
-readCache().then(writeCache);
+readCache();
