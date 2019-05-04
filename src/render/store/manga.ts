@@ -1,23 +1,25 @@
-import Zip from 'lib/zip';
-import sizeOf from 'image-size';
 import * as fs from 'fs-extra';
-import { join, extname, basename } from 'path';
-import naturalCompare from 'string-natural-compare';
 
-import { appRoot } from 'lib/utils';
-import { createId } from 'lib/id';
-import { compress, imageExtend } from 'lib/image';
+import { join } from 'path';
+import { clone } from 'lib/utils';
+import { resolveCache } from './cache';
 
-/** 同人志元数据 */
+/** 漫画的标签数据 */
+interface TagInManga {
+    id: number;
+    tags: number[];
+}
+
+/** 漫画元数据 */
 export interface MangaData {
     /** 显示名称 */
     name: string;
-    /** 当前同人志的 ID */
+    /** 当前漫画的编号 */
     id: number;
-    /** 预览文件坐标 */
+    /** 当前漫画的标签集数据 */
+    tagGroups: TagInManga[];
+    /** 预览图片位置列表 */
     previewPositions: number[];
-    /** 当前漫画的 tag id 集合 */
-    tags: number[];
 
     /** 对应的实际文件属性 */
     file: {
@@ -30,48 +32,26 @@ export interface MangaData {
     };
 }
 
-/** 标签数据 */
-export interface TagData {
-    /** 标签的唯一 ID */
-    id: number;
-    /** 标签名称 */
-    name: string;
-    /** 标签别名 */
-    alias: string[];
-}
+/** 全局漫画编号 */
+let id = 0;
 
-/** 标签元数据 */
-export interface TagGroupData extends TagData {
-    /** 标签集合内含标签的 id */
-    tags: TagData[];
-}
+/** 漫画类 */
+export class Manga implements MangaData {
+    name = '';
+    id = id++;
 
-type MangaInput =
-    Pick<MangaData, 'name' | 'file'> &
-    Partial<Pick<MangaData, 'id' | 'tags' | 'previewPositions'>>;
-
-// 允许的图片后缀
-const allowImageExt = ['.bmp', '.jpeg', '.jpg', '.png', '.tiff', '.webp', '.svg'];
-
-/** 同人志数据 */
-export default class Manga implements MangaData {
-    name: string;
-    tags: number[];
-
-    file: {
-        path: string;
-        isDirectory: boolean;
-        lastModified: number;
+    /** 预览图片位置列表 */
+    readonly previewPositions: number[] = [];
+    /** 漫画标签数据 */
+    readonly tagGroups: MangaData['tagGroups'] = [];
+    /** 漫画对应的实际文件的属性 */
+    readonly file: MangaData['file'] = {
+        path: '',
+        isDirectory: false,
+        lastModified: 0,
     };
 
-    /** 漫画的唯一编号 */
-    readonly id: number;
-    /** 预览图片位置列表 */
-    readonly previewPositions: number[];
-    /** 当前漫画的缓存数据路径 */
-    readonly cachePath: string;
-
-    /** 静态属性配置 */
+    /** 漫画缓存配置 */
     static option = {
         /** 压缩配置 */
         compressOption: {
@@ -88,100 +68,31 @@ export default class Manga implements MangaData {
         },
     };
 
-    constructor({
-        name,
-        file,
-        id = createId('manga'),
-        tags = [],
-        previewPositions = [],
-    }: MangaInput) {
-        this.id = id;
-        this.tags = tags;
-        this.file = { ...file };
-        this.name = basename(name);
-        this.previewPositions = previewPositions;
-        this.cachePath = join(appRoot, 'cache', String(this.id));
-    }
+    /** 从缓存创建实例 */
+    static fromData(data: MangaData) {
+        const manga = Object.assign(new Manga(), clone(data)) as Manga;
 
-    /** 从文件夹生成预览 */
-    async createPreviewFromDirectory() {
-        this.previewPositions.length = 0;
-
-        let preview = Buffer.from('');
-        const { content, cover } = Manga.option.compressOption;
-        const allFiles = (await fs.readdir(this.file.path)).sort(naturalCompare);
-
-        for (const file of allFiles) {
-            const fullPath = join(this.file.path, file);
-            const stat = await fs.stat(fullPath);
-
-            // 跳过目录和不允许的文件后缀
-            if (stat.isDirectory() || !allowImageExt.includes(extname(file).toLowerCase())) {
-                continue;
-            }
-
-            // 读取当前图片
-            const image = await fs.readFile(fullPath);
-            // 当前图片预览
-            const currentImage = await compress(image, 'jpg', content);
-
-            // 第一页
-            if (preview.length === 0) {
-                // 制作封面
-                await fs.writeFile(
-                    join(this.cachePath, 'cover.jpg'),
-                    await compress(image, 'jpg', cover),
-                );
-
-                preview = currentImage;
-                this.previewPositions.push(0, sizeOf(preview).width);
-            }
-            else {
-                preview = await imageExtend(preview, currentImage);
-                this.previewPositions.push(sizeOf(preview).width);
-            }
+        // 编号重置
+        if (data.id > id) {
+            id = data.id;
         }
 
-        // 预览文件写入硬盘
-        await fs.writeFile(
-            join(this.cachePath, 'preview.jpg'),
-            preview,
-        );
+        return manga;
     }
-    /** 从压缩包生成预览 */
-    async createPreviewFromZip() {
-        this.previewPositions.length = 0;
 
-        let preview = Buffer.from('');
-        const zip = await Zip.loadZip(this.file.path);
-        const { content, cover } = Manga.option.compressOption;
+    /** 从路径创建实例 */
+    static fromPath(path: string) {
 
-        for await (const file of zip.files()) {
-            // 当前图片预览
-            const currentImage = await compress(file.buffer, 'jpg', content);
+        return new Manga();
+    }
 
-            // 第一页
-            if (preview.length === 0) {
-                // 制作封面
-                await fs.writeFile(
-                    join(this.cachePath, 'cover.jpg'),
-                    await compress(file.buffer, 'jpg', cover),
-                );
-
-                preview = currentImage;
-                this.previewPositions.push(0, sizeOf(preview).width);
-            }
-            else {
-                preview = await imageExtend(preview, currentImage);
-                this.previewPositions.push(sizeOf(preview).width);
-            }
-        }
-
-        // 预览文件写入硬盘
-        await fs.writeFile(
-            join(this.cachePath, 'preview.jpg'),
-            preview,
-        );
+    /** 当前漫画共多少页 */
+    get length() {
+        return this.previewPositions.length + 1;
+    }
+    /** 当前漫画的缓存数据位置 */
+    get cachePath() {
+        return resolveCache(this.id);
     }
 
     /** 生成缓存并将其写入硬盘 */
@@ -191,7 +102,7 @@ export default class Manga implements MangaData {
             id: this.id,
             name: this.name,
             file: this.file,
-            tags: this.tags,
+            tagGroups: this.tagGroups,
             previewPositions: this.previewPositions,
         };
 
@@ -200,11 +111,11 @@ export default class Manga implements MangaData {
 
         // 当前漫画是文件夹
         if (this.file.isDirectory) {
-            await this.createPreviewFromDirectory();
+            // await this.createPreviewFromDirectory();
         }
         // 当前漫画是压缩包
         else {
-            await this.createPreviewFromZip();
+            // await this.createPreviewFromZip();
         }
 
         // 写入漫画 metadata 缓存
@@ -212,7 +123,7 @@ export default class Manga implements MangaData {
             join(this.cachePath, 'meta.json'),
             mangaData,
             process.env.NODE_ENV === 'development'
-                ? { replacer: null, spaces: 2 }
+                ? { replacer: null, spaces: 4 }
                 : undefined,
         );
     }
