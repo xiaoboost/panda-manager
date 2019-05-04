@@ -2,7 +2,6 @@ import * as path from 'path';
 import * as url from 'url';
 
 import { app, BrowserWindow } from 'electron';
-import { devHttpPort } from '../../build/config';
 
 let win: BrowserWindow | null;
 
@@ -11,6 +10,7 @@ function createWindow() {
         width: 800,
         height: 600,
         webPreferences: {
+            nodeIntegration: true,
             webSecurity: process.env.NODE_ENV !== 'development',
         },
     });
