@@ -1,12 +1,13 @@
-import { default as React } from 'react';
+import React from 'react';
 
-import { shell } from 'electron';
 import { Link } from 'react-router-dom';
 import { Icon, Button } from 'antd';
-import { confirm } from 'lib/dialog';
 
 import * as store from 'store';
+
+import { shell } from 'electron';
 import { useStore } from 'lib/store';
+import { warnDialog, selectDirectory } from 'lib/interface';
 
 /** 选项卡片 */
 const SettingCard: React.FunctionComponent<{ title: string }> = ({ title, children }) => (
@@ -35,6 +36,15 @@ const SettingCardLine: React.FunctionComponent<SettingCardLineProps> = ({ title,
     </div>
 );
 
+/** 添加文件夹 */
+const addDirectory = () => selectDirectory().then((dir) => store.addDirectory(dir));
+
+/** 移除文件夹 */
+const removeDirectory = async (path: string) => {
+    await warnDialog('确认删除', `确定要删除此文件夹？\n${path}`);
+    store.removeDirectory(path);
+};
+
 export default function Setting() {
     const loading = useStore(store.loading);
     const dirs = useStore(store.directories);
@@ -59,6 +69,7 @@ export default function Setting() {
                             action={
                                 <Icon
                                     style={{ fontSize: '20px' }}
+                                    onClick={addDirectory}
                                     type='folder-add'
                                     theme='outlined'
                                 />
@@ -87,6 +98,7 @@ export default function Setting() {
                                                 fontSize: '14px',
                                                 marginLeft: '8px',
                                             }}
+                                            onClick={() => removeDirectory(path)}
                                             type='delete'
                                             theme='outlined'
                                         />
@@ -99,7 +111,7 @@ export default function Setting() {
                     <SettingCardLine
                         title='刷新预览缓存'
                         subtitle='刷新目录内有被增、删、改操作的项目'
-                        action={<Button loading={loading}>刷新</Button>}
+                        action={<Button onClick={() => store.refreshCache(false)} loading={loading}>刷新</Button>}
                     />
                 </SettingCard>
             </article>

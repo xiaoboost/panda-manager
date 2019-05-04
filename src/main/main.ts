@@ -30,7 +30,7 @@ function createWindow() {
     });
 }
 
-/** 初始化主界面 */
+// 初始化主界面
 app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {

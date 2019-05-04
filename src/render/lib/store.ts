@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 
 type Subscribe<T> = (now: T, pre?: T) => void;
 
+/** 储存值类 */
 export default class Store<T> {
     /** 此时的值 */
     value: T;
@@ -28,10 +29,11 @@ export default class Store<T> {
         const oldVal = this.value;
 
         this.value = val;
-        this.subs.forEach((cb) => cb(oldVal, val));
+        this.subs.forEach((cb) => cb(val, oldVal));
     }
 }
 
+/** 使用储存值 */
 export function useStore<T>(store: Store<T>) {
     const [state, setState] = useState(store.value);
 

@@ -1,9 +1,10 @@
-import { resolveRender } from 'lib/utils';
+// import { resolveRender } from 'lib/utils';
 import { remote, MessageBoxOptions } from 'electron';
 
-const MainNativeImage = remote.nativeImage;
+// const MainNativeImage = remote.nativeImage;
 // const QuestionIcon = MainNativeImage.createFromPath(resolveRender('icons/question/icon.png'));
 
+/** 选择文件夹 */
 export function selectDirectory() {
     return new Promise<string>((resolve) => {
         const win = remote.getCurrentWindow();
@@ -16,7 +17,8 @@ export function selectDirectory() {
     });
 }
 
-export function confirm(title: string, message: string) {
+/** 原生警告对话框 */
+export function warnDialog(title: string, message: string) {
     return new Promise<void>((resolve) => {
         const win = remote.getCurrentWindow();
         const option: MessageBoxOptions = {
