@@ -1,28 +1,47 @@
-import * as React from 'react';
-import * as com from 'lib/com';
+import { default as React } from 'react';
 
 import { shell } from 'electron';
 import { Link } from 'react-router-dom';
 import { Icon, Button } from 'antd';
-import { Reactive, StoreProps } from 'store';
+import { confirm } from 'lib/dialog';
 
-@Reactive
-export default class Setting extends React.Component<StoreProps> {
-    /** 选择文件夹 */
-    addDirectory = async () => {
-        const directory = await com.selectDirectory();
-        this.props.store.addDirectory(directory);
-    }
-    /** 删除文件夹 */
-    removeDirectory = async (path: string) => {
-        await com.confirmDialog('确认删除', `确定要删除此文件夹？\n${path}`);
-        this.props.store.removeDirectory(path);
-    }
+import * as store from 'store';
+import { useStore } from 'lib/store';
 
-    render() {
-        const { isLoading, directories } = this.props.store;
+/** 选项卡片 */
+const SettingCard: React.FunctionComponent<{ title: string }> = ({ title, children }) => (
+    <section className='settings-section'>
+        <header className='settings-title'>{title}</header>
+        <article className='settings-card'>{children}</article>
+    </section>
+);
 
-        return <main id='main-setting'>
+/** 选项卡片元素属性 */
+interface SettingCardLineProps {
+    title: string;
+    subtitle?: string;
+    isSubline?: boolean;
+    action?: React.ReactElement;
+}
+
+/** 选项卡片元素 */
+const SettingCardLine: React.FunctionComponent<SettingCardLineProps> = ({ title, subtitle, isSubline, action }) => (
+    <div className={ isSubline ? 'settings-subline' : 'settings-line' }>
+        <span>
+            <div className='settings-line__name'>{title}</div>
+            { subtitle ? <div className='settings-line__subname'>{subtitle}</div> : ''}
+        </span>
+        {action || ''}
+    </div>
+);
+
+export default function Setting() {
+    const loading = useStore(store.loading);
+    const dirs = useStore(store.directories);
+
+    return (
+        <main id='main-setting'>
+            {/* 标题栏 */}
             <header className='page-header setting-header'>
                 <Link to='/'>
                     <Icon type='arrow-left' theme='outlined' />
@@ -31,66 +50,59 @@ export default class Setting extends React.Component<StoreProps> {
             </header>
             <article className='setting-article'>
                 {/** 文件夹部分选项卡 */}
-                <section className='settings-section'>
-                    <header className='settings-title'>文件夹</header>
-                    <article className='settings-card'>
-                        {/** 文件夹列表 */}
-                        <div className='setting-box'>
-                            <div className='settings-line'>
-                                <span>
-                                    <div className='settings-line__name'>文件目录</div>
-                                    <div className='settings-line__subname'>目录内的所有 zip 压缩包以及文件夹（不包含子文件夹内容）</div>
-                                </span>
+                <SettingCard title='文件夹'>
+                    {/** 文件夹列表 */}
+                    <div className='setting-box'>
+                        <SettingCardLine
+                            title='文件目录'
+                            subtitle='目录内的所有 zip 压缩包以及文件夹（不包含子文件夹内容）'
+                            action={
                                 <Icon
-                                    onClick={this.addDirectory}
                                     style={{ fontSize: '20px' }}
                                     type='folder-add'
                                     theme='outlined'
                                 />
-                            </div>
-                            {directories.length === 0
-                                ? <div className='settings-subline'>
-                                    <div className='settings-line__name' style={{ textAlign: 'center' }}>尚未添加目录</div>
-                                </div>
-                                : directories.map((path, i) =>
-                                    <div className='settings-subline' key={i}>
-                                        <div className='settings-line__name'>{path}</div>
-                                        <span>
-                                            <Icon
-                                                style={{
-                                                    color: 'rgba(0, 0, 0, .4)',
-                                                    fontSize: '14px',
-                                                }}
-                                                onClick={() => shell.openItem(path)}
-                                                type='folder-open'
-                                                theme='outlined'
-                                            />
-                                            <Icon
-                                                style={{
-                                                    color: '#faad14',
-                                                    fontSize: '14px',
-                                                    marginLeft: '8px',
-                                                }}
-                                                onClick={() => this.removeDirectory(path)}
-                                                type='delete'
-                                                theme='outlined'
-                                            />
-                                        </span>
-                                    </div>,
-                                )
                             }
-                        </div>
-                        {/** 刷新目录 */}
-                        <div className='settings-line'>
-                            <span>
-                                <div className='settings-line__name'>刷新预览缓存</div>
-                                <div className='settings-line__subname'>刷新目录内有被增、删、改操作的项目</div>
-                            </span>
-                            <Button loading={isLoading} onClick={() => this.props.store.refreshCache()}>刷新</Button>
-                        </div>
-                    </article>
-                </section>
+                        />
+                        {dirs.length === 0
+                            ? <SettingCardLine isSubline title='尚未添加目录' />
+                            : dirs.map((path, i) => (
+                                <SettingCardLine
+                                    isSubline
+                                    key={i}
+                                    title={path}
+                                    action={<span>
+                                        <Icon
+                                            style={{
+                                                color: 'rgba(0, 0, 0, .4)',
+                                                fontSize: '14px',
+                                            }}
+                                            onClick={() => shell.openItem(path)}
+                                            type='folder-open'
+                                            theme='outlined'
+                                        />
+                                        <Icon
+                                            style={{
+                                                color: '#faad14',
+                                                fontSize: '14px',
+                                                marginLeft: '8px',
+                                            }}
+                                            type='delete'
+                                            theme='outlined'
+                                        />
+                                    </span>}
+                                />
+                            ))
+                        }
+                    </div>
+                    {/** 刷新目录 */}
+                    <SettingCardLine
+                        title='刷新预览缓存'
+                        subtitle='刷新目录内有被增、删、改操作的项目'
+                        action={<Button loading={loading}>刷新</Button>}
+                    />
+                </SettingCard>
             </article>
-        </main>;
-    }
+        </main>
+    );
 }
