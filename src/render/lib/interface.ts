@@ -1,4 +1,4 @@
-// import { resolveRender } from 'lib/utils';
+// import { resolveRender } from 'render/lib/utils';
 import { remote, MessageBoxOptions } from 'electron';
 
 // const MainNativeImage = remote.nativeImage;

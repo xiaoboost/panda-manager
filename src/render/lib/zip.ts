@@ -7,7 +7,7 @@ import {
     isArray,
     isString,
     handleError,
-} from 'lib/utils';
+} from 'render/lib/utils';
 
 /**
  * 读取文件子路径

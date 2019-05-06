@@ -5,10 +5,10 @@ import * as React from 'react';
 import { render } from 'react-dom';
 import { HashRouter, Route, Switch } from 'react-router-dom';
 
-import Setting from 'views/setting';
-import MangaList from 'views/manga-list';
-import ItemDetail from 'views/manga-detail';
-import TagCollection from 'views/tag-collection';
+import Setting from 'render/views/setting';
+import MangaList from 'render/views/manga-list';
+import ItemDetail from 'render/views/manga-detail';
+import TagCollection from 'render/views/tag-collection';
 
 render(
     <HashRouter>

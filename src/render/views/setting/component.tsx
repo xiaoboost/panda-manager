@@ -3,11 +3,17 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Icon, Button } from 'antd';
 
-import * as store from 'store';
+import * as store from 'render/store';
 
 import { shell } from 'electron';
-import { useStore } from 'lib/store';
-import { warnDialog, selectDirectory } from 'lib/interface';
+import { useStore } from 'render/lib/store';
+import { warnDialog, selectDirectory } from 'render/lib/interface';
+
+import {
+    addDirectory as add,
+    removeDirectory as remove,
+    refreshCache as refresh,
+} from 'render/lib/cache';
 
 /** 选项卡片 */
 const SettingCard: React.FunctionComponent<{ title: string }> = ({ title, children }) => (
@@ -37,12 +43,12 @@ const SettingCardLine: React.FunctionComponent<SettingCardLineProps> = ({ title,
 );
 
 /** 添加文件夹 */
-const addDirectory = () => selectDirectory().then((dir) => store.addDirectory(dir));
+const addDirectory = () => selectDirectory().then(add);
 
 /** 移除文件夹 */
-const removeDirectory = async (path: string) => {
-    await warnDialog('确认删除', `确定要删除此文件夹？\n${path}`);
-    store.removeDirectory(path);
+const removeDirectory = (path: string) => {
+    warnDialog('确认删除', `确定要删除此文件夹？\n${path}`)
+        .then(() => remove(path));
 };
 
 export default function Setting() {
@@ -111,7 +117,7 @@ export default function Setting() {
                     <SettingCardLine
                         title='刷新预览缓存'
                         subtitle='刷新目录内有被增、删、改操作的项目'
-                        action={<Button onClick={() => store.refreshCache(false)} loading={loading}>刷新</Button>}
+                        action={<Button onClick={() => refresh(false)} loading={loading}>刷新</Button>}
                     />
                 </SettingCard>
             </article>
