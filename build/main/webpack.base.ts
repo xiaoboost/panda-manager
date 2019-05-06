@@ -1,4 +1,5 @@
 import Webpack from 'webpack';
+import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 
 import { resolveRoot, main } from '../env';
 
@@ -21,11 +22,17 @@ const baseConfig: WebpackConfig = {
         filename: 'main.js',
     },
     resolve: {
-        extensions: ['.ts', '.js', '.json', '.styl'],
+        extensions: ['.ts', '.js', '.json'],
         mainFiles: ['index.ts'],
         alias: {
-            src: resolve('src/main'),
+            src: resolve('src'),
+            shared: resolve('src/shared'),
         },
+        plugins: [
+            new TsconfigPathsPlugin({
+                configFile: resolveRoot('tsconfig.build.main.json'),
+            }),
+        ],
     },
     module: {
         rules: [

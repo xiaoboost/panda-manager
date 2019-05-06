@@ -34,13 +34,11 @@ const baseConfig: WebpackConfig = {
         filename: '[name].js',
     },
     resolve: {
-        // 自动补全的扩展名
         extensions: ['.tsx', '.ts', '.js', '.jsx', '.json', '.styl', '.less', '.css'],
-        // 目录下的默认主文件
         mainFiles: ['index.tsx', 'index.ts', 'index.js', 'index.less', 'index.css'],
-        // 默认路径别名
         alias: {
-            'src': resolve('src/render'),
+            'src': resolve('src'),
+            'shared': resolve('src/shared'),
             'object-assign': resolveRoot('node_modules/object-assign/index.js'),
         },
         plugins: [

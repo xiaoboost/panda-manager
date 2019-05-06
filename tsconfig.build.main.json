@@ -4,10 +4,7 @@
         "outDir": "dist/main",
         "module": "commonjs",
         "jsx": "preserve",
-        "esModuleInterop": true,
-        "paths": {
-            "*": ["*", "src/main/*", "src/shared/*"]
-        }
+        "esModuleInterop": true
     },
     "include": ["src/main", "src/shared", "typings"],
     "exclude": ["node_modules", "dist", "build", "src/render"]

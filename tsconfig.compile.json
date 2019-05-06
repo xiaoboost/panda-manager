@@ -2,7 +2,10 @@
     "extends": "./tsconfig.json",
     "compilerOptions": {
         "module": "commonjs",
-        "target": "esnext"
+        "target": "esnext",
+        "paths": {
+            "*": ["*", "src/*"]
+        }
     },
     "include": ["typings", "build"],
     "exclude": ["node_modules", "dist", "src", "test"]

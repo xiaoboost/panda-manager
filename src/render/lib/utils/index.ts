@@ -1,4 +1,3 @@
-export * from './env';
 export * from './assert';
 export * from './object';
 export * from './error';

@@ -1,6 +1,5 @@
-import * as path from 'path';
-import * as url from 'url';
-
+import { format } from 'url';
+import { resolveRender } from 'shared/env';
 import { app, BrowserWindow } from 'electron';
 
 let win: BrowserWindow | null;
@@ -15,8 +14,8 @@ function createWindow() {
         },
     });
 
-    win.loadURL(url.format({
-        pathname: path.join(__dirname, '../render/index.html'),
+    win.loadURL(format({
+        pathname: resolveRender('index.html'),
         protocol: 'file:',
         slashes: true,
     }));
