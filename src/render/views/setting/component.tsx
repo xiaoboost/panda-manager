@@ -52,8 +52,8 @@ const removeDirectory = (path: string) => {
 };
 
 export default function Setting() {
-    const loading = useStore(store.loading);
-    const dirs = useStore(store.directories);
+    const [loading] = useStore(store.loading);
+    const [dirs] = useStore(store.directories);
 
     return (
         <main id='main-setting'>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { isString, isUndef } from 'render/lib/utils';
+import { isString, isDef } from 'render/lib/utils';
 
 type Reduer<T> = (val: T, payload?: any) => T;
 type Subscribe<T> = (now: T, pre?: T) => void;
@@ -13,6 +13,9 @@ export default class Store<T, R extends Record<keyof R, Reduer<T>> = any> {
     private reduer: R;
     /** 订阅函数 */
     private subs: Subscribe<T>[] = [];
+
+    /** 是否被冻结 */
+    private isFreeze = false;
 
     constructor(initVal: T, reduer?: R) {
         this.value = initVal;
@@ -29,6 +32,15 @@ export default class Store<T, R extends Record<keyof R, Reduer<T>> = any> {
         this.subs = this.subs.filter((f) => f !== sub);
     }
 
+    /** 冻结此值 */
+    freeze() {
+        this.isFreeze = true;
+    }
+    /** 解冻此值 */
+    thaw() {
+        this.isFreeze = false;
+    }
+
     /** 发布此值 */
     dispatch(val: T): void;
     /** 按照预定的分配器发布此值 */
@@ -37,10 +49,15 @@ export default class Store<T, R extends Record<keyof R, Reduer<T>> = any> {
     dispatch<K extends keyof R>(name: T | K, payload?: Parameters<R[K]>[1]) {
         let val: T;
 
+        // 被冻结，不允许改变值
+        if (this.isFreeze) {
+            return;
+        }
+
         const oldVal = this.value;
         const isReduerKey = (x: any): x is K => (isString(x) && x in this.reduer);
 
-        if (isReduerKey(name) && isUndef(payload)) {
+        if (isReduerKey(name) && isDef(payload)) {
             val = this.reduer[name](oldVal, payload);
         }
         else {
@@ -66,5 +83,5 @@ export function useStore<T>(store: Store<T>) {
         return () => store.unSubscribe(handleStatusChange);
     });
 
-    return state;
+    return [state, store.dispatch.bind(store)] as const;
 }

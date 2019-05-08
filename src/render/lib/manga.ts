@@ -1,8 +1,12 @@
 import * as fs from 'fs-extra';
 
+import Zip from './zip';
+import sizeOf from 'image-size';
+
 import { join } from 'path';
-import { clone } from 'render/lib/utils';
+import { clone } from './utils';
 import { resolveCache } from 'shared/env';
+import { compress, imageExtend } from './image';
 
 /** 漫画的标签数据 */
 interface TagInManga {
@@ -20,7 +24,6 @@ export interface MangaData {
     tagGroups: TagInManga[];
     /** 预览图片位置列表 */
     previewPositions: number[];
-
     /** 对应的实际文件属性 */
     file: {
         /** 真实文件的路径 */
@@ -148,38 +151,36 @@ export class Manga implements MangaData {
     }
     /** 从压缩包生成预览 */
     async createPreviewFromZip() {
-    //     this.previewPositions.length = 0;
+        this.previewPositions.length = 0;
 
-    //     let preview = Buffer.from('');
-    //     const zip = await Zip.loadZip(this.file.path);
-    //     const { content, cover } = Manga.option.compressOption;
+        let preview = Buffer.from('');
+        const zip = await Zip.fromZipFile(this.file.path);
+        const { compressOption: option } = Manga;
+        const { cachePaths: path } = this;
 
-    //     for await (const file of zip.files()) {
-    //         // 当前图片预览
-    //         const currentImage = await compress(file.buffer, 'jpg', content);
+        for await (const file of zip.files()) {
+            // 当前图片预览
+            const currentImage = await compress(file.buffer, 'jpg', option.content);
 
-    //         // 第一页
-    //         if (preview.length === 0) {
-    //             // 制作封面
-    //             await fs.writeFile(
-    //                 join(this.cacheDir, 'cover.jpg'),
-    //                 await compress(file.buffer, 'jpg', cover),
-    //             );
+            // 第一页
+            if (preview.length === 0) {
+                // 制作封面
+                await fs.writeFile(
+                    path.cover,
+                    await compress(file.buffer, 'jpg', option.cover),
+                );
 
-    //             preview = currentImage;
-    //             this.previewPositions.push(0, sizeOf(preview).width);
-    //         }
-    //         else {
-    //             preview = await imageExtend(preview, currentImage);
-    //             this.previewPositions.push(sizeOf(preview).width);
-    //         }
-    //     }
+                preview = currentImage;
+                this.previewPositions.push(0, sizeOf(preview).width);
+            }
+            else {
+                preview = await imageExtend(preview, currentImage);
+                this.previewPositions.push(sizeOf(preview).width);
+            }
+        }
 
-    //     // 预览文件写入硬盘
-    //     await fs.writeFile(
-    //         join(this.cacheDir, 'preview.jpg'),
-    //         preview,
-    //     );
+        // 预览文件写入硬盘
+        await fs.writeFile(path.preview, preview);
     }
     /** 生成缓存并将其写入硬盘 */
     async writeCache() {
@@ -199,11 +200,11 @@ export class Manga implements MangaData {
 
         // 当前漫画是文件夹
         if (this.file.isDirectory) {
-            // await this.createPreviewFromDirectory();
+            await this.createPreviewFromDirectory();
         }
         // 当前漫画是压缩包
         else {
-            // await this.createPreviewFromZip();
+            await this.createPreviewFromZip();
         }
 
         // 写入漫画 metadata 缓存

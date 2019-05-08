@@ -1,9 +1,9 @@
 
 import * as fs from 'fs-extra';
+import * as path from 'path';
 
-import { join } from 'path';
 import { resolveCache } from 'shared/env';
-import { handleError } from 'render/lib/utils';
+import { handleError, isArray } from 'render/lib/utils';
 
 import { Manga } from './manga';
 import { TagGroup, TagGroupData } from './tag';
@@ -74,7 +74,7 @@ async function readCacheFile() {
 /** 读取所有漫画缓存文件夹列表 */
 async function readCacheMangaList() {
     const dirs = await fs.readdir(cacheDir).catch(() => [] as string[]);
-    const stats = await Promise.all(dirs.map((dir) => fs.stat(join(cacheDir, dir))));
+    const stats = await Promise.all(dirs.map((dir) => fs.stat(path.join(cacheDir, dir))));
 
     return dirs.filter((_, i) => stats[i].isDirectory());
 }
@@ -85,7 +85,7 @@ async function removeExtraCache() {
 
     // 删除多余的实际存在的缓存文件（夹）
     for (const dir of dirs) {
-        const fullPath = join(cacheDir, dir);
+        const fullPath = path.join(cacheDir, dir);
         const stat = await fs.stat(fullPath);
         const isDirectory = stat.isDirectory();
 
@@ -154,10 +154,10 @@ export async function addDirectory(dirInput: string) {
         return;
     }
 
-    // this.directories.push(dirInput);
+    directories.dispatch('Push', dirInput);
 
-    // await this.refreshDirectories(dirInput);
-    // await writeCache();
+    await refreshDirectories(dirInput);
+    await writeCache();
 }
 
 /**
@@ -165,14 +165,14 @@ export async function addDirectory(dirInput: string) {
  * @param {string} 删除的文件夹
  */
 export async function removeDirectory(dirInput: string) {
-    // if (!this.directories.includes(dirInput)) {
-    //     handleError(100, dirInput);
-    //     return;
-    // }
+    if (!directories.value.includes(dirInput)) {
+        handleError(100, dirInput);
+        return;
+    }
 
-    // remove(this.directories, dirInput);
+    directories.dispatch('Delete', dirInput);
 
-    // const deleteMangas = this.mangas.filter((item) => item.file.path.includes(dirInput));
+    const deleteMangas = Object.values(mangas.value).filter(({ file }) => file.path.includes(dirInput));
 
     // for (const manga of deleteMangas) {
     //     remove(this.mangas, manga);
@@ -190,15 +190,17 @@ export async function removeDirectory(dirInput: string) {
  *  - false 只会刷新有修改记录的漫画缓存
  */
 export async function refreshCache(force = false) {
-    // this.isLoading = true;
+    loading.dispatch(true);
+    loading.freeze();
 
-    // await this.removeExtraCache();
+    await removeExtraCache();
 
-    // for (const dir of this.directories) {
-    //     await this.refreshDirectories(dir, force);
-    // }
+    for (const dir of directories.value) {
+        await refreshDirectories(dir, force);
+    }
 
-    // this.isLoading = false;
+    loading.thaw();
+    loading.dispatch(false);
 }
 
 /**
@@ -210,92 +212,89 @@ export async function refreshCache(force = false) {
  *  - false 只会刷新有修改记录的漫画缓存
  */
 export async function refreshDirectories(dirInput: string, force?: boolean) {
-    // // 输入文件夹不再包含的文件夹之中
-    // if (!this.directories.includes(dirInput)) {
-    //     handleError(102, dirInput);
-    //     return;
-    // }
+    // 输入文件夹不再包含的文件夹之中
+    if (!directories.value.includes(dirInput)) {
+        handleError(102, dirInput);
+        return;
+    }
 
-    // this.isLoading = true;
+    loading.dispatch(true);
 
-    // // 当前文件夹下已经被缓存的漫画
-    // const cacheMangas = this.mangas.filter((item) => dirname(item.file.path) === dirInput);
-    // // 当前文件夹下实际存在的漫画
-    // const dirMangas: string[] | Error = await fs.readdir(dirInput).catch((e) => e);
+    // 当前文件夹下已经被缓存的漫画
+    const cacheMangas = Object.values(mangas.value)
+        .filter(({ file }) => path.dirname(file.path) === dirInput);
+    // 当前文件夹下实际存在的漫画
+    const dirMangas: string[] | Error = await fs.readdir(dirInput).catch((e) => e);
 
-    // // 发生错误
-    // if (!isArray(dirMangas)) {
-    //     handleError(100, dirInput);
-    //     remove(this.directories, dirInput);
-    //     return;
-    // }
+    // 发生错误
+    if (!isArray(dirMangas)) {
+        handleError(100, dirInput);
+        directories.dispatch('Delete', dirInput);
+        return;
+    }
 
-    // // 删除已经不存在的缓存
-    // await Promise.all(
-    //     cacheMangas
-    //         .filter((item) => !dirMangas.includes(basename(item.file.path)))
-    //         .map((item) => {
-    //             remove(this.mangas, item);
-    //             return fs.remove(item.cachePath);
-    //         }),
-    // );
+    // 删除已经不存在的缓存
+    await Promise.all(
+        cacheMangas
+            .filter((item) => !dirMangas.includes(path.basename(item.file.path)))
+            .map((item) => {
+                // mangas.dispatch('Delete', item.id);
+                return fs.remove(item.cachePaths.dir);
+            }),
+    );
 
-    // // 刷新实际存在的漫画缓存
-    // for (let i = 0; i < dirMangas.length; i++) {
-    //     const name = dirMangas[i];
-    //     const fullPath = join(dirInput, name);
-    //     const stat = await fs.stat(fullPath);
-    //     const isDirectory = stat.isDirectory();
-    //     const lastModified = new Date(stat.mtime).getTime();
+    // 刷新实际存在的漫画缓存
+    for (let i = 0; i < dirMangas.length; i++) {
+        const name = dirMangas[i];
+        const fullPath = path.join(dirInput, name);
+        const stat = await fs.stat(fullPath);
+        const isDirectory = stat.isDirectory();
+        const lastModified = new Date(stat.mtime).getTime();
 
-    //     // 跳过非 zip 后缀的文件
-    //     if (!isDirectory && extname(name) !== '.zip') {
-    //         continue;
-    //     }
+        // 跳过非 zip 后缀的文件
+        if (!isDirectory && path.extname(name) !== '.zip') {
+            continue;
+        }
 
-    //     setProgress({
-    //         currentPath: fullPath,
-    //         jobProgress: {
-    //             total: dirMangas.length,
-    //             current: i + 1,
-    //         },
-    //     });
+        // setProgress({
+        //     currentPath: fullPath,
+        //     jobProgress: {
+        //         total: dirMangas.length,
+        //         current: i + 1,
+        //     },
+        // });
 
-    //     // 从已有缓存中搜索当前漫画
-    //     const cacheManga = cacheMangas.find((item) => item.file.path === fullPath);
+        // 从已有缓存中搜索当前漫画
+        const cacheManga = cacheMangas.find((item) => item.file.path === fullPath);
 
-    //     // 已有缓存
-    //     if (cacheManga) {
-    //         // 强制刷新或者漫画被修改过
-    //         if (force || cacheManga.file.lastModified < lastModified) {
-    //             await cacheManga.writeCache();
-    //         }
-    //     }
-    //     // 新漫画
-    //     else {
-    //         const manga = new Manga({
-    //             name,
-    //             file: {
-    //                 path: fullPath,
-    //                 lastModified,
-    //                 isDirectory: stat.isDirectory(),
-    //             },
-    //         });
+        // 已有缓存
+        if (cacheManga) {
+            // 强制刷新或者漫画被修改过
+            if (force || cacheManga.file.lastModified < lastModified) {
+                await cacheManga.writeCache();
+            }
+        }
+        // 新漫画
+        else {
+            const manga = new Manga();
 
-    //         await manga.writeCache();
-    //         this.mangas.push(manga);
-    //     }
-    // }
+            manga.name = name;
 
-    // // 重写缓存
-    // await this.writeCache();
+            manga.file.path = fullPath;
+            manga.file.lastModified = lastModified;
+            manga.file.isDirectory = stat.isDirectory();
 
-    // // 延迟判断是否关闭进度提示
-    // setTimeout(() => {
-    //     if (!this.isLoading) {
-    //         closeProgress();
-    //     }
-    // }, 100);
+            await manga.writeCache();
+
+            mangas.dispatch('Partial', {
+                [manga.id]: manga,
+            });
+        }
+    }
+
+    await writeCache();
+
+    loading.dispatch(false);
 }
 
 // 初始化

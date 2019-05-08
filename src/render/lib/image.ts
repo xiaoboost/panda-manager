@@ -56,9 +56,10 @@ export function imageExtend(main: Buffer, extend: Buffer) {
                 top: 0, bottom: 0, left: 0, right: width,
                 background: { r: 255, g: 255, b: 255, alpha: 1 },
             })
-            .overlayWith(extend, {
+            .composite([{
+                input: extend,
                 gravity: Sharp.gravity.east,
-            })
+            }])
             .toBuffer()
             .then(resolve)
             .catch(reject);

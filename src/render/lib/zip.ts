@@ -40,12 +40,23 @@ async function readDir(dir: string) {
     }
 }
 
+/** 将压缩包内的文件数据写入硬盘 */
+function writeZipInsideFile(writePath: string, data: JSZip.JSZipObject) {
+    return new Promise((resolve, reject) => {
+        data
+            .nodeStream()
+            .pipe(fs.createWriteStream(writePath))
+            .on('finish', resolve)
+            .on('error', reject);
+    });
+}
+
 /**
  * Zip 压缩包类
  */
 export default class Zip {
     /** 读取 zip 文件 */
-    static async loadZip(zipPath: string) {
+    static async fromZipFile(zipPath: string) {
         const zip = new Zip(path.parse(zipPath).name);
         const content = await fs.readFile(zipPath);
 
@@ -54,7 +65,7 @@ export default class Zip {
         return zip;
     }
     /** 读取需要压缩的文件夹 */
-    static async loadDirectory(directory: string) {
+    static async fromDirectory(directory: string) {
         const { name } = path.parse(directory);
         const zipper = new Zip(name);
 
@@ -104,6 +115,7 @@ export default class Zip {
     /** 解压缩当前压缩包 */
     async unPack(targetDir: string) {
         const errorFiles: string[] = [];
+        const fileDirMap: AnyObject<boolean> = {};
 
         for (const [innerPath, data] of Object.entries(this._zip.files)) {
             if (data.dir) {
@@ -111,24 +123,18 @@ export default class Zip {
             }
 
             const filePath = path.join(targetDir, innerPath);
-            const { dir: fileDir } = path.parse(filePath);
+            const fileDir = path.dirname(filePath);
 
-            await (new Promise((resolve) => {
-                fs.mkdirp(fileDir)
-                    .then(() => data
-                        .nodeStream()
-                        .pipe(fs.createWriteStream(filePath))
-                        .on('finish', resolve)
-                        .on('error', () => {
-                            errorFiles.push(innerPath);
-                            resolve();
-                        }),
-                    )
-                    .catch(() => {
-                        errorFiles.push(innerPath);
-                        resolve();
-                    });
-            }));
+            // 还未访问过此目录
+            if (!fileDirMap[fileDir]) {
+                // 标记访问
+                fileDirMap[fileDir] = true;
+                // 创建目录
+                await fs.mkdirp(path.parse(filePath).dir);
+            }
+
+            await writeZipInsideFile(filePath, data)
+                .catch(() => errorFiles.push(innerPath));
         }
     }
     /** 将压缩包写入硬盘 */
