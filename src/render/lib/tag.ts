@@ -33,8 +33,8 @@ export class Tag implements TagData {
         const tag = Object.assign(new Tag(), data) as Tag;
 
         // 全局编号重置
-        if (data.id > tagId) {
-            tagId = data.id;
+        if (data.id >= tagId) {
+            tagId = data.id + 1;
         }
 
         return tag;
@@ -59,8 +59,8 @@ export class TagGroup implements TagGroupData {
         group.tags = data.tags.map(Tag.from);
 
         // 全局编号重置
-        if (data.id > groupId) {
-            groupId = data.id;
+        if (data.id >= groupId) {
+            groupId = data.id + 1;
         }
 
         return group;

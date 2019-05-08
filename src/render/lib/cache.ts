@@ -90,7 +90,7 @@ async function removeExtraCache() {
         const isDirectory = stat.isDirectory();
 
         if (
-            (isDirectory && !mangas[dir]) ||
+            (isDirectory && !mangas.value[dir]) ||
             (!isDirectory && dir !== 'meta.json')
         ) {
             await fs.remove(fullPath);
@@ -113,9 +113,14 @@ export async function readCache() {
                 .catch(() => void 0),
     ));
 
+    const data: AnyObject<Manga> = {};
+
     metas
         .filter((x: any): x is Manga => !!x)
-        .forEach((item) => mangas[item.id] = item);
+        .forEach((item) => data[item.id] = item);
+
+    // 更新漫画储存
+    mangas.dispatch('Partial', data);
 
     // 删除多余缓存
     await removeExtraCache();
@@ -278,7 +283,7 @@ export async function refreshDirectories(dirInput: string, force?: boolean) {
         else {
             const manga = new Manga();
 
-            manga.name = name;
+            manga.name = path.parse(name).base;
 
             manga.file.path = fullPath;
             manga.file.lastModified = lastModified;

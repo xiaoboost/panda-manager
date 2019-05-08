@@ -79,8 +79,8 @@ export class Manga implements MangaData {
         const manga = Object.assign(new Manga(), clone(data)) as Manga;
 
         // 编号重置
-        if (data.id > id) {
-            id = data.id;
+        if (data.id >= id) {
+            id = data.id + 1;
         }
 
         return manga;
