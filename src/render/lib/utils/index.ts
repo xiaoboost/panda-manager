@@ -5,3 +5,5 @@ export * from './error';
 export * from './clone';
 export * from './event';
 export * from './async';
+export * from './native';
+export * from './dom';
