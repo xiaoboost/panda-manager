@@ -21,7 +21,7 @@ export function hasOwn(obj: object, key: string): boolean {
  * @param obj 待检测对象
  */
 export function isEmpty(obj: object) {
-    return Object.keys(obj).length > 0;
+    return Object.keys(obj).length === 0;
 }
 
 /**

@@ -1,6 +1,7 @@
 import { deleteVal } from 'render/lib/utils';
 
 /** 替换函数 */
+// TODO: 替换的时候应该要做是否替换的检测
 const Replace = <T>(origin: T, newVal: T) => newVal;
 
 /** 数组方法代理 */

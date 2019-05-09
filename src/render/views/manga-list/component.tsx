@@ -9,7 +9,8 @@ import { SortOption, SortBy } from 'render/lib/cache';
 import { useStore } from 'render/lib/store';
 import { useObject } from 'render/lib/hooks';
 import { sort, mangas } from 'render/store';
-import { stringifyClass } from 'render/lib/utils';
+
+import { stringifyClass, selfEvent } from 'render/lib/utils';
 
 /** 排序选项下拉列表 */
 function SortDropMenu() {
@@ -119,7 +120,9 @@ export default function MangaList() {
                 </Link>
                 <SortDropMenu />
             </header>
-            <article className='main-list-article'>
+            <article
+                className='main-list-article'
+                onClick={selfEvent(() => setSelected('Replace', {}))}>
                 {getMangasList(state, sortState).map((item) =>
                     <div
                         key={item.id}
