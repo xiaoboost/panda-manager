@@ -2,9 +2,10 @@ import * as fs from 'fs-extra';
 
 import Zip from './zip';
 import sizeOf from 'image-size';
+import naturalCompare from 'string-natural-compare';
 
-import { join } from 'path';
 import { clone } from './utils';
+import { join, extname } from 'path';
 import { resolveCache } from 'shared/env';
 import { compress, imageExtend } from './image';
 
@@ -37,6 +38,8 @@ export interface MangaData {
 
 /** 全局漫画编号 */
 let id = 0;
+/** 允许的图片后缀 */
+const allowImageExt = ['png', 'jpg', 'bmp'];
 
 /** 漫画类 */
 export class Manga implements MangaData {
@@ -65,12 +68,16 @@ export class Manga implements MangaData {
         /** 封面 */
         cover: {
             quality: 95,
-            size: { height: 380 },
+            size: {
+                height: 380,
+            },
         },
         /** 内容 */
         content: {
             quality: 80,
-            size: { height: 180 },
+            size: {
+                height: 180,
+            },
         },
     };
 
@@ -95,7 +102,7 @@ export class Manga implements MangaData {
         return this.previewPositions.length + 1;
     }
     /** 当前漫画的缓存路径 */
-    get cachePaths() {
+    get paths() {
         const dir = resolveCache(this.id);
         const meta = join(dir, Manga.metaData.meta);
         const cover = join(dir, Manga.metaData.cover);
@@ -105,85 +112,113 @@ export class Manga implements MangaData {
     }
 
     /** 从文件夹生成预览 */
-    async createPreviewFromDirectory() {
-    //     this.previewPositions.length = 0;
+    private async createPreviewFromDirectory() {
+            this.previewPositions.length = 0;
+    
+            let image = Buffer.from('');
 
-    //     let preview = Buffer.from('');
-    //     const { content, cover } = Manga.option.compressOption;
-    //     const allFiles = (await fs.readdir(this.file.path)).sort(naturalCompare);
+            const allFiles = (await fs.readdir(this.file.path)).sort(naturalCompare);
+            const { compressOption: option } = Manga;
+            const { paths: { cover, preview }} = this;
 
-    //     for (const file of allFiles) {
-    //         const fullPath = join(this.file.path, file);
-    //         const stat = await fs.stat(fullPath);
+            for (let i = 0; i < allFiles.length; i++) {
+                const file = allFiles[i];
+                const fullPath = join(this.file.path, file);
+                const stat = await fs.stat(fullPath);
+    
+                // 跳过目录和不允许的文件后缀
+                if (stat.isDirectory() || !allowImageExt.includes(extname(file).toLowerCase())) {
+                    continue;
+                }
+    
+                // 读取当前图片
+                const currentImage = await fs.readFile(fullPath);
+                // 当前图片预览
+                const currentPriview = await compress(currentImage, 'jpg', option.content);
+    
+                // 第一页
+                if (i === 0) {
+                    // 制作封面
+                    await fs.writeFile(
+                        cover,
+                        await compress(image, 'jpg', option.cover),
+                    );
+    
+                    image = currentPriview;
+                }
+                else {
+                    image = await imageExtend(image, currentPriview);
+                }
 
-    //         // 跳过目录和不允许的文件后缀
-    //         if (stat.isDirectory() || !allowImageExt.includes(extname(file).toLowerCase())) {
-    //             continue;
-    //         }
-
-    //         // 读取当前图片
-    //         const image = await fs.readFile(fullPath);
-    //         // 当前图片预览
-    //         const currentImage = await compress(image, 'jpg', content);
-
-    //         // 第一页
-    //         if (preview.length === 0) {
-    //             // 制作封面
-    //             await fs.writeFile(
-    //                 join(this.cacheDir, 'cover.jpg'),
-    //                 await compress(image, 'jpg', cover),
-    //             );
-
-    //             preview = currentImage;
-    //             this.previewPositions.push(0, sizeOf(preview).width);
-    //         }
-    //         else {
-    //             preview = await imageExtend(preview, currentImage);
-    //             this.previewPositions.push(sizeOf(preview).width);
-    //         }
-    //     }
-
-    //     // 预览文件写入硬盘
-    //     await fs.writeFile(
-    //         join(this.cacheDir, 'preview.jpg'),
-    //         preview,
-    //     );
+                this.previewPositions.push(sizeOf(currentPriview).width);
+            }
+    
+            // 预览文件写入硬盘
+            await fs.writeFile(preview, preview);
     }
     /** 从压缩包生成预览 */
-    async createPreviewFromZip() {
+    private async createPreviewFromZip() {
         this.previewPositions.length = 0;
 
-        let preview = Buffer.from('');
+        let image = Buffer.from('');
+
         const zip = await Zip.fromZipFile(this.file.path);
         const { compressOption: option } = Manga;
-        const { cachePaths: path } = this;
+        const { paths: { cover, preview }} = this;
 
         for await (const file of zip.files()) {
             // 当前图片预览
-            const currentImage = await compress(file.buffer, 'jpg', option.content);
+            const currentPreview = await compress(file.buffer, 'jpg', option.content);
 
             // 第一页
             if (preview.length === 0) {
-                // 制作封面
+                // 生成封面
                 await fs.writeFile(
-                    path.cover,
+                    cover,
                     await compress(file.buffer, 'jpg', option.cover),
                 );
 
-                preview = currentImage;
-                this.previewPositions.push(0, sizeOf(preview).width);
+                image = currentPreview;
             }
             else {
-                preview = await imageExtend(preview, currentImage);
-                this.previewPositions.push(sizeOf(preview).width);
+                image = await imageExtend(image, currentPreview);
             }
+
+            // 合成预览图片
+            this.previewPositions.push(sizeOf(image).width);
         }
 
         // 预览文件写入硬盘
-        await fs.writeFile(path.preview, preview);
+        await fs.writeFile(this.paths.preview, preview);
+    }
+
+    /** 生成预览 */
+    async createPreview() {
+        if (await this.allowUpdatePrview()) {
+            this.file.isDirectory
+                ? this.createPreviewFromDirectory()
+                : this.createPreviewFromZip();
+        }
+    }
+    /** 是否可以生成缓存 */
+    async allowUpdatePrview() {
+        const { paths: { preview }, file } = this;
+
+        // 预览文件不存在
+        if (!await fs.pathExists(preview)) {
+            return true;
+        }
+        
+        const stat = await fs.stat(file.path);
+        const fileLastModified = new Date(stat.mtime).getTime();
+        
+        // 漫画预览是旧版
+        return fileLastModified > file.lastModified;
     }
     /** 生成缓存并将其写入硬盘 */
     async writeCache() {
+        const { dir, meta } = this.paths;
+
         // 漫画 meta 信息
         const mangaData: MangaData = {
             id: this.id,
@@ -193,19 +228,12 @@ export class Manga implements MangaData {
             previewPositions: this.previewPositions,
         };
 
-        const { dir, meta } = this.cachePaths;
-
-        await fs.remove(dir);
-        await fs.mkdirp(dir);
-
-        // 当前漫画是文件夹
-        if (this.file.isDirectory) {
-            await this.createPreviewFromDirectory();
+        // 文件夹不存在，则创建
+        if (!await fs.pathExists(dir)) {
+            await fs.mkdirp(dir);
         }
-        // 当前漫画是压缩包
-        else {
-            await this.createPreviewFromZip();
-        }
+
+        await this.createPreview();
 
         // 写入漫画 metadata 缓存
         await fs.writeJSON(
