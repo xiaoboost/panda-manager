@@ -1,8 +1,4 @@
-// import { resolveRender } from 'render/lib/utils';
 import { remote, MessageBoxOptions } from 'electron';
-
-// const MainNativeImage = remote.nativeImage;
-// const QuestionIcon = MainNativeImage.createFromPath(resolveRender('icons/question/icon.png'));
 
 /** 选择文件夹 */
 export function selectDirectory() {
@@ -26,7 +22,6 @@ export function warnDialog(title: string, message: string) {
             message,
             type: 'warning',
             buttons: ['取消', '确定'],
-            // icon: QuestionIcon,
         };
 
         remote.dialog.showMessageBox(win, option, (response) => {

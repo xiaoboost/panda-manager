@@ -1,25 +1,21 @@
 import { useState, useEffect } from 'react';
-import { isString, isDef } from 'render/lib/utils';
 
-type Reduer<T> = (val: T, payload?: any) => T;
+import * as array from './utils/array';
+
 type Subscribe<T> = (now: T, pre?: T) => void;
 
 /** 储存值类 */
-export default class Store<T, R extends Record<keyof R, Reduer<T>> = any> {
+export default class Store<T> {
     /** 此时的值 */
     value: T;
 
-    /** 分配器 */
-    private reduer: R;
+    /** 是否被冻结 */
+    private isFreeze = false;
     /** 订阅函数 */
     private subs: Subscribe<T>[] = [];
 
-    /** 是否被冻结 */
-    private isFreeze = false;
-
-    constructor(initVal: T, reduer?: R) {
+    constructor(initVal: T) {
         this.value = initVal;
-        this.reduer = (reduer || {}) as R;
     }
 
     /** 订阅此值的变化 */
@@ -42,27 +38,13 @@ export default class Store<T, R extends Record<keyof R, Reduer<T>> = any> {
     }
 
     /** 发布此值 */
-    dispatch(val: T): void;
-    /** 按照预定的分配器发布此值 */
-    dispatch<K extends keyof R>(name: K, payload: Parameters<R[K]>[1]): void;
-
-    dispatch<K extends keyof R>(name: T | K, payload?: Parameters<R[K]>[1]) {
-        let val: T;
-
+    dispatch(val: T) {
         // 被冻结，不允许改变值
         if (this.isFreeze) {
             return;
         }
 
         const oldVal = this.value;
-        const isReduerKey = (x: any): x is K => (isString(x) && x in this.reduer);
-
-        if (isReduerKey(name) && isDef(payload)) {
-            val = this.reduer[name](oldVal, payload);
-        }
-        else {
-            val = name as T;
-        }
 
         this.value = val;
         this.subs.forEach((cb) => cb(val, oldVal));
@@ -74,14 +56,50 @@ export function useStore<T>(store: Store<T>) {
     const [state, setState] = useState(store.value);
 
     useEffect(() => {
-        function handleStatusChange(val: T) {
-            setState(val);
-        }
-
-        store.subscribe(handleStatusChange);
-
-        return () => store.unSubscribe(handleStatusChange);
+        store.subscribe(setState);
+        return () => store.unSubscribe(setState);
     });
 
     return [state, store.dispatch.bind(store)] as const;
+}
+
+/** 使用对象储存值 */
+export function useStoreMap<T extends object>(store: Store<T>) {
+    const [map, set] = useState(store.value);
+    const setMap = {
+        /** 恢复初始值 */
+        reset: () => set(store.value),
+        /** 替换对象 */
+        replace: (val: T) => set(val),
+        /** 取出某个字段值 */
+        get: <K extends keyof T>(key: K) => map[key],
+        /** 设置某个字段值 */
+        set: <K extends keyof T>(key: K, entry: T[K]) => set({
+            ...map,
+            [key]: entry,
+        }),
+    };
+
+    return [map, setMap] as const;
+}
+
+/** 使用数组储存值 */
+export function useStoreList<T extends Array<T>>(store: Store<Array<T>>) {
+    const [list, set] = useState(store.value);
+    const setList = {
+        /** 替换数组 */
+        replace: set,
+        /** 清空数组 */
+        clear: () => set([]),
+        /** 取出数组某个下标的元素 */
+        get: (index: number) => array.get(store.value, index),
+        /** 设置数组某个下标的元素 */
+        set: (index: number, val: T) => set((current) => [...current.slice(0, index), val, ...current.slice(index + 1)]),
+        /** 删除数组某个下标的元素 */
+        delete: (index: number) => set((current) => [...current.slice(0, index), ...current.slice(index + 1)]),
+        /** 数组元素入栈 */
+        push: (val: T) => set((current) => [...current, val]),
+    };
+
+    return [list, setList] as const;
 }
