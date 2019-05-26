@@ -13,7 +13,7 @@ import {
     addDirectory as add,
     removeDirectory as remove,
     refreshCache as refresh,
-} from 'render/lib/cache';
+} from 'src/render/store';
 
 /** 选项卡片 */
 const SettingCard: React.FunctionComponent<{ title: string }> = ({ title, children }) => (
@@ -117,7 +117,7 @@ export default function Setting() {
                     <SettingCardLine
                         title='刷新预览缓存'
                         subtitle='刷新目录内有被增、删、改操作的项目'
-                        action={<Button onClick={() => refresh(false)} loading={loading}>刷新</Button>}
+                        action={<Button onClick={refresh} loading={loading}>刷新</Button>}
                     />
                 </SettingCard>
             </article>

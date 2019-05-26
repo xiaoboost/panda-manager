@@ -26,6 +26,11 @@
         flex-grow: 0;
         box-shadow: 2px 2px 4px Shadow;
         position: relative;
+        transition: box-shadow 200ms
+
+        &:hover {
+            box-shadow: 2px 2px 6px Shadow - #444;
+        }
 
         .manga-item__mask {
             opacity: 0;

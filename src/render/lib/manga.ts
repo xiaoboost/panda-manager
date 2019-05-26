@@ -114,7 +114,7 @@ export class Manga implements MangaData {
     /** 从文件夹生成预览 */
     private async createPreviewFromDirectory() {
             this.previewPositions.length = 0;
-    
+
             let image = Buffer.from('');
 
             const allFiles = (await fs.readdir(this.file.path)).sort(naturalCompare);
@@ -125,17 +125,17 @@ export class Manga implements MangaData {
                 const file = allFiles[i];
                 const fullPath = join(this.file.path, file);
                 const stat = await fs.stat(fullPath);
-    
+
                 // 跳过目录和不允许的文件后缀
                 if (stat.isDirectory() || !allowImageExt.includes(extname(file).toLowerCase())) {
                     continue;
                 }
-    
+
                 // 读取当前图片
                 const currentImage = await fs.readFile(fullPath);
                 // 当前图片预览
                 const currentPriview = await compress(currentImage, 'jpg', option.content);
-    
+
                 // 第一页
                 if (i === 0) {
                     // 制作封面
@@ -143,7 +143,7 @@ export class Manga implements MangaData {
                         cover,
                         await compress(image, 'jpg', option.cover),
                     );
-    
+
                     image = currentPriview;
                 }
                 else {
@@ -152,9 +152,9 @@ export class Manga implements MangaData {
 
                 this.previewPositions.push(sizeOf(currentPriview).width);
             }
-    
+
             // 预览文件写入硬盘
-            await fs.writeFile(preview, preview);
+            await fs.writeFile(preview, image);
     }
     /** 从压缩包生成预览 */
     private async createPreviewFromZip() {
@@ -171,7 +171,7 @@ export class Manga implements MangaData {
             const currentPreview = await compress(file.buffer, 'jpg', option.content);
 
             // 第一页
-            if (preview.length === 0) {
+            if (this.previewPositions.length === 0) {
                 // 生成封面
                 await fs.writeFile(
                     cover,
@@ -189,15 +189,15 @@ export class Manga implements MangaData {
         }
 
         // 预览文件写入硬盘
-        await fs.writeFile(this.paths.preview, preview);
+        await fs.writeFile(preview, image);
     }
 
     /** 生成预览 */
     async createPreview() {
         if (await this.allowUpdatePrview()) {
             this.file.isDirectory
-                ? this.createPreviewFromDirectory()
-                : this.createPreviewFromZip();
+                ? await this.createPreviewFromDirectory()
+                : await this.createPreviewFromZip();
         }
     }
     /** 是否可以生成缓存 */
@@ -208,10 +208,10 @@ export class Manga implements MangaData {
         if (!await fs.pathExists(preview)) {
             return true;
         }
-        
+
         const stat = await fs.stat(file.path);
         const fileLastModified = new Date(stat.mtime).getTime();
-        
+
         // 漫画预览是旧版
         return fileLastModified > file.lastModified;
     }
@@ -233,6 +233,7 @@ export class Manga implements MangaData {
             await fs.mkdirp(dir);
         }
 
+        debugger;
         await this.createPreview();
 
         // 写入漫画 metadata 缓存
