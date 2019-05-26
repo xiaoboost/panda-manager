@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react';
-
-// import * as array from './utils/array';
 import { isBaseType, isArray } from './utils/assert';
 
 type Subscribe<T> = (now: T, pre?: T) => void;
@@ -127,14 +125,18 @@ export default class Store<T> {
     }
 }
 
-/** 使用储存值 */
 export function useStore<T>(store: Store<T>) {
     const [state, setState] = useState(store.value);
 
     useEffect(() => {
-        store.subscribe(setState);
-        return () => store.unSubscribe(setState);
-    });
+        function handleStatusChange(val: T) {
+            setState(val);
+        }
+
+        store.subscribe(handleStatusChange);
+
+        return () => store.unSubscribe(handleStatusChange);
+    }, []);
 
     return [state, store.dispatch.bind(store)] as const;
 }
