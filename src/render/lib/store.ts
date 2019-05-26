@@ -132,13 +132,8 @@ export function useStore<T>(store: Store<T>) {
     const [state, setState] = useState(store.value);
 
     useEffect(() => {
-        function handleStatusChange(val: T) {
-            setState(val);
-        }
-
-        store.subscribe(handleStatusChange);
-
-        return () => store.unSubscribe(handleStatusChange);
+        store.subscribe(setState);
+        return () => store.unSubscribe(setState);
     });
 
     return [state, store.dispatch.bind(store)] as const;
