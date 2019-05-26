@@ -64,8 +64,7 @@ export default function SortDropMenu() {
         <Menu id='sort-menu'>
             {sortByList.map(({ key, label }) =>
                 <Menu.Item key={key}>
-                    {/* <a onClick={() => setState('Partial', { by: key })}> */}
-                    <a>
+                    <a onClick={() => setState({ ...state, by: key })}>
                         {state.by === key
                             ? <Icon type='check' theme='outlined' />
                             : <i className='anticon' />
@@ -77,8 +76,7 @@ export default function SortDropMenu() {
             <Menu.Divider />
             {sortAscList.map(({ key, label }) =>
                 <Menu.Item key={Number(key)}>
-                    <a>
-                    {/* <a onClick={() => setState('Partial', { asc: key })}> */}
+                <a onClick={() => setState({ ...state, asc: key })}>
                         {state.asc === key
                             ? <Icon type='check' theme='outlined' />
                             : <i className='anticon' />

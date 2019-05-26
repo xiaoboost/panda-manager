@@ -1,4 +1,4 @@
-import React from 'react';
+import { default as React, PropsWithChildren, memo } from 'react';
 
 import { Link } from 'react-router-dom';
 import { Icon, Button } from 'antd';
@@ -16,12 +16,14 @@ import {
 } from 'src/render/store';
 
 /** 选项卡片 */
-const SettingCard: React.FunctionComponent<{ title: string }> = ({ title, children }) => (
-    <section className='settings-section'>
-        <header className='settings-title'>{title}</header>
-        <article className='settings-card'>{children}</article>
-    </section>
-);
+function SettingCard(props: PropsWithChildren<{ title: string }>) {
+    return (
+        <section className='settings-section'>
+            <header className='settings-title'>{props.title}</header>
+            <article className='settings-card'>{props.children}</article>
+        </section>
+    );
+}
 
 /** 选项卡片元素属性 */
 interface SettingCardLineProps {
@@ -32,15 +34,49 @@ interface SettingCardLineProps {
 }
 
 /** 选项卡片元素 */
-const SettingCardLine: React.FunctionComponent<SettingCardLineProps> = ({ title, subtitle, isSubline, action }) => (
-    <div className={ isSubline ? 'settings-subline' : 'settings-line' }>
+function SettingCardLine(props: SettingCardLineProps) {
+    return <div className={ props.isSubline ? 'settings-subline' : 'settings-line' }>
         <span>
-            <div className='settings-line__name'>{title}</div>
-            { subtitle ? <div className='settings-line__subname'>{subtitle}</div> : ''}
+            <div className='settings-line__name'>{props.title}</div>
+            { props.subtitle ? <div className='settings-line__subname'>{props.subtitle}</div> : ''}
         </span>
-        {action || ''}
-    </div>
-);
+        {props.action || ''}
+    </div>;
+};
+
+/** 文件夹列表 */
+const DirPathList = memo(function DirPathList(props: { dirs: string[] }) {
+    return <>
+        {props.dirs.map((path, i) => (
+            <SettingCardLine
+                isSubline
+                key={i}
+                title={path}
+                action={<span>
+                    <Icon
+                        style={{
+                            color: 'rgba(0, 0, 0, .4)',
+                            fontSize: '14px',
+                        }}
+                        onClick={() => shell.openItem(path)}
+                        type='folder-open'
+                        theme='outlined'
+                    />
+                    <Icon
+                        style={{
+                            color: '#faad14',
+                            fontSize: '14px',
+                            marginLeft: '8px',
+                        }}
+                        onClick={() => removeDirectory(path)}
+                        type='delete'
+                        theme='outlined'
+                    />
+                </span>}
+            />
+        ))}
+    </>;
+});
 
 /** 添加文件夹 */
 const addDirectory = () => selectDirectory().then(add);
@@ -83,34 +119,7 @@ export default function Setting() {
                         />
                         {dirs.length === 0
                             ? <SettingCardLine isSubline title='尚未添加目录' />
-                            : dirs.map((path, i) => (
-                                <SettingCardLine
-                                    isSubline
-                                    key={i}
-                                    title={path}
-                                    action={<span>
-                                        <Icon
-                                            style={{
-                                                color: 'rgba(0, 0, 0, .4)',
-                                                fontSize: '14px',
-                                            }}
-                                            onClick={() => shell.openItem(path)}
-                                            type='folder-open'
-                                            theme='outlined'
-                                        />
-                                        <Icon
-                                            style={{
-                                                color: '#faad14',
-                                                fontSize: '14px',
-                                                marginLeft: '8px',
-                                            }}
-                                            onClick={() => removeDirectory(path)}
-                                            type='delete'
-                                            theme='outlined'
-                                        />
-                                    </span>}
-                                />
-                            ))
+                            : <DirPathList dirs={dirs} />
                         }
                     </div>
                     {/** 刷新目录 */}
