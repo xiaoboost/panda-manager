@@ -2,10 +2,10 @@ import { default as React } from 'react';
 
 import { Icon, Menu, Dropdown } from 'antd';
 
-import { Manga } from 'render/lib/manga';
-import { useStore } from 'render/lib/store';
-import { sortOption } from 'render/store';
-import { SortOption, SortBy } from 'src/render/store/cache';
+import { Manga } from 'src/renderer/lib/manga';
+import { useStore } from 'src/renderer/lib/store';
+import { sortOption } from 'src/renderer/store';
+import { SortOption, SortBy } from 'src/renderer/store/cache';
 
 /** 按照排序己算当前漫画列表 */
 export function getMangasList(items: AnyObject<Manga>, option: SortOption) {

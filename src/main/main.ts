@@ -1,5 +1,5 @@
 import { format } from 'url';
-import { resolveRender } from 'shared/env';
+import { resolveRender } from 'utils/shared';
 import { app, BrowserWindow } from 'electron';
 
 let win: BrowserWindow | null;

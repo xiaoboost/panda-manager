@@ -6,7 +6,7 @@ import naturalCompare from 'string-natural-compare';
 
 import { clone } from './utils';
 import { join, extname } from 'path';
-import { resolveCache } from 'shared/env';
+import { resolveCache } from 'src/utils/shared/env';
 import { compress, imageExtend } from './image';
 
 /** 漫画的标签数据 */

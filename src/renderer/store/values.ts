@@ -1,4 +1,4 @@
-import Store from 'render/lib/store';
+import Store from 'src/renderer/lib/store';
 
 import { Manga } from '../lib/manga';
 import { TagGroup } from '../lib/tag';

@@ -3,17 +3,17 @@ import { default as React, PropsWithChildren, memo } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon, Button } from 'antd';
 
-import * as store from 'render/store';
+import * as store from 'src/renderer/store';
 
 import { shell } from 'electron';
-import { useStore } from 'render/lib/store';
-import { warnDialog, selectDirectory } from 'render/lib/interface';
+import { useStore } from 'src/renderer/lib/store';
+import { warnDialog, selectDirectory } from 'src/renderer/lib/interface';
 
 import {
     addDirectory as add,
     removeDirectory as remove,
     refreshCache as refresh,
-} from 'src/render/store';
+} from 'src/renderer/store';
 
 /** 选项卡片 */
 function SettingCard(props: PropsWithChildren<{ title: string }>) {

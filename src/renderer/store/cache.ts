@@ -3,10 +3,10 @@ import * as path from 'path';
 
 import { remote } from 'electron';
 
-import { Manga } from 'render/lib/manga';
-import { resolveCache } from 'shared/env';
-import { TagGroup, TagGroupData } from 'render/lib/tag';
-import { handleError, isString, deleteVal } from 'render/lib/utils';
+import { Manga } from 'src/renderer/lib/manga';
+import { resolveCache } from 'utils/shared/env';
+import { TagGroup, TagGroupData } from 'src/renderer/lib/tag';
+import { handleError, isString, deleteVal } from 'src/renderer/lib/utils';
 
 
 import {

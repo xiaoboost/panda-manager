@@ -3,14 +3,12 @@ import { default as React } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from 'antd';
 
-import { Manga } from 'render/lib/manga';
-import { SortOption, SortBy } from 'src/render/store/cache';
-
 import { useMap } from 'react-use';
-import { useStore } from 'render/lib/store';
-import { sortOption, mangas } from 'render/store';
+import { useStore } from 'src/renderer/lib/store';
+import { sortOption, mangas } from 'src/renderer/store';
 
-import { stringifyClass, selfEvent } from 'render/lib/utils';
+import { stringifyClass } from 'src/renderer/lib/utils';
+import { selfEvent } from 'src/renderer/lib/event';
 
 import { default as SortDropMenu, getMangasList } from './sort-menu';
 
@@ -21,7 +19,10 @@ export default function MangaList() {
 
     // 漫画点击事件
     function mangaClickHandler(ev: React.MouseEvent) {
+        // 左键
+        if (ev.button === 0) {
 
+        }
     }
 
     return (
