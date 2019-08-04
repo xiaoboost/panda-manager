@@ -3,9 +3,8 @@
     "compilerOptions": {
         "outDir": "dist/main",
         "module": "commonjs",
-        "jsx": "preserve",
         "esModuleInterop": true
     },
-    "include": ["src/main", "src/shared", "typings"],
+    "include": ["src/main", "src/utils", "typings"],
     "exclude": ["node_modules", "dist", "build", "src/render"]
 }

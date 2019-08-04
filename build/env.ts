@@ -16,19 +16,19 @@ const resolveMain = (dir: string) => join(__dirname, '../src/main/', dir);
  * 定位到渲染模块目录
  * @param {string} dir 路径
  */
-const resolveRender = (dir: string) => join(__dirname, '../src/render/', dir);
+const resolveRenderer = (dir: string) => join(__dirname, '../src/renderer/', dir);
 
 /** 调试时的网络端口 */
 export const devHttpPort = 9090;
 
 /** 渲染模块配置 */
-export const render = {
+export const renderer = {
     /** 定位到渲染模块目录 */
-    resolve: resolveRender,
+    resolve: resolveRenderer,
     /** 静态资源 */
-    assert: resolveRender('assets/'),
+    assert: resolveRenderer('assets/'),
     /** 构建输出的文件路径 */
-    output: resolveRoot('dist/render'),
+    output: resolveRoot('dist/renderer'),
     /** 公共资源输出路径 */
     publicPath: '',
 };
