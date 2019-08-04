@@ -5,5 +5,7 @@ declare namespace NodeJS {
         NODE_ENV: 'development' | 'production';
         /** 初始目录 */
         INIT_CWD: string;
+        /** 临时目录 */
+        TEMP: string;
     }
 }
