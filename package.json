@@ -11,7 +11,7 @@
     "dev:renderer": "npm run ts-node ./build/renderer/webpack.dev.ts",
     "build:renderer": "npm run ts-node ./build/renderer/webpack.prod.ts",
     "build": "npm run clear && npm run build:main && npm run build:renderer",
-    "rebuild": "./node_modules/.bin/electron-rebuild",
+    "rebuild": "./node_modules/.bin/electron-rebuild && node node_modules/sharp/install/dll-copy",
     "start": "./node_modules/.bin/electron ."
   },
   "author": "xiao",
@@ -30,8 +30,7 @@
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.1",
     "react-use": "^10.5.0",
-    "rebound": "^0.1.0",
-    "sharp": "^0.22.1",
+    "sharp": "^0.23.0",
     "string-natural-compare": "^2.0.3"
   },
   "devDependencies": {
@@ -52,9 +51,8 @@
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
     "copy-webpack-plugin": "^5.0.4",
-    "cross-env": "^5.2.0",
     "css-loader": "^3.1.0",
-    "electron": "^6.0.0",
+    "electron": "~5.0.8",
     "electron-rebuild": "^1.8.5",
     "eslint": "~5.16.0",
     "file-loader": "^4.1.0",
