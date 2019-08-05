@@ -6,5 +6,5 @@
         "esModuleInterop": true
     },
     "include": ["src/main", "src/utils", "typings"],
-    "exclude": ["node_modules", "dist", "build", "src/render"]
+    "exclude": ["node_modules", "dist", "build", "src/renderer"]
 }

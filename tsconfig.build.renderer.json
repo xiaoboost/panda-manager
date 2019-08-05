@@ -1,9 +1,9 @@
 {
     "extends": "./tsconfig.json",
     "compilerOptions": {
-        "outDir": "dist/render",
+        "outDir": "dist/renderer",
         "module": "esnext",
     },
-    "include": ["src/render", "src/utils", "typings"],
+    "include": ["src/renderer", "src/utils", "typings"],
     "exclude": ["node_modules", "dist", "build", "src/main"]
 }
