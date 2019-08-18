@@ -1,0 +1,33 @@
+Height = 32px
+
+.app-header
+    height Height
+
+    color #fff
+    font-size 12px
+    background-color #34353b
+
+    display flex
+    align-items center
+    justify-content space-between
+
+    user-select none
+    -webkit-app-region drag
+
+    > span
+        display inline-flex
+        align-items center
+    
+
+    .app-title-bar__icon
+        padding 10px 17px
+        -webkit-app-region no-drag
+
+        &:hover
+            background-color #4f535b
+
+        &.icon-close:hover
+            background-color #BC2F2E
+    
+    .app-title-bar__title
+        padding 0 13px
