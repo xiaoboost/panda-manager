@@ -42,6 +42,9 @@ export function webpackBaseConfig(mode: 'main' | 'renderer'): Webpack.Configurat
             __dirname: false,
             __filename: false,
         },
+        externals: {
+            'fs-extra': 'commonjs fs-extra',
+        },
         optimization: {
             minimizer: [],
         },
