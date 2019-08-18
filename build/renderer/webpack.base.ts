@@ -16,12 +16,12 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 const baseConfig: Webpack.Configuration = {
     ...webpackBaseConfig('renderer'),
 
-    entry: resolve('main.tsx'),
+    entry: resolve('index.tsx'),
 
     output: {
         path: output,
         publicPath,
-        filename: '[name].js',
+        filename: 'script.js',
     },
 };
 

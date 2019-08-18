@@ -1,4 +1,5 @@
 import { join } from 'path';
+import { app } from 'electron';
 
 /** exe 调用路径 */
 const initCWD = process.env.INIT_CWD;
@@ -8,7 +9,7 @@ const appRoot = process.env.NODE_ENV === 'development' ? join(initCWD, 'dist') :
 /** 渲染进程根目录 */
 const appRender = process.env.NODE_ENV === 'development' ? join(initCWD, 'dist/renderer') : initCWD;
 /** 缓存文件夹路径 */
-const cacheDir = resolveRoot('cache');
+const userDir = app.getPath('userData');
 
 /** 由软件根目录的相对路径转变为绝对路径 */
 export function resolveRoot(...paths: (string | number)[]) {
@@ -21,6 +22,6 @@ export function resolveRender(...paths: (string | number)[]) {
 }
 
 /** 由缓存资源目录的相对路径转变为绝对路径 */
-export const resolveCache = (...paths: (string | number)[]) => {
-    return join(cacheDir, ...paths.map(String));
+export function resolveUserDir(...paths: (string | number)[]) {
+    return join(userDir, ...paths.map(String));
 };

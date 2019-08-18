@@ -2,12 +2,18 @@ import { format } from 'url';
 import { resolveRender } from 'utils/shared';
 import { app, BrowserWindow } from 'electron';
 
-let win: BrowserWindow | null;
+import windowStateKeeper from './window-state';
 
-function createWindow() {
-    win = new BrowserWindow({
+/** 主窗口 */
+export let win: BrowserWindow | null;
+
+/** 创建主界面窗口 */
+export async function install() {
+    win = await windowStateKeeper({
         width: 800,
         height: 600,
+        center: true,
+        frame: process.env.NODE_ENV === 'development',
         webPreferences: {
             nodeIntegration: true,
             webSecurity: process.env.NODE_ENV !== 'development',
@@ -24,22 +30,9 @@ function createWindow() {
         win.webContents.openDevTools();
     }
 
+    // 主界面被关闭时，退出软件
     win.on('closed', () => {
         win = null;
+        app.quit();
     });
 }
-
-// 初始化主界面
-app.on('ready', createWindow);
-
-app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-        app.quit();
-    }
-});
-
-app.on('activate', () => {
-    if (win === null) {
-        createWindow();
-    }
-});

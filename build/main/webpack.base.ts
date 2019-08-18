@@ -8,12 +8,12 @@ const { resolve, output, publicPath } = main;
 const baseConfig: Webpack.Configuration = {
     ...webpackBaseConfig('main'),
 
-    entry: resolve('main.ts'),
+    entry: resolve('index.ts'),
 
     output: {
         path: output,
         publicPath,
-        filename: 'main.js',
+        filename: 'index.js',
     },
 };
 
