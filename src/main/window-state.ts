@@ -40,6 +40,8 @@ export default async function install(options: BrowserWindowConstructorOptions =
         width: options.width,
     }));
 
+    Object.assign(state, config);
+
     // 最大化
     if (config.isMaximize) {
         options.center = true;
