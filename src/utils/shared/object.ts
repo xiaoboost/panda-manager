@@ -87,3 +87,23 @@ export function def(from: object, properties: object) {
         }),
     );
 }
+
+/** 编译 JSON */
+export function parserBody<T = AnyObject>(body: T | string): T {
+    let data = body;
+
+    if (!body) {
+        data = {} as any;
+    }
+    else if (typeof body === 'string') {
+        try {
+            data = JSON.parse(body);
+        }
+        catch (e) {
+            data = {} as any;
+            console.warn(`JSON 格式错误: ${body}`);
+        }
+    }
+
+    return data as T;
+}
