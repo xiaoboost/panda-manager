@@ -1,9 +1,9 @@
 import './index.styl';
 
-import { default as React } from 'react';
+import { default as React, useCallback } from 'react';
 
 import { remote } from 'electron';
-import { stringifyClass } from 'renderer/lib/utils';
+import { stringifyClass } from 'utils/web';
 import { useIsFocus, useIsMaximize } from 'renderer/lib/use';
 
 import Icon from 'antd/es/icon';
@@ -21,6 +21,10 @@ export default function Header() {
     const isMaximize = useIsMaximize();
     const win = remote.getCurrentWindow();
 
+    const maximize = useCallback(() => win.maximize(), [win]);
+    const minimize = useCallback(() => win.minimize(), [win]);
+    const close = useCallback(() => win.close(), [win]);
+
     return (
         <header className={stringifyClass(['app-header',  {
             'app-header__focus': isFocus,
@@ -34,7 +38,7 @@ export default function Header() {
                 <Icon
                     type="minus"
                     className='app-title-bar__icon'
-                    onClick={() => win.minimize()}
+                    onClick={minimize}
                 />
                 {isMaximize
                     /* 还原 */
@@ -43,13 +47,13 @@ export default function Header() {
                     : <Icon
                         type="border"
                         className='app-title-bar__icon'
-                        onClick={() => win.maximize()}
+                        onClick={maximize}
                     />}
                 {/* 关闭 */}
                 <Icon
                     type='close'
                     className='app-title-bar__icon icon-close'
-                    onClick={() => win.close()}
+                    onClick={close}
                 />
             </span>
         </header>
