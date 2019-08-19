@@ -1,29 +1,11 @@
 import './index.styl';
 
-import { remote } from 'electron';
-import { default as React, useState, useEffect } from 'react';
+import { default as React } from 'react';
+
+import { stringifyClass } from 'renderer/lib/utils';
+import { useIsFocus, useIsMaximize } from 'renderer/lib/use';
 
 import Icon from 'antd/es/icon';
-
-function useIsMaximize() {
-    const win = remote.getCurrentWindow();
-    const [isMaximize, setState] = useState(win.isMaximized());
-
-    useEffect(() => {
-        const setMaximize = () => setState(true);
-        const setUnMaximize = () => setState(false);
-
-        win.on('maximize', setMaximize);
-        win.on('unmaximize', setUnMaximize);
-
-        return () => {
-            win.removeListener('maximize', setMaximize);
-            win.removeListener('unmaximize', setUnMaximize);
-        };
-    }, []);
-
-    return isMaximize;
-}
 
 const Recover = () => (
     <i className="anticon app-title-bar__icon">
@@ -34,10 +16,13 @@ const Recover = () => (
 );
 
 export default function Header() {
+    const isFocus = useIsFocus();
     const isMaximize = useIsMaximize();
 
     return (
-        <header className='app-header'>
+        <header className={stringifyClass(['app-header',  {
+            'app-header__focus': isFocus,
+        }])}>
             <span>
                 <i className='app-title-bar__icon'></i>
                 <span className='app-title-bar__title'>Panda Manager</span>
