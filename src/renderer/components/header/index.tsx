@@ -2,6 +2,7 @@ import './index.styl';
 
 import { default as React } from 'react';
 
+import { remote } from 'electron';
 import { stringifyClass } from 'renderer/lib/utils';
 import { useIsFocus, useIsMaximize } from 'renderer/lib/use';
 
@@ -18,6 +19,7 @@ const Recover = () => (
 export default function Header() {
     const isFocus = useIsFocus();
     const isMaximize = useIsMaximize();
+    const win = remote.getCurrentWindow();
 
     return (
         <header className={stringifyClass(['app-header',  {
@@ -29,14 +31,26 @@ export default function Header() {
             </span>
             <span>
                 {/* 最小化 */}
-                <Icon className='app-title-bar__icon' type="minus" />
+                <Icon
+                    type="minus"
+                    className='app-title-bar__icon'
+                    onClick={() => win.minimize()}
+                />
                 {isMaximize
                     /* 还原 */
                     ? <Recover />
                     /* 最大化 */
-                    : <Icon className='app-title-bar__icon' type="border" />}
+                    : <Icon
+                        type="border"
+                        className='app-title-bar__icon'
+                        onClick={() => win.maximize()}
+                    />}
                 {/* 关闭 */}
-                <Icon className='app-title-bar__icon icon-close' type="close" />
+                <Icon
+                    type='close'
+                    className='app-title-bar__icon icon-close'
+                    onClick={() => win.close()}
+                />
             </span>
         </header>
     );
