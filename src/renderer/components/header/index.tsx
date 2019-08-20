@@ -15,15 +15,26 @@ export default function Header() {
     const win = remote.getCurrentWindow();
 
     const maximize = useCallback(() => win.maximize(), [win]);
+    const unmaximize = useCallback(() => win.unmaximize(), [win]);
     const minimize = useCallback(() => win.minimize(), [win]);
     const close = useCallback(() => win.close(), [win]);
 
+    const logoDbClickStop = useCallback((ev: React.MouseEvent) => ev.stopPropagation(), []);
+    const headerDbClick = useCallback(() => {
+        isMaximize ? win.unmaximize() : win.maximize();
+    }, [win, isMaximize]);
+
     return (
-        <header className={stringifyClass(['app-header',  {
-            'app-header__focus': isFocus,
-        }])}>
+        <header
+            onDoubleClick={headerDbClick}
+            className={stringifyClass(['app-header',  {
+                'app-header__focus': isFocus,
+            }])}>
             <span>
-                <i className='app-title-bar__icon'></i>
+                {/* <i className='app-title-bar__icon'></i> */}
+                {/* <span className='app-title-bar__icon' onDoubleClick={logoDbClickStop}>
+                    <AIcon type="arrow-left" />
+                </span> */}
                 <span className='app-title-bar__title'>Panda Manager</span>
             </span>
             <span>
@@ -38,7 +49,7 @@ export default function Header() {
                     ? <BIcon
                         type='recover'
                         className='app-title-bar__icon'
-                        onClick={() => win.unmaximize()}
+                        onClick={unmaximize}
                     />
                     /* 最大化 */
                     : <AIcon
