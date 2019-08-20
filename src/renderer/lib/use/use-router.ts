@@ -1,33 +1,23 @@
 import { LocationState } from 'history';
-import { Context, useContext, useEffect, useCallback, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import { __RouterContext, RouteComponentProps, StaticContext } from 'react-router';
+
+import useForceUpdate from './use-force-update';
 
 const INCORRECT_VERSION_ERROR = new Error('use-react-router may only be used with react-router@^5.');
 const MISSING_CONTEXT_ERROR = new Error('useReactRouter may only be called within a <Router /> context.');
 
-export function useForceUpdate(): () => void {
-    const [ , dispatch] = useState<{}>(Object.create(null));
-
-    // Turn dispatch(required_parameter) into dispatch().
-    const memoizedDispatch = useCallback(
-        () => dispatch(Object.create(null)),
-        [dispatch],
-    );
-
-    return memoizedDispatch;
-}
-
-export function useRouter<
+export default function useRouter<
     P extends { [K in keyof P]?: string } = {},
     C extends StaticContext = StaticContext,
     S = LocationState,
 >(): RouteComponentProps<P, C, S> {
-    // If this version of react-router does not support Context,
+    // 检测 react router 的版本
     if (!__RouterContext) {
         throw INCORRECT_VERSION_ERROR;
     }
 
-    // If the react-router Context is not a parent Component,
+    // 此函数必须是 <Router /> 的子元素 
     const context = useContext<RouteComponentProps<P, C, S>>(
         __RouterContext as any,
     );
@@ -36,10 +26,10 @@ export function useRouter<
         throw MISSING_CONTEXT_ERROR;
     }
 
-    const forceUpdate: VoidFunction = useForceUpdate();
+    const forceUpdate = useForceUpdate();
 
     useEffect(
-        (): VoidFunction => context.history.listen(forceUpdate),
+        () => context.history.listen(forceUpdate),
         [context],
     );
 
