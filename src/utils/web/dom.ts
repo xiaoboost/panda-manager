@@ -1,4 +1,4 @@
-import { isArray, isString, isObject } from './assert';
+import { isArray, isString, isObject } from '../shared';
 
 type ClassOption = string | undefined | { [className: string]: boolean };
 export type ClassInput = ClassOption | ClassOption[];

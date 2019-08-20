@@ -1,8 +1,10 @@
 import { join } from 'path';
-import { app } from 'electron';
+import { app as originApp, remote } from 'electron';
 
 /** exe 调用路径 */
 const initCWD = process.env.INIT_CWD;
+/** 主进程模块 */
+const app = originApp ? originApp : remote.app;
 
 /** 软件根目录 */
 const appRoot = process.env.NODE_ENV === 'development' ? join(initCWD, 'dist') : initCWD;

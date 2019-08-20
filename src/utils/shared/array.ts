@@ -71,3 +71,27 @@ export function unique<T>(arr: T[], label?: (value: T, index: number) => number 
         .filter(({ key }) => (labelMap[key] ? false : (labelMap[key] = true)))
         .map(({ value }) => value);
 }
+
+/** 连接数组 */
+export function concat<T, U>(from: T[], callback: (val: T) => U[] | undefined): U[] {
+    let result: U[] = [];
+
+    for (let i = 0; i < from.length; i++) {
+        result = result.concat(callback(from[i]) || []);
+    }
+
+    return result;
+}
+
+/** 转换为数组 */
+export function transArr<T>(item?: T | T[]): T[] {
+    if (!item) {
+        return [];
+    }
+    else if (!Array.isArray(item)) {
+        return [item];
+    }
+    else {
+        return item;
+    }
+}

@@ -1,11 +1,11 @@
 Height = 32px
 
-.app-header
+.app-header {
     height Height
 
     color #fff
     font-size 12px
-    background-color #34353b
+    background-color #666
 
     display flex
     align-items center
@@ -14,20 +14,35 @@ Height = 32px
     user-select none
     -webkit-app-region drag
 
-    > span
+    > span {
         display inline-flex
         align-items center
-    
+    }
 
-    .app-title-bar__icon
+    .app-title-bar__icon {
         padding 10px 17px
         -webkit-app-region no-drag
 
-        &:hover
-            background-color #4f535b
-
-        &.icon-close:hover
-            background-color #BC2F2E
+        &:hover {
+            background-color #D41324
+        }
+    }
     
-    .app-title-bar__title
+    .app-title-bar__title {
         padding 0 13px
+    }
+}
+
+.app-header.app-header__focus {
+    background-color #34353b
+
+    .app-title-bar__icon {
+        &:hover {
+            background-color #4f535b
+        }
+
+        &.icon-close:hover {
+            background-color #D41324
+        }
+    }
+}
