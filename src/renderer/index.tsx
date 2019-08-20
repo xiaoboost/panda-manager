@@ -1,9 +1,8 @@
-import './css/main';
+import './css';
 
 import * as React from 'react';
 
 import { render } from 'react-dom';
-
 import { HashRouter, Route, Switch } from 'react-router-dom';
 
 // import Setting from 'renderer/views/setting';
@@ -12,10 +11,18 @@ import { HashRouter, Route, Switch } from 'react-router-dom';
 // import TagCollection from 'renderer/views/tag-collection';
 
 import Header from 'src/renderer/components/header';
+import Sidebar from 'src/renderer/components/sidebar';
 
 render(
     <HashRouter>
         <Header />
+        <article className='app-body'>
+            <Sidebar />
+            <div className="app-content__wrapper">
+                <Switch>
+                </Switch>
+            </div>
+        </article>
         {/* <Switch>
             <Route exact path='/' component={MangaList} />
             <Route path='/setting' component={Setting} />

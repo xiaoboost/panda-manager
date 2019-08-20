@@ -50,7 +50,7 @@ export function webpackBaseConfig(mode: 'main' | 'renderer'): Webpack.Configurat
         },
         resolve: {
             extensions: ['.tsx', '.ts', '.js', '.jsx', '.json', '.styl', '.less', '.css'],
-            mainFiles: ['index.tsx', 'index.ts', 'index.js', 'index.less', 'index.css'],
+            mainFiles: ['index.tsx', 'index.ts', 'index.js', 'index.styl', 'index.less', 'index.css'],
             alias: {
                 src: resolveRoot('src'),
                 main: resolveRoot('src/main'),
