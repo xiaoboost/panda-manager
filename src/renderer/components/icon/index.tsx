@@ -4,9 +4,10 @@ import * as icons from './data';
 interface IconProps {
     type: keyof typeof icons;
     className?: string;
+    onClick?(event: React.MouseEvent): any;
 }
 
-export default function Icon({ type: name, className }: IconProps) {
+export default function Icon({ type: name, className, onClick }: IconProps) {
     const data = icons[name];
 
     if (!data) {
@@ -14,7 +15,7 @@ export default function Icon({ type: name, className }: IconProps) {
     }
 
     return (
-        <i className={`anticon anticon-${name} ${className}`}>
+        <i className={`anticon anticon-${name} ${className}`} onClick={onClick}>
             <svg
                 viewBox={data.viewBox}
                 version="1.1"

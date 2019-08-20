@@ -31,7 +31,11 @@ export default function Header() {
                 />
                 {isMaximize
                     /* 还原 */
-                    ? <BIcon className='app-title-bar__icon' type='recover' />
+                    ? <BIcon
+                        type='recover'
+                        className='app-title-bar__icon'
+                        onClick={() => win.unmaximize()}
+                    />
                     /* 最大化 */
                     : <AIcon
                         type="border"
