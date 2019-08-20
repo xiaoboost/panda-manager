@@ -14,8 +14,14 @@ export default function Icon({ type: name, className, onClick }: IconProps) {
         return <i>无</i>;
     }
 
+    let customClass = `anticon anticon-${name}`;
+
+    if (className) {
+        customClass += ' ' + className;
+    }
+
     return (
-        <i className={`anticon anticon-${name} ${className}`} onClick={onClick}>
+        <i className={customClass} onClick={onClick}>
             <svg
                 viewBox={data.viewBox}
                 version="1.1"

@@ -1,0 +1,47 @@
+.app-sidebar {
+    display flex
+    flex-direction column
+    border-right 1px solid #ddd
+    background-color #F3F3F5;
+
+    width 140px
+
+    transition width .3s, border .3s
+
+    .menu-item {
+        height 40px
+        line-height 40px
+        color #666
+        padding 0 12px 0 10px
+        border-left 2px solid #F3F3F5
+
+        display flex
+        align-items center
+        flex-wrap nowrap
+
+        overflow-x hidden
+
+        &.menu-switch {
+            color #000
+            margin-bottom 5px
+        }
+
+        &.menu-item__highlight {
+            color #333
+            background-color #ddd
+
+            padding-left 10px
+            border-color #34353b
+        }
+    }
+
+    .menu-item__title {
+        margin-left 15px
+        flex-shrink 0
+    }
+}
+
+.app-sidebar.app-sidebar__fold {
+    width 40px
+    border-right 0
+}
