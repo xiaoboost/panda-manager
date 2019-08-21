@@ -3,11 +3,8 @@ import path from 'path';
 import JSZip from 'jszip';
 import naturalCompare from 'string-natural-compare';
 
-import {
-    isArray,
-    isString,
-    handleError,
-} from 'src/renderer/lib/utils';
+import { handleError } from './error';
+import { isArray, isString } from 'utils/shared';
 
 /**
  * 读取文件子路径
@@ -42,7 +39,7 @@ async function readDir(dir: string) {
 
 /** 将压缩包内的文件数据写入硬盘 */
 function writeZipInsideFile(writePath: string, data: JSZip.JSZipObject) {
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
         data
             .nodeStream()
             .pipe(fs.createWriteStream(writePath))
@@ -70,6 +67,7 @@ export default class Zip {
         const zipper = new Zip(name);
 
         await zipper.append(directory, directory);
+
         return zipper;
     }
 

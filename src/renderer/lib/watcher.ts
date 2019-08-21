@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import { isBaseType, isArray } from './utils/assert';
+import { isBaseType, isArray } from 'utils/shared';
 
 type Subscribe<T> = (now: T, pre?: T) => void;
 
@@ -7,13 +6,11 @@ type Subscribe<T> = (now: T, pre?: T) => void;
 const methodsToIntercept = ['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse'];
 
 /** 储存值类 */
-export default class Store<T> {
+export default class Watcher<T> {
     /** 代理值 */
     private _proxy: T;
     /** 原始值 */
     private _origin: T;
-    /** 是否被冻结 */
-    private _isFreeze = false;
     /** 订阅函数 */
     private subs: Subscribe<T>[] = [];
 
@@ -24,13 +21,17 @@ export default class Store<T> {
         this.dispatch(val);
     }
 
-    /** 对外获取原始值 */
+    /** 对外获取原始值副本 */
     get origin() {
-        return this._origin;
-    }
-    /** 是否被冻结 */
-    get isFreeze() {
-        return this._isFreeze;
+        if (isBaseType(this._origin)) {
+            return this._origin;
+        }
+        else if (isArray(this._origin)) {
+            return this._origin.slice();
+        }
+        else {
+            return { ...this._origin };
+        }
     }
 
     constructor(initVal: T) {
@@ -88,55 +89,18 @@ export default class Store<T> {
         this.subs = this.subs.filter((f) => f !== sub);
     }
 
-    /** 冻结此值 */
-    freeze() {
-        this._isFreeze = true;
-    }
-    /** 解冻此值 */
-    thaw() {
-        this._isFreeze = false;
-    }
-
     /** 发布此值 */
-    dispatch(val?: T) {
-        // 被冻结，不允许发布
-        if (this.isFreeze) {
+    dispatch(val: T) {
+        // 新值与旧值相同，直接退出
+        if (this._proxy === val || this._origin === val) {
             return;
         }
 
-        // 输入了新得值
-        if (arguments.length > 0) {
-            // 新值与旧值相同，直接退出
-            if (this._proxy === val || this._origin === val) {
-                return;
-            }
+        const oldVal = this._proxy;
 
-            const oldVal = this._proxy;
+        this._origin = val;
+        this._proxy = this.proxy(val);
 
-            this._origin = val!;
-            this._proxy = this.proxy(val!);
-            this.subs.forEach((cb) => cb(val!, oldVal));
-        }
-        // 没有输入新值，强制发布
-        else {
-            this._proxy = this.proxy(this._origin);
-            this.subs.forEach((cb) => cb(this.value));
-        }
+        this.subs.forEach((cb) => cb(val, oldVal));
     }
-}
-
-export function useStore<T>(store: Store<T>) {
-    const [state, setState] = useState(store.value);
-
-    useEffect(() => {
-        function handleStatusChange(val: T) {
-            setState(val);
-        }
-
-        store.subscribe(handleStatusChange);
-
-        return () => store.unSubscribe(handleStatusChange);
-    }, []);
-
-    return [state, store.dispatch.bind(store)] as const;
 }

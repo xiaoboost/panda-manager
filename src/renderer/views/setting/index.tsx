@@ -4,17 +4,17 @@ import { default as React, PropsWithChildren, memo } from 'react';
 
 import { Icon, Button } from 'antd';
 
-import * as store from 'src/renderer/store';
+import * as store from 'renderer/store';
 
 import { shell } from 'electron';
-import { useStore } from 'renderer/lib/store';
+import { useWatcher } from 'renderer/lib/use';
 import { warnDialog, selectDirectory } from 'renderer/lib/interface';
 
 import {
     addDirectory as add,
     removeDirectory as remove,
     refreshCache as refresh,
-} from 'src/renderer/store';
+} from 'renderer/store';
 
 /** 选项卡片 */
 function SettingCard(props: PropsWithChildren<{ title: string }>) {
@@ -89,8 +89,8 @@ const removeDirectory = (path: string) => {
 };
 
 export default function Setting() {
-    const [loading] = useStore(store.loading);
-    const [dirs] = useStore(store.directories);
+    const [loading] = useWatcher(store.loading);
+    const [dirs] = useWatcher(store.directories);
 
     return (
         <main id='main-setting'>

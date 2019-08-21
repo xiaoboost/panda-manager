@@ -6,13 +6,13 @@ import * as React from 'react';
 import { render } from 'react-dom';
 import { HashRouter, Route, Switch } from 'react-router-dom';
 
+import Header from 'renderer/components/header';
+import Sidebar from 'renderer/components/sidebar';
+
 import Setting from 'renderer/views/setting';
 import MangaList from 'renderer/views/manga-list';
 // import ItemDetail from 'renderer/views/manga-detail';
 // import TagCollection from 'renderer/views/tag-collection';
-
-import Header from 'src/renderer/components/header';
-import Sidebar from 'src/renderer/components/sidebar';
 
 render(
     <HashRouter>

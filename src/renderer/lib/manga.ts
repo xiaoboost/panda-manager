@@ -4,10 +4,9 @@ import Zip from './zip';
 import sizeOf from 'image-size';
 import naturalCompare from 'string-natural-compare';
 
-import { clone } from './utils';
 import { join, extname } from 'path';
-import { resolveCache } from 'src/utils/shared/env';
 import { compress, imageExtend } from './image';
+import { clone, resolveUserDir } from 'utils/shared';
 
 /** 漫画的标签数据 */
 interface TagInManga {
@@ -39,7 +38,7 @@ export interface MangaData {
 /** 全局漫画编号 */
 let id = 0;
 /** 允许的图片后缀 */
-const allowImageExt = ['png', 'jpg', 'bmp'];
+const allowImageExt = ['png', 'jpg', 'jepg', 'bmp'];
 
 /** 漫画类 */
 export class Manga implements MangaData {
@@ -59,6 +58,7 @@ export class Manga implements MangaData {
 
     /** 漫画缓存文件配置 */
     static metaData = {
+        folder: 'previews',
         meta: 'meta.json',
         cover: 'cover.jpg',
         preview: 'preview.jpg',
@@ -101,14 +101,21 @@ export class Manga implements MangaData {
     get length() {
         return this.previewPositions.length + 1;
     }
-    /** 当前漫画的缓存路径 */
-    get paths() {
-        const dir = resolveCache(this.id);
-        const meta = join(dir, Manga.metaData.meta);
-        const cover = join(dir, Manga.metaData.cover);
-        const preview = join(dir, Manga.metaData.preview);
-
-        return { dir, meta, cover, preview };
+    /** 元数据存放的路径 */
+    get metaDir() {
+        return resolveUserDir(Manga.metaData.folder, this.id);
+    }
+    /** 元数据路径 */
+    get metaPath() {
+        return join(this.metaDir, Manga.metaData.meta);
+    }
+    /** 封面预览路径 */
+    get coverPath() {
+        return join(this.metaDir, Manga.metaData.cover);
+    }
+    /** 内容预览路径 */
+    get previewPath() {
+        return join(this.metaDir, Manga.metaData.preview);
     }
 
     /** 从文件夹生成预览 */
@@ -118,8 +125,9 @@ export class Manga implements MangaData {
             let image = Buffer.from('');
 
             const allFiles = (await fs.readdir(this.file.path)).sort(naturalCompare);
+
             const { compressOption: option } = Manga;
-            const { paths: { cover, preview }} = this;
+            const { coverPath: cover, previewPath: preview } = this;
 
             for (let i = 0; i < allFiles.length; i++) {
                 const file = allFiles[i];
@@ -164,7 +172,7 @@ export class Manga implements MangaData {
 
         const zip = await Zip.fromZipFile(this.file.path);
         const { compressOption: option } = Manga;
-        const { paths: { cover, preview }} = this;
+        const { coverPath: cover, previewPath: preview } = this;
 
         for await (const file of zip.files()) {
             // 当前图片预览
@@ -200,12 +208,12 @@ export class Manga implements MangaData {
                 : await this.createPreviewFromZip();
         }
     }
-    /** 是否可以生成缓存 */
+    /** 是否允许生成预览 */
     async allowUpdatePrview() {
-        const { paths: { preview }, file } = this;
+        const { previewPath, file } = this;
 
         // 预览文件不存在
-        if (!await fs.pathExists(preview)) {
+        if (!await fs.pathExists(previewPath)) {
             return true;
         }
 
@@ -215,9 +223,9 @@ export class Manga implements MangaData {
         // 漫画预览是旧版
         return fileLastModified > file.lastModified;
     }
-    /** 生成缓存并将其写入硬盘 */
-    async writeCache() {
-        const { dir, meta } = this.paths;
+    /** 元数据写入硬盘 */
+    async writeMeta() {
+        const { metaDir, metaPath } = this;
 
         // 漫画 meta 信息
         const mangaData: MangaData = {
@@ -229,20 +237,14 @@ export class Manga implements MangaData {
         };
 
         // 文件夹不存在，则创建
-        if (!await fs.pathExists(dir)) {
-            await fs.mkdirp(dir);
+        if (!await fs.pathExists(metaDir)) {
+            await fs.mkdirp(metaDir);
         }
 
         debugger;
         await this.createPreview();
 
         // 写入漫画 metadata 缓存
-        await fs.writeJSON(
-            meta,
-            mangaData,
-            process.env.NODE_ENV === 'development'
-                ? { replacer: null, spaces: 4 }
-                : undefined,
-        );
+        await fs.writeJSON(metaPath, mangaData);
     }
 }
