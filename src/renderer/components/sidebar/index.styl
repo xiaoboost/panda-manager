@@ -1,8 +1,10 @@
+@import '../../css/variable.styl';
+
 .app-sidebar {
     display flex
     flex-direction column
-    border-right 1px solid #ddd
-    background-color #F3F3F5;
+    border-right 1px solid Gray
+    background-color WhiteMask;
 
     width 140px
 
@@ -13,7 +15,7 @@
         line-height 40px
         color #666
         padding 0 12px 0 10px
-        border-left 2px solid #F3F3F5
+        border-left 2px solid WhiteMask
 
         display flex
         align-items center
@@ -27,11 +29,11 @@
         }
 
         &.menu-item__highlight {
-            color #333
-            background-color #ddd
+            color Black
+            background-color Gray + #040404
 
             padding-left 10px
-            border-color #34353b
+            border-color Black
         }
     }
 
