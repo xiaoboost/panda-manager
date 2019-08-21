@@ -5,5 +5,5 @@
         "module": "esnext",
     },
     "include": ["src/renderer", "src/utils", "typings"],
-    "exclude": ["node_modules", "dist", "build", "src/main"]
+    "exclude": ["node_modules", "dist", "build", "src/main", "draft"]
 }
