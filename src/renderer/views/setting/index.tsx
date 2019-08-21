@@ -1,13 +1,14 @@
+import './index.styl';
+
 import { default as React, PropsWithChildren, memo } from 'react';
 
-import { Link } from 'react-router-dom';
 import { Icon, Button } from 'antd';
 
 import * as store from 'src/renderer/store';
 
 import { shell } from 'electron';
-import { useStore } from 'src/renderer/lib/store';
-import { warnDialog, selectDirectory } from 'src/renderer/lib/interface';
+import { useStore } from 'renderer/lib/store';
+import { warnDialog, selectDirectory } from 'renderer/lib/interface';
 
 import {
     addDirectory as add,
@@ -93,43 +94,34 @@ export default function Setting() {
 
     return (
         <main id='main-setting'>
-            {/* 标题栏 */}
-            <header className='page-header setting-header'>
-                <Link to='/'>
-                    <Icon type='arrow-left' theme='outlined' />
-                </Link>
-                <span className='page-title'>设置</span>
-            </header>
-            <article className='setting-article'>
-                {/** 文件夹部分选项卡 */}
-                <SettingCard title='文件夹'>
-                    {/** 文件夹列表 */}
-                    <div className='setting-box'>
-                        <SettingCardLine
-                            title='文件目录'
-                            subtitle='目录内的所有 zip 压缩包以及文件夹（不包含子文件夹内容）'
-                            action={
-                                <Icon
-                                    style={{ fontSize: '20px' }}
-                                    onClick={addDirectory}
-                                    type='folder-add'
-                                    theme='outlined'
-                                />
-                            }
-                        />
-                        {dirs.length === 0
-                            ? <SettingCardLine isSubline title='尚未添加目录' />
-                            : <DirPathList dirs={dirs} />
-                        }
-                    </div>
-                    {/** 刷新目录 */}
+            {/** 文件夹部分选项卡 */}
+            <SettingCard title='文件夹'>
+                {/** 文件夹列表 */}
+                <div className='setting-box'>
                     <SettingCardLine
-                        title='刷新预览缓存'
-                        subtitle='刷新目录内有被增、删、改操作的项目'
-                        action={<Button onClick={refresh} loading={loading}>刷新</Button>}
+                        title='文件目录'
+                        subtitle='目录内的所有 zip 压缩包以及文件夹（不包含子文件夹内容）'
+                        action={
+                            <Icon
+                                style={{ fontSize: '20px' }}
+                                onClick={addDirectory}
+                                type='folder-add'
+                                theme='outlined'
+                            />
+                        }
                     />
-                </SettingCard>
-            </article>
+                    {dirs.length === 0
+                        ? <SettingCardLine isSubline title='尚未添加目录' />
+                        : <DirPathList dirs={dirs} />
+                    }
+                </div>
+                {/** 刷新目录 */}
+                <SettingCardLine
+                    title='刷新预览缓存'
+                    subtitle='刷新目录内有被增、删、改操作的项目'
+                    action={<Button onClick={refresh} loading={loading}>刷新</Button>}
+                />
+            </SettingCard>
         </main>
     );
 }
