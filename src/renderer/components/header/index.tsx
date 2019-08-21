@@ -27,9 +27,9 @@ export default function Header() {
     return (
         <header
             onDoubleClick={headerDbClick}
-            className={stringifyClass(['app-header',  {
+            className={stringifyClass('app-header',  {
                 'app-header__focus': isFocus,
-            }])}>
+            })}>
             <span>
                 {/* <i className='app-title-bar__icon'></i> */}
                 {/* <span className='app-title-bar__icon' onDoubleClick={logoDbClickStop}>

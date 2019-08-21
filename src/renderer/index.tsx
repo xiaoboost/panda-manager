@@ -1,4 +1,5 @@
 import './css';
+import 'renderer/lib/native';
 
 import * as React from 'react';
 
