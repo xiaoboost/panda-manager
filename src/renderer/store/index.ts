@@ -1,2 +1,2 @@
 export * from './values';
-export * from './cache';
+export * from './controller';

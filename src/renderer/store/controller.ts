@@ -3,11 +3,10 @@ import * as path from 'path';
 
 import { remote } from 'electron';
 
-import { Manga } from 'src/renderer/lib/manga';
-import { resolveCache } from 'utils/shared/env';
-import { TagGroup, TagGroupData } from 'src/renderer/lib/tag';
-import { handleError, isString, deleteVal } from 'src/renderer/lib/utils';
-
+import { Manga } from 'renderer/lib/manga';
+import { handleError } from 'renderer/lib/error';
+import { TagGroup, TagGroupData } from 'renderer/lib/tag';
+import { isString, deleteVal, toObject, resolveUserDir } from 'utils/shared';
 
 import {
     mangas,
@@ -45,9 +44,9 @@ interface CacheFileData {
 /** 缓存文件名称 */
 const fileName = 'meta.json';
 /** 缓存文件夹路径 */
-const cacheDir = resolveCache();
+const cacheDir = resolveUserDir();
 /** 缓存文件路径 */
-const cacheFilePath = resolveCache(fileName);
+const cacheFilePath = resolveUserDir(fileName);
 
 /** 读取缓存文件 */
 async function readCacheFile() {
@@ -60,10 +59,11 @@ async function readCacheFile() {
         ...(data.sort || {}),
     };
 
-    if (data.tagGroups) {
-        data.tagGroups.forEach((item) => tagGroups.origin[item.id] = TagGroup.from(item));
-        tagGroups.dispatch();
-    }
+    tagGroups.value = toObject(
+        (data.tagGroups || []),
+        ({ id }) => id,
+        (item) => TagGroup.from(item),
+    ) as typeof tagGroups.value;
 }
 
 /** 读取所有漫画缓存文件夹列表 */
@@ -86,7 +86,7 @@ async function removeExtraCache() {
 
         if (
             (isDirectory && !mangas.value[dir]) ||
-            (!isDirectory && dir !== 'meta.json')
+            (!isDirectory && dir !== Manga.metaData.meta)
         ) {
             await fs.remove(fullPath);
         }
@@ -104,17 +104,19 @@ async function readCache() {
     // 读取所有漫画缓存数据
     const metas = await Promise.all(dirs.map(
         (name) =>
-            fs.readJSON(resolveCache(name, fileName))
+            fs.readJSON(resolveUserDir(name, fileName))
                 .then((item) => Manga.fromData(item))
                 .catch(() => void 0),
     ));
 
+    const mangasCopy = mangas.value;
+
     metas
         .filter((x: any): x is Manga => !!x)
-        .forEach((item) => mangas.origin[item.id] = item);
+        .forEach((item) => mangasCopy[item.id] = item);
 
     // 漫画储存值变化
-    mangas.dispatch();
+    mangas.dispatch(mangasCopy);
 
     // 删除多余缓存
     await removeExtraCache();
@@ -171,10 +173,10 @@ async function getMangasList(dirs: string | string[] = directories.value) {
         );
 
         // 删除已经不存在的缓存
-        for (const cache of mangasCached) {
+        for (const willDelete of mangasCached) {
             // 有缓存，但是实际却不存在
-            if (!mangasInDir.includes(path.basename(cache.file.path))) {
-                await fs.remove(cache.paths.dir);
+            if (!mangasInDir.includes(path.basename(willDelete.file.path))) {
+                await fs.remove(willDelete.metaDir);
             }
         }
 
@@ -214,7 +216,7 @@ async function refreshMangas(paths: string[]) {
             if (cacheManga) {
                 // 强制刷新或者漫画被修改过
                 if (cacheManga.file.lastModified < lastModified) {
-                    await cacheManga.writeCache();
+                    await cacheManga.writeMeta();
                 }
             }
             // 新漫画
@@ -228,7 +230,7 @@ async function refreshMangas(paths: string[]) {
 
                 mangas.value[manga.id] = manga;
 
-                await manga.writeCache();
+                await manga.writeMeta();
             }
         }
 
@@ -276,14 +278,15 @@ export async function removeDirectory(dirInput: string) {
 
     deleteVal(directories.value, dirInput);
 
+    const origin = mangas.origin;
     const deleteMangas = Object.values(mangas.origin).filter(({ file }) => file.path.includes(dirInput));
 
     for (const manga of deleteMangas) {
-        delete mangas.origin[manga.id];
-        await fs.remove(manga.paths.dir);
+        delete origin[manga.id];
+        await fs.remove(manga.metaDir);
     }
 
-    mangas.dispatch();
+    mangas.dispatch(origin);
 
     await removeExtraCache();
     await writeCache();

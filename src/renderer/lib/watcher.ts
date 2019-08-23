@@ -22,12 +22,12 @@ export default class Watcher<T> {
     }
 
     /** 对外获取原始值副本 */
-    get origin() {
+    get origin(): T {
         if (isBaseType(this._origin)) {
             return this._origin;
         }
         else if (isArray(this._origin)) {
-            return this._origin.slice();
+            return this._origin.slice() as any;
         }
         else {
             return { ...this._origin };
