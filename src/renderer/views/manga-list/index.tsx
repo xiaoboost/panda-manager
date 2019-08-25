@@ -1,6 +1,6 @@
 import './index.styl';
 
-import { default as React } from 'react';
+import { default as React, useCallback } from 'react';
 import { useMap } from 'react-use';
 
 import { mangas } from 'renderer/store';
@@ -12,11 +12,18 @@ export default function MangaList() {
     const [selected, setSelected] = useMap<AnyObject<boolean>>();
     const mangasList = Object.values(manga);
 
+    const resetHandler = useCallback((ev: React.MouseEvent) => {
+        if (ev.currentTarget === ev.target) {
+            setSelected.reset();
+        }
+    }, [selected]);
+
     return (
-        <main id='main-list'>
+        <main id='main-list' onClick={resetHandler}>
             {mangasList.map((item) =>
                 <div
                     key={item.id}
+                    onClick={() => setSelected.set(item.id, !selected[item.id])}
                     className={stringifyClass('manga-item', {
                         'manga-item__selected': selected[item.id],
                     })}>
