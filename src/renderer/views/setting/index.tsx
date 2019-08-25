@@ -89,8 +89,8 @@ const removeDirectory = (path: string) => {
 };
 
 export default function Setting() {
-    const [loading] = useWatcher(store.loading);
-    const [dirs] = useWatcher(store.directories);
+    const [loading] = useWatcher(store.reading);
+    const [dirs] = useWatcher(store.mangaDirectories);
 
     return (
         <main id='main-setting'>

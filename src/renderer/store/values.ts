@@ -4,10 +4,15 @@ import { Manga } from '../lib/manga';
 import { TagGroup } from '../lib/tag';
 import { SortOption, SortBy } from './controller';
 
-/** 后台线程线程是否被占用 */
-export const loading = new Watcher(false);
+/** 读取并生成预览线程是否被占用 */
+export const reading = new Watcher(false);
+/** 写硬盘线程是否被占用 */
+export const writting = new Watcher(false);
+/** 压缩线程线程是否被占用 */
+export const compressing = new Watcher(false);
+
 /** 漫画缓存的文件夹 */
-export const directories = new Watcher<string[]>([]);
+export const mangaDirectories = new Watcher<string[]>([]);
 /** 所有漫画 */
 export const mangas = new Watcher<AnyObject<Manga>>({});
 /** 所有标签集 */

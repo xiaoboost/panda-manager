@@ -1,4 +1,4 @@
-import { isBaseType, isArray } from 'utils/shared';
+import { isBaseType, isArray, isFunc } from 'utils/shared';
 
 type Subscribe<T> = (now: T, pre?: T) => void;
 
@@ -87,6 +87,37 @@ export default class Watcher<T> {
     /** 取消订阅此值的变化 */
     unSubscribe(sub: Subscribe<T>) {
         this.subs = this.subs.filter((f) => f !== sub);
+    }
+
+    /** 订阅一次事件 */
+    once() {
+        return new Promise<T>((resolve) => {
+            const callback = () => {
+                resolve(this._origin);
+                this.unSubscribe(callback);
+            };
+
+            this.subscribe(callback);
+        });
+    }
+    /** 当值与输入相等时触发 */
+    when(val: T | ((item: T) => boolean)) {
+        const func = isFunc(val) ? val : (item: T) => item === val;
+
+        if (func(this._origin)) {
+            return Promise.resolve();
+        }
+
+        return new Promise<void>((resolve) => {
+            const callback = (item: T) => {
+                if (func(item)) {
+                    resolve();
+                    this.unSubscribe(callback);
+                }
+            };
+
+            this.subscribe(callback);
+        });
     }
 
     /** 发布此值 */

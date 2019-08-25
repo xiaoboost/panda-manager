@@ -58,7 +58,7 @@ export class Manga implements MangaData {
 
     /** 漫画缓存文件配置 */
     static metaData = {
-        folder: 'previews',
+        folder: resolveUserDir('metas'),
         meta: 'meta.json',
         cover: 'cover.jpg',
         preview: 'preview.jpg',
@@ -103,7 +103,7 @@ export class Manga implements MangaData {
     }
     /** 元数据存放的路径 */
     get metaDir() {
-        return resolveUserDir(Manga.metaData.folder, this.id);
+        return join(Manga.metaData.folder, String(this.id));
     }
     /** 元数据路径 */
     get metaPath() {
@@ -241,7 +241,6 @@ export class Manga implements MangaData {
             await fs.mkdirp(metaDir);
         }
 
-        debugger;
         await this.createPreview();
 
         // 写入漫画 metadata 缓存
