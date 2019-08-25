@@ -4,25 +4,28 @@ import { default as React, useCallback } from 'react';
 
 import { remote } from 'electron';
 import { stringifyClass } from 'utils/web';
-import { useIsFocus, useIsMaximize } from 'renderer/lib/use';
+import { useIsFocus, useIsMaximize, useRouter } from 'renderer/lib/use';
 
 import AIcon from 'antd/es/icon';
 import BIcon from 'renderer/components/icon';
 
+// TODO: 按键按下也应该有效果
+
 export default function Header() {
     const isFocus = useIsFocus();
     const isMaximize = useIsMaximize();
+    const router = useRouter();
+
     const win = remote.getCurrentWindow();
 
     const maximize = useCallback(() => win.maximize(), [win]);
     const unmaximize = useCallback(() => win.unmaximize(), [win]);
     const minimize = useCallback(() => win.minimize(), [win]);
     const close = useCallback(() => win.close(), [win]);
+    const routerBack = useCallback(() => router.history.goBack(), [router]);
 
     const logoDbClickStop = useCallback((ev: React.MouseEvent) => ev.stopPropagation(), []);
-    const headerDbClick = useCallback(() => {
-        isMaximize ? win.unmaximize() : win.maximize();
-    }, [win, isMaximize]);
+    const headerDbClick = useCallback(() => isMaximize ? win.unmaximize() : win.maximize(), [win, isMaximize]);
 
     return (
         <header
@@ -31,10 +34,16 @@ export default function Header() {
                 'app-header__focus': isFocus,
             })}>
             <span>
-                {/* <i className='app-title-bar__icon'></i> */}
-                {/* <span className='app-title-bar__icon' onDoubleClick={logoDbClickStop}>
-                    <AIcon type="arrow-left" />
-                </span> */}
+                <span onDoubleClick={logoDbClickStop}>
+                    {router.location.pathname === '/'
+                        ? <BIcon className='app-title-bar__logo' type='bamboo' />
+                        : <AIcon
+                            type="arrow-left"
+                            className='app-title-bar__icon'
+                            onClick={routerBack}
+                        />
+                    }
+                </span>
                 <span className='app-title-bar__title'>Panda Manager</span>
             </span>
             <span>

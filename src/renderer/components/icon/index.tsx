@@ -27,7 +27,7 @@ export default function Icon({ type: name, className, onClick }: IconProps) {
                 version="1.1"
                 width="1em"
                 height="1em"
-                fill="currentColor"
+                fill={data.fill ? data.fill : 'currentColor'}
                 aria-hidden="true">
                 <path d={data.path} />
             </svg>

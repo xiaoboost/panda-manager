@@ -2,7 +2,6 @@ import Watcher from '../watcher';
 
 import { useState, useEffect } from 'react';
 
-
 export default function useWatcher<T>(watcher: Watcher<T>) {
     const [state, setState] = useState(watcher.value);
 
