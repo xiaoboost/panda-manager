@@ -13,7 +13,7 @@ export async function install() {
         width: 800,
         height: 600,
         center: true,
-        frame: process.env.NODE_ENV === 'development',
+        frame: false,
         webPreferences: {
             nodeIntegration: true,
             webSecurity: process.env.NODE_ENV !== 'development',
