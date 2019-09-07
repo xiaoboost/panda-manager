@@ -6,15 +6,15 @@ import * as store from 'renderer/store';
 
 import { useMap } from 'react-use';
 import { Manga } from 'renderer/lib/manga';
-import { stringifyClass } from 'utils/web';
-import { useWatcher, useRouter } from 'renderer/lib/use';
+import { useWatcher, useListCallback } from 'renderer/lib/use';
+
+import MangaCover from './manga';
 
 import stringNaturalCompare from 'string-natural-compare';
 
 export default function MangaList() {
-    const [mangas] = useWatcher(store.mangas);
+    const [mangas, setMangas] = useWatcher(store.mangas);
     const [selected, setSelected] = useMap<AnyObject<boolean>>();
-    const router = useRouter();
 
     const sort = store.sortOption.value;
     const sortFunc = (() => {
@@ -32,6 +32,7 @@ export default function MangaList() {
     })();
 
     const mangasList = Object.values(mangas).sort(sortFunc);
+    const mangasLeftClick = useListCallback(mangasList, (item) => () => setSelected.set(item.id, !selected[item.id]))
 
     const resetHandler = useCallback((ev: React.MouseEvent) => {
         if (ev.currentTarget === ev.target) {
@@ -41,19 +42,14 @@ export default function MangaList() {
 
     return (
         <main id='main-list' onClick={resetHandler}>
-            {mangasList.map((item) =>
-                <div
+            {mangasList.map((item, i) =>
+                <MangaCover
                     key={item.id}
-                    onClick={() => setSelected.set(item.id, !selected[item.id])}
-                    className={stringifyClass('manga-item', {
-                        'manga-item__selected': selected[item.id],
-                    })}>
-                    <div className='manga-item__mask'>
-                        <div className='manga-item__mask-outside'></div>
-                        <div className='manga-item__mask-inside'></div>
-                    </div>
-                    <img src={item.coverPath} height='200' />
-                </div>,
+                    data={item}
+                    isSelected={selected[item.id]}
+                    onRightClick={() => {}}
+                    onLeftClick={mangasLeftClick[i]}
+                />,
             )}
         </main>
     );

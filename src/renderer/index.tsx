@@ -23,7 +23,7 @@ render(
                 <Switch>
                     <Route exact path='/' component={MangaList} />
                     <Route path='/setting' component={Setting} />
-                    <Route path='/detail' component={MangaDetail} />
+                    <Route path='/detail/:id' component={MangaDetail} />
                     <Route path='/tags' component={TagCollection} />
                 </Switch>
             </div>
