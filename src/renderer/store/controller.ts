@@ -272,7 +272,6 @@ export async function removeDirectory(dirInput: string) {
     mangas.dispatch(origin);
 
     await removeExtraCache();
-    await writeMeta();
 }
 
 /** 从硬盘中读取缓存 */
@@ -313,5 +312,13 @@ async function readMeta() {
     reading.value = false;
 }
 
+/** 绑定写缓存函数 */
+function subscribeWrite() {
+    [mangas, tagGroups, sortOption].forEach((watcher) => {
+        watcher.subscribe(writeMeta);
+    });
+}
+
 // 初始化
 readMeta();
+subscribeWrite();

@@ -1,16 +1,37 @@
 import './index.styl';
 
 import { default as React, useCallback } from 'react';
-import { useMap } from 'react-use';
 
-import { mangas } from 'renderer/store';
-import { useWatcher } from 'renderer/lib/use';
+import * as store from 'renderer/store';
+
+import { useMap } from 'react-use';
+import { Manga } from 'renderer/lib/manga';
 import { stringifyClass } from 'utils/web';
+import { useWatcher, useRouter } from 'renderer/lib/use';
+
+import stringNaturalCompare from 'string-natural-compare';
 
 export default function MangaList() {
-    const [manga] = useWatcher(mangas);
+    const [mangas] = useWatcher(store.mangas);
     const [selected, setSelected] = useMap<AnyObject<boolean>>();
-    const mangasList = Object.values(manga);
+    const router = useRouter();
+
+    const sort = store.sortOption.value;
+    const sortFunc = (() => {
+        const val = Math.pow(-1, Number(!sort.asc));
+        // 按照名称排序
+        if (sort.by === store.SortBy.name) {
+            return (pre: Manga, next: Manga) => val * stringNaturalCompare(pre.name, next.name);
+        }
+        // 按照最后修改时间排序
+        else {
+            return (pre: Manga, next: Manga) => {
+                return pre.file.lastModified > next.file.lastModified ? val : -1 * val;
+            };
+        }
+    })();
+
+    const mangasList = Object.values(mangas).sort(sortFunc);
 
     const resetHandler = useCallback((ev: React.MouseEvent) => {
         if (ev.currentTarget === ev.target) {

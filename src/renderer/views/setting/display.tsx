@@ -41,7 +41,7 @@ export default function Display() {
                 defaultValue={sort.by}
                 onChange={selectHandler}>
                 {sortByList.map(({ value, label }) => ( 
-                    <Option value={value}>{label}</Option>
+                    <Option key={value} value={value}>{label}</Option>
                 ))}
             </Select>
             </CardLine>
