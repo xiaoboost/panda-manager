@@ -13,7 +13,7 @@ import MangaCover from './manga';
 import stringNaturalCompare from 'string-natural-compare';
 
 export default function MangaList() {
-    const [mangas, setMangas] = useWatcher(store.mangas);
+    const [mangas] = useWatcher(store.mangas);
     const [selected, setSelected] = useMap<AnyObject<boolean>>();
 
     const sort = store.sortOption.value;

@@ -11,9 +11,7 @@ export default function useListCallback<T, F extends AnyFunction>(data: T[], cre
     /** 当前缓存记录 */
     const map = new Map(new Map<T, F>());
 
-    debugger;
     useEffect(() => {
-        debugger;
         ref.current = map;
     });
 

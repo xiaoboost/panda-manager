@@ -4,3 +4,4 @@ export * from './async';
 export * from './clone';
 export * from './array';
 export * from './object';
+export * from './time';
