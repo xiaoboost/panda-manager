@@ -14,6 +14,20 @@ interface TagInManga {
     tags: number[];
 }
 
+/** 漫画类别枚举 */
+export const enum Category {
+    Doujinshi,
+    Manga,
+    ArtistCG,
+    GameCG,
+    Western,
+    NonH,
+    ImageSet,
+    Cosplay,
+    AsianPorn,
+    Misc,
+}
+
 /** 漫画元数据 */
 export interface MangaData {
     /** 显示名称 */
@@ -35,6 +49,49 @@ export interface MangaData {
     };
 }
 
+export const CategoryMap = {
+    [Category.Doujinshi]: {
+        label: 'Doujinshi',
+        color: '#9E2720',
+    },
+    [Category.Manga]: {
+        label: 'Manga',
+        color: '#DB6C24',
+    },
+    [Category.ArtistCG]: {
+        label: 'Artist CG',
+        color: '#D38F1D',
+    },
+    [Category.GameCG]: {
+        label: 'Game CG',
+        color: '#6A936D',
+    },
+    [Category.Western]: {
+        label: 'Western',
+        color: '#AB9F60',
+    },
+    [Category.NonH]: {
+        label: 'Non-H',
+        color: '#5FA9CF',
+    },
+    [Category.ImageSet]: {
+        label: 'Image Set',
+        color: '#325CA2',
+    },
+    [Category.Cosplay]: {
+        label: 'Cosplay',
+        color: '#6A32A2',
+    },
+    [Category.AsianPorn]: {
+        label: 'Asian Porn',
+        color: '#A23282',
+    },
+    [Category.Misc]: {
+        label: 'Misc',
+        color: '#777777',
+    },
+};
+
 /** 全局漫画编号 */
 let id = 0;
 /** 允许的图片后缀 */
@@ -45,10 +102,13 @@ export class Manga implements MangaData {
     id = id++;
     name = '';
 
+    /** 漫画类型 */
+    category?: Category;
+    /** 漫画标签数据 */
+    tagGroups: MangaData['tagGroups'] = [];
+
     /** 预览图片位置列表 */
     readonly previewPositions: number[] = [];
-    /** 漫画标签数据 */
-    readonly tagGroups: MangaData['tagGroups'] = [];
     /** 漫画对应的实际文件的属性 */
     readonly file: MangaData['file'] = {
         path: '',
@@ -69,7 +129,7 @@ export class Manga implements MangaData {
         cover: {
             quality: 95,
             size: {
-                height: 380,
+                height: 400,
             },
         },
         /** 内容 */
