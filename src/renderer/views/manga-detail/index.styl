@@ -1,43 +1,46 @@
-main#main-detail {
+@import '../../css/variable.styl'
+
+main#manga-detail-main {
     width 1200px
     margin 0 auto
 
-    .manga-details {
+    .card-box {
         margin 10px
         padding 10px
         border-radius 4px
         box-shadow 0 0 6px #bbb
+    }
 
+    #manga-detail {
         display flex
-        align-items center
-    }
+        
+        .manga-cover {
+            width 250px
+            height 100%
 
-    .manga-cover {
-        width 250px
-        height 100%
-
-        img {
-            max-width 250px
-            max-height 100%
+            img {
+                max-width 250px
+                max-height 100%
+            }
         }
-    }
 
-    .manga-info {
-        margin-left 10px
-        flex-grow 1
+        .manga-info {
+            margin-left 10px
+            flex-grow 1
 
-        display inline-flex
-        flex-direction column
+            display inline-flex
+            flex-direction column
 
-        .manga-name {
-            flex-grow 0
-            flex-shrink 0
+            .manga-name {
+                flex-grow 0
+                flex-shrink 0
 
-            font-size 12px
-            padding 0 0 2px
-            margin 3px 15px
-            color #b8b8b8
-            border-bottom 1px solid #000000
+                font-size 12px
+                padding 0 0 2px
+                margin 3px 15px
+                color Black
+                border-bottom 1px solid Gray - #111
+            }
         }
 
         .manga-meta {
@@ -45,30 +48,78 @@ main#main-detail {
             flex-shrink 0
 
             display flex
-        }
 
-        .manga-category {
             margin-top 6px
-            text-align center
+
+            > * {
+                flex-shrink 0
+                flex-grow 0
+            }
         }
 
-        .manga-baisc {
-            margin 12px 0
-
-            .manga-basic-label, .manga-basic-value {
-                display inline-block
-                height 17px
-                font-size 12px
-                white-space nowrap
+        .manga-file {
+            width 210px
+            flex-shrink 0
+            
+            .manga-category {
+                margin-top 6px
+                text-align center
             }
 
-            .manga-basic-label {
-                font-weight bold
-            }
+            .manga-baisc {
+                margin 12px 0
 
-            .manga-basic-value {
-                padding-left 3px
+                .manga-basic-label,
+                .manga-basic-value {
+                    display inline-block
+                    line-height 22px
+                    font-size 12px
+                    white-space nowrap
+                }
+
+                .manga-basic-label {
+                    font-weight bold
+                }
+
+                .manga-basic-value {
+                    padding-left 3px
+                }
             }
+        }
+
+        .manga-tags {
+            flex 1
+            border-left 1px solid Gray - #111
+            border-right 1px solid Gray - #111
+        }
+
+        .manga-action {
+            flex-shrink 0
+            width 210px
+            margin-top 6px
+
+            display flex
+            flex-direction column
+            justify-content center
+            align-items center
+
+            > * {
+                margin-bottom 6px
+            }
+        }
+    }
+
+    #manga-previews {
+        .image-block {
+            display inline-block
+            margin 10px
+            height 150px
+        }
+
+        .image-background {
+            margin 1px auto 0
+            background-repeat no-repeat
+            background-color transparent
         }
     }
 }
