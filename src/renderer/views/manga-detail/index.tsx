@@ -13,7 +13,7 @@ import { Button } from 'antd';
 
 import CategorySelector from 'renderer/components/category-selector';
 
-const previewHeight = Manga.compressOption.content.size.height;
+const originHeight = Manga.compressOption.content.size.height + 'px';
 
 export default function MangaDetail() {
     const { match } = useRouter<{ id: string }>();
@@ -79,9 +79,9 @@ export default function MangaDetail() {
                             style={{
                                 backgroundImage: `url('${preview}')`,
                                 backgroundPositionY: '0px',
-                                backgroundPositionX: `${i === 0 ? 0 : -arr[i - 1] - 1}px`,
+                                backgroundPositionX: `${i === 0 ? 0 : -arr[i - 1]}px`,
                                 width: `${i === 0 ? width : width - arr[i - 1]}px`,
-                                height: `${previewHeight}px`,
+                                height: originHeight,
                             }}
                         />
                     </div>

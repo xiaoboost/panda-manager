@@ -136,7 +136,7 @@ export class Manga implements MangaData {
         content: {
             quality: 80,
             size: {
-                height: 180,
+                height: 150,
             },
         },
     };
