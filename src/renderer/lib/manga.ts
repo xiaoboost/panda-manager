@@ -4,7 +4,7 @@ import Zip from './zip';
 import sizeOf from 'image-size';
 import naturalCompare from 'string-natural-compare';
 
-import { join, extname } from 'path';
+import { join, parse, extname } from 'path';
 import { compress, imageExtend } from './image';
 import { clone, resolveUserDir } from 'utils/shared';
 
@@ -42,6 +42,8 @@ export interface MangaData {
     file: {
         /** 真实文件的路径 */
         path: string;
+        /** 真实文件的大小 - 单位 byte */
+        size: number;
         /** 此路径是否是文件夹 */
         isDirectory: boolean;
         /** 此文件（夹）最后修改的时间 */
@@ -112,6 +114,7 @@ export class Manga implements MangaData {
     /** 漫画对应的实际文件的属性 */
     readonly file: MangaData['file'] = {
         path: '',
+        size: 0,
         isDirectory: false,
         lastModified: 0,
     };
@@ -141,8 +144,8 @@ export class Manga implements MangaData {
         },
     };
 
-    /** 从缓存创建实例 */
-    static fromData(data: MangaData) {
+    /** 从缓存元数据创建实例 */
+    static fromMeta(data: MangaData) {
         const manga = Object.assign(new Manga(), clone(data)) as Manga;
 
         // 编号重置
@@ -152,9 +155,18 @@ export class Manga implements MangaData {
 
         return manga;
     }
-    /** 从路径创建实例 */
-    static fromPath(path: string) {
-        return new Manga();
+    /** 从实际文件路径创建实例 */
+    static async fromPath(fullPath: string) {
+        const manga = new Manga();
+        const stat = await fs.stat(fullPath);
+
+        manga.name = parse(fullPath).name;
+        manga.file.path = fullPath;
+        manga.file.size = stat.size;
+        manga.file.isDirectory = stat.isDirectory();
+        manga.file.lastModified = new Date(stat.mtime).getTime();
+
+        return manga;
     }
 
     /** 当前漫画共多少页 */

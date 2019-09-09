@@ -8,7 +8,6 @@ import { Switch, Select } from 'antd';
 import { useWatcher } from 'renderer/lib/use';
 import { SortBy, sortOption } from 'renderer/store';
 
-const { Option } = Select;
 const sortByList = [
     {
         value: SortBy.name,
@@ -36,14 +35,14 @@ export default function Display() {
     return (
         <Card title='漫画排序'>
             <CardLine title='排序方式'>
-            <Select
-                style={{ width: 160 }}
-                defaultValue={sort.by}
-                onChange={selectHandler}>
-                {sortByList.map(({ value, label }) => ( 
-                    <Option key={value} value={value}>{label}</Option>
-                ))}
-            </Select>
+                <Select
+                    style={{ width: 160 }}
+                    defaultValue={sort.by}
+                    onChange={selectHandler}>
+                    {sortByList.map(({ value, label }) => ( 
+                        <Select.Option key={value} value={value}>{label}</Select.Option>
+                    ))}
+                </Select>
             </CardLine>
             <CardLine title={sort.asc ? '顺序排列' : '倒序排列'}>
                 <Switch

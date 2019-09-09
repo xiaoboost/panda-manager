@@ -1,7 +1,7 @@
 import { default as React, useCallback, FunctionComponent } from 'react';
 
 import { shell } from 'electron';
-import { useWatcher } from 'renderer/lib/use';
+import { useWatcher, useListCallback } from 'renderer/lib/use';
 import { warnDialog, selectDirectory } from 'renderer/lib/interface';
 
 import Card from './card';
@@ -17,6 +17,9 @@ const DirsList: FunctionComponent<{ dirs: string[] }> = function DirPathList({ d
             .then(() => remove(path));
     };
 
+    const removeList = useListCallback(dirs, (dir) => () => remove(dir));
+    const openFolder = useListCallback(dirs, (dir) => () => shell.openItem(dir));
+
     return <>
         {dirs.map((path, i) => (
             <CardLine
@@ -28,7 +31,7 @@ const DirsList: FunctionComponent<{ dirs: string[] }> = function DirPathList({ d
                         color: 'rgba(0, 0, 0, .4)',
                         fontSize: '14px',
                     }}
-                    onClick={() => shell.openItem(path)}
+                    onClick={openFolder[i]}
                     type='folder-open'
                     theme='outlined'
                 />
@@ -38,7 +41,7 @@ const DirsList: FunctionComponent<{ dirs: string[] }> = function DirPathList({ d
                         fontSize: '14px',
                         marginLeft: '8px',
                     }}
-                    onClick={() => remove(path)}
+                    onClick={removeList[i]}
                     type='delete'
                     theme='outlined'
                 />
