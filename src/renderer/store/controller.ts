@@ -20,6 +20,7 @@ import {
 export const enum SortBy {
     name,
     lastModified,
+    size,
 }
 
 /** 排序选项 */
@@ -199,12 +200,7 @@ async function refreshMangas(mangaPaths?: string[]) {
             }
             // 新漫画
             else {
-                const manga = new Manga();
-
-                manga.name = path.parse(fullName).name;
-                manga.file.path = fullPath;
-                manga.file.lastModified = lastModified;
-                manga.file.isDirectory = stat.isDirectory();
+                const manga = await Manga.fromPath(fullPath);
 
                 mangas.value[manga.id] = manga;
 
@@ -288,7 +284,7 @@ async function readMeta() {
     const metas = await Promise.all(dirs.map(
         (name) =>
             fs.readJSON(path.join(mangaMetaFolder, name, Manga.metaData.meta))
-                .then((item) => Manga.fromData(item))
+                .then((item) => Manga.fromMeta(item))
                 .catch(() => void 0),
     ));
 
