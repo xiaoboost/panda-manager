@@ -1,36 +1,43 @@
-import sizeOf from 'image-size';
+import infoOf from 'image-size';
 import { default as Sharp, JpegOptions, PngOptions } from 'sharp';
 
-type CompressOption = (JpegOptions | PngOptions) & {
-    size?: {
-        width?: number;
-        height?: number;
-    };
-};
+interface ImageSize {
+    width: number;
+    height: number;
+}
+
+interface JpgImageCompressOption extends JpegOptions {
+    type: 'jpg';
+    size?: Partial<ImageSize>;
+}
+
+interface PngImageCompressOption extends PngOptions {
+    type: 'png';
+    size?: Partial<ImageSize>;
+}
 
 /** 压缩图片 */
-export function compress(
-    image: Buffer,
-    type: 'jpg' | 'png',
-    { size, ...options }: CompressOption = {},
-) {
+export function compressImage(image: Buffer, options: JpgImageCompressOption): Promise<Buffer>;
+export function compressImage(image: Buffer, options: PngImageCompressOption): Promise<Buffer>;
+export function compressImage(image: Buffer, {
+    type,
+    size: toSize = {},
+    ...options
+}: JpgImageCompressOption | PngImageCompressOption) {
     return new Promise<Buffer>((resolve, reject) => {
         let sharp = Sharp(image);
-        const info = sizeOf(image);
+        const originInfo = infoOf(image);
 
         // 要求变更输出尺寸，且输出尺寸和图片原尺寸不同
         if (
-            size &&
-            (
-                (size.width && info.width !== size.width) ||
-                (size.height && info.height !== size.height)
-            )
+            (toSize.width && originInfo.width !== toSize.width) ||
+            (toSize.height && originInfo.height !== toSize.height)
         ) {
-            sharp = sharp.resize(size.width, size.height);
+            sharp = sharp.resize(toSize.width, toSize.height);
         }
 
         // 类型不同，需要转换格式
-        if (info.type !== type) {
+        if (originInfo.type !== type) {
             if (type === 'jpg') {
                 sharp = sharp.jpeg(options);
             }
@@ -46,10 +53,13 @@ export function compress(
     });
 }
 
-/** 生成漫画预览 */
-export function imageExtend(main: Buffer, extend: Buffer) {
+/**
+ * 图片向右拼接
+ *  - extend 图片会放在 main 图片的右边
+ */
+export function concatImage(main: Buffer, extend: Buffer) {
     return new Promise<Buffer>((resolve, reject) => {
-        const { width } = sizeOf(extend);
+        const { width } = infoOf(extend);
 
         Sharp(main)
             .extend({

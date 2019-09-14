@@ -9,6 +9,9 @@ import { format } from 'utils/shared';
 // import { stringifyClass } from 'utils/web';
 import { useWatcher, useRouter } from 'renderer/lib/use';
 
+import { deleteConfirm } from 'renderer/lib/dialog';
+import { selectDirectory } from 'renderer/lib/interface';
+
 import { Button } from 'antd';
 
 import CategorySelector from 'renderer/components/category-selector';
@@ -24,7 +27,16 @@ export default function MangaDetail() {
         return <div>Loading...</div>;
     }
 
+    const { file } = manga;
     const preview = manga.previewPath.replace(/\\/g, '\\\\');
+    const extractManga = () => selectDirectory().then((dir) => manga.extract(dir));
+    const deleteManga = () => {
+        deleteConfirm({
+            title: '警告',
+            content: `确定要删除此漫画？\n\n${file.path}`,
+        })
+            .then(() => manga.deleteSelf())
+    };
 
     return (
         <main id='manga-detail-main'>
@@ -61,11 +73,45 @@ export default function MangaDetail() {
                         </div>
                         <div className='manga-tags'></div>
                         <div className='manga-action'>
-                            <Button size='small'>浏览漫画</Button>
-                            {manga.file.isDirectory ? <Button size='small'>打包漫画</Button> : ''}
-                            <Button size='small'>压缩漫画</Button>
-                            <Button size='small'>复制到</Button>
-                            <Button size='small'>打开文件夹</Button>
+                            <Button
+                                type='primary'
+                                size='small'
+                                onClick={manga.viewManga.bind(manga)}>
+                                浏览漫画
+                            </Button>
+                            {file.isDirectory
+                                    ? <Button
+                                        type='primary'
+                                        size='small'
+                                        onClick={manga.archive.bind(manga)}>
+                                        打包漫画
+                                    </Button>
+                                    : ''}
+                            <Button
+                                type='primary'
+                                size='small'
+                                onClick={extractManga}>
+                                {file.isDirectory
+                                    ? '复制到'
+                                    : '解压到'}
+                            </Button>
+                            <Button
+                                size='small'
+                                className='ant-btn-success'
+                                onClick={manga.openFolder.bind(manga)}>
+                                打开文件夹
+                            </Button>
+                            <Button
+                                size='small'
+                                className='ant-btn-warning'>
+                                压制漫画
+                            </Button>
+                            <Button
+                                type='danger'
+                                size='small'
+                                onClick={deleteManga}>
+                                删除漫画
+                            </Button>
                         </div>
                     </div>
                 </div>
