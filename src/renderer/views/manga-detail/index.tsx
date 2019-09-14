@@ -1,12 +1,12 @@
 import './index.styl';
 
 import { default as React } from 'react';
-import { useMap } from 'react-use';
+// import { useMap } from 'react-use';
 
 import { Manga } from 'renderer/lib/manga';
 import { mangas } from 'renderer/store';
 import { format } from 'utils/shared';
-import { stringifyClass } from 'utils/web';
+// import { stringifyClass } from 'utils/web';
 import { useWatcher, useRouter } from 'renderer/lib/use';
 
 import { Button } from 'antd';
@@ -21,9 +21,9 @@ export default function MangaDetail() {
     const manga = origin[match.params.id];
 
     if (!manga) {
-        return <div>Loading...</div>
+        return <div>Loading...</div>;
     }
-    
+
     const preview = manga.previewPath.replace(/\\/g, '\\\\');
 
     return (
@@ -72,9 +72,8 @@ export default function MangaDetail() {
             </div>
             <div className='card-box' id='manga-previews'>
                 {manga.previewPositions.map((width, i, arr) => (
-                    <div className='image-block'>
+                    <div className='image-block' key={i}>
                         <div
-                            key={i}
                             className='image-background'
                             style={{
                                 backgroundImage: `url('${preview}')`,

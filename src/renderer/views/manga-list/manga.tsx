@@ -4,7 +4,7 @@ import { default as React, PropsWithChildren } from 'react';
 
 import { Manga } from 'renderer/lib/manga';
 import { stringifyClass } from 'utils/web';
-import { useWatcher, useRouter } from 'renderer/lib/use';
+import { useRouter } from 'renderer/lib/use';
 
 interface MangaProp {
     data: Manga;

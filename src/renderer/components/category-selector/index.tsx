@@ -1,4 +1,4 @@
-import './index.styl'
+import './index.styl';
 
 import { default as React, useState, PropsWithChildren } from 'react';
 

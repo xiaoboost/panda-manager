@@ -39,14 +39,14 @@ export default function Display() {
                     style={{ width: 160 }}
                     defaultValue={sort.by}
                     onChange={selectHandler}>
-                    {sortByList.map(({ value, label }) => ( 
+                    {sortByList.map(({ value, label }) => (
                         <Select.Option key={value} value={value}>{label}</Select.Option>
                     ))}
                 </Select>
             </CardLine>
             <CardLine title={sort.asc ? '顺序排列' : '倒序排列'}>
                 <Switch
-                    size="small"
+                    size='small'
                     checked={sort.asc}
                     onChange={switchHandler}
                 />

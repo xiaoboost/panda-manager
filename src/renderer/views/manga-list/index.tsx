@@ -32,7 +32,7 @@ export default function MangaList() {
     })();
 
     const mangasList = Object.values(mangas).sort(sortFunc);
-    const mangasLeftClick = useListCallback(mangasList, (item) => () => setSelected.set(item.id, !selected[item.id]))
+    const mangasLeftClick = useListCallback(mangasList, (item) => () => setSelected.set(item.id, !selected[item.id]));
 
     const resetHandler = useCallback((ev: React.MouseEvent) => {
         if (ev.currentTarget === ev.target) {

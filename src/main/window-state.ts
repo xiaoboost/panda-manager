@@ -12,7 +12,7 @@ interface WindowState {
     isMaximize: boolean;
     /** 上次关闭时主窗口的高度 */
     height: number;
-    /**上次关闭时主窗口的宽度 */
+    /** 上次关闭时主窗口的宽度 */
     width: number;
 }
 
@@ -60,7 +60,7 @@ export default async function install(options: BrowserWindowConstructorOptions =
     if (config.isMaximize) {
         win.maximize();
     }
-    
+
     win.on('close', () => writeState());
 
     win.on('maximize', () => writeState({

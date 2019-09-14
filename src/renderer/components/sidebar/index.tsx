@@ -21,7 +21,7 @@ export default function Sidebar() {
         })}>
             <div className='menu-item menu-switch'>
                 <AIcon
-                    type="menu"
+                    type='menu'
                     className='menu-item__icon'
                     onClick={foldSidebar}
                 />
