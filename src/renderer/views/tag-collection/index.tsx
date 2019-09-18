@@ -1,18 +1,26 @@
 import './index.styl';
 
 import { default as React } from 'react';
-import { useMap } from 'react-use';
 
-import { mangas } from 'renderer/store';
-import { useWatcher } from 'renderer/lib/use';
+import { tagGroups } from 'renderer/store';
+import { useWatcherList } from 'renderer/lib/use';
 import { stringifyClass } from 'utils/web';
 
+import { Button, Icon } from 'antd';
+import { editTag, FormType } from './tag-edit';
+
 export default function TagCollection() {
-    const [manga] = useWatcher(mangas);
+    const [groups, { push }] = useWatcherList(tagGroups);
+    const addTagGroup = () => {
+        editTag({ type: FormType.TagGroup });
+    };
 
     return (
-        <main id='tag-collection'>
-            标签集合
+        <main id='tags-collection'>
+            {/* {groups.map((group) => <TagsGroup key={group.id} id={group.id} />)} */}
+            <Button onClick={addTagGroup}>
+                <Icon type='plus-circle' /> 添加标签集
+            </Button>
         </main>
     );
 }

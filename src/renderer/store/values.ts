@@ -16,7 +16,7 @@ export const mangaDirectories = new Watcher<string[]>([]);
 /** 所有漫画 */
 export const mangas = new Watcher<AnyObject<Manga>>({});
 /** 所有标签集 */
-export const tagGroups = new Watcher<AnyObject<TagGroup>>({});
+export const tagGroups = new Watcher<TagGroup[]>([]);
 /** 列表页排序配置 */
 export const sortOption = new Watcher<SortOption>({
     by: SortBy.name,

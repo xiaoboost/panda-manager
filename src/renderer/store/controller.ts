@@ -55,6 +55,7 @@ const metaFilePath = resolveUserDir(metaFileName);
 async function readMetaFile() {
     const data = await fs.readJSON(metaFilePath).catch(() => ({})) as Partial<metaFileData>;
 
+    tagGroups.value = data.tagGroups || [];
     mangaDirectories.value = data.directories || [];
 
     sortOption.value = {
@@ -62,15 +63,21 @@ async function readMetaFile() {
         ...(data.sort || {}),
     };
 
-    if (data.tagGroups) {
-        const result = {};
-        data.tagGroups.forEach((item) => result[item.id] = TagGroup.from(item));
-        tagGroups.value = result;
-    }
-
     if (!fs.existsSync(mangaMetaFolder)) {
         await fs.mkdir(mangaMetaFolder);
     }
+}
+
+/** 写缓存 */
+async function writeMeta() {
+    const data: metaFileData =  {
+        tagGroups: tagGroups.origin,
+        directories: mangaDirectories.origin,
+        sort: sortOption.origin,
+    };
+
+    await fs.mkdirp(userDir);
+    await fs.writeJSON(metaFilePath, data);
 }
 
 /** 读取所有漫画缓存文件夹列表 */
@@ -98,24 +105,6 @@ async function removeExtraCache() {
             await fs.remove(fullPath);
         }
     }
-}
-
-/** 写缓存 */
-async function writeMeta() {
-    const data: metaFileData =  {
-        tagGroups: Object.values(tagGroups.origin),
-        directories: mangaDirectories.origin,
-        sort: sortOption.origin,
-    };
-
-    await fs.mkdirp(userDir);
-    await fs.writeJSON(
-        metaFilePath,
-        data,
-        process.env.NODE_ENV === 'development'
-            ? { replacer: null, spaces: 4 }
-            : undefined,
-    );
 }
 
 /**
