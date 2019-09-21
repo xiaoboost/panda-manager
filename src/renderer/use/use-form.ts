@@ -3,8 +3,9 @@ import { FormItemProps } from 'antd/es/form/FormItem';
 
 import { useRef } from 'react';
 import { useMap } from 'react-use';
+import { useForceUpdate } from './index';
 
-import { isString, delay } from 'utils/shared';
+import { isString } from 'utils/shared';
 
 import { default as Schema, Rules, RuleItem } from 'async-validator';
 
@@ -25,8 +26,10 @@ export default function useForm<T extends object>(initVal: T) {
 
     /** 保存初始值 */
     const initState = useRef<T>(initVal);
-    /** 当前表单状态 */
-    const [state, setState] = useMap(initVal);
+    /** 当前状态 */
+    const nowState = useRef<T>(initVal);
+    /** 强制更新 */
+    const $forceUpdate = useForceUpdate();
 
     /** 当前规则集合 */
     const fieldsRule: Rules = {};
@@ -38,19 +41,28 @@ export default function useForm<T extends object>(initVal: T) {
 
     /** 初始化表单对应字段输入 */
     function resetFields(names: Keys = Object.keys(initState.current) as Keys) {
-        // const oldState = { ...state };
-        // setState.reset;
+        // 更新状态值
+        nowState.current = names.reduce((ans, key) => (ans[key] = nowState.current[key], ans), {} as T);
+        // 更新视图
+        $forceUpdate();
     }
 
     /** 校验表单对应字段 */
-    async function validateFields(names: Keys = Object.keys(initState.current) as Keys) {
+    function validateFields(names: Keys = Object.keys(initState.current) as Keys) {
         if (!schema) {
             schema = new Schema(fieldsRule);
         }
 
-        const values = names.reduce((ans, key) => (ans[key] = state[key], ans), {} as T);
-        const result = await schema.validate(values, undefined, (errs) => {
-            debugger;
+        const values = names.reduce((ans, key) => (ans[key] = nowState.current[key], ans), {} as T);
+
+        for (let name of names) {
+            setStatus.set(name, {
+                help: '',
+                validateStatus: 'success',
+            });
+        }
+
+        schema.validate(values, undefined, (errs) => {
             for (let err of errs) {
                 setStatus.set(err.field as keyof T, {
                     help: err.message,
@@ -58,13 +70,11 @@ export default function useForm<T extends object>(initVal: T) {
                 });
             }
         });
-
-        debugger;
     }
 
     /** 返回当前表单数据 */
     function getFields() {
-        return { ...state };
+        return { ...nowState.current };
     }
 
     /** Input 组件输入 props 和校验规则 */
@@ -74,7 +84,7 @@ export default function useForm<T extends object>(initVal: T) {
         const result: InputProps = props;
 
         // 初始值为输入的表单值
-        result.defaultValue = state[key] as any;
+        result.defaultValue = initVal[key] as any;
 
         // 没有规则则直接返回
         if (!props.rules) {
@@ -103,7 +113,11 @@ export default function useForm<T extends object>(initVal: T) {
         const oldInputEvent = result.onInput;
         // 双向绑定
         result.onInput = (ev: React.FormEvent<HTMLInputElement>) => {
-            setState.set(key, ev.currentTarget.value as any);
+            // 更新表单值
+            nowState.current[key] = ev.currentTarget.value as any;
+            // 更新视图
+            $forceUpdate();
+
             oldInputEvent && oldInputEvent(ev)
         };
 
