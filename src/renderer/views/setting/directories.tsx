@@ -1,8 +1,8 @@
-import { default as React, useCallback, FunctionComponent } from 'react';
+import { default as React, FunctionComponent } from 'react';
 
 import { shell } from 'electron';
-import { useWatcher, useListCallback } from 'renderer/lib/use';
 import { warnDialog, selectDirectory } from 'renderer/lib/interface';
+import { useWatcher, useCallback, useListCallback } from 'renderer/use';
 
 import Card from './card';
 import CardLine from './line';

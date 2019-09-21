@@ -1,10 +1,10 @@
 import './index.styl';
 
-import { default as React, useCallback } from 'react';
+import React from 'react';
 
 import { remote } from 'electron';
 import { stringifyClass } from 'utils/web';
-import { useIsFocus, useIsMaximize, useRouter } from 'renderer/lib/use';
+import { useIsFocus, useIsMaximize, useRouter, useCallback } from 'renderer/use';
 
 import AIcon from 'antd/es/icon';
 import BIcon from 'renderer/components/icon';

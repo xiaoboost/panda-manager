@@ -1,12 +1,12 @@
 import './index.styl';
 
-import { default as React, useCallback } from 'react';
+import React from 'react';
 
 import * as store from 'renderer/store';
 
 import { useMap } from 'react-use';
 import { Manga } from 'renderer/lib/manga';
-import { useWatcher, useListCallback } from 'renderer/lib/use';
+import { useWatcher, useCallback, useListCallback } from 'renderer/use';
 
 import MangaCover from './manga';
 

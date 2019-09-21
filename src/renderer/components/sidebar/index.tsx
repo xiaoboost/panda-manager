@@ -1,9 +1,9 @@
 import './index.styl';
 
-import { default as React, useState, useCallback } from 'react';
+import React from 'react';
 
 import { stringifyClass } from 'utils/web';
-import { useRouter } from 'renderer/lib/use';
+import { useRouter, useState, useCallback } from 'renderer/use';
 
 import AIcon from 'antd/es/icon';
 import BIcon from 'renderer/components/icon';

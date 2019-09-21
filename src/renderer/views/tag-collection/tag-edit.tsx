@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { Form, Tag, Icon, Input, Modal, Tooltip } from 'antd';
@@ -10,9 +10,10 @@ import {
     useRef,
     useList,
     useState,
+    useEffect,
     useCallback,
     useListCallback,
-} from 'renderer/lib/use';
+} from 'renderer/use';
 
 export enum FormType {
     Tag,
@@ -58,7 +59,7 @@ function TagEditForm(props: Required<FormProps>) {
 
     return (
         <Form layout='vertical'>
-            <Form.Item label={nameLabel}>
+            <Form.Item label={nameLabel} validateStatus='error' help='测试消息'>
                 <Input placeholder={`请输入${nameLabel}`} />
             </Form.Item>
             <Form.Item label="别名">

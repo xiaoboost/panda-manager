@@ -1,4 +1,4 @@
-import Watcher from '../watcher';
+import Watcher from '../lib/watcher';
 
 import { useState, useEffect } from 'react';
 

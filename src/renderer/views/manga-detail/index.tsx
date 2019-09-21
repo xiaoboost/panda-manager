@@ -1,13 +1,13 @@
 import './index.styl';
 
-import { default as React } from 'react';
+import React from 'react';
 // import { useMap } from 'react-use';
 
 import { Manga } from 'renderer/lib/manga';
 import { mangas } from 'renderer/store';
 import { format } from 'utils/shared';
 // import { stringifyClass } from 'utils/web';
-import { useWatcher, useRouter } from 'renderer/lib/use';
+import { useWatcher, useRouter } from 'renderer/use';
 
 import { deleteConfirm } from 'renderer/lib/dialog';
 import { selectDirectory } from 'renderer/lib/interface';

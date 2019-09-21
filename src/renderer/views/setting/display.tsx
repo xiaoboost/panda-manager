@@ -1,11 +1,11 @@
-import { default as React, useCallback } from 'react';
+import React from 'react';
 
 import Card from './card';
 import CardLine from './line';
 
 import { Switch, Select } from 'antd';
 
-import { useWatcher } from 'renderer/lib/use';
+import { useWatcher, useCallback } from 'renderer/use';
 import { SortBy, sortOption } from 'renderer/store';
 
 const sortByList = [

@@ -1,9 +1,9 @@
 import './index.styl';
 
-import { default as React } from 'react';
+import React from 'react';
 
 import { tagGroups } from 'renderer/store';
-import { useWatcherList } from 'renderer/lib/use';
+import { useWatcherList } from 'renderer/use';
 import { stringifyClass } from 'utils/web';
 
 import { Button, Icon } from 'antd';
