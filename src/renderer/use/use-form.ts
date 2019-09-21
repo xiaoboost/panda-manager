@@ -5,7 +5,7 @@ import { useRef } from 'react';
 import { useMap } from 'react-use';
 import { useForceUpdate } from './index';
 
-import { isString } from 'utils/shared';
+import { isString, isArray, unique } from 'utils/shared';
 
 import { default as Schema, Rules, RuleItem } from 'async-validator';
 
@@ -16,9 +16,30 @@ interface FormRule<T extends string> extends RuleItem {
 
 /** 表单输入属性包装 */
 type PropsWarpper<P extends object, T extends string> = P & {
-    rules?: FormRule<T>;
+    rules?: FormRule<T> | FormRule<T>[];
 };
 
+function getTriggers<T extends string>(rules: FormRule<T> | FormRule<T>[], all: T[]): T[] {
+    const triggers: T[] = [];
+
+    rules = isArray(rules) ? rules : [rules];
+
+    for (let rule of rules) {
+        // 当前验证规则没有触发条件，则返回全部
+        if (!rule.trigger) {
+            return all;
+        }
+
+        if (isString(rule.trigger)) {
+            triggers.push(rule.trigger);
+        }
+        else {
+            triggers.push(...rule.trigger);
+        }
+    }
+
+    return unique(triggers);
+}
 
 export default function useForm<T extends object>(initVal: T) {
     /** 初始化对象的键名数组 */
@@ -92,9 +113,8 @@ export default function useForm<T extends object>(initVal: T) {
         }
 
         const { rules } = props;
-        const triggers = !rules.trigger
-            ? ['onChange', 'onBlur', 'onPressEnter'] as const
-            : isString(rules.trigger) ? [rules.trigger] : rules.trigger;
+        const allTrigger = ['onChange', 'onBlur', 'onPressEnter'] as const;
+        const triggers = getTriggers(rules, allTrigger as any);
 
         for (let triggerType of triggers) {
             // 原本的回调函数
