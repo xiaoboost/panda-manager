@@ -8,6 +8,7 @@ import { TagData } from 'renderer/lib/tag';
 
 import {
     useRef,
+    useForm,
     useList,
     useState,
     useEffect,
@@ -55,14 +56,26 @@ function TagEditForm(props: Required<FormProps>) {
         filter((val) => val !== origin);
     });
 
-    const [tagNameInput, setTagNameInput] = useState(props.name);
+    const { getFields, resetFields, setFormItem, input } = useForm({
+        name: props.name,
+    });
 
     return (
         <Form layout='vertical'>
-            <Form.Item label={nameLabel} validateStatus='error' help='测试消息'>
-                <Input placeholder={`请输入${nameLabel}`} />
+            <Form.Item label={nameLabel} {...setFormItem('name')}>
+                <Input placeholder={`请输入${nameLabel}`} {...input('name', {
+                    rules: {
+                        trigger: 'onChange',
+                        validator: (rule, value: string, cb) => {
+                            debugger;
+                            if (value.length > 4) {
+                                cb('超过长度');
+                            }
+                        },
+                    },
+                })} />
             </Form.Item>
-            <Form.Item label="别名">
+            {/* <Form.Item label="别名">
                 {alias.map((tag, i) => {
                     const isLongTag = tag.length > longLimit;
                     const tagElem = (
@@ -96,7 +109,7 @@ function TagEditForm(props: Required<FormProps>) {
                         <Icon type='plus' /> 添加别名
                     </Tag>
                 }
-            </Form.Item>
+            </Form.Item> */}
         </Form>
     );
 }
