@@ -4,6 +4,8 @@ export interface TagData {
     id: number;
     /** 标签名称 */
     name: string;
+    /** 注释说明 */
+    comment: string;
     /** 标签别名 */
     alias: string[];
 }
@@ -21,48 +23,54 @@ let groupId  = 0;
 
 /** 标签类 */
 export class Tag implements TagData {
-    /** 标签编号 */
-    id = tagId++;
-    /** 标签名称 */
-    name = '';
-    /** 标签别名 */
-    alias: string[] = [];
+    id: number;
+    name: string;
+    comment: string;
+    alias: string[];
 
-    /** 从标签数据生成标签 */
-    static from(data: TagData) {
-        const tag = Object.assign(new Tag(), data) as Tag;
+    constructor({
+        id = tagId++,
+        name = '',
+        comment = '',
+        alias = [],
+    }: Partial<TagData> = {}) {
+        this.id = id;
+        this.name = name;
+        this.comment = comment;
+        this.alias = alias;
 
         // 全局编号重置
-        if (data.id >= tagId) {
-            tagId = data.id + 1;
+        if (id >= tagId) {
+            tagId = this.id + 1;
         }
-
-        return tag;
     }
 }
 
 /** 标签类 */
 export class TagGroup implements TagGroupData {
-    /** 标签编号 */
-    id = groupId++;
-    /** 标签集名称 */
-    name = '';
-    /** 标签集包含的标签 */
-    tags: Tag[] = [];
-    /** 标签集别名 */
-    alias: string[] = [];
+    id: number;
+    name: string;
+    comment: string;
+    tags: Tag[];
+    alias: string[];
 
-    /** 从标签数据生成标签 */
-    static from(data: TagGroupData) {
-        const group = Object.assign(new TagGroup(), data) as TagGroup;
+    constructor({
+        id = groupId++,
+        name = '',
+        comment = '',
+        tags = [],
+        alias = [],
+    }: Partial<TagGroupData> = {}) {
+        this.id = id;
+        this.name = name;
+        this.comment = comment;
+        this.alias = alias;
 
-        group.tags = data.tags.map(Tag.from);
+        this.tags = tags.map((item) => new Tag(item));
 
         // 全局编号重置
-        if (data.id >= groupId) {
-            groupId = data.id + 1;
+        if (id >= groupId) {
+            groupId = this.id + 1;
         }
-
-        return group;
     }
 }

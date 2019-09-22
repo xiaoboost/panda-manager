@@ -55,8 +55,10 @@ const metaFilePath = resolveUserDir(metaFileName);
 async function readMetaFile() {
     const data = await fs.readJSON(metaFilePath).catch(() => ({})) as Partial<metaFileData>;
 
-    tagGroups.value = data.tagGroups || [];
     mangaDirectories.value = data.directories || [];
+    tagGroups.value = (data.tagGroups || []).map((item) => {
+        return new TagGroup(item);
+    });
 
     sortOption.value = {
         ...sortOption.value,

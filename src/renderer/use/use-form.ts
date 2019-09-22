@@ -10,12 +10,12 @@ import { isString, isArray, unique } from 'utils/shared';
 import { default as Schema, Rules, RuleItem } from 'async-validator';
 
 /** 表单验证规则选项扩展 */
-interface FormRule<T extends string> extends RuleItem {
+interface FormRule<T> extends RuleItem {
     trigger?: T | T[];
 }
 
 /** 表单输入属性包装 */
-type PropsWarpper<P extends object, T extends string> = P & {
+type PropsWarpper<P extends object, T extends keyof P> = P & {
     rules?: FormRule<T> | FormRule<T>[];
 };
 
@@ -50,7 +50,7 @@ export default function useForm<T extends object>(initVal: T) {
     /** 当前状态 */
     const nowState = useRef<T>(initVal);
     /** 强制更新 */
-    const $forceUpdate = useForceUpdate();
+    const forceUpdate = useForceUpdate();
 
     /** 当前规则集合 */
     const fieldsRule: Rules = {};
@@ -65,31 +65,40 @@ export default function useForm<T extends object>(initVal: T) {
         // 更新状态值
         nowState.current = names.reduce((ans, key) => (ans[key] = nowState.current[key], ans), {} as T);
         // 更新视图
-        $forceUpdate();
+        forceUpdate();
     }
 
     /** 校验表单对应字段 */
     function validateFields(names: Keys = Object.keys(initState.current) as Keys) {
-        if (!schema) {
-            schema = new Schema(fieldsRule);
-        }
+        return new Promise<boolean>((resolve) => {
+            if (!schema) {
+                schema = new Schema(fieldsRule);
+            }
 
-        const values = names.reduce((ans, key) => (ans[key] = nowState.current[key], ans), {} as T);
+            const values = names.reduce((ans, key) => (ans[key] = nowState.current[key], ans), {} as T);
 
-        for (let name of names) {
-            setStatus.set(name, {
-                help: '',
-                validateStatus: 'success',
-            });
-        }
-
-        schema.validate(values, undefined, (errs) => {
-            for (let err of errs) {
-                setStatus.set(err.field as keyof T, {
-                    help: err.message,
-                    validateStatus: 'error',
+            for (let name of names) {
+                setStatus.set(name, {
+                    help: '',
+                    validateStatus: 'success',
                 });
             }
+
+            schema.validate(values, undefined, (errs) => {
+                if (errs) {
+                    for (let err of errs) {
+                        setStatus.set(err.field as keyof T, {
+                            help: err.message,
+                            validateStatus: 'error',
+                        });
+                    }
+
+                    resolve(false);
+                }
+                else {
+                    resolve(true);
+                }
+            });
         });
     }
 
@@ -98,54 +107,68 @@ export default function useForm<T extends object>(initVal: T) {
         return { ...nowState.current };
     }
 
-    /** Input 组件输入 props 和校验规则 */
-    type InputPropsWithRule = PropsWarpper<InputProps, 'onChange' | 'onBlur' | 'onPressEnter'>;
-    /** input 组件 props 包装器 */
-    function input(key: keyof T, props: InputPropsWithRule): InputProps {
-        const result: InputProps = props;
-
-        // 初始值为输入的表单值
-        result.defaultValue = initVal[key] as any;
-
-        // 没有规则则直接返回
-        if (!props.rules) {
-            return result;
-        }
-
-        const { rules } = props;
-        const allTrigger = ['onChange', 'onBlur', 'onPressEnter'] as const;
-        const triggers = getTriggers(rules, allTrigger as any);
-
-        for (let triggerType of triggers) {
-            // 原本的回调函数
-            const oldCb = result[triggerType];
-            // 新的回调函数添加验证输入的钩子
-            result[triggerType] = (ev: React.SyntheticEvent) => {
-                if (oldCb) {
-                    oldCb(ev as any);
-                }
-
-                validateFields([key]);
-            };
-        }
-
-        // 外部 input 事件
-        const oldInputEvent = result.onInput;
-        // 双向绑定
-        result.onInput = (ev: React.FormEvent<HTMLInputElement>) => {
-            // 更新表单值
-            nowState.current[key] = ev.currentTarget.value as any;
-            // 更新视图
-            $forceUpdate();
-
-            oldInputEvent && oldInputEvent(ev)
-        };
-
-        // 记录规则
-        fieldsRule[key as string] = props.rules;
-
-        return result;
+    /** 组件基础属性 */
+    interface BaseProps {
+        defaultValue?: any;
     }
+
+    /**
+     * 创建组件修饰器
+     * @param {string} binding 双向绑定的事件名称
+     * @param {(ev: any) => void} cb 双向绑定事件
+     */
+    function formInputBinding<P extends BaseProps, K extends GetString<keyof P>>(binding: keyof P, update: (ev: any) => void) {
+        return (key: keyof T, props: PropsWarpper<P, K> = {} as P): P => {
+            const result: P = props;
+
+            // 初始值为输入的表单值
+            result.defaultValue = initVal[key] as any;
+    
+            // 绑定触发规则
+            if (props.rules) {
+                const { rules } = props;
+                const allTrigger = ['onChange', 'onBlur', 'onPressEnter'] as const;
+                const triggers = getTriggers<K>(rules, allTrigger as any);
+                
+                // 记录规则
+                fieldsRule[key as string] = rules;
+        
+                for (let triggerType of triggers) {
+                    // 原本的回调函数
+                    const oldCb: any = result[triggerType];
+                    // 新的回调函数添加验证输入的钩子
+                    result[triggerType] = ((ev: React.SyntheticEvent) => {
+                        if (oldCb) {
+                            oldCb(ev as any);
+                        }
+        
+                        validateFields([key]);
+                    }) as any;
+                }
+            }
+    
+            // 外部 input 事件
+            const oldEvent: any = result[binding];
+            // 双向绑定
+            result[binding] = ((arg: any) => {
+                // 更新表单值
+                nowState.current[key] = update(arg) as any;
+                // 更新视图
+                forceUpdate();
+                // 外部事件调用
+                oldEvent && oldEvent(arg);
+            }) as any;
+    
+            return result;
+        };
+    }
+
+    /** Input 组件允许的验证规则事件 */
+    type InputPropsTrigger = 'onChange' | 'onBlur' | 'onPressEnter';
+    /** input 组件 props 包装器 */
+    const input = formInputBinding<InputProps, InputPropsTrigger>('onInput', (ev: React.FormEvent<HTMLInputElement>) => {
+        return ev.currentTarget.value;
+    });
 
     /** 表单输入对应的表单元素 props 生成器 */
     function setFormItem(key: keyof T): FormItemProps {
@@ -159,5 +182,7 @@ export default function useForm<T extends object>(initVal: T) {
         getFields,
         resetFields,
         validateFields,
+
+        formInputBinding,
     };
 }

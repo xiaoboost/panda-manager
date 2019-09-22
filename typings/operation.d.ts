@@ -18,3 +18,5 @@ declare type AnyObject<T = any> = { [key: string]: T };
 
 /** any Function */
 declare type AnyFunction = (...args: any[]) => any;
+
+declare type GetString<T> = T extends string ? T : never;
