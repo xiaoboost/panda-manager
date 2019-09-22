@@ -15,5 +15,5 @@ export default function useReactive<T extends object>(initVal: T) {
         },
     });
 
-    return [reactive, forceUpdate] as const;
+    return reactive;
 }

@@ -33,7 +33,7 @@ function AliasList({ defaultValue, onChange }: AliasProps) {
     /** Input 组件引用 */
     const inputRef = useRef<Input>(null);
     /** 当前组件状态 */
-    const [state] = useReactive({
+    const state = useReactive({
         inputVisible: false,
         inputName: '',
         tags: defaultValue,
@@ -191,7 +191,7 @@ interface EditTag {
 }
 
 /** 修改标签 */
-export function editTag({ type, data }: EditTag) {
+export function editTagByModal({ type, data }: EditTag) {
     return new Promise<Omit<TagData, 'id'>>((resolve) => {
         const container = document.createElement('div');
 
