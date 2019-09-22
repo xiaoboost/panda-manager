@@ -1,4 +1,47 @@
+@import '../../css/variable.styl';
+
 main#tags-collection {
     margin: 0 auto;
-    width: 1200px;
+    max-width: 1000px;
+
+    .tags-group-card {
+        margin: 10px 0 20px 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+
+        &:first-child {
+            margin-top: 0;
+        }
+
+        boxPaddingX = 6px;
+        boxPaddingY = 4px;
+
+        .tags-group-card__header {
+            display: inline-block;
+            padding: boxPaddingY 0;
+            border-bottom: 1px solid BlackExtraLight;
+
+            .tags-group-card__title {
+                margin: 0 12px 0 boxPaddingX;
+                font-size: 110%;
+            }
+
+            .tags-group-card__action {
+                color: Blue;
+                cursor: pointer;
+                margin-right: 10px;
+            }
+        }
+
+        .tags-group-card__content {
+            padding: 10px boxPaddingX;
+        }
+    }
+
+    .tags-group-menu {
+        [index-data="delete"] * {
+            color: Red;
+        }
+    }
 }
