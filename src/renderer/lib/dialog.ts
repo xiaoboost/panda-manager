@@ -1,4 +1,4 @@
-import { default as Modal, ModalFuncProps } from 'antd/es/modal'
+import { default as Modal, ModalFuncProps } from 'antd/es/modal';
 
 type DeleteOptions = Omit<ModalFuncProps, 'okType' | 'onOk' | 'onCancel' | 'keyboard'>;
 

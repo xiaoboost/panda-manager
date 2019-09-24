@@ -38,7 +38,7 @@ function AliasList({ defaultValue, onChange }: AliasProps) {
         inputName: '',
         tags: defaultValue,
     });
-    
+
     const tagsRemoveCb = useListCallback(defaultValue, (origin) => () => {
         state.tags = state.tags.filter((item) => item !== origin);
     });
@@ -64,7 +64,7 @@ function AliasList({ defaultValue, onChange }: AliasProps) {
         onChange(state.tags);
     }, []);
 
-    const showInput = useCallback(() => state.inputVisible = true, []);
+    const showInput = useCallback(() => (state.inputVisible = true), []);
     const hiddenInput = useCallback(() => {
         inputConfirm();
         state.inputVisible = false;
@@ -174,10 +174,10 @@ export default function TagEditDialog({ data, type, destroy, getContainer, onCon
                         ],
                     })} />
                 </Form.Item>
-                <Form.Item label="注释" {...setFormItem('comment')}>
+                <Form.Item label='注释' {...setFormItem('comment')}>
                     <Input {...input('comment')} />
                 </Form.Item>
-                <Form.Item label="别名" {...setFormItem('alias')}>
+                <Form.Item label='别名' {...setFormItem('alias')}>
                     <AliasList {...aliasList('alias')} />
                 </Form.Item>
             </Form>
@@ -203,7 +203,7 @@ export function editTagByModal({ type, data }: EditTag) {
             alias: [],
             ...data,
         };
-        
+
         /** 销毁当前对话框 */
         function destroy() {
             const unmountResult = ReactDOM.unmountComponentAtNode(container);

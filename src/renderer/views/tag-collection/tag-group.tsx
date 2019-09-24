@@ -9,7 +9,7 @@ import { useCallback } from 'renderer/use';
 
 interface Props {
     data: TagGroupData;
-    onDelete: (id: number) => void;
+    onDelete: (data: TagGroupData) => void;
     onChange: (data: TagGroupData) => void;
 }
 
@@ -17,7 +17,7 @@ export default function TagGroup({ data, onChange, onDelete }: Props) {
     const { name, tags } = data;
 
     /** 删除当前标签集 */
-    const deleteSelf = useCallback(() => onDelete(data.id), []);
+    const deleteSelf = useCallback(() => onDelete(data), []);
     /** 编辑当前标签集 */
     const editSelf = useCallback(() => {
 
