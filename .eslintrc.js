@@ -73,7 +73,7 @@ module.exports =  {
         // 允许存在不保存值的 new 表达式
         'no-new': 'off',
         // 默认退格为4个空格
-        'indent': ['error', 4, { 'SwitchCase': true }],
+        'indent': ['error', 4, { 'SwitchCase': 1 }],
         // 声明可以不合并
         'one-var': 'off',
         // 函数名或 function 关键字之后与括号之间不需要空格，async 之后需要空格
@@ -207,7 +207,7 @@ module.exports =  {
         // 禁止多行字符串
         'no-multi-str': 'error',
         // 最多允许一个空行
-        'no-multiple-empty-lines': ['error', { 'max': 'warn' }],
+        'no-multiple-empty-lines': ['error', { 'max': 1 }],
         // 禁止原生内置变量的重新赋值
         'no-global-assign': 'error',
         // 禁止不安全的 ! 运算

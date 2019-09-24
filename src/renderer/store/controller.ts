@@ -30,7 +30,7 @@ export interface SortOption {
 }
 
 /** 配置文件格式 */
-interface metaFileData {
+interface MetaFileData {
     /** 漫画文件夹存放仓库地址 */
     directories: string[];
     /** 标签集数据 */
@@ -53,7 +53,7 @@ const metaFilePath = resolveUserDir(metaFileName);
 
 /** 读取缓存文件 */
 async function readMetaFile() {
-    const data = await fs.readJSON(metaFilePath).catch(() => ({})) as Partial<metaFileData>;
+    const data = await fs.readJSON(metaFilePath).catch(() => ({})) as Partial<MetaFileData>;
 
     mangaDirectories.value = data.directories || [];
     tagGroups.value = (data.tagGroups || []).map((item) => {
@@ -72,7 +72,7 @@ async function readMetaFile() {
 
 /** 写缓存 */
 async function writeMeta() {
-    const data: metaFileData =  {
+    const data: MetaFileData =  {
         tagGroups: tagGroups.origin,
         directories: mangaDirectories.origin,
         sort: sortOption.origin,
@@ -151,10 +151,7 @@ async function getMangasList(dirs: string | string[] = mangaDirectories.value) {
     return result;
 }
 
-/**
- * 刷新列表的所有漫画
- * @param force 
- */
+/** 刷新列表的所有漫画 */
 async function refreshMangas(mangaPaths?: string[]) {
     // 没有输入路径则刷新全部
     if (!mangaPaths) {
@@ -238,7 +235,7 @@ export async function addDirectory(dirInput: string) {
  * 删除文件夹
  * @param {string} 删除的文件夹
  */
-export async function removeDirectory(dirInput: string) {    
+export async function removeDirectory(dirInput: string) {
     await reading.when(false);
 
     if (!mangaDirectories.value.includes(dirInput)) {
@@ -283,7 +280,7 @@ async function readMeta() {
 
     metas
         .filter((x: any): x is Manga => !!x)
-        .forEach((item) => mangasCopy[item.id] = item);
+        .forEach((item) => (mangasCopy[item.id] = item));
 
     // 漫画储存值变化
     mangas.dispatch(mangasCopy);
