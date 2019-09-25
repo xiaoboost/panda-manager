@@ -22,32 +22,67 @@ export function get<T>(arr: T[], index: number): T {
 
 /**
  * 删除满足条件的元素
+ *  - 原数组不变，返回新数组
  *  - predicate 为函数时，删除 predicate 返回 true 的元素
  *  - predicate 为非函数时，删除与 predicate 严格相等的元素
  *  - 当 whole 为 false 时，只删除匹配到的第一个元素；为 true 时，删除所有匹配到的元素
- *
- * @template T
- * @param {T[]} arr
- * @param {(T | ((value: T, index: number) => boolean))} predicate
- * @param {boolean} [whole=true]
- * @returns {boolean}
  */
-export function deleteVal<T>(arr: T[], predicate: T | ((value: T, index: number) => boolean), whole = true) {
+export function deleteVal<T>(
+    arr: T[],
+    predicate: T | ((value: T, index: number) => boolean),
+    whole = true
+) {
     const fn = isFunc(predicate) ? predicate : (item: T) => item === predicate;
+    const newArr = arr.slice();
 
-    let index = 0, flag = false;
+    let index = 0;
+
     while (index >= 0) {
-        index = arr.findIndex(fn);
+        index = newArr.findIndex(fn);
+
         if (index !== -1) {
-            arr.splice(index, 1);
-            flag = true;
+            newArr.splice(index, 1);
         }
+
         if (!whole) {
             break;
         }
     }
 
-    return flag;
+    return newArr;
+}
+
+/**
+ * 删除满足条件的元素
+ *  - 原数组不变，返回新数组
+ *  - predicate 为函数时，删除 predicate 返回 true 的元素
+ *  - predicate 为非函数时，删除与 predicate 严格相等的元素
+ */
+export function replace<T>(
+    arr: T[],
+    newVal: T,
+    predicate: T | ((value: T, index: number) => boolean),
+    whole = false
+) {
+    const fn = isFunc(predicate) ? predicate : (item: T) => item === predicate;
+    const newArr = arr.slice();
+
+    for (let i = 0; i < newArr.length; i++) {
+        const item = newArr[i];
+        const compared = fn(item, i);
+
+        if (compared) {
+            newArr.splice(i, 1, newVal);
+
+            if (!whole) {
+                break;
+            }
+
+            i++;
+        }
+    }
+
+    return newArr;
 }
 
 /**

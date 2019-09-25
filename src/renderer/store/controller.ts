@@ -243,7 +243,7 @@ export async function removeDirectory(dirInput: string) {
         return;
     }
 
-    deleteVal(mangaDirectories.value, dirInput);
+    mangaDirectories.value = deleteVal(mangaDirectories.value, dirInput);
 
     const origin = mangas.origin;
     const deleteMangas = Object.values(mangas.origin).filter(({ file }) => file.path.includes(dirInput));

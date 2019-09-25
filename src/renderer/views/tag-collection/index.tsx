@@ -2,15 +2,18 @@ import './index.styl';
 
 import React from 'react';
 
+import { warn } from 'renderer/lib/error';
 import { tagGroups } from 'renderer/store';
 import { useWatcher } from 'renderer/use';
+import { deleteConfirm } from 'renderer/lib/dialog';
 import { TagGroup, TagGroupData } from 'renderer/lib/tag';
 
 import { Button, Icon } from 'antd';
-import { deleteConfirm } from 'renderer/lib/dialog';
-import { editTagByModal, FormType } from './tag-edit';
 
 import TagGroupComp from './tag-group';
+import { editTagByModal, FormType } from './tag-edit';
+
+import { deleteVal } from 'utils/shared';
 
 export default function TagCollection() {
     const [groups, setGroup] = useWatcher(tagGroups);
@@ -22,7 +25,16 @@ export default function TagCollection() {
     };
 
     const changeGroup = (data: TagGroupData) => {
+        const newGroups = groups.slice();
+        const index = newGroups.findIndex(({ id }) => data.id === id);
 
+        if (index < 0) {
+            warn(`当前 ID 无效：${data.id}`);
+            return;
+        }
+
+        newGroups.splice(index, 1, data);
+        setGroup(newGroups);
     };
 
     const deleteGroup = async (data: TagGroupData) => {
@@ -37,7 +49,7 @@ export default function TagCollection() {
             ),
         });
 
-        setGroup(groups.filter((item) => item.id !== data.id));
+        setGroup(deleteVal(groups, (item) => item.id !== data.id));
     };
 
     return (

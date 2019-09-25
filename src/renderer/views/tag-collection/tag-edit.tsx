@@ -52,6 +52,11 @@ function AliasList({ defaultValue, onChange }: AliasProps) {
     const inputConfirm = useCallback(() => {
         const val = state.inputName;
 
+        // 为空，则直接退出
+        if (!val) {
+            return;
+        }
+
         // 重复
         if (state.tags.includes(val)) {
             state.inputName = '';
@@ -135,9 +140,8 @@ export default function TagEditDialog({ data, type, destroy, getContainer, onCon
         alias: data.alias,
     });
 
+    const closeDialog = () => setVisible(false);
     const aliasList = formInputBinding<AliasProps, 'onChange'>('onChange', (val: string[]) => val);
-
-    const closeDialog = useCallback(() => setVisible(false), []);
 
     return (
         <Modal

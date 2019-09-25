@@ -24,7 +24,7 @@
     "antd": "^3.23.4",
     "async-validator": "^3.1.0",
     "fs-extra": "^8.1.0",
-    "image-size": "^0.8.2",
+    "image-size": "^0.7.5",
     "jszip": "^3.2.2",
     "keyboardjs": "^2.5.1",
     "react": "^16.9.0",

@@ -19,7 +19,7 @@ render(
         <Header />
         <article className='app-body'>
             <Sidebar />
-            <div className="app-content__wrapper">
+            <div className='app-content__wrapper'>
                 <Switch>
                     <Route exact path='/' component={MangaList} />
                     <Route path='/setting' component={Setting} />
