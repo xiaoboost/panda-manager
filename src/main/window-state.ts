@@ -14,12 +14,18 @@ interface WindowState {
     height: number;
     /** 上次关闭时主窗口的宽度 */
     width: number;
+    /** 上次关闭时主窗口距离桌面左边的距离 */
+    left?: number;
+    /** 上次关闭时主窗口距离桌面顶端的距离 */
+    top?: number;
 }
 
 /** 当前窗口状态缓存 */
 const state: WindowState = {
     width: 800,
     height: 600,
+    left: undefined,
+    top: undefined,
     isMaximize: false,
 };
 
@@ -33,11 +39,13 @@ function writeState(opt: Partial<WindowState> = {}) {
     fs.writeJSON(filePath, state);
 }
 
-export default async function install(options: BrowserWindowConstructorOptions = {}) {
+export default async function windowStateKeeper(options: BrowserWindowConstructorOptions = {}) {
     const config: WindowState = await fs.readJSON(filePath).catch(() => ({
         isMaximize: false,
         height: options.height,
         width: options.width,
+        top: options.y,
+        left: options.x,
     }));
 
     Object.assign(state, config);
@@ -45,14 +53,13 @@ export default async function install(options: BrowserWindowConstructorOptions =
     // 最大化
     if (config.isMaximize) {
         options.center = true;
-        options.width = config.width;
-        options.height = config.height;
-
         options.show = false;
     }
     else {
         options.width = config.width;
         options.height = config.height;
+        options.x = config.left;
+        options.y = config.top;
     }
 
     const win = new BrowserWindow(options);
@@ -75,6 +82,13 @@ export default async function install(options: BrowserWindowConstructorOptions =
         if (!win.isMaximized()) {
             const [width, height] = win.getSize();
             writeState({ width, height });
+        }
+    }));
+
+    win.on('move', debounce(() => {
+        if (!win.isMaximized()) {
+            const [left, top] = win.getPosition();
+            writeState({ left, top });
         }
     }));
 
