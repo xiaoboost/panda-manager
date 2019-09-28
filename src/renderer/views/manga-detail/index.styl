@@ -43,71 +43,85 @@ main#manga-detail-main {
                 border-bottom 1px solid Gray - #111
             }
         }
+    }
 
-        .manga-meta {
-            flex-grow 1
+    .manga-meta {
+        flex-grow 1
+        flex-shrink 0
+
+        display flex
+
+        margin-top 6px
+
+        > * {
             flex-shrink 0
+            flex-grow 0
+        }
+    }
 
-            display flex
-
+    .manga-file {
+        width 210px
+        flex-shrink 0
+        
+        .manga-category {
             margin-top 6px
-
-            > * {
-                flex-shrink 0
-                flex-grow 0
-            }
+            text-align center
         }
 
-        .manga-file {
-            width 210px
-            flex-shrink 0
-            
-            .manga-category {
-                margin-top 6px
-                text-align center
+        .manga-baisc {
+            margin 20px 0
+
+            .manga-basic-label,
+            .manga-basic-value {
+                display inline-block
+                line-height 22px
+                font-size 12px
+                white-space nowrap
             }
 
-            .manga-baisc {
-                margin 20px 0
+            .manga-basic-label {
+                font-weight bold
+            }
 
-                .manga-basic-label,
-                .manga-basic-value {
-                    display inline-block
-                    line-height 22px
-                    font-size 12px
-                    white-space nowrap
-                }
-
-                .manga-basic-label {
-                    font-weight bold
-                }
-
-                .manga-basic-value {
-                    padding-left 3px
-                }
+            .manga-basic-value {
+                padding-left 3px
             }
         }
+    }
 
-        .manga-tags {
-            flex 1
-            border-left 1px solid Gray - #111
-            border-right 1px solid Gray - #111
+    .manga-action {
+        flex-shrink 0
+        width 180px
+        margin-top 6px
+
+        display flex
+        flex-direction column
+        justify-content center
+        align-items center
+
+        > * {
+            margin-bottom 12px
+            width 100px
         }
+    }
 
-        .manga-action {
-            flex-shrink 0
-            width 180px
-            margin-top 6px
+    .manga-tags {
+        flex 1
+        border-left 1px solid Gray - #111
+        border-right 1px solid Gray - #111
+        padding 0 6px
+        line-height 22px
+        font-size 12px
 
-            display flex
-            flex-direction column
-            justify-content center
-            align-items center
-
-            > * {
-                margin-bottom 12px
-                width 100px
-            }
+        .manga-tags__group {
+            padding-right 6px
+            text-align right
+            min-width 24px
+            box-sizing content-box
+        }
+        
+        .manga-tags__list {
+            text-align left
         }
     }
 

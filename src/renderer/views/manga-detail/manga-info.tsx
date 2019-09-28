@@ -3,6 +3,7 @@ import React from 'react';
 import { format } from 'utils/shared';
 import { Manga } from 'renderer/lib/manga';
 
+import MangaTags from './manga-tags';
 import MangaActions from './manga-actions';
 import CategorySelector from 'renderer/components/category-selector';
 
@@ -47,7 +48,7 @@ export default function MangaInfo({ manga }: Props) {
                             </div>
                         </div>
                     </div>
-                    <div className='manga-tags'></div>
+                    <MangaTags manga={manga} />
                     <MangaActions manga={manga} />
                 </div>
             </div>

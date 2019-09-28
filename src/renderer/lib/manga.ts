@@ -9,10 +9,10 @@ import { compressImage, concatImage } from './image';
 import { clone, resolveUserDir, resolveTempDir } from 'utils/shared';
 
 /** 漫画的标签数据 */
-interface TagInManga {
+export type TagInManga = Array<{
     id: number;
     tags: number[];
-}
+}>;
 
 /** 漫画类别枚举 */
 export const enum Category {
@@ -35,7 +35,7 @@ export interface MangaData {
     /** 当前漫画的编号 */
     id: number;
     /** 当前漫画的标签集数据 */
-    tagGroups: TagInManga[];
+    tagGroups: TagInManga;
     /** 预览图片位置列表 */
     previewPositions: Array<[number, number]>;
     /** 对应的实际文件属性 */
