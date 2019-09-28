@@ -4,6 +4,8 @@ import { default as Sharp, JpegOptions, PngOptions } from 'sharp';
 interface ImageSize {
     width: number;
     height: number;
+    maxWidth: number;
+    maxHeight: number;
 }
 
 interface JpgImageCompressOption extends JpegOptions {
@@ -24,33 +26,72 @@ export function compressImage(image: Buffer, {
     size: toSize = {},
     ...options
 }: JpgImageCompressOption | PngImageCompressOption) {
-    return new Promise<Buffer>((resolve, reject) => {
-        let sharp = Sharp(image);
-        const originInfo = infoOf(image);
+    /** 是否经历转换 */
+    let hasTrans = false;
+    /** 图片转换器 */
+    let sharp = Sharp(image);
+    /** 原始图片属性 */
+    const { width, height, type: imageType } = infoOf(image);
+    /** 宽高比 */
+    const radio = height / width;
+    /** 取整运算 */
+    const { floor } = Math;
 
-        // 要求变更输出尺寸，且输出尺寸和图片原尺寸不同
-        if (
-            (toSize.width && originInfo.width !== toSize.width) ||
-            (toSize.height && originInfo.height !== toSize.height)
-        ) {
-            sharp = sharp.resize(toSize.width, toSize.height);
+    // 输出尺寸和图片原尺寸不同
+    if ((toSize.width && width !== toSize.width) || (toSize.height && height !== toSize.height)) {
+        hasTrans = true;
+        // 宽高都存在，则设置为包含，多余部分填充白色
+        if (toSize.width && toSize.height) {
+            sharp = sharp.resize(toSize.width, toSize.height, {
+                fit: 'contain',
+                background: '#ffffff',
+            });
         }
+        // 单独设置宽度
+        else if (toSize.width) {
+            // 缩放之后的宽高
+            let width = toSize.width;
+            let height = radio * toSize.width;
 
-        // 类型不同，需要转换格式
-        if (originInfo.type !== type) {
-            if (type === 'jpg') {
-                sharp = sharp.jpeg(options);
+            // 限高
+            if (toSize.maxHeight && height > toSize.maxHeight) {
+                height = toSize.maxHeight;
+                width = height / radio;
             }
-            else {
-                sharp = sharp.png(options);
-            }
+
+            sharp = sharp.resize(floor(width), floor(height));
         }
+        // 单独设置高度
+        else if (toSize.height) {
+            // 缩放之后的宽高
+            let height = toSize.height;
+            let width = toSize.height / radio;
 
-        sharp
-            .toBuffer()
-            .then(resolve)
-            .catch(reject);
-    });
+            // 限高
+            if (toSize.maxWidth && width > toSize.maxWidth) {
+                width = toSize.maxWidth;
+                height = radio * width;
+            }
+
+            sharp = sharp.resize(floor(width), floor(height));
+        }
+    }
+
+    // 类型不同，需要转换格式
+    if (imageType !== type) {
+        hasTrans = true;
+
+        if (type === 'jpg') {
+            sharp = sharp.jpeg(options);
+        }
+        else {
+            sharp = sharp.png(options);
+        }
+    }
+
+    return hasTrans
+        ? sharp.toBuffer()
+        : Promise.resolve(image);
 }
 
 /**
@@ -58,20 +99,16 @@ export function compressImage(image: Buffer, {
  *  - extend 图片会放在 main 图片的右边
  */
 export function concatImage(main: Buffer, extend: Buffer) {
-    return new Promise<Buffer>((resolve, reject) => {
-        const { width } = infoOf(extend);
+    const { width } = infoOf(extend);
 
-        Sharp(main)
-            .extend({
-                top: 0, bottom: 0, left: 0, right: width,
-                background: { r: 255, g: 255, b: 255, alpha: 1 },
-            })
-            .composite([{
-                input: extend,
-                gravity: Sharp.gravity.east,
-            }])
-            .toBuffer()
-            .then(resolve)
-            .catch(reject);
-    });
+    return Sharp(main)
+        .extend({
+            top: 0, bottom: 0, left: 0, right: width,
+            background: { r: 255, g: 255, b: 255, alpha: 1 },
+        })
+        .composite([{
+            input: extend,
+            gravity: Sharp.gravity.east,
+        }])
+        .toBuffer();
 }
