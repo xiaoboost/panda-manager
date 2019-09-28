@@ -92,19 +92,32 @@ async function readMetaMangaList() {
 
 /** 删除多余的缓存文件 */
 async function removeExtraCache() {
-    const dirs = await fs.readdir(mangaMetaFolder).catch(() => [] as string[]);
+    const ids = await fs.readdir(mangaMetaFolder).catch(() => [] as string[]);
 
     // 删除多余的实际存在的缓存文件（夹）
-    for (const dir of dirs) {
-        const fullPath = path.join(mangaMetaFolder, dir);
-        const stat = await fs.stat(fullPath);
-        const isDirectory = stat.isDirectory();
+    for (const id of ids) {
+        const metaPath = path.join(mangaMetaFolder, id);
+        const stat = await fs.stat(metaPath);
 
-        if (
-            (isDirectory && !mangas.value[dir]) ||
-            (!isDirectory && dir !== Manga.metaData.meta)
-        ) {
-            await fs.remove(fullPath);
+        // 移除非文件夹
+        if (!stat.isDirectory()) {
+            await fs.remove(metaPath);
+            return;
+        }
+
+        // 漫画元数据
+        const data = mangas.value[id];
+
+        // 缓存中不存在
+        if (!data) {
+            await fs.remove(metaPath);
+            return;
+        }
+
+        // 漫画源文件不存在
+        if (!fs.existsSync(data.file.path)) {
+            await fs.remove(metaPath);
+            return;
         }
     }
 }
@@ -190,9 +203,10 @@ async function refreshMangas(mangaPaths?: string[]) {
             else {
                 const manga = await Manga.fromPath(fullPath);
 
-                mangas.value[manga.id] = manga;
-
                 await manga.writeMeta();
+
+                // 更新数据在生成缓存之后
+                mangas.value[manga.id] = manga;
             }
         }
 
@@ -289,7 +303,6 @@ async function readMeta() {
     await removeExtraCache();
     // 刷新缓存
     await refreshMangas();
-
     // 重写缓存
     await writeMeta();
 

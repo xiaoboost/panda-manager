@@ -37,7 +37,7 @@ export interface MangaData {
     /** 当前漫画的标签集数据 */
     tagGroups: TagInManga[];
     /** 预览图片位置列表 */
-    previewPositions: number[];
+    previewPositions: Array<[number, number]>;
     /** 对应的实际文件属性 */
     file: {
         /** 真实文件的路径 */
@@ -97,7 +97,7 @@ export const CategoryMap = {
 /** 全局漫画编号 */
 let id = 0;
 /** 允许的图片后缀 */
-const allowImageExt = ['png', 'jpg', 'jepg', 'bmp'];
+const allowImageExt = ['.png', '.jpg', '.jepg', '.bmp'];
 
 /** 漫画类 */
 export class Manga implements MangaData {
@@ -110,7 +110,7 @@ export class Manga implements MangaData {
     tagGroups: MangaData['tagGroups'] = [];
 
     /** 预览图片位置列表 */
-    readonly previewPositions: number[] = [];
+    readonly previewPositions: Array<[number, number]> = [];
     /** 漫画对应的实际文件的属性 */
     readonly file: MangaData['file'] = {
         path: '',
@@ -140,6 +140,7 @@ export class Manga implements MangaData {
             quality: 80,
             size: {
                 height: 150,
+                maxWidth: 220,
             },
         },
     };
@@ -196,55 +197,60 @@ export class Manga implements MangaData {
 
     /** 从文件夹生成预览 */
     private async createPreviewFromDirectory() {
-            this.previewPositions.length = 0;
+        this.previewPositions.length = 0;
 
-            let image = Buffer.from('');
+        let image = Buffer.from('');
 
-            const allFiles = (await fs.readdir(this.file.path)).sort(naturalCompare);
+        const allFiles = (await fs.readdir(this.file.path)).sort(naturalCompare);
 
-            const { compressOption: option } = Manga;
-            const { coverPath: cover, previewPath: preview } = this;
+        const { compressOption: option } = Manga;
+        const { coverPath: cover, previewPath: preview } = this;
 
-            for (let i = 0; i < allFiles.length; i++) {
-                const file = allFiles[i];
-                const fullPath = join(this.file.path, file);
-                const stat = await fs.stat(fullPath);
+        for (let i = 0; i < allFiles.length; i++) {
+            const file = allFiles[i];
+            const fullPath = join(this.file.path, file);
+            const stat = await fs.stat(fullPath);
 
-                // 跳过目录和不允许的文件后缀
-                if (stat.isDirectory() || !allowImageExt.includes(extname(file).toLowerCase())) {
-                    continue;
-                }
-
-                // 读取当前图片
-                const currentImage = await fs.readFile(fullPath);
-                // 当前图片预览
-                const currentPriview = await compressImage(currentImage, {
-                    type: 'jpg',
-                    ...option.content,
-                });
-
-                // 第一页
-                if (i === 0) {
-                    // 制作封面
-                    await fs.writeFile(
-                        cover,
-                        await compressImage(image, {
-                            type: 'jpg',
-                            ...option.cover,
-                        }),
-                    );
-
-                    image = currentPriview;
-                }
-                else {
-                    image = await concatImage(image, currentPriview);
-                }
-
-                this.previewPositions.push(sizeOf(currentPriview).width);
+            // 跳过目录和不允许的文件后缀
+            if (stat.isDirectory() || !allowImageExt.includes(extname(file).toLowerCase())) {
+                continue;
             }
 
-            // 预览文件写入硬盘
-            await fs.writeFile(preview, image);
+            // 读取当前图片
+            const currentImage = await fs.readFile(fullPath);
+            // 压缩图片，生成预览
+            const currentPreview = await compressImage(currentImage, {
+                type: 'jpg',
+                ...option.content,
+            });
+            // 压缩后的图片大小
+            const proviewSize = sizeOf(currentPreview);
+
+            // 第一页
+            if (i === 0) {
+                // 制作封面
+                await fs.writeFile(
+                    cover,
+                    await compressImage(currentImage, {
+                        type: 'jpg',
+                        ...option.cover,
+                    }),
+                );
+
+                image = currentPreview;
+            }
+            else {
+                image = await concatImage(image, currentPreview);
+            }
+
+            this.previewPositions.push([
+                sizeOf(currentPreview).width,
+                proviewSize.height,
+            ]);
+        }
+
+        // 预览文件写入硬盘
+        await fs.writeFile(preview, image);
     }
     /** 从压缩包生成预览 */
     private async createPreviewFromZip() {
@@ -262,6 +268,8 @@ export class Manga implements MangaData {
                 type: 'jpg',
                 ...option.content,
             });
+            // 压缩后的图片大小
+            const proviewSize = sizeOf(currentPreview);
 
             // 第一页
             if (this.previewPositions.length === 0) {
@@ -281,7 +289,10 @@ export class Manga implements MangaData {
             }
 
             // 合成预览图片
-            this.previewPositions.push(sizeOf(image).width);
+            this.previewPositions.push([
+                sizeOf(image).width,
+                proviewSize.height,
+            ]);
         }
 
         // 预览文件写入硬盘
@@ -294,6 +305,8 @@ export class Manga implements MangaData {
             this.file.isDirectory
                 ? await this.createPreviewFromDirectory()
                 : await this.createPreviewFromZip();
+
+            this.writeMeta();
         }
     }
     /** 是否允许生成预览 */
@@ -334,18 +347,18 @@ export class Manga implements MangaData {
         // 写入漫画 metadata 缓存
         await fs.writeJSON(metaPath, mangaData);
     }
-    
+
     /**
      * 提取至
      *  - 如果是文件夹，则复制
      *  - 如果是压缩包，则解压缩
      */
     async extract(path: string) {
-
+        // 。。
     }
     /** 打包文件夹 */
     async archive() {
-
+        // ..
     }
     /** 浏览漫画 */
     async viewManga() {
@@ -363,10 +376,10 @@ export class Manga implements MangaData {
     }
     /** 打开文件所在文件夹 */
     async openFolder() {
-
+        // ..
     }
     /** 删除自身 */
     async deleteSelf() {
-
+        // ..
     }
 }
