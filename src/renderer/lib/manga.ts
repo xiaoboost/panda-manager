@@ -356,7 +356,7 @@ export class Manga implements MangaData {
      *  - 如果是压缩包，则解压缩
      */
     async extract(path: string) {
-        // 。。
+        // ..
     }
     /** 打包文件夹 */
     async archive() {
@@ -375,10 +375,6 @@ export class Manga implements MangaData {
         }
 
         // 打开浏览器
-    }
-    /** 打开文件所在文件夹 */
-    async openFolder() {
-        // ..
     }
     /** 删除自身 */
     async deleteSelf() {

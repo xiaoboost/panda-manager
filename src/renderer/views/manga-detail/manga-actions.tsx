@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Button } from 'antd';
+import { shell } from 'electron';
 
 import { Manga } from 'renderer/lib/manga';
 import { deleteConfirm } from 'renderer/lib/dialog';
@@ -49,14 +50,14 @@ export default function PreviewsList({ manga }: Props) {
             <Button
                 size='small'
                 className='ant-btn-success'
-                onClick={manga.openFolder.bind(manga)}>
+                onClick={() => shell.showItemInFolder(file.path)}>
                 打开文件夹
             </Button>
-            <Button
+            {/* <Button
                 size='small'
                 className='ant-btn-warning'>
                 压制漫画
-            </Button>
+            </Button> */}
             <Button
                 type='danger'
                 size='small'
