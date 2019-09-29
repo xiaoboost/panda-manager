@@ -6,6 +6,8 @@ import naturalCompare from 'string-natural-compare';
 
 import { join, parse, extname } from 'path';
 import { compressImage, concatImage } from './image';
+
+import { getFileSize } from 'utils/node';
 import { clone, resolveUserDir, resolveTempDir } from 'utils/shared';
 
 /** 漫画的标签数据 */
@@ -163,7 +165,7 @@ export class Manga implements MangaData {
 
         manga.name = parse(fullPath).name;
         manga.file.path = fullPath;
-        manga.file.size = stat.size;
+        manga.file.size = await getFileSize(fullPath);
         manga.file.isDirectory = stat.isDirectory();
         manga.file.lastModified = new Date(stat.mtime).getTime();
 
@@ -244,7 +246,7 @@ export class Manga implements MangaData {
             }
 
             this.previewPositions.push([
-                sizeOf(currentPreview).width,
+                sizeOf(image).width,
                 proviewSize.height,
             ]);
         }
