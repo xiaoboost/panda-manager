@@ -24,7 +24,7 @@ function getTriggers<T extends string>(rules: FormRule<T> | FormRule<T>[], all: 
 
     rules = isArray(rules) ? rules : [rules];
 
-    for (let rule of rules) {
+    for (const rule of rules) {
         // 当前验证规则没有触发条件，则返回全部
         if (!rule.trigger) {
             return all;
@@ -63,7 +63,7 @@ export default function useForm<T extends object>(initVal: T) {
     /** 初始化表单对应字段输入 */
     function resetFields(names: Keys = Object.keys(initState.current) as Keys) {
         // 更新状态值
-        nowState.current = names.reduce((ans, key) => (ans[key] = nowState.current[key], ans), {} as T);
+        nowState.current = names.reduce((ans, key) => ((ans[key] = nowState.current[key]), ans), {} as T);
         // 更新视图
         forceUpdate();
     }
@@ -75,9 +75,9 @@ export default function useForm<T extends object>(initVal: T) {
                 schema = new Schema(fieldsRule);
             }
 
-            const values = names.reduce((ans, key) => (ans[key] = nowState.current[key], ans), {} as T);
+            const values = names.reduce((ans, key) => ((ans[key] = nowState.current[key]), ans), {} as T);
 
-            for (let name of names) {
+            for (const name of names) {
                 setStatus.set(name, {
                     help: '',
                     validateStatus: 'success',
@@ -86,7 +86,7 @@ export default function useForm<T extends object>(initVal: T) {
 
             schema.validate(values, undefined, (errs) => {
                 if (errs) {
-                    for (let err of errs) {
+                    for (const err of errs) {
                         setStatus.set(err.field as keyof T, {
                             help: err.message,
                             validateStatus: 'error',
@@ -123,17 +123,17 @@ export default function useForm<T extends object>(initVal: T) {
 
             // 初始值为输入的表单值
             result.defaultValue = initVal[key] as any;
-    
+
             // 绑定触发规则
             if (props.rules) {
                 const { rules } = props;
                 const allTrigger = ['onChange', 'onBlur', 'onPressEnter'] as const;
                 const triggers = getTriggers<K>(rules, allTrigger as any);
-                
+
                 // 记录规则
                 fieldsRule[key as string] = rules;
-        
-                for (let triggerType of triggers) {
+
+                for (const triggerType of triggers) {
                     // 原本的回调函数
                     const oldCb: any = result[triggerType];
                     // 新的回调函数添加验证输入的钩子
@@ -141,12 +141,12 @@ export default function useForm<T extends object>(initVal: T) {
                         if (oldCb) {
                             oldCb(ev as any);
                         }
-        
+
                         validateFields([key]);
                     }) as any;
                 }
             }
-    
+
             // 外部 input 事件
             const oldEvent: any = result[binding];
             // 双向绑定
@@ -158,7 +158,7 @@ export default function useForm<T extends object>(initVal: T) {
                 // 外部事件调用
                 oldEvent && oldEvent(arg);
             }) as any;
-    
+
             return result;
         };
     }
