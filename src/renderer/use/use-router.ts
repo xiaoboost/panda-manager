@@ -17,7 +17,7 @@ export default function useRouter<
         throw INCORRECT_VERSION_ERROR;
     }
 
-    // 此函数必须是 <Router /> 的子元素 
+    // 此函数必须是 <Router /> 的子元素
     const context = useContext<RouteComponentProps<P, C, S>>(
         __RouterContext as any,
     );

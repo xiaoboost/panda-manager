@@ -155,7 +155,7 @@ export default class Zip {
         });
     }
     /** 生成异步的文件列表迭代器 */
-    async * files() {
+    async *files() {
         // 所有文件
         const files = Object.keys(this._zip.files).sort(naturalCompare);
 

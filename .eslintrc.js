@@ -38,10 +38,8 @@ module.exports =  {
         '@typescript-eslint/no-explicit-any': 'off',
         // 类方法不需要写出 public 关键字
         '@typescript-eslint/explicit-member-accessibility': ['error', { accessibility: 'no-public' }],
-        // 只有当数组元素为基础类型时才允许使用 T[] 形式数组类型定义
-        '@typescript-eslint/array-type': ['error', {
-            default: 'array-simple',
-        }],
+        // 不限制数组类型定义的形式
+        '@typescript-eslint/array-type': 'off',
         // 不强制驼峰
         '@typescript-eslint/camelcase': 'off',
         // 除了函数之外，禁止在定义之前使用变量

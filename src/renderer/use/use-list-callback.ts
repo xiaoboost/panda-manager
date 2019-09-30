@@ -18,7 +18,7 @@ export default function useListCallback<T, F extends AnyFunction>(data: T[], cre
     return data.map((item, i) => {
         const cache = ref.current.get(item);
         const cb = cache ? cache : createCb(item, i);
-        
+
         map.set(item, cb);
 
         return cb;

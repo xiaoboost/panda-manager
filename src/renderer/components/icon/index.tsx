@@ -24,11 +24,11 @@ export default function Icon({ type: name, className, onClick }: IconProps) {
         <i className={customClass} onClick={onClick}>
             <svg
                 viewBox={data.viewBox}
-                version="1.1"
-                width="1em"
-                height="1em"
+                version='1.1'
+                width='1em'
+                height='1em'
                 fill={data.fill ? data.fill : 'currentColor'}
-                aria-hidden="true">
+                aria-hidden='true'>
                 <path d={data.path} />
             </svg>
         </i>

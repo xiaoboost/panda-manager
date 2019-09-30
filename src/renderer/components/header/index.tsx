@@ -38,7 +38,7 @@ export default function Header() {
                     {router.location.pathname === '/'
                         ? <BIcon className='app-title-bar__logo' type='bamboo' />
                         : <AIcon
-                            type="arrow-left"
+                            type='arrow-left'
                             className='app-title-bar__icon'
                             onClick={routerBack}
                         />
@@ -49,7 +49,7 @@ export default function Header() {
             <span>
                 {/* 最小化 */}
                 <AIcon
-                    type="minus"
+                    type='minus'
                     className='app-title-bar__icon'
                     onClick={minimize}
                 />
@@ -62,7 +62,7 @@ export default function Header() {
                     />
                     /* 最大化 */
                     : <AIcon
-                        type="border"
+                        type='border'
                         className='app-title-bar__icon'
                         onClick={maximize}
                     />}

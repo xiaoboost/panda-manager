@@ -31,8 +31,3 @@ export function warnDialog(title: string, message: string) {
         });
     });
 }
-
-/** 打开文件所在文件夹并选中此文件 */
-export function openFileInFolder(file: string) {
-
-}
