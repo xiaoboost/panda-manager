@@ -31,23 +31,18 @@ export function warn(text: string, isDebug = false) {
     }
 }
 
-/** 错误码 */
-const errorCode = {
-    // 100 ~ 199 文件与文件夹
-    100: '文件夹不存在',
-    101: '不允许重复添加文件夹',
-    102: '只允许刷新已经添加的文件夹',
-    103: '此漫画已经被删除，它将会被移出列表',
-    104: '无法写入文件',
-
-    // 200 ~ 299
-    200: '压缩包损坏',
+/** 错误信息 */
+export const ErrorMessage = {
+    notExist: '文件夹不存在',
+    noRepeatFolder: '不允许重复添加文件夹',
+    canNotWrite: '无法写入文件',
+    zipBroken: '压缩包损坏',
 };
 
-export function handleError(code: keyof typeof errorCode, info?: string) {
+export function handleError(code: keyof typeof ErrorMessage, info?: string) {
     Message.error(
         info
-            ? errorCode[code]
-            : `${errorCode[code]}：\n ${info}`,
+            ? ErrorMessage[code]
+            : `${ErrorMessage[code]}：\n ${info}`,
     );
 }
