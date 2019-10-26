@@ -46,16 +46,17 @@ export default class Watcher<T> {
         // 拦截对象设置属性操作
         const proxyHandler: ProxyHandler<object> = {
             set: (target: T & object, key: PropertyKey, value: any) => {
-                this.dispatch({
-                    ...target,
-                    [key]: value,
-                });
+                const result = Reflect.set(target, key, value);
 
-                return true;
+                if (result) {
+                    this.dispatch();
+                }
+
+                return result;
             },
         };
 
-        return new Proxy({ ...data } as any, proxyHandler);
+        return new Proxy(data as any, proxyHandler);
     }
 
     /** 订阅此值的变化 */
@@ -99,17 +100,21 @@ export default class Watcher<T> {
     }
 
     /** 发布此值 */
-    dispatch(val: T) {
-        // 新值与旧值相同，直接退出
-        if (this._proxy === val || this._origin === val) {
-            return;
+    dispatch(val?: T) {
+        if (arguments.length > 0) {
+            if (this._proxy === val || this._origin === val) {
+                return;
+            }
+
+            const oldVal = this._proxy;
+    
+            this._origin = val!;
+            this._proxy = this.proxy(val!);
+    
+            this.subs.forEach((cb) => cb(val!, oldVal));
         }
-
-        const oldVal = this._proxy;
-
-        this._origin = val;
-        this._proxy = this.proxy(val);
-
-        this.subs.forEach((cb) => cb(val, oldVal));
+        else {
+            this.subs.forEach((cb) => cb(this._proxy, this._proxy));
+        }
     }
 }

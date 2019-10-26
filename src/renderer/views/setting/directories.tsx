@@ -11,17 +11,20 @@ import { Icon } from 'antd';
 
 import * as store from 'renderer/store';
 
-const DirsList: FunctionComponent<{ dirs: string[] }> = function DirPathList({ dirs }) {
-    const remove = (path: string) => {
-        warnDialog('确认删除', `确定要删除此文件夹？\n${path}`)
-            .then(() => remove(path));
-    };
+interface DirsListProps {
+    paths: string[];
+    remove(path: string): void;
+}
 
-    const removeList = useListCallback(dirs, (dir) => () => remove(dir));
-    const openFolder = useListCallback(dirs, (dir) => () => shell.openItem(dir));
+const DirsList: FunctionComponent<DirsListProps> = function DirPathList({ paths, remove }) {
+    const openFolder = useListCallback(paths, (dir) => () => shell.openItem(dir));
+    const removeList = useListCallback(paths, (dir) => () => {
+        warnDialog('确认删除', `确定要删除此文件夹？\n${dir}`)
+            .then(() => remove(dir));
+    });
 
     return <>
-        {dirs.map((path, i) => (
+        {paths.map((path, i) => (
             <CardLine
                 isSubline
                 key={i}
@@ -52,9 +55,8 @@ const DirsList: FunctionComponent<{ dirs: string[] }> = function DirPathList({ d
 
 export default function Directories() {
     const [dirs] = useWatcher(store.mangaDirectories);
-
-    /** 添加文件夹 */
     const add = useCallback(() => selectDirectory().then(store.addDirectory), []);
+    const remove = useCallback((dir: string) => store.removeDirectory(dir), []);
 
     return (
         <Card title='文件夹'>
@@ -72,7 +74,10 @@ export default function Directories() {
                 </CardLine>
                 {dirs.length === 0
                     ? <CardLine isSubline title='尚未添加目录' />
-                    : <DirsList dirs={dirs} />}
+                    : <DirsList
+                        paths={dirs}
+                        remove={remove}
+                    />}
             </div>
             {/** 刷新目录 */}
             {/* <CardLine

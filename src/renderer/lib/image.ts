@@ -32,7 +32,6 @@ export function compressImage(image: Buffer, {
     let sharp = Sharp(image);
     /** 原始图片属性 */
     const { width, height, type: imageType } = imageSize(image);
-    debugger;
     /** 宽高比 */
     const radio = height! / width!;
     /** 取整运算 */
@@ -102,7 +101,6 @@ export function compressImage(image: Buffer, {
 export function concatImage(main: Buffer, extend: Buffer) {
     const { width } = imageSize(extend);
 
-    debugger;
     return Sharp(main)
         .extend({
             top: 0, bottom: 0, left: 0, right: width,

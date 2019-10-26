@@ -260,7 +260,7 @@ export async function removeDirectory(dirInput: string) {
     mangaDirectories.value = deleteVal(mangaDirectories.value, dirInput);
 
     const origin = mangas.origin;
-    const deleteMangas = Object.values(mangas.origin).filter(({ file }) => file.path.includes(dirInput));
+    const deleteMangas = Object.values(mangas.origin).filter(({ file }) => path.dirname(file.path) === dirInput);
 
     for (const manga of deleteMangas) {
         delete origin[manga.id];
@@ -281,9 +281,9 @@ async function readMeta() {
     reading.value = true;
 
     // 所有漫画缓存
-    const dirs = await readMetaMangaList();
+    const mangaPaths = await readMetaMangaList();
     // 读取所有漫画缓存数据
-    const metas = await Promise.all(dirs.map(
+    const metas = await Promise.all(mangaPaths.map(
         (name) =>
             fs.readJSON(path.join(mangaMetaFolder, name, Manga.metaData.meta))
                 .then((item) => Manga.fromMeta(item))
@@ -294,6 +294,7 @@ async function readMeta() {
 
     metas
         .filter((x: any): x is Manga => !!x)
+        .filter(({ file }) => mangaDirectories.value.includes(path.dirname(file.path)))
         .forEach((item) => (mangasCopy[item.id] = item));
 
     // 漫画储存值变化

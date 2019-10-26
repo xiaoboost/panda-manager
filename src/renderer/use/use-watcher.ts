@@ -1,13 +1,16 @@
 import Watcher from '../lib/watcher';
+import useForceUpdate from './use-force-update';
 
-import { useState, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 
 export default function useWatcher<T>(watcher: Watcher<T>) {
-    const [state, setState] = useState(watcher.value);
+    const update = useForceUpdate();
+    const state = useRef(watcher.origin);
 
     useEffect(() => {
         function handleStatusChange(val: T) {
-            setState(val);
+            state.current = val;
+            update();
         }
 
         watcher.subscribe(handleStatusChange);
@@ -15,5 +18,5 @@ export default function useWatcher<T>(watcher: Watcher<T>) {
         return () => watcher.unSubscribe(handleStatusChange);
     }, []);
 
-    return [state, watcher.dispatch.bind(watcher)] as const;
+    return [state.current, watcher.dispatch.bind(watcher)] as const;
 }
