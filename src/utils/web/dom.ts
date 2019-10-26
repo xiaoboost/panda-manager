@@ -1,11 +1,10 @@
-import { isArray, isString, isObject } from '../shared';
+import { isString, isObject } from '../shared';
 
-export type ClassInput = string | undefined | { [className: string]: boolean };
+export type ClassObject = Record<string, boolean>;
+export type ClassInput = string | undefined | ClassObject;
 
 /** 解析对象 class */
 export function stringifyClass(...opt: ClassInput[]) {
-    interface ClassObject { [key: string]: boolean; }
-
     /** 解析 class 对象 */
     function parseClassObject(classObject: ClassObject) {
         return Object.keys(classObject).filter((key) => classObject[key]);
