@@ -2,9 +2,6 @@ import { isBaseType, isArray, isFunc } from 'utils/shared';
 
 type Subscribe<T> = (now: T, pre?: T) => void;
 
-/** 需要代理的数组方法 */
-const methodsToIntercept = ['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse'];
-
 /** 储存值类 */
 export default class Watcher<T> {
     /** 代理值 */
@@ -58,26 +55,7 @@ export default class Watcher<T> {
             },
         };
 
-        // 数组还需要代理部分方法
-        if (isArray(data)) {
-            proxyHandler.get = (target: T & any[], key: string) => {
-                if (methodsToIntercept.includes(key)) {
-                    return (...args: any[]) => {
-                        const newArr = Array.from(target);
-                        newArr[key](...args);
-                        this.dispatch(newArr as any);
-                    };
-                }
-                else {
-                    return target[key];
-                }
-            };
-
-            return new Proxy(Array.from(data), proxyHandler);
-        }
-        else {
-            return new Proxy({ ...data } as any, proxyHandler);
-        }
+        return new Proxy({ ...data } as any, proxyHandler);
     }
 
     /** 订阅此值的变化 */

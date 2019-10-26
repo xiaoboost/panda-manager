@@ -13,7 +13,7 @@ export function delay(time = 0) {
 export function wait(fn: () => boolean, interval = 200, stopTimeout = 60000) {
     let timeout = false;
 
-    const timer = setTimeout(() => timeout = true, stopTimeout);
+    const timer = setTimeout(() => (timeout = true), stopTimeout);
 
     return (function check(): Promise<void> {
         if (fn()) {
@@ -30,11 +30,23 @@ export function wait(fn: () => boolean, interval = 200, stopTimeout = 60000) {
 }
 
 /** 防抖动函数包装 */
-export function debounce(cb: () => void, time = 500) {
-    let timer: NodeJS.Timeout;
+export function debounce<T extends AnyFunction>(cb: T): (...args: Parameters<T>) => void;
+export function debounce<T extends AnyFunction>(delay: number, cb: T): (...args: Parameters<T>) => void;
+export function debounce<T extends AnyFunction>(delay: number | T, cb?: T): (...args: Parameters<T>) => void {
+    let timer: ReturnType<typeof setTimeout>;
+    let time: number, cbt: T;
 
-    return function delayInDebounce() {
+    if (typeof delay === 'function') {
+        cbt = delay;
+        time = 200;
+    }
+    else {
+        cbt = cb as T;
+        time = delay;
+    }
+
+    return function delayInDebounce(...args: any[]) {
         clearTimeout(timer);
-        timer = setTimeout(cb, time);
+        timer = setTimeout(() => cbt(...args), time);
     };
 }

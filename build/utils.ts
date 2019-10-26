@@ -4,7 +4,7 @@ import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 import FriendlyErrorsPlugin from 'friendly-errors-webpack-plugin';
 
 import { loader } from 'mini-css-extract-plugin';
-import { removeSync as rm } from 'fs-extra';
+import { removeSync as rm, readdirSync, statSync } from 'fs-extra';
 
 import { resolveRoot } from './env';
 
@@ -177,5 +177,18 @@ export function build(BaseConfig: Webpack.Configuration) {
             children: false,
         }));
     });
+}
 
+/** 检查编译项目是否存在 */
+export function checkProjectName(name: string) {
+    const paths = readdirSync(resolveRoot('src'));
+    const isExist = paths.includes(name);
+
+    if (!isExist) {
+        return false;
+    }
+
+    const stat = statSync(resolveRoot('src', name));
+
+    return stat.isDirectory();
 }
