@@ -1,4 +1,4 @@
-import infoOf from 'image-size';
+import { imageSize } from 'image-size';
 import { default as Sharp, JpegOptions, PngOptions } from 'sharp';
 
 interface ImageSize {
@@ -31,9 +31,10 @@ export function compressImage(image: Buffer, {
     /** 图片转换器 */
     let sharp = Sharp(image);
     /** 原始图片属性 */
-    const { width, height, type: imageType } = infoOf(image);
+    const { width, height, type: imageType } = imageSize(image);
+    debugger;
     /** 宽高比 */
-    const radio = height / width;
+    const radio = height! / width!;
     /** 取整运算 */
     const { floor } = Math;
 
@@ -99,8 +100,9 @@ export function compressImage(image: Buffer, {
  *  - extend 图片会放在 main 图片的右边
  */
 export function concatImage(main: Buffer, extend: Buffer) {
-    const { width } = infoOf(extend);
+    const { width } = imageSize(extend);
 
+    debugger;
     return Sharp(main)
         .extend({
             top: 0, bottom: 0, left: 0, right: width,

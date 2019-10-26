@@ -149,7 +149,7 @@ export default class Zip {
                 .pipe(fs.createWriteStream(targetFile))
                 .on('finish', () => resolve(true))
                 .on('error', () => {
-                    handleError(104, targetFile);
+                    handleError(handleError.messages.zipBroken, targetFile);
                     resolve(false);
                 });
         });

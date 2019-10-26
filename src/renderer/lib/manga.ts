@@ -1,9 +1,9 @@
 import * as fs from 'fs-extra';
 
 import Zip from './zip';
-import sizeOf from 'image-size';
 import naturalCompare from 'string-natural-compare';
 
+import { imageSize } from 'image-size';
 import { join, parse, extname } from 'path';
 import { compressImage, concatImage } from './image';
 
@@ -226,7 +226,7 @@ export class Manga implements MangaData {
                 ...option.content,
             });
             // 压缩后的图片大小
-            const proviewSize = sizeOf(currentPreview);
+            const proviewSize = imageSize(currentPreview);
 
             // 第一页
             if (i === 0) {
@@ -246,8 +246,8 @@ export class Manga implements MangaData {
             }
 
             this.previewPositions.push([
-                sizeOf(image).width,
-                proviewSize.height,
+                imageSize(image).width!,
+                proviewSize.height!,
             ]);
         }
 
@@ -271,7 +271,7 @@ export class Manga implements MangaData {
                 ...option.content,
             });
             // 压缩后的图片大小
-            const proviewSize = sizeOf(currentPreview);
+            const proviewSize = imageSize(currentPreview);
 
             // 第一页
             if (this.previewPositions.length === 0) {
@@ -292,8 +292,8 @@ export class Manga implements MangaData {
 
             // 合成预览图片
             this.previewPositions.push([
-                sizeOf(image).width,
-                proviewSize.height,
+                imageSize(image).width!,
+                proviewSize.height!,
             ]);
         }
 

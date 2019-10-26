@@ -138,7 +138,7 @@ async function getMangasList(dirs: string | string[] = mangaDirectories.value) {
     for (const dir of dirs) {
         // 当前文件夹下实际存在的漫画
         const mangasInDir: string[] = await fs.readdir(dir).catch(() => {
-            handleError(100, dir);
+            handleError(handleError.messages.notExist, dir);
             return [];
         });
 
@@ -235,7 +235,7 @@ export async function addDirectory(dirInput: string) {
     await reading.when(false);
 
     if (mangaDirectories.value.includes(dirInput)) {
-        handleError(101, dirInput);
+        handleError(handleError.messages.noRepeatFolder, dirInput);
         return;
     }
 
@@ -253,7 +253,7 @@ export async function removeDirectory(dirInput: string) {
     await reading.when(false);
 
     if (!mangaDirectories.value.includes(dirInput)) {
-        handleError(100, dirInput);
+        handleError(handleError.messages.notExist, dirInput);
         return;
     }
 

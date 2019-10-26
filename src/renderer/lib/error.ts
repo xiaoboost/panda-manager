@@ -33,16 +33,23 @@ export function warn(text: string, isDebug = false) {
 
 /** 错误信息 */
 export const ErrorMessage = {
-    notExist: '文件夹不存在',
+    notExist: '路径不存在',
     noRepeatFolder: '不允许重复添加文件夹',
     canNotWrite: '无法写入文件',
     zipBroken: '压缩包损坏',
 };
 
-export function handleError(code: keyof typeof ErrorMessage, info?: string) {
+interface HandleError {
+    (msg: string, info?: string): void;
+    messages: typeof ErrorMessage;
+}
+
+export const handleError: HandleError = (msg: string, info?: string) => {
     Message.error(
         info
-            ? ErrorMessage[code]
-            : `${ErrorMessage[code]}：\n ${info}`,
+            ? ErrorMessage[msg]
+            : `${ErrorMessage[msg]}：\n ${info}`,
     );
 }
+
+handleError.messages = ErrorMessage;
