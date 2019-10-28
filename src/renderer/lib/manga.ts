@@ -3,12 +3,13 @@ import * as fs from 'fs-extra';
 import Zip from './zip';
 import naturalCompare from 'string-natural-compare';
 
+import { shell, remote } from 'electron';
 import { imageSize } from 'image-size';
 import { join, parse, extname } from 'path';
 import { compressImage, concatImage } from './image';
 
 import { getFileSize } from 'utils/node';
-import { clone, resolveUserDir, resolveTempDir } from 'utils/shared';
+import { clone, delay, resolveUserDir, resolveTempDir } from 'utils/shared';
 
 /** 漫画的标签数据 */
 export type TagInManga = Array<{
@@ -364,17 +365,28 @@ export class Manga implements MangaData {
     }
     /** 浏览漫画 */
     async viewManga() {
-        let path = '';
-
         // 是压缩包，先解压到临时目录
         if (!this.file.isDirectory) {
-            path = this.tempPath;
-        }
-        else {
-            path = this.file.path;
+            const win = remote.getCurrentWindow();
+            const mangaZip = await Zip.fromZipFile(this.file.path);
+
+            win.setProgressBar(0);
+
+            await mangaZip.unPack(this.tempPath, (name, progress) => {
+                win.setProgressBar(progress);
+                // console.log(`${(progress * 100).toFixed(2)}% - ${name}`);
+            });
+
+            win.setProgressBar(-1);
         }
 
-        // 打开浏览器
+        const path = this.file.isDirectory ? this.file.path : this.tempPath;
+        const files = await fs.readdir(path);
+        const firstFile = files.sort(naturalCompare)[0];
+
+        await delay(500);
+
+        shell.openItem(join(this.file.path, firstFile));
     }
     /** 删除自身 */
     async deleteSelf() {
