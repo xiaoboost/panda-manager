@@ -31,9 +31,9 @@ export function resolveRender(...paths: (string | number)[]) {
 /** 由缓存资源目录的相对路径转变为绝对路径 */
 export function resolveUserDir(...paths: (string | number)[]) {
     return join(userDir, ...paths.map(String));
-};
+}
 
 /** 由临时资源目录的相对路径转变为绝对路径 */
 export function resolveTempDir(...paths: (string | number)[]) {
     return join(tempDir, appName, ...paths.map(String));
-};
+}

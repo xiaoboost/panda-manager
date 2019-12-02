@@ -107,10 +107,10 @@ export default class Watcher<T> {
             }
 
             const oldVal = this._proxy;
-    
+
             this._origin = val!;
             this._proxy = this.proxy(val!);
-    
+
             this.subs.forEach((cb) => cb(val!, oldVal));
         }
         else {
