@@ -54,6 +54,7 @@ function writeZipInsideFile(writePath: string, data: JSZip.JSZipObject) {
 export default class Zip {
     /** 读取 zip 文件 */
     static async fromZipFile(zipPath: string) {
+        // FIXME: zip 文件夹内部路径含有非英文字符绘乱码
         const zip = new Zip(path.parse(zipPath).name);
         const content = await fs.readFile(zipPath);
 
@@ -111,16 +112,15 @@ export default class Zip {
         }
     }
     /** 解压缩当前压缩包 */
-    async unPack(targetDir: string) {
+    async unPack(targetDir: string, progress?: (file: string, progress: number) => void) {
         const errorFiles: string[] = [];
         const fileDirMap: AnyObject<boolean> = {};
+        const files = Object.entries(this._zip.files).filter(([, data]) => !data.dir);
+        const maxFiles = files.length;
 
-        for (const [innerPath, data] of Object.entries(this._zip.files)) {
-            if (data.dir) {
-                continue;
-            }
-
-            const filePath = path.join(targetDir, innerPath);
+        for (let i = 0; i < maxFiles; i ++) {
+            const [inner, data] = files[i];
+            const filePath = path.join(targetDir, inner);
             const fileDir = path.dirname(filePath);
 
             // 还未访问过此目录
@@ -132,7 +132,12 @@ export default class Zip {
             }
 
             await writeZipInsideFile(filePath, data)
-                .catch(() => errorFiles.push(innerPath));
+                .catch(() => errorFiles.push(inner))
+                .then(() => {
+                    if (progress) {
+                        progress(inner, ((i + 1) / maxFiles));
+                    }
+                });
         }
     }
     /** 将压缩包写入硬盘 */

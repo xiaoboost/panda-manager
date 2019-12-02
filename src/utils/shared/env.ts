@@ -1,4 +1,5 @@
 import { join } from 'path';
+import { existsSync, mkdirpSync } from 'fs-extra';
 import { app as originApp, remote } from 'electron';
 
 /** 软件名称 */
@@ -15,8 +16,13 @@ const appRoot = process.env.NODE_ENV === 'development' ? join(initCWD, 'dist') :
 const appRender = process.env.NODE_ENV === 'development' ? join(initCWD, 'dist/renderer') : initCWD;
 /** 缓存文件夹路径 */
 const userDir = app.getPath('userData');
-/** 临时件夹路径 */
-const tempDir = app.getPath('temp');
+/** 软件临时件夹路径 */
+const tempDir = join(app.getPath('temp'), appName);
+
+// 如果没有临时文件夹，则创建
+if (!existsSync(tempDir)) {
+    mkdirpSync(tempDir);
+}
 
 /** 由软件根目录的相对路径转变为绝对路径 */
 export function resolveRoot(...paths: (string | number)[]) {
