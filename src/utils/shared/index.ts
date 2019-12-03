@@ -1,5 +1,6 @@
 export * from './env';
 export * from './assert';
+export * from './subject';
 export * from './async';
 export * from './clone';
 export * from './array';
