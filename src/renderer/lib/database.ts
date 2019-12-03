@@ -2,10 +2,10 @@ import * as zlib from 'zlib';
 
 import { promisify } from 'util';
 import { readFile, writeFile } from 'fs-extra';
-import { uid, debounce, resolveTempDir, Subject } from 'utils/shared';
+import { uid, debounce, resolveUserDir, Subject } from 'utils/shared';
 
 /** 数据库文件实体路径 */
-const databsePath = resolveTempDir('database');
+const databsePath = resolveUserDir('database');
 
 /** 基础数据行 */
 type TableRowData<T extends object> = T & { id: number };
