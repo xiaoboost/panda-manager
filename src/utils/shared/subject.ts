@@ -1,4 +1,4 @@
-type EventHandler = (payload: any) => any;
+type EventHandler = (...payloads: any[]) => any;
 
 /** 订阅者 */
 export class Subject {
@@ -59,13 +59,13 @@ export class Subject {
     }
 
     /** 通知变动 */
-    notify(name: string, payload: any) {
+    notify(name: string, ...payloads: any[]) {
         const { _events: events } = this;
 
         if (!events[name]) {
             return;
         }
 
-        events[name].forEach((cb) => cb(payload));
+        events[name].forEach((cb) => cb(...payloads));
     }
 }
