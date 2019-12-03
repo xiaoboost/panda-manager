@@ -1,5 +1,6 @@
 import * as zlib from 'zlib';
 
+import { promisify } from 'util';
 import { readFile, writeFile } from 'fs-extra';
 import { uid, debounce, resolveTempDir } from 'utils/shared';
 
@@ -7,40 +8,25 @@ import { uid, debounce, resolveTempDir } from 'utils/shared';
 const databsePath = resolveTempDir('database');
 
 /** 基础数据行 */
-type TableRow<T extends object> = T & { id: number };
+type TableRowData<T extends object> = T & { id: number };
 
 /** gzip Promise 包装 */
-function gzip(buf: zlib.InputType) {
-    return new Promise<Buffer>((resolve, reject) => zlib.gzip(buf, (err, result) => {
-        if (err) {
-            reject(err);
-        }
-        else {
-            resolve(result);
-        }
-    }));
-}
+const gzip = promisify<zlib.InputType, Buffer>(zlib.gzip);
+const gunzip = promisify<zlib.InputType, Buffer>(zlib.gunzip);
 
-/** gunzip Promise 包装 */
-function gunzip(buf: zlib.InputType) {
-    return new Promise<Buffer>((resolve, reject) => zlib.gunzip(buf, (err, result) => {
-        if (err) {
-            reject(err);
-        }
-        else {
-            resolve(result);
-        }
-    }));
+/**  */
+
+/** 数据行类 */
+class TableRow {
+
 }
 
 /** 数据表类 */
 class Table<Map extends object = object> {
     /** 按照哪列排序 */
-    private _orderBy: keyof TableRow<Map> = 'id';
-    /** 当前已经选取的数据列 */
-    private _selected: Array<keyof TableRow<Map>> = [];
+    private _orderBy: keyof TableRowData<Map> = 'id';
     /** 查询条件回调 */
-    private _whereCb: Array<(data: TableRow<Map>) => boolean> = [];
+    private _whereCb: Array<(data: TableRowData<Map>) => boolean> = [];
     /** 是否是升序排列 */
     private _isAsc = true;
     /** 设置查询的数量 */
@@ -49,7 +35,7 @@ class Table<Map extends object = object> {
     /** 数据库 */
     private readonly _database: Database;
     /** 数据表数据 */
-    private readonly _data: TableRow<Map>[] = [];
+    private readonly _data: TableRowData<Map>[] = [];
 
     /** 复制当前的数据表类 */
     private _shadowTable() {
@@ -64,35 +50,17 @@ class Table<Map extends object = object> {
         table._isAsc = this._isAsc;
         table._orderBy = this._orderBy;
         table._whereCb = this._whereCb.slice();
-        table._selected = this._selected.slice();
 
         return table;
-    }
-    /** 生成截取数据列的函数 */
-    private _select<K extends keyof TableRow<Map>>() {
-        type SelectData = Pick<TableRow<Map>, K>;
-
-        return (data: TableRow<Map>): SelectData => {
-            const result: SelectData = {} as any;
-
-            this._selected.forEach((key) => {
-                result[key as any] = data[key];
-            });
-
-            return result;
-        };
     }
     /** 生成排序回调 */
     private _sort() {
         const large = this._isAsc ? 1 : -1, small = -large, key = this._orderBy;
 
-        return (pre: TableRow<Map>, next: TableRow<Map>) => {
+        return (pre: TableRowData<Map>, next: TableRowData<Map>) => {
             return pre[key] > next[key] ? large : small;
         };
     }
-
-    /** 数据库写数据 */
-    private _writeDatabase = debounce(200, () => this._database.writeDisk());
 
     /** 隶属的数据库 */
     constructor(database: Database) {
@@ -106,7 +74,7 @@ class Table<Map extends object = object> {
             id: uid(),
         });
 
-        this._writeDatabase();
+        this._database.writeDisk();
     }
     /** 删除条目 */
     remove() {
@@ -131,13 +99,12 @@ class Table<Map extends object = object> {
                     count++;
                 }
             }
-
         }
 
         // 表长度重新赋值
         table.length -= count;
 
-        this._writeDatabase();
+        this._database.writeDisk();
     }
     /** 修改条目 */
     update(id: number, data: Partial<Map>) {
@@ -153,12 +120,12 @@ class Table<Map extends object = object> {
             }
         });
 
-        this._writeDatabase();
+        this._database.writeDisk();
 
         return true;
     }
     /** 查询数据 */
-    toQuery<K extends keyof TableRow<Map> = keyof TableRow<Map>>() {
+    toQuery() {
         const selected: Table<Map>['_data'] = [];
 
         for (let i = 0; i < this._data.length; i++) {
@@ -173,24 +140,12 @@ class Table<Map extends object = object> {
             }
         }
 
-        return selected.sort(this._sort()).map(this._select<K>());
+        return selected.sort(this._sort()).map((item) => ({ ...item }));
     }
 
     // 查询条件
-    /** 选择输出的数据列 */
-    select(...keys: Array<keyof TableRow<Map>>) {
-        const Table = this._shadowTable();
-
-        keys.forEach((key) => {
-            if (Table._selected.indexOf(key) < 0) {
-                Table._selected.push(key);
-            }
-        })
-
-        return Table;
-    }
     /** 设置查询条件 */
-    where(assert: (data: TableRow<Map>) => boolean) {
+    where(assert: (data: TableRowData<Map>) => boolean) {
         const Table = this._shadowTable();
 
         if (Table._whereCb.indexOf(assert) < 0) {
@@ -200,10 +155,11 @@ class Table<Map extends object = object> {
         return Table;
     }
     /** 设置排序 */
-    orderBy(key: keyof TableRow<Map>) {
-        const Table = this._shadowTable();
+    orderBy(key: keyof TableRowData<Map>, direction: 'desc' | 'asc' = 'asc') {
+        const table = this._shadowTable();
 
-        Table._orderBy = key;
+        table._orderBy = key;
+        table._isAsc = direction === 'asc';
 
         return Table;
     }
@@ -224,28 +180,37 @@ class Database {
     /** 数据库数据 */
     private _data: Record<string, Table> = {};
 
+    constructor() {
+        this.readDisk();
+    }
+
     /** 数据写入硬盘 */
-    writeDisk() {
-        return this._progress = this._progress.then(async () => {
+    private _writeDisk() {
+        this._progress = this._progress.then(async () => {
             const data: Record<string, object> = {};
 
             Object.entries(this._data).forEach(([name, table]) => {
                 data[name] = table['_data'];
             });
-    
+
             await writeFile(databsePath, await gzip(JSON.stringify(data)));
         });
+
+        return this._progress;
     }
+
+    /** 对外暴露的写硬盘接口 */
+    writeDisk = debounce(200, () => this._writeDisk());
     /** 从硬盘读取数据 */
     readDisk() {
-        return this._progress = this._progress.then(async () => {
+        this._progress = this._progress.then(async () => {
             try {
                 const buf = await gunzip(await readFile(databsePath));
 
                 debugger;
                 this._data = JSON.parse(buf.toString());
             }
-            catch(err) {
+            catch (err) {
                 debugger;
                 console.error(err);
                 this._data = {};
@@ -262,10 +227,8 @@ class Database {
                 });
             });
         });
-    }
 
-    constructor() {
-        this.readDisk();
+        return this._progress;
     }
 
     /** 使用某个表 */
