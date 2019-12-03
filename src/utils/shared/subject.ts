@@ -1,7 +1,7 @@
 type EventHandler = (...payloads: any[]) => any;
 
-/** 订阅者 */
-export class Subject {
+/** 频道订阅者 */
+export class ChannelSubject {
     /** 事件数据 */
     private _events: Record<string, EventHandler[]> = {};
 
@@ -58,7 +58,7 @@ export class Subject {
         }
     }
 
-    /** 通知变动 */
+    /** 发布变化 */
     notify(name: string, ...payloads: any[]) {
         const { _events: events } = this;
 
@@ -67,5 +67,43 @@ export class Subject {
         }
 
         events[name].forEach((cb) => cb(...payloads));
+    }
+}
+
+/** 订阅者 */
+export class Subject {
+    /** 事件数据 */
+    private _events: EventHandler[] = [];
+
+    /** 注册观测器 */
+    observe(ev: EventHandler) {
+        /** 注销观测器 */
+        const unObserve = () => {
+            this._events = this._events.filter((cb) => cb !== ev);
+        };
+        
+        // 添加观测器
+        this._events.push(ev);
+
+        return unObserve;
+    }
+
+    /** 注销全部观测器 */
+    unObserve(): void;
+    /** 注销此回调的观测器 */
+    unObserve(ev: EventHandler): void;
+
+    unObserve(ev?: EventHandler) {
+        if (!ev) {
+            this._events = [];
+        }
+        else {
+            this._events = this._events.filter((cb) => cb !== ev);
+        }
+    }
+
+    /** 发布变化 */
+    notify<T = any>(newVal: T, lastVal: T) {
+        this._events.forEach((cb) => cb(newVal, lastVal));
     }
 }

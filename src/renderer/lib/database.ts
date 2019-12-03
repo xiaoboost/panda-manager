@@ -50,7 +50,7 @@ class TableRow<Map extends object> extends Subject {
             ...data,
         };
 
-        this.notify('change', this.data, lastData);
+        this.notify(this.data, lastData);
     }
 }
 
@@ -102,9 +102,13 @@ class Table<Map extends object = object> extends Subject {
     }
 
     /** 添加条目 */
-    insert(data: Map) {
-        this._data.push(new TableRow(data));
+    insert(...data: Map[]) {
+        const last = this._data.slice();
+
+        this._data.push(...data.map((item) => new TableRow(item)));
         this._database.writeDisk();
+
+        this.notify(this._data, last);
     }
     /** 删除条目 */
     remove() {
@@ -113,6 +117,8 @@ class Table<Map extends object = object> extends Subject {
             _limit: limit,
             _whereCb: assert,
         } = this;
+
+        const last = this._data.slice();
 
         let count = 0;
 
@@ -135,6 +141,7 @@ class Table<Map extends object = object> extends Subject {
         table.length -= count;
 
         this._database.writeDisk();
+        this.notify(this._data, last);
     }
     /** 修改条目 */
     update(id: number, data: Partial<Map>) {
@@ -152,16 +159,23 @@ class Table<Map extends object = object> extends Subject {
     }
     /** 查询数据 */
     toQuery() {
-        const selected: TableRow<Map>[] = [];
+        let selected: TableRow<Map>[] = [];
 
-        for (let i = 0; i < this._data.length; i++) {
-            const item = this._data[i];
-
-            if (this._whereCb.every((cb) => cb(item.data))) {
-                selected.push(item);
-
-                if (selected.length >= this._limit) {
-                    break;
+        // 没有查询条件，则返回全部数据
+        if (this._whereCb.length === 0) {
+            selected = this._data.slice();
+        }
+        // 有查询条件则搜索
+        else {
+            for (let i = 0; i < this._data.length; i++) {
+                const item = this._data[i];
+    
+                if (this._whereCb.every((cb) => cb(item.data))) {
+                    selected.push(item);
+    
+                    if (selected.length >= this._limit) {
+                        break;
+                    }
                 }
             }
         }
@@ -178,7 +192,7 @@ class Table<Map extends object = object> extends Subject {
             table._whereCb.push(assert);
         }
 
-        return Table;
+        return table;
     }
     /** 设置排序 */
     orderBy(key: keyof TableRowData<Map>, direction: 'desc' | 'asc' = 'asc') {
@@ -187,15 +201,15 @@ class Table<Map extends object = object> extends Subject {
         table._orderBy = key;
         table._isAsc = direction === 'asc';
 
-        return Table;
+        return table;
     }
     /** 设置查询数量 */
     limit(num: number) {
-        const Table = this._shadowTable();
+        const table = this._shadowTable();
 
-        Table._limit = num;
+        table._limit = num;
 
-        return Table;
+        return table;
     }
 }
 
