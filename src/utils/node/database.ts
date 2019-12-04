@@ -1,17 +1,12 @@
-import * as zlib from 'zlib';
-
-import { promisify } from 'util';
 import { readFile, writeFile } from 'fs-extra';
+
+import { gzip, gunzip } from 'utils/node';
 import { uid, debounce, Subject } from 'utils/shared';
 
 /** 基础数据行 */
 type TableRowData<T extends object> = T & { id: number };
 /** 数据库文件在文件系统中的储存结构 */
 type DatabaseInFile = Record<string, object[]>;
-
-/** gzip Promise 包装 */
-const gzip = promisify<zlib.InputType, Buffer>(zlib.gzip);
-const gunzip = promisify<zlib.InputType, Buffer>(zlib.gunzip);
 
 /** 生成编号 */
 const newId = ({ id }: { id?: any }) => {
@@ -20,7 +15,7 @@ const newId = ({ id }: { id?: any }) => {
 };
 
 /** 数据行类 */
-class TableRow<Map extends object> extends Subject {
+class TableRow<Map extends object> extends Subject<TableRowData<Map>> {
     /** 原始数据 */
     private _data: TableRowData<Map>;
     /** 只读的代理数据 */
@@ -58,7 +53,7 @@ class TableRow<Map extends object> extends Subject {
 }
 
 /** 数据表类 */
-class Table<Map extends object = object> extends Subject {
+class Table<Map extends object = object> extends Subject<TableRow<Map>[]> {
     /** 按照哪列排序 */
     private _orderBy: keyof TableRowData<Map> = 'id';
     /** 查询条件回调 */
