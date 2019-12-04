@@ -111,7 +111,7 @@ export class Subject<T> {
     }
 }
 
-/** 储存值类 */
+/** 监控者 */
 export class Watcher<T> extends Subject<T> {
     /** 原始值 */
     private _data: T;
