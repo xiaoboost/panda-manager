@@ -66,12 +66,12 @@ export interface ModuleBaseData {
 export interface Module {
     /** 模块类型 */
     type: ModuleType;
-    
+
     /** 列表页封面组件 */
     ListCover: Component;
     /** 详情页面组件 */
     DetailPage: Component;
-    
+
     /** 判断当前路径所示真实文件是否可以用于当前模块 */
     test(path: string): PromiseComp<boolean>;
     /** 从真实的文件中中生成当前模块实例数据 */

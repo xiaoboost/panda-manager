@@ -169,10 +169,10 @@ class Table<Map extends object = object> extends Subject {
         else {
             for (let i = 0; i < this._data.length; i++) {
                 const item = this._data[i];
-    
+
                 if (this._whereCb.every((cb) => cb(item.data))) {
                     selected.push(item);
-    
+
                     if (selected.length >= this._limit) {
                         break;
                     }
@@ -185,7 +185,7 @@ class Table<Map extends object = object> extends Subject {
 
     // 查询条件
     /** 设置查询条件 */
-    where(assert: (data: TableRowData<Map>) => boolean) {
+    where(assert: (data: Readonly<TableRowData<Map>>) => boolean) {
         const table = this._shadowTable();
 
         if (table._whereCb.indexOf(assert) < 0) {
