@@ -22,6 +22,7 @@ async function folderSize(base: string) {
     return result;
 }
 
+/** 获取文件（夹）大小 */
 export async function getFileSize(base: string) {
     const stat = await fs.stat(base);
 

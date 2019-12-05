@@ -1,23 +1,21 @@
-import * as zlib from 'zlib';
-
-import { promisify } from 'util';
 import { readFile, writeFile } from 'fs-extra';
-import { uid, debounce, resolveUserDir, Subject } from 'utils/shared';
 
-/** 数据库文件实体路径 */
-const databsePath = resolveUserDir('database');
+import { gzip, gunzip } from 'utils/node';
+import { uid, debounce, Subject } from 'utils/shared';
 
 /** 基础数据行 */
 type TableRowData<T extends object> = T & { id: number };
 /** 数据库文件在文件系统中的储存结构 */
 type DatabaseInFile = Record<string, object[]>;
 
-/** gzip Promise 包装 */
-const gzip = promisify<zlib.InputType, Buffer>(zlib.gzip);
-const gunzip = promisify<zlib.InputType, Buffer>(zlib.gunzip);
+/** 生成编号 */
+const newId = ({ id }: { id?: any }) => {
+    const oldId = Number(id);
+    return Number.isNaN(oldId) ? uid() : oldId;
+};
 
 /** 数据行类 */
-class TableRow<Map extends object> extends Subject {
+class TableRow<Map extends object> extends Subject<TableRowData<Map>> {
     /** 原始数据 */
     private _data: TableRowData<Map>;
     /** 只读的代理数据 */
@@ -28,12 +26,12 @@ class TableRow<Map extends object> extends Subject {
         return this._readOnly;
     }
 
-    constructor(data: Map) {
+    constructor(data: Map & { id?: any }) {
         super();
 
         this._data = {
             ...data,
-            id: uid(),
+            id: newId(data),
         };
 
         this._readOnly = new Proxy(this._data, {
@@ -55,7 +53,7 @@ class TableRow<Map extends object> extends Subject {
 }
 
 /** 数据表类 */
-class Table<Map extends object = object> extends Subject {
+class Table<Map extends object = object> extends Subject<TableRow<Map>[]> {
     /** 按照哪列排序 */
     private _orderBy: keyof TableRowData<Map> = 'id';
     /** 查询条件回调 */
@@ -214,13 +212,16 @@ class Table<Map extends object = object> extends Subject {
 }
 
 /** 数据库类 */
-class Database {
+export class Database {
+    /** 数据库储存的路径 */
+    private _path: string;
     /** 当前异步进程 */
     private _progress = Promise.resolve();
     /** 数据库数据 */
     private _data: Record<string, Table> = {};
 
-    constructor() {
+    constructor(path: string) {
+        this._path = path;
         this.readDisk();
     }
 
@@ -233,7 +234,7 @@ class Database {
                 data[name] = table['_data'].map((row) => row['_data']);
             });
 
-            await writeFile(databsePath, await gzip(JSON.stringify(data)));
+            await writeFile(this._path, await gzip(JSON.stringify(data)));
         });
 
         return this._progress;
@@ -247,9 +248,7 @@ class Database {
             let data: DatabaseInFile = {};
 
             try {
-                const buf = await gunzip(await readFile(databsePath));
-
-                debugger;
+                const buf = await gunzip(await readFile(this._path));
                 data = JSON.parse(buf.toString());
             }
             catch (err) {
@@ -258,8 +257,7 @@ class Database {
             }
 
             Object.entries((data)).forEach(([name, tableData]) => {
-                const table = this.use(name);
-                tableData.forEach((item) => table['_data'].push(new TableRow(item)));
+                this.use(name).insert(...tableData);
             });
         });
 
@@ -275,5 +273,3 @@ class Database {
         return this._data[name] as any;
     }
 }
-
-export default new Database();

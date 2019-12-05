@@ -10,8 +10,8 @@ import Header from 'renderer/components/header';
 import Sidebar from 'renderer/components/sidebar';
 
 import Setting from 'renderer/views/setting';
-import ItemList from 'renderer/views/item-list';
-import ItemDetail from 'renderer/views/item-detail';
+import ObjectList from 'src/renderer/views/object-list';
+import ObjectDetail from 'src/renderer/views/object-detail';
 import TagCollection from 'renderer/views/tag-collection';
 
 render(
@@ -21,9 +21,9 @@ render(
             <Sidebar />
             <div className='app-content__wrapper'>
                 <Switch>
-                    <Route exact path='/' component={ItemList} />
+                    <Route exact path='/' component={ObjectList} />
                     <Route path='/setting' component={Setting} />
-                    <Route path='/detail/:id' component={ItemDetail} />
+                    <Route path='/detail/:id' component={ObjectDetail} />
                     <Route path='/tags' component={TagCollection} />
                 </Switch>
             </div>

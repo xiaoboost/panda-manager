@@ -1,4 +1,7 @@
-type EventHandler = (...payloads: any[]) => any;
+import { isFunc } from './assert';
+
+type EventHandler<T = any> = (...payloads: T[]) => any;
+type ReadonlyObject<T> = T extends object ? Readonly<T> : T;
 
 /** 频道订阅者 */
 export class ChannelSubject {
@@ -71,12 +74,12 @@ export class ChannelSubject {
 }
 
 /** 订阅者 */
-export class Subject {
+export class Subject<T> {
     /** 事件数据 */
-    private _events: EventHandler[] = [];
+    private _events: EventHandler<T>[] = [];
 
     /** 注册观测器 */
-    observe(ev: EventHandler) {
+    observe(ev: EventHandler<T>) {
         /** 注销观测器 */
         const unObserve = () => {
             this._events = this._events.filter((cb) => cb !== ev);
@@ -91,9 +94,9 @@ export class Subject {
     /** 注销全部观测器 */
     unObserve(): void;
     /** 注销此回调的观测器 */
-    unObserve(ev: EventHandler): void;
+    unObserve(ev: EventHandler<T>): void;
 
-    unObserve(ev?: EventHandler) {
+    unObserve(ev?: EventHandler<T>) {
         if (!ev) {
             this._events = [];
         }
@@ -103,7 +106,61 @@ export class Subject {
     }
 
     /** 发布变化 */
-    notify<T = any>(newVal: T, lastVal: T) {
+    notify(newVal: T, lastVal: T) {
         this._events.forEach((cb) => cb(newVal, lastVal));
+    }
+}
+
+/** 监控者 */
+export class Watcher<T> extends Subject<T> {
+    /** 原始值 */
+    private _data: T;
+
+    get value(): ReadonlyObject<T> {
+        return this._data as any;
+    }
+    set value(val: ReadonlyObject<T>) {
+        const last = this._data;
+
+        if (val !== last) {
+            this._data = val;
+            this.notify(last, val);
+        }
+    }
+
+    constructor(initVal: T) {
+        super();
+        this._data = initVal;
+    }
+    
+    /** 只监听一次变化 */
+    once() {
+        return new Promise<T>((resolve) => {
+            const callback = (val: T) => {
+                this.unObserve(callback);
+                resolve(val);
+            };
+
+            this.observe(callback);
+        });
+    }
+    /** 当值与输入相等时触发 */
+    when(val: T | ((item: T) => boolean)) {
+        const func = isFunc(val) ? val : (item: T) => item === val;
+
+        if (func(this.value)) {
+            return Promise.resolve();
+        }
+
+        return new Promise<void>((resolve) => {
+            const callback = (item: T) => {
+                if (func(item)) {
+                    this.unObserve(callback);
+                    resolve();
+                }
+            };
+
+            this.observe(callback);
+        });
     }
 }
