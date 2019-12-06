@@ -1,7 +1,7 @@
 import { readFile, writeFile } from 'fs-extra';
 
 import { gzip, gunzip } from 'utils/node';
-import { uid, debounce, Subject } from 'utils/shared';
+import { uid, debounce, Watcher } from 'utils/shared';
 
 /** 基础数据行 */
 type TableRowData<T extends object> = T & { id: number };
@@ -10,32 +10,20 @@ type DatabaseInFile = Record<string, object[]>;
 
 /** 生成编号 */
 const newId = ({ id }: { id?: any }) => {
+    if (id) {
+        return uid();
+    }
+
     const oldId = Number(id);
     return Number.isNaN(oldId) ? uid() : oldId;
 };
 
 /** 数据行类 */
-class TableRow<Map extends object> extends Subject<TableRowData<Map>> {
-    /** 原始数据 */
-    private _data: TableRowData<Map>;
-    /** 只读的代理数据 */
-    private _readOnly: Readonly<TableRowData<Map>>;
-
-    /** 对外暴露数据副本 */
-    get data(): Readonly<TableRowData<Map>> {
-        return this._readOnly;
-    }
-
+class TableRow<Map extends object> extends Watcher<TableRowData<Map>> {
     constructor(data: Map & { id?: any }) {
-        super();
-
-        this._data = {
+        super({
             ...data,
             id: newId(data),
-        };
-
-        this._readOnly = new Proxy(this._data, {
-            get: (target, prop) => target[prop],
         });
     }
 
@@ -53,7 +41,7 @@ class TableRow<Map extends object> extends Subject<TableRowData<Map>> {
 }
 
 /** 数据表类 */
-class Table<Map extends object = object> extends Subject<TableRow<Map>[]> {
+class Table<Map extends object = object> extends Watcher<TableRow<Map>[]> {
     /** 按照哪列排序 */
     private _orderBy: keyof TableRowData<Map> = 'id';
     /** 查询条件回调 */
@@ -65,8 +53,6 @@ class Table<Map extends object = object> extends Subject<TableRow<Map>[]> {
 
     /** 数据库 */
     private readonly _database: Database;
-    /** 数据表数据 */
-    private readonly _data: TableRow<Map>[] = [];
 
     /** 复制当前的数据表类 */
     private _shadowTable() {
@@ -95,7 +81,7 @@ class Table<Map extends object = object> extends Subject<TableRow<Map>[]> {
 
     /** 隶属的数据库 */
     constructor(database: Database) {
-        super();
+        super([]);
         this._database = database;
     }
 

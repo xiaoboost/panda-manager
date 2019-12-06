@@ -84,7 +84,7 @@ export class Subject<T> {
         const unObserve = () => {
             this._events = this._events.filter((cb) => cb !== ev);
         };
-        
+
         // 添加观测器
         this._events.push(ev);
 
@@ -114,12 +114,12 @@ export class Subject<T> {
 /** 监控者 */
 export class Watcher<T> extends Subject<T> {
     /** 原始值 */
-    private _data: T;
+    protected _data: T;
 
-    get value(): ReadonlyObject<T> {
+    get data(): ReadonlyObject<T> {
         return this._data as any;
     }
-    set value(val: ReadonlyObject<T>) {
+    set data(val: ReadonlyObject<T>) {
         const last = this._data;
 
         if (val !== last) {
@@ -132,7 +132,7 @@ export class Watcher<T> extends Subject<T> {
         super();
         this._data = initVal;
     }
-    
+
     /** 只监听一次变化 */
     once() {
         return new Promise<T>((resolve) => {
@@ -148,7 +148,7 @@ export class Watcher<T> extends Subject<T> {
     when(val: T | ((item: T) => boolean)) {
         const func = isFunc(val) ? val : (item: T) => item === val;
 
-        if (func(this.value)) {
+        if (func(this.data)) {
             return Promise.resolve();
         }
 
