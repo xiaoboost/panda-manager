@@ -5,8 +5,8 @@ import { ModuleBaseData } from 'renderer/modules';
 /** 全局数据库 */
 const database = new Database(resolveUserDir('database'));
 
-/** 标签数据 */
-interface TagData {
+/** 标签基础数据 */
+interface TagBaseData {
     /** 标签名称 */
     name: string;
     /** 注释说明 */
@@ -15,8 +15,13 @@ interface TagData {
     alias: string[];
 }
 
+/** 标签数据 */
+interface TagData extends TagBaseData {
+    tagGroupId: number;
+}
+
 /** 标签集数据 */
-interface TagGroupData extends TagData {
+interface TagGroupData extends TagBaseData {
     /** 包含的标签编号 */
     tags: number[];
 }

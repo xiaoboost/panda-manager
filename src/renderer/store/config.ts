@@ -46,7 +46,7 @@ const writeDisk = debounce(200, async (val: ConfigData) => {
 export const configReady = (async () => {
     try {
         const buf = await gunzip(await readFile(configPath));
-        Config.value = JSON.parse(buf.toString());
+        Config.data = JSON.parse(buf.toString());
     }
     catch (err) {
         console.info('配置文件初始化出错，使用默认值覆盖');
