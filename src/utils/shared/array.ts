@@ -130,3 +130,28 @@ export function transArr<T>(item?: T | T[]): T[] {
         return item;
     }
 }
+
+/** 索引类型 */
+type Index = string | number | symbol;
+
+/** 生成`hash`查询表 */
+export function toMap<T extends Index>(arr: T[]): Record<T, boolean>;
+export function toMap<T, U extends Index>(arr: T[], cb: (val: T) => U): Record<U, boolean>;
+export function toMap<T, U extends Index>(arr: T[], cb?: (val: T) => U) {
+    const map: Record<Index, boolean> = {};
+
+    if (!cb) {
+        arr.forEach((key) => (map[key as any] = true));
+    }
+    else {
+        arr.forEach((key) => (map[cb(key)] = true));
+    }
+
+    return map;
+}
+
+/** 在`rest`数组中，且不在`arr`数组中的 */
+export function exclude<T extends Index>(arr: T[], rest: T[]) {
+    const map = toMap(arr);
+    return rest.filter((key) => !map[key]);
+}

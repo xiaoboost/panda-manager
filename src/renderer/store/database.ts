@@ -26,6 +26,8 @@ interface TagGroupData extends TagBaseData {
     tags: number[];
 }
 
+/** 数据库初始化完成 */
+export const ready = database.ready;
 /** 文件数据表 */
 export const Objects = database.use<ModuleBaseData>('objects');
 /** 标签数据表 */

@@ -1,5 +1,10 @@
 const _toString = Object.prototype.toString;
 
+/** 基础类型 */
+export type BaseType = number | string | boolean | symbol | null | undefined;
+/** 非空基础类型 */
+export type Primitive = number | string | boolean | symbol;
+
 /**
  * 断言：输入是否是数字
  *
@@ -130,13 +135,14 @@ export function isElement(x: any): x is HTMLElement {
     return (/^\[object (HTML|SVG)([a-zA-Z]+)?Element\]$/.test(_toString.call(x) as string));
 }
 
+
 /**
  * 断言：输入是否是基础类型
  *
  * @param {*} x
- * @returns {(x is number | string | boolean | symbol | null | undefined)}
+ * @returns {(x is BaseType)}
  */
-export function isBaseType(x: any): x is number | string | boolean | symbol | null | undefined {
+export function isBaseType(x: any): x is BaseType {
     return (!isObject(x));
 }
 
@@ -144,9 +150,9 @@ export function isBaseType(x: any): x is number | string | boolean | symbol | nu
  * 断言：输入是否是除 null 和 undefined 之外的基础类型
  *
  * @param {*} x
- * @returns {(x is number | string | boolean | symbol)}
+ * @returns {(x is Primitive)}
  */
-export function isPrimitive(x: any): x is number | string | boolean | symbol {
+export function isPrimitive(x: any): x is Primitive {
     const type = typeof x;
     return (
         type === 'string' ||

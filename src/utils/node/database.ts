@@ -205,10 +205,13 @@ export class Database {
     private _progress = Promise.resolve();
     /** 数据库数据 */
     private _data: Record<string, Table> = {};
+    
+    /** 初始化准备就绪 */
+    ready: Promise<void>;
 
     constructor(path: string) {
         this._path = path;
-        this.readDisk();
+        this.ready = this.readDisk();
     }
 
     /** 数据写入硬盘 */
