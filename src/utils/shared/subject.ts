@@ -120,9 +120,9 @@ export class Watcher<T> extends Subject<T> {
         return this._data as any;
     }
     set data(val: ReadonlyObject<T>) {
-        const last = this._data;
+        if (val !== this._data) {
+            const last = this._data;
 
-        if (val !== last) {
             this._data = val;
             this.notify(last, val);
         }
@@ -149,14 +149,14 @@ export class Watcher<T> extends Subject<T> {
         const func = isFunc(val) ? val : (item: T) => item === val;
 
         if (func(this.data)) {
-            return Promise.resolve();
+            return Promise.resolve(this.data);
         }
 
-        return new Promise<void>((resolve) => {
+        return new Promise<T>((resolve) => {
             const callback = (item: T) => {
                 if (func(item)) {
                     this.unObserve(callback);
-                    resolve();
+                    resolve(item);
                 }
             };
 
