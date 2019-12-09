@@ -80,7 +80,9 @@ export interface Module {
     /** 判断当前路径所示真实文件是否可以用于当前模块 */
     test(path: string): PromiseComp<boolean>;
     /** 从真实的文件中中生成当前模块实例数据 */
-    from(path: string): PromiseComp<object>;
+    from(path: string): PromiseComp<ModuleBaseData>;
+    /** 删除当前模块实例的元数据 */
+    remove(): PromiseComp<void>;
 }
 
 /** 模块模板数据 */
