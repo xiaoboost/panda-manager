@@ -32,7 +32,7 @@ export function warn(text: string, isDebug = false) {
 }
 
 /** 错误信息 */
-export const ErrorMessage = {
+const ErrorMessage = {
     notExist: '路径不存在',
     noRepeatFolder: '不允许重复添加文件夹',
     canNotWrite: '无法写入文件',

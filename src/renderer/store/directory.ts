@@ -7,14 +7,21 @@ import { loading } from './state';
 import { ready as ConfigReadt, Config } from './config';
 import { ready as DatabaseReady, Objects } from './database';
 
-import modules from 'renderer/modules';
-
-import { handleError } from 'renderer/lib/error';
+import { createMeta } from 'renderer/modules';
+import { handleError } from 'renderer/lib/print';
 
 import { concat, toMap, exclude } from 'utils/shared';
 
 /** 待处理的文件列表 */
-const files: string[] = [];
+const files: string[] = new Proxy([], {
+    set(target, prop, val) {
+        if (prop !== 'length') {
+            return Reflect.set(target, prop, val);
+        }
+
+        target.length = val;
+    },
+});
 
 /** 初始化 */
 export const ready = (async function init() {
@@ -34,7 +41,7 @@ export const ready = (async function init() {
     Objects.where(({ file }) => exInDatabase[file]).remove();
 
     // 实际存在而数据库中没有的，则要添加
-
+    files.push(...exclude(filesInDisk, filesInDatabase));
 })();
 
 /** 添加仓库文件夹 */
