@@ -1,5 +1,8 @@
 import { default as Manga } from './manga';
 
+import { toMap } from 'utils/shared';
+import { warn } from 'renderer/lib/print';
+
 type Component = () => JSX.Element;
 type PromiseComp<T = any> = T | Promise<T>;
 
@@ -54,12 +57,14 @@ export const enum ModuleType {
 export interface ModuleBaseData {
     /** 模块类型 */
     type: ModuleType;
-    /** 文件编号 */
-    id: number;
     /** 文件名称 - 默认为实际的文件名称，但是可以和实际文件名称不同 */
     name: string;
     /** 实际文件路径 */
     file: string;
+    /** 标签数据 */
+    tags: number[]
+    /** 文件最后修改的时间 */
+    lastModified: number;
 }
 
 /** 模块公共接口 */
@@ -75,7 +80,45 @@ export interface Module {
     /** 判断当前路径所示真实文件是否可以用于当前模块 */
     test(path: string): PromiseComp<boolean>;
     /** 从真实的文件中中生成当前模块实例数据 */
-    from(path: string): PromiseComp<object>;
+    from(path: string): PromiseComp<ModuleBaseData>;
+    /** 删除当前模块实例的元数据 */
+    remove(): PromiseComp<void>;
 }
 
-export default [Manga];
+/** 模块模板数据 */
+const modules = [Manga];
+/** 模块类型索引 */
+const modulesMap = toMap(modules, (target) => target.type);
+
+/** 创建文件元数据 */
+export async function createMeta(path: string) {
+    try {
+        let target: Module | undefined;
+
+        // 搜索符合条件的模块
+        for (let i = 0; i < modules.length; i++) {
+            if (await modules[i].test(path)) {
+                target = modules[i];
+                break;
+            }
+        }
+
+        // 没有则直接退出
+        if (!target) {
+            return;
+        }
+
+        return await target.from(path);
+    }
+    catch (e) {
+        warn(e, true);
+        return;
+    }
+}
+
+/** 由类型获得模块 */
+export function getModule(type: ModuleType) {
+    return modulesMap[type];
+}
+
+export default modules;
