@@ -4,8 +4,8 @@ import * as path from 'path';
 import { remote } from 'electron';
 
 import { loading } from './state';
-import { ready as ConfigReadt, Config } from './config';
-import { ready as DatabaseReady, Objects } from './database';
+import { configReady, Config } from './config';
+import { databaseReady, Objects } from './database';
 
 import modules from 'renderer/modules';
 
@@ -17,9 +17,9 @@ import { concat, toMap, exclude } from 'utils/shared';
 const files: string[] = [];
 
 /** 初始化 */
-export const ready = (async function init() {
+export const directoryReady = (async function init() {
     // 等待初始化
-    await Promise.all([ConfigReadt, DatabaseReady]);
+    await Promise.all([configReady, databaseReady]);
 
     // 当前数据库中的所有项目
     const filesInDatabase = Objects.toQuery().map(({ data }) => data.file);
@@ -34,7 +34,6 @@ export const ready = (async function init() {
     Objects.where(({ file }) => exInDatabase[file]).remove();
 
     // 实际存在而数据库中没有的，则要添加
-
 })();
 
 /** 添加仓库文件夹 */
@@ -45,7 +44,7 @@ export async function add(input: string) {
     }
 
     // 等待初始化完成
-    await ready;
+    await directoryReady;
 
     // 变更配置
     Config.data = {
@@ -65,5 +64,5 @@ export async function remove(input: string) {
     }
 
     // 等待初始化完成
-    await ready;
+    await directoryReady;
 }

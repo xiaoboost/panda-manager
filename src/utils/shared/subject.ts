@@ -135,10 +135,10 @@ export class Watcher<T> extends Subject<T> {
 
     /** 只监听一次变化 */
     once() {
-        return new Promise<T>((resolve) => {
+        return new Promise<ReadonlyObject<T>>((resolve) => {
             const callback = (val: T) => {
                 this.unObserve(callback);
-                resolve(val);
+                resolve(val as ReadonlyObject<T>);
             };
 
             this.observe(callback);
@@ -152,11 +152,11 @@ export class Watcher<T> extends Subject<T> {
             return Promise.resolve(this.data);
         }
 
-        return new Promise<T>((resolve) => {
+        return new Promise<ReadonlyObject<T>>((resolve) => {
             const callback = (item: T) => {
                 if (func(item)) {
                     this.unObserve(callback);
-                    resolve(item);
+                    resolve(item as ReadonlyObject<T>);
                 }
             };
 
