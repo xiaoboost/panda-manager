@@ -9,7 +9,7 @@ export default function useListCallback<T, F extends AnyFunction>(data: T[], cre
     /** 上一次的原始数据 */
     const ref = useRef(new Map<T, F>());
     /** 当前缓存记录 */
-    const map = new Map(new Map<T, F>());
+    const map = new Map<T, F>();
 
     useEffect(() => {
         ref.current = map;
