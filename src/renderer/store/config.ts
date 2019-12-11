@@ -35,7 +35,7 @@ const ininVal: ConfigData = {
 };
 
 /** 配置选项监听器 */
-export const Config = new Watcher<ConfigData>(ininVal);
+export const data = new Watcher<ConfigData>(ininVal);
 
 /** 配置文件写入硬盘 */
 const writeDisk = debounce(200, async (val: ConfigData) => {
@@ -43,10 +43,10 @@ const writeDisk = debounce(200, async (val: ConfigData) => {
 });
 
 /** 配置选项初始化完成 */
-export const configReady = (async () => {
+export const ready = (async () => {
     try {
         const buf = await gunzip(await readFile(configPath));
-        Config.data = JSON.parse(buf.toString());
+        data.data = JSON.parse(buf.toString());
     }
     catch (err) {
         console.info('配置文件初始化出错，使用默认值覆盖');
@@ -55,4 +55,4 @@ export const configReady = (async () => {
 })();
 
 // 每次变更都写配置文件至硬盘
-Config.observe(writeDisk);
+data.observe(writeDisk);

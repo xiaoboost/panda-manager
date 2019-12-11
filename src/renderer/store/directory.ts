@@ -1,11 +1,7 @@
 import * as fs from 'fs-extra';
-import * as path from 'path';
 
-import { remote } from 'electron';
-
-import { loading } from './state';
-import { configReady, Config } from './config';
-import { databaseReady, Objects } from './database';
+import { ready as databaseReady, Objects } from './database';
+import { ready as configReady, data as Config } from './config';
 
 import { createMeta } from 'renderer/modules';
 import { handleError } from 'renderer/lib/print';
@@ -15,8 +11,9 @@ import { concat, toMap, exclude } from 'utils/shared';
 /** 待处理的文件队列 */
 const filesQueue: string[] = new Proxy([], {
     set(target: string[], prop: string, val) {
+        debugger;
         // 普通属性以及队列非空时，直接设置属性
-        if (prop !== 'length' || target.length !== 0) {
+        if (prop !== 'length' || val === 0 || target.length !== 0) {
             return Reflect.set(target, prop, val);
         }
 
@@ -38,7 +35,7 @@ const filesQueue: string[] = new Proxy([], {
 });
 
 /** 初始化 */
-export const directoryReady = (async function init() {
+export const ready = (async function init() {
     // 等待初始化
     await Promise.all([configReady, databaseReady]);
 
@@ -66,7 +63,7 @@ export async function add(input: string) {
     }
 
     // 等待初始化完成
-    await directoryReady;
+    await ready;
 
     // 变更配置
     Config.data = {
@@ -86,5 +83,11 @@ export async function remove(input: string) {
     }
 
     // 等待初始化完成
-    await directoryReady;
+    await ready;
+    
+    // 变更配置
+    Config.data = {
+        ...Config.data,
+        directories: Config.data.directories.filter((dir) => dir !== input),
+    };
 }

@@ -14,14 +14,21 @@ const app = originApp ? originApp : remote.app;
 const appRoot = process.env.NODE_ENV === 'development' ? join(initCWD, 'dist') : initCWD;
 /** 渲染进程根目录 */
 const appRender = process.env.NODE_ENV === 'development' ? join(initCWD, 'dist/renderer') : initCWD;
-/** 缓存文件夹路径 */
-const userDir = app.getPath('userData');
 /** 软件临时件夹路径 */
 const tempDir = join(app.getPath('temp'), appName);
+/** 缓存文件夹路径 */
+const userDir = process.env.NODE_ENV === 'development'
+    ? join(app.getPath('temp'), `${appName}-userdata`)
+    : app.getPath('userData');
 
 // 如果没有临时文件夹，则创建
 if (!existsSync(tempDir)) {
     mkdirpSync(tempDir);
+}
+
+// 如果没有用户文件夹，则创建
+if (!existsSync(userDir)) {
+    mkdirpSync(userDir);
 }
 
 /** 由软件根目录的相对路径转变为绝对路径 */

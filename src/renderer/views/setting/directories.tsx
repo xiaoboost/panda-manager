@@ -2,14 +2,17 @@ import { default as React, FunctionComponent } from 'react';
 
 import { shell } from 'electron';
 import { warnDialog, selectDirectory } from 'renderer/lib/interface';
-import { useWatcher, useCallback, useListCallback } from 'renderer/use';
+import { useWatcher, useCallback, useListCallback } from 'src/utils/react';
 
 import Card from './card';
 import CardLine from './line';
 
 import { Icon } from 'antd';
 
-import * as store from 'renderer/store';
+import {
+    Config,
+    Directory,
+} from 'renderer/store';
 
 interface DirsListProps {
     paths: string[];
@@ -54,9 +57,9 @@ const DirsList: FunctionComponent<DirsListProps> = function DirPathList({ paths,
 };
 
 export default function Directories() {
-    const [dirs] = useWatcher(store.mangaDirectories);
-    const add = useCallback(() => selectDirectory().then(store.addDirectory), []);
-    const remove = useCallback((dir: string) => store.removeDirectory(dir), []);
+    const [{ directories }] = useWatcher(Config.data);
+    const add = useCallback(() => selectDirectory().then(Directory.add), []);
+    const remove = useCallback((dir: string) => Directory.remove(dir), []);
 
     return (
         <Card title='文件夹'>
@@ -72,10 +75,10 @@ export default function Directories() {
                         theme='outlined'
                     />
                 </CardLine>
-                {dirs.length === 0
+                {directories.length === 0
                     ? <CardLine isSubline title='尚未添加目录' />
                     : <DirsList
-                        paths={dirs}
+                        paths={directories}
                         remove={remove}
                     />}
             </div>

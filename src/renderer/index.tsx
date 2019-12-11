@@ -10,8 +10,8 @@ import Header from 'renderer/components/header';
 import Sidebar from 'renderer/components/sidebar';
 
 import Setting from 'renderer/views/setting';
-import ObjectList from 'src/renderer/views/object-list';
-import ObjectDetail from 'src/renderer/views/object-detail';
+import ObjectList from 'renderer/views/object-list';
+import ObjectDetail from 'renderer/views/object-detail';
 import TagCollection from 'renderer/views/tag-collection';
 
 render(

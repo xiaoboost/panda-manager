@@ -5,32 +5,31 @@ import CardLine from './line';
 
 import { Switch, Select } from 'antd';
 
-import { useWatcher, useCallback } from 'renderer/use';
-import { SortBy, sortOption } from 'renderer/store';
+import { Config } from 'renderer/store';
+import { useWatcher, useCallback } from 'utils/react';
 
 const sortByList = [
     {
-        value: SortBy.name,
+        value: Config.SortBy.name,
         label: '按名称',
     },
     {
-        value: SortBy.lastModified,
+        value: Config.SortBy.lastModified,
         label: '按最后的修改时间',
     },
 ];
 
 export default function Display() {
-    const [sort, setSort] = useWatcher(sortOption);
+    const [{ sort }, setConfig] = useWatcher(Config.data);
+    const setSort = (val: Partial<Config.SortOption>) => setConfig({
+        sort: {
+            ...sort,
+            ...val,
+        },
+    });
 
-    const selectHandler = useCallback((val: SortBy) => setSort({
-        ...sort,
-        by: val,
-    }), [sort.by]);
-
-    const switchHandler = useCallback((val: boolean) => setSort({
-        ...sort,
-        asc: val,
-    }), [sort.asc]);
+    const sortByHandler = useCallback((by: Config.SortBy) => setSort({ by }), [sort.by]);
+    const sortAscHandler = useCallback((asc: boolean) => setSort({ asc }), [sort.asc]);
 
     return (
         <Card title='漫画排序'>
@@ -38,7 +37,7 @@ export default function Display() {
                 <Select
                     style={{ width: 160 }}
                     defaultValue={sort.by}
-                    onChange={selectHandler}>
+                    onChange={sortByHandler}>
                     {sortByList.map(({ value, label }) => (
                         <Select.Option key={value} value={value}>{label}</Select.Option>
                     ))}
@@ -48,7 +47,7 @@ export default function Display() {
                 <Switch
                     size='small'
                     checked={sort.asc}
-                    onChange={switchHandler}
+                    onChange={sortAscHandler}
                 />
             </CardLine>
         </Card>

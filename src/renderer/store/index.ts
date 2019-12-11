@@ -1,14 +1,15 @@
-import { configReady } from './config';
-import { databaseReady } from './database';
-import { directoryReady } from './directory';
+import * as Config from './config';
+import * as Database from './database';
+import * as Directory from './directory';
 
 export const ready = Promise.all([
-    configReady,
-    databaseReady,
-    directoryReady,
+    Config.ready,
+    Database.ready,
+    Directory.ready,
 ]);
 
-export * from './state';
-export * from './config';
-export * from './database';
-export * from './directory';
+export {
+    Config,
+    Database,
+    Directory,
+};
