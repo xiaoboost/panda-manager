@@ -1,7 +1,10 @@
 import {
     isFunc,
-    isUndef,
+    isDef,
 } from './assert';
+
+/** 索引类型 */
+type Index = string | number;
 
 /**
  * 根据下标取出当前数组元素
@@ -30,7 +33,7 @@ export function get<T>(arr: T[], index: number): T {
 export function deleteVal<T>(
     arr: T[],
     predicate: T | ((value: T, index: number) => boolean),
-    whole = true
+    whole = true,
 ) {
     const fn = isFunc(predicate) ? predicate : (item: T) => item === predicate;
     const newArr = arr.slice();
@@ -62,7 +65,7 @@ export function replace<T>(
     arr: T[],
     newVal: T,
     predicate: T | ((value: T, index: number) => boolean),
-    whole = false
+    whole = false,
 ) {
     const fn = isFunc(predicate) ? predicate : (item: T) => item === predicate;
     const newArr = arr.slice();
@@ -89,22 +92,22 @@ export function replace<T>(
  * 数组去重
  *  - 如果没有输入 label 函数，则对数组元素直接去重
  *  - 如果输入了 label 函数，将会使用该函数对数组元素做一次转换，对转换之后的值进行去重，最后再映射回原数组
- *
- * @template T
- * @param {T[]} arr
- * @param {((value: T, index: number) => number | string)} [label]
- * @returns {T[]}
  */
-export function unique<T>(arr: T[], label?: (value: T, index: number) => number | string): T[] {
-    if (isUndef(label)) {
-        return [...new Set(arr)];
-    }
+export function unique<T extends Index>(arr: T[]): T[];
+export function unique<T>(arr: T[], label: (value: T, index: number) => Index): T[];
+export function unique<T>(arr: T[], label?: (value: T, index: number) => Index): T[] {
+    let labelMap: Record<Index, boolean>;
 
-    const labelMap: { [key: string]: boolean } = {};
-    return arr
-        .map((value, index) => ({ value, key: label(value, index) }))
-        .filter(({ key }) => (labelMap[key] ? false : (labelMap[key] = true)))
-        .map(({ value }) => value);
+    if (isDef(label)) {
+        return arr
+            .map((value, index) => ({ value, key: label(value, index) }))
+            .filter(({ key }) => (labelMap[key] ? false : (labelMap[key] = true)))
+            .map(({ value }) => value);
+    }
+    else {
+        labelMap = toMap(arr as any);
+        return arr.filter((item) => !labelMap[item as any]);
+    }
 }
 
 /** 连接数组 */
@@ -131,20 +134,17 @@ export function transArr<T>(item?: T | T[]): T[] {
     }
 }
 
-/** 索引类型 */
-type Index = string | number | symbol;
-
 /** 生成`hash`查询表 */
 export function toMap<T extends Index>(arr: T[]): Record<T, boolean>;
-export function toMap<T, U extends Index>(arr: T[], cb: (val: T) => U): Record<U, boolean>;
-export function toMap<T, U extends Index>(arr: T[], cb?: (val: T) => U) {
+export function toMap<T, U extends Index>(arr: T[], cb: (val: T, index: number) => U): Record<U, boolean>;
+export function toMap<T, U extends Index>(arr: T[], cb?: (val: T, index: number) => U) {
     const map: Record<Index, boolean> = {};
 
     if (!cb) {
         arr.forEach((key) => (map[key as any] = true));
     }
     else {
-        arr.forEach((key) => (map[cb(key)] = true));
+        arr.forEach((key, i) => (map[cb(key, i)] = true));
     }
 
     return map;

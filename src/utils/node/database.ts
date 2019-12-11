@@ -211,7 +211,7 @@ export class Database {
 
     constructor(path: string) {
         this._path = path;
-        this.ready = this.readDisk();
+        this.ready = this._readDisk();
     }
 
     /** 数据写入硬盘 */
@@ -228,11 +228,8 @@ export class Database {
 
         return this._progress;
     }
-
-    /** 将数据库写入硬盘 */
-    writeDisk = debounce(200, () => this._writeDisk());
     /** 从硬盘读取数据 */
-    readDisk() {
+    private _readDisk() {
         this._progress = this._progress.then(async () => {
             let data: DatabaseInFile = {};
 
@@ -252,6 +249,9 @@ export class Database {
 
         return this._progress;
     }
+
+    /** 将数据库写入硬盘 */
+    writeDisk = debounce(200, () => this._writeDisk());
 
     /** 使用某个表 */
     use<Map extends object = object>(name: string): Table<Map> {

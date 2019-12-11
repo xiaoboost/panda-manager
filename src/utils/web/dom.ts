@@ -12,7 +12,9 @@ export function stringifyClass(...opt: ClassInput[]) {
 
     const className: string[] = [];
 
-    for (const item of opt) {
+    for (let i = 0; i < opt.length; i++) {
+        const item = opt[i];
+
         if (isObject(item)) {
             className.push(...parseClassObject(item));
         }
