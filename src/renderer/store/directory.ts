@@ -4,8 +4,8 @@ import * as path from 'path';
 import { remote } from 'electron';
 
 import { loading } from './state';
-import { ready as ConfigReadt, Config } from './config';
-import { ready as DatabaseReady, Objects } from './database';
+import { configReady, Config } from './config';
+import { databaseReady, Objects } from './database';
 
 import { createMeta } from 'renderer/modules';
 import { handleError } from 'renderer/lib/print';
@@ -38,9 +38,9 @@ const filesQueue: string[] = new Proxy([], {
 });
 
 /** 初始化 */
-export const ready = (async function init() {
+export const directoryReady = (async function init() {
     // 等待初始化
-    await Promise.all([ConfigReadt, DatabaseReady]);
+    await Promise.all([configReady, databaseReady]);
 
     // 当前数据库中的所有项目
     const filesInDatabase = Objects.toQuery().map(({ data }) => data.file);
@@ -66,7 +66,7 @@ export async function add(input: string) {
     }
 
     // 等待初始化完成
-    await ready;
+    await directoryReady;
 
     // 变更配置
     Config.data = {
@@ -86,5 +86,5 @@ export async function remove(input: string) {
     }
 
     // 等待初始化完成
-    await ready;
+    await directoryReady;
 }

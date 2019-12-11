@@ -43,7 +43,7 @@ const writeDisk = debounce(200, async (val: ConfigData) => {
 });
 
 /** 配置选项初始化完成 */
-export const ready = (async () => {
+export const configReady = (async () => {
     try {
         const buf = await gunzip(await readFile(configPath));
         Config.data = JSON.parse(buf.toString());
