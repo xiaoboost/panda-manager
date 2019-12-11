@@ -3,7 +3,7 @@ import './index.styl';
 import React from 'react';
 
 import { stringifyClass } from 'utils/web';
-import { useRouter, useState, useCallback } from 'renderer/use';
+import { useRouter, useState, useCallback } from 'utils/react';
 
 import AIcon from 'antd/es/icon';
 import BIcon from 'renderer/components/icon';

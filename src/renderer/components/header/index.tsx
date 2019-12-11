@@ -4,7 +4,7 @@ import React from 'react';
 
 import { remote } from 'electron';
 import { stringifyClass } from 'utils/web';
-import { useIsFocus, useIsMaximize, useRouter, useCallback } from 'renderer/use';
+import { useIsFocus, useIsMaximize, useRouter, useCallback } from 'utils/react';
 
 import AIcon from 'antd/es/icon';
 import BIcon from 'renderer/components/icon';
