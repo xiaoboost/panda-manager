@@ -18,7 +18,7 @@ const appRender = process.env.NODE_ENV === 'development' ? join(initCWD, 'dist/r
 const tempDir = join(app.getPath('temp'), appName);
 /** 缓存文件夹路径 */
 const userDir = process.env.NODE_ENV === 'development'
-    ? join(app.getPath('temp'), `${appName}-userdata`)
+    ? join(app.getPath('temp'), `${appName}-dev-userdir`)
     : app.getPath('userData');
 
 // 如果没有临时文件夹，则创建

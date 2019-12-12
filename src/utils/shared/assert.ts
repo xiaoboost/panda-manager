@@ -59,7 +59,7 @@ export function isUndef(x: any): x is null | undefined {
  * 断言：输入是否是非 null 或 undefined 的值
  *
  * @param {*} x
- * @returns {(x is null | undefined)}
+ * @returns {(x is NonNullable<T>)}
  */
 export function isDef<T>(x: T): x is NonNullable<T> {
     return x !== undefined && x !== null;
@@ -72,7 +72,7 @@ export function isDef<T>(x: T): x is NonNullable<T> {
  * @returns {x is () => any}
  */
 /* tslint:disable-next-line:ban-types  */
-export function isFunc(x: any): x is Function {
+export function isFunc(x: any): x is AnyFunction {
     return (typeof x === 'function');
 }
 
@@ -134,7 +134,6 @@ export function isRegExp(x: any): x is RegExp {
 export function isElement(x: any): x is HTMLElement {
     return (/^\[object (HTML|SVG)([a-zA-Z]+)?Element\]$/.test(_toString.call(x) as string));
 }
-
 
 /**
  * 断言：输入是否是基础类型
