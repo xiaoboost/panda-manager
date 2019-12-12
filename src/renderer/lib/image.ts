@@ -19,9 +19,9 @@ interface PngImageCompressOption extends PngOptions {
 }
 
 /** 压缩图片 */
-export function compressImage(image: Buffer, options: JpgImageCompressOption): Promise<Buffer>;
-export function compressImage(image: Buffer, options: PngImageCompressOption): Promise<Buffer>;
-export function compressImage(image: Buffer, {
+export function compress(image: Buffer, options: JpgImageCompressOption): Promise<Buffer>;
+export function compress(image: Buffer, options: PngImageCompressOption): Promise<Buffer>;
+export function compress(image: Buffer, {
     type,
     size: toSize = {},
     ...options
@@ -98,7 +98,7 @@ export function compressImage(image: Buffer, {
  * 图片向右拼接
  *  - extend 图片会放在 main 图片的右边
  */
-export function concatImage(main: Buffer, extend: Buffer) {
+export function concat(main: Buffer, extend: Buffer) {
     const { width } = imageSize(extend);
 
     return Sharp(main)
