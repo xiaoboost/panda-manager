@@ -42,8 +42,8 @@ async function fromDir(dir: string): Promise<Preview> {
     let thumbnails = Buffer.from('');
     /** 预览图片的位置信息 */
     const position: [number, number][] = [];
-
-    const allFiles = await readdirs(dir);
+    /** 文件夹内所有文件 */
+    const allFiles = (await readdirs(dir)).sort(naturalCompare);
     
     for (let i = 0; i < allFiles.length; i++) {
         const file = allFiles[i];
