@@ -124,7 +124,7 @@ export class Watcher<T> extends Subject<T> {
             const last = this._data;
 
             this._data = val;
-            this.notify(last, val);
+            this.notify(val, last);
         }
     }
 
