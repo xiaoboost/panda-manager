@@ -1,4 +1,5 @@
 import * as fs from 'fs-extra';
+import * as path from 'path';
 
 import { ready as databaseReady, Objects } from './database';
 import { ready as configReady, data as Config } from './config';
@@ -8,27 +9,36 @@ import { handleError } from 'renderer/lib/print';
 
 import { concat, toMap, exclude } from 'utils/shared';
 
+/** 文件队列是否空闲 */
+let loading = false;
+
 /** 待处理的文件队列 */
 const filesQueue: string[] = new Proxy([], {
     set(target: string[], prop: string, val) {
-        debugger;
-        // 普通属性以及队列非空时，直接设置属性
-        if (prop !== 'length' || val === 0 || target.length !== 0) {
+        // 普通属性，直接设置属性
+        if (prop !== 'length') {
             return Reflect.set(target, prop, val);
         }
 
         // 设置长度属性的结果
         const result = Reflect.set(target, prop, val);
+        // 队列空闲且非空，则启动处理
+        if (!loading && target.length > 0) {
+            loading = true;
 
-        // 启动处理队列
-        (async () => {
-            while(target.length > 0) {
-                const meta = await createMeta(target.shift()!);
-                if (meta) {
-                    Objects.insert(meta);
+            (async () => {
+                while (target.length > 0) {
+                    const meta = await createMeta(target.shift()!);
+
+                    if (meta) {
+                        Objects.insert(meta);
+                    }
                 }
-            }
-        })();
+
+                debugger;
+                loading = false;
+            })();
+        }
 
         return result;
     },
@@ -40,7 +50,7 @@ export const ready = (async function init() {
     await Promise.all([configReady, databaseReady]);
 
     // 当前数据库中的所有项目
-    const filesInDatabase = Objects.toQuery().map(({ data }) => data.file);
+    const filesInDatabase = Objects.toQuery().map(({ data }) => data.filePath);
     // 实际存在于硬盘中的文件
     const filesInDisk = concat(
         await Promise.all(Config.data.directories.map((dir) => fs.readdir(dir).catch(() => [] as string[]))),
@@ -49,7 +59,7 @@ export const ready = (async function init() {
 
     // 删除数据库中存在，而实际不存在的数据
     const exInDatabase = toMap(exclude(filesInDatabase, filesInDisk));
-    Objects.where(({ file }) => exInDatabase[file]).remove();
+    Objects.where(({ filePath }) => exInDatabase[filePath]).remove();
 
     // 实际存在而数据库中没有的，则要添加
     filesQueue.push(...exclude(filesInDisk, filesInDatabase));
@@ -72,7 +82,8 @@ export async function add(input: string) {
     };
 
     // 待处理文件进入队列
-    filesQueue.push(...await fs.readdir(input));
+    const files = await fs.readdir(input);
+    filesQueue.push(...files.map((file) => path.join(input, file)));
 }
 
 /** 移除仓库文件夹 */
