@@ -1,69 +1,32 @@
-import { ModuleBaseData, ModuleType, Module } from '../';
+import * as Module from '../module';
 
 import {  } from 'path';
-import {  } from 'fs-extra';
+import { remove } from 'fs-extra';
 
 import ListCover from './list-cover';
 import DetailPage from './detail-page';
 
-/** 数据库中的数据 */
-export interface MangaData extends ModuleBaseData {
-    /** 指定为 manga 类型 */
-    type:  ModuleType.Manga;
-}
-
-const module: Module = {
-    type: ModuleType.Manga,
-
-    ListCover,
-    DetailPage,
-
-    async test(file: string) {
-        return false;
-    },
-
-    async from(file: string) {
-
-    },
-};
-
-export default module;
-
-// export default class Manga implements ModuleInstance {
-//     static async testFile(path: string) {
-//         return true;
-//     }
-
-//     static async testMeta(path: string) {
-//         return true;
-//     }
-
-//     static async fromMeta(path: string) {
-//         return '';
-//     }
-
-//     static async fromFile(path: string) {
-//         return '';
-//     }
-
-//     static ListCover = ListCover;
-//     static DetailPage = DetailPage;
-
-//     id = uid();
-//     name = '';
+export default class Manga extends Module.BaseModule implements Module.ModuleInstance {
+    /** 指定为漫画类型 */
+    static type = Module.ModuleType.Manga;
     
-//     filePath = '';
-//     fileSize = 0;
+    /** 列表封面组件 */
+    static ListCover = ListCover;
+    /** 详情页面组件 */
+    static DetailPage = DetailPage;
 
-//     get metaDir() {
-//         return '';
-//     }
+    /** 创建元数据 */
+    static async from({ file, buffer }: Module.FromContext) {
+        debugger;
+        return '' as any;
+    }
 
-//     get tempDir() {
-//         return '';
-//     }
+    /** 指定为漫画类型 */
+    type = Module.ModuleType.Manga;
 
-//     createMeta() {
-
-//     }
-// }
+    name = '';
+    filePath = '';
+    fileSize = 0;
+    lastModified = 0;
+    tags: number[] = [];
+}

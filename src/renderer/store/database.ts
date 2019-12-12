@@ -1,6 +1,6 @@
 import { Database } from 'utils/node';
 import { resolveUserDir } from 'utils/shared';
-import { ModuleBaseData } from 'renderer/modules';
+import { BaseModuleData } from 'renderer/modules';
 
 /** 全局数据库 */
 const database = new Database(resolveUserDir('database'));
@@ -29,7 +29,7 @@ interface TagGroupData extends TagBaseData {
 /** 数据库初始化完成 */
 export const ready = database.ready;
 /** 文件数据表 */
-export const Objects = database.use<ModuleBaseData>('objects');
+export const Objects = database.use<BaseModuleData>('objects');
 /** 标签数据表 */
 export const Tags = database.use<TagData>('tags');
 /** 标签集数据表 */
