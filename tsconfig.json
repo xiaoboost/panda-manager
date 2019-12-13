@@ -31,7 +31,15 @@
                 "name": "typescript-plugin-css-modules",
                 "options": {
                     "classnameTransform": "camelCaseOnly",
-                    "customMatcher": "\\.less$"
+                    "customMatcher": "\\.less$",
+                    "rendererOptions": {
+                        "less": {
+                            "paths": [
+                                "./node_modules/",
+                                "./src/"
+                            ]
+                        }
+                    }
                 }
             }
         ]

@@ -1,4 +1,4 @@
-@import '~renderer/css/variable.styl';
+@import 'renderer/css/variable.less';
 
 @Height: 32px;
 
@@ -31,7 +31,7 @@
         -webkit-app-region: no-drag;
 
         &:hover {
-            background-color: Red;
+            background-color: @Red;
         }
     }
 
@@ -46,15 +46,15 @@
 }
 
 .app-header.app-header__focus {
-    background-color: Black;
+    background-color: @Black;
 
     .app-title-bar__icon {
         &:hover {
-            background-color: BlackLight;
+            background-color: @BlackLight;
         }
 
         &.icon-close:hover {
-            background-color: Red;
+            background-color: @Red;
         }
     }
 }

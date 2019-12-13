@@ -1,4 +1,4 @@
-import './index.less';
+import styles from './index.less';
 
 import React from 'react';
 
@@ -30,46 +30,46 @@ export default function Header() {
     return (
         <header
             onDoubleClick={headerDbClick}
-            className={stringifyClass('app-header',  {
-                'app-header__focus': isFocus,
+            className={stringifyClass(styles.appHeader,  {
+                [styles.appHeaderFocus]: isFocus,
             })}>
             <span>
                 <span onDoubleClick={logoDbClickStop}>
                     {router.location.pathname === '/'
-                        ? <BIcon className='app-title-bar__logo' type='bamboo' />
+                        ? <BIcon className={styles.appTitleBarLogo} type='bamboo' />
                         : <AIcon
                             type='arrow-left'
-                            className='app-title-bar__icon'
+                            className={styles.appTitleBarIcon}
                             onClick={routerBack}
                         />
                     }
                 </span>
-                <span className='app-title-bar__title'>Panda Manager</span>
+                <span className={styles.appTitleBarTitle}>Panda Manager</span>
             </span>
             <span>
                 {/* 最小化 */}
                 <AIcon
                     type='minus'
-                    className='app-title-bar__icon'
+                    className={styles.appTitleBarIcon}
                     onClick={minimize}
                 />
                 {isMaximize
                     /* 还原 */
                     ? <BIcon
                         type='recover'
-                        className='app-title-bar__icon'
+                        className={styles.appTitleBarIcon}
                         onClick={unmaximize}
                     />
                     /* 最大化 */
                     : <AIcon
                         type='border'
-                        className='app-title-bar__icon'
+                        className={styles.appTitleBarIcon}
                         onClick={maximize}
                     />}
                 {/* 关闭 */}
                 <AIcon
                     type='close'
-                    className='app-title-bar__icon icon-close'
+                    className={`${styles.appTitleBarIcon} ${styles.iconClose}`}
                     onClick={close}
                 />
             </span>
