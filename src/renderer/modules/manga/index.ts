@@ -29,4 +29,9 @@ export default class Manga extends Module.BaseModule implements Module.ModuleIns
     fileSize = 0;
     lastModified = 0;
     tags: number[] = [];
+
+    /** 生成储存用的元数据 */
+    toData() {
+
+    }
 }

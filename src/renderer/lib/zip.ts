@@ -1,6 +1,7 @@
 import fs from 'fs-extra';
 import path from 'path';
 import JSZip from 'jszip';
+// import IconvLite from 'iconv-lite';
 import naturalCompare from 'string-natural-compare';
 
 import { handleError } from './print';
@@ -55,13 +56,20 @@ function writeZipInsideFile(writePath: string, data: JSZip.JSZipObject) {
  */
 export default class Zip {
     /** 读取 zip 文件 */
-    static async fromZipFile(zipPath: string) {
-        // FIXME: zip 文件夹内部路径含有非英文字符绘乱码
-        const zip = new Zip(path.parse(zipPath).name);
+    static async fromFile(file: string | Buffer) {
+        const zip = new Zip(isString(file) ? path.parse(file).name : 'placeholder');
+
         const content = await fs.readFile(zipPath);
+        // if ()
 
-        await zip._zip.loadAsync(content);
+        // FIXME: zip 文件夹内部路径含有非英文字符绘乱码
+        await zip._zip.loadAsync(content, {
+            // decodeFileName(bytes: Buffer) {
+            //     return IconvLite.decode(bytes, 'gbk');
+            // },
+        });
 
+        debugger;
         return zip;
     }
     /** 读取需要压缩的文件夹 */
@@ -77,14 +85,7 @@ export default class Zip {
     /** 压缩包数据本体 */
     private _zip: JSZip;
 
-    /**
-     * 压缩包名称
-     *  - 不包含 .zip 后缀
-     */
-    name: string;
-
     constructor(name: string) {
-        this.name = name;
         this._zip = new JSZip();
     }
 
@@ -190,7 +191,7 @@ export default class Zip {
 /** 生成异步文件列表迭代器 */
 export function *zipFiles(zip: string) {
     // 所有文件
-    const files = Object.keys(this._zip.files).sort(naturalCompare);
+    // const files = Object.keys(this._zip.files).sort(naturalCompare);
 }
 
 /** 压缩包写入硬盘 */

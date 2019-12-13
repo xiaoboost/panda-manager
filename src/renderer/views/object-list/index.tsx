@@ -1,18 +1,12 @@
 import './index.less';
 
-import { default as React, useState, useEffect } from 'react';
+import React from 'react';
 
-import { ModuleType } from 'renderer/modules';
+import { useWatcher } from 'utils/react';
 import { Objects } from 'renderer/store/database';
 
 export default function ItemList() {
-    const [objects, setObjects] = useState(Objects.toQuery());
-
-    useEffect(() => {
-        return Objects.observe((data) => {
-            setObjects(data);
-        });
-    }, []);
+    const [objects] = useWatcher(Objects);
 
     return (
         <main id='item-list'>
