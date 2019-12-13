@@ -69,6 +69,8 @@ export async function *zipFiles(file: string | Buffer) {
             buffer,
             /** 相对于压缩包本身的路径 */
             path: file,
+            /** 下标 */
+            index: i,
         };
     }
 }

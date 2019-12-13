@@ -1,12 +1,13 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
 
-import Zip from 'renderer/lib/zip';
 import naturalCompare from 'string-natural-compare';
 
 import { imageSize } from 'image-size';
 import { readdirs } from 'utils/node';
 import { isString } from 'utils/shared';
+
+import { zipFiles } from 'renderer/lib/zip';
 import { compress, concat } from 'renderer/lib/image';
 
 /** 预览数据 */
@@ -89,9 +90,55 @@ async function fromDir(dir: string): Promise<Preview> {
     };
 }
 
-async function fromZip(file: string | Buffer): Promise<Preview> {
-    const zip = await Zip.fromFile(file);
-    return {} as any;
+async function fromZip(zip: string | Buffer): Promise<Preview> {
+    /** 封面图片数据 */
+    let cover = Buffer.from('');
+    /** 预览图片数据 */
+    let thumbnails = Buffer.from('');
+    /** 预览图片的位置信息 */
+    const position: [number, number][] = [];
+
+    // 迭代压缩包内的数据
+    for await (const file of zipFiles(zip)) {
+        // 跳过不允许的文件后缀
+        if (!allowImageExt.includes(path.extname(file.path).toLowerCase())) {
+            continue;
+        }
+
+        // 当前图片
+        const image = file.buffer;
+        // 生成预览图片
+        const preview = await compress(image, {
+            type: 'jpg',
+            ...PriviewCompress,
+        });
+
+        // 第一页
+        if (file.index === 0) {
+            // 预览图片
+            thumbnails = preview;
+            // 压缩首页
+            cover = await compress(image, {
+                type: 'jpg',
+                ...CoverCompress,
+            });
+        }
+        else {
+            thumbnails = await concat(thumbnails, preview);
+        }
+
+        // 记录当前图片在预览总图中右下角的坐标
+        position.push([
+            imageSize(thumbnails).width!,
+            imageSize(preview).height!,
+        ]);
+    }
+    
+    return {
+        cover,
+        thumbnails,
+        position,
+    };
 }
 
 /** 生成预览数据 */
