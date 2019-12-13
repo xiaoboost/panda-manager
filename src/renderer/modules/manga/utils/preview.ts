@@ -19,7 +19,7 @@ interface Preview {
 
 /** 封面图片参数 */
 const CoverCompress = {
-    quality: 95,
+    quality: 90,
     size: {
         height: 400,
     },
@@ -29,7 +29,8 @@ const CoverCompress = {
 const PriviewCompress = {
     quality: 80,
     size: {
-        maxWidth: 220,
+        maxHeight: 142,
+        width: 100,
     },
 };
 
@@ -133,7 +134,7 @@ async function fromZip(zip: string | Buffer): Promise<Preview> {
             imageSize(preview).height!,
         ]);
     }
-    
+
     return {
         cover,
         thumbnails,
@@ -142,7 +143,7 @@ async function fromZip(zip: string | Buffer): Promise<Preview> {
 }
 
 /** 生成预览数据 */
-export default async function create(file: string | Buffer) {
+export async function buildPreview(file: string | Buffer) {
     if (!isString(file)) {
         return await fromZip(file);
     }

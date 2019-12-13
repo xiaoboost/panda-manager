@@ -38,7 +38,10 @@ export function compress(image: Buffer, {
     const { floor } = Math;
 
     // 输出尺寸和图片原尺寸不同
-    if ((toSize.width && width !== toSize.width) || (toSize.height && height !== toSize.height)) {
+    if (
+        (toSize.width && width && width >= toSize.width) ||
+        (toSize.height && height && height >= toSize.height)
+    ) {
         hasTrans = true;
         // 宽高都存在，则设置为包含，多余部分填充白色
         if (toSize.width && toSize.height) {
@@ -99,11 +102,15 @@ export function compress(image: Buffer, {
  *  - extend 图片会放在 main 图片的右边
  */
 export function concat(main: Buffer, extend: Buffer) {
-    const { width } = imageSize(extend);
+    const { width, height } = imageSize(extend);
+    const { height: maxHeight } = imageSize(main);
+    const exBottom = (maxHeight && height && height > maxHeight)
+        ? Math.ceil(height - maxHeight)
+        : 0;
 
     return Sharp(main)
         .extend({
-            top: 0, bottom: 0, left: 0, right: width,
+            top: 0, bottom: exBottom, left: 0, right: width,
             background: { r: 255, g: 255, b: 255, alpha: 1 },
         })
         .composite([{

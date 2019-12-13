@@ -19,13 +19,12 @@ async function readZip(file: string | Buffer) {
             handleError('压缩包不存在');
             return;
         }
-        
+
         buf = await fs.readFile(file);
     }
     else {
         buf = file;
     }
-
 
     // FIXME: zip 文件夹内部路径含有非英文字符绘乱码
     const zip = await JSZip.loadAsync(buf, {
@@ -51,17 +50,14 @@ export async function *zipFiles(file: string | Buffer) {
     }
 
     // 所有文件
-    const files = Object.keys(zip.files).sort(naturalCompare);
+    const files = Object.keys(zip.files)
+        .sort(naturalCompare)
+        .filter((name) => !zip.files[name].dir);
 
     // 迭代所有文件
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
         const data = zip.files[file];
-
-        if (data.dir) {
-            continue;
-        }
-
         const buffer = await data.async('nodebuffer');
 
         yield {

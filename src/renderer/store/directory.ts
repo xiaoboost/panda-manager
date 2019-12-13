@@ -35,7 +35,6 @@ const filesQueue: string[] = new Proxy([], {
                     }
                 }
 
-                debugger;
                 loading = false;
             })();
         }
@@ -53,16 +52,23 @@ export const ready = (async function init() {
     const filesInDatabase = Objects.toQuery().map(({ data }) => data.filePath);
     // 实际存在于硬盘中的文件
     const filesInDisk = concat(
-        await Promise.all(Config.data.directories.map((dir) => fs.readdir(dir).catch(() => [] as string[]))),
+        await Promise.all(Config.data.directories.map(async (dir) => {
+            const dirs = await fs.readdir(dir).catch(() => [] as string[]);
+            return dirs.map((file) => path.join(dir, file));
+        })),
         (val) => val,
     );
 
     // 删除数据库中存在，而实际不存在的数据
-    const exInDatabase = toMap(exclude(filesInDatabase, filesInDisk));
-    Objects.where(({ filePath }) => exInDatabase[filePath]).remove();
+    const exInDatabase = exclude(filesInDisk, filesInDatabase);
+
+    if (exInDatabase.length > 0) {
+        const exMap = toMap(exInDatabase);
+        Objects.where(({ filePath }) => exMap[filePath]).remove();
+    }
 
     // 实际存在而数据库中没有的，则要添加
-    filesQueue.push(...exclude(filesInDisk, filesInDatabase));
+    filesQueue.push(...exclude(filesInDatabase, filesInDisk));
 })();
 
 /** 添加仓库文件夹 */
