@@ -6,19 +6,29 @@ import naturalCompare from 'string-natural-compare';
 
 import { handleError } from './print';
 import { readdirs } from 'utils/node';
+import { isString } from 'utils/shared';
 
 /** 读取压缩包 */
-async function readZip(file: string) {
-    const stat = await fs.stat(file).catch(() => void 0);
+async function readZip(file: string | Buffer) {
+    let buf: Buffer;
 
-    if (!stat || stat.isDirectory()) {
-        handleError('压缩包不存在');
-        return;
+    if (isString(file)) {
+        const stat = await fs.stat(file).catch(() => void 0);
+
+        if (!stat || stat.isDirectory()) {
+            handleError('压缩包不存在');
+            return;
+        }
+        
+        buf = await fs.readFile(file);
+    }
+    else {
+        buf = file;
     }
 
+
     // FIXME: zip 文件夹内部路径含有非英文字符绘乱码
-    const content = await fs.readFile(file);
-    const zip = await JSZip.loadAsync(content, {
+    const zip = await JSZip.loadAsync(buf, {
         // decodeFileName() {
         // },
     });
@@ -33,7 +43,7 @@ function zipToDisk(zip: JSZip, targetFile: string) {
 }
 
 /** 生成异步文件列表迭代器 */
-export async function *zipFiles(file: string) {
+export async function *zipFiles(file: string | Buffer) {
     const zip = await readZip(file);
 
     if (!zip) {
