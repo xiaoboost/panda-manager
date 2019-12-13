@@ -27,20 +27,8 @@ function buildTag() {
 /** 当前版本号 */
 export const version = buildTag();
 
-/** 生成 css loader */
-export const cssLoader = (): Webpack.RuleSetUseItem[] => [
-    process.env.NODE_ENV === 'development' ? 'style-loader' : loader,
-    {
-        loader: 'css-loader',
-        options: {
-            localsConvention: 'camelCaseOnly',
-            modules: {
-                localIdentName: '[local]__[hash:base64:5]',
-                context: resolveRoot(__dirname, 'src'),
-            },
-        },
-    },
-];
+/** 当前模式的样式读取器 */
+const styleLoader = process.env.NODE_ENV === 'development' ? 'style-loader' : loader;
 
 /** 生成 webpack 基础配置 */
 export function webpackBaseConfig(mode: 'main' | 'renderer'): Webpack.Configuration {
@@ -88,22 +76,36 @@ export function webpackBaseConfig(mode: 'main' | 'renderer'): Webpack.Configurat
                 },
                 {
                     test: /\.css$/,
-                    use: cssLoader(),
+                    use: [styleLoader, 'css-loader'],
                 },
                 {
                     test: /\.less$/,
-                    use: cssLoader().concat([
+                    include: /node_modules/,
+                    use: [styleLoader, 'css-loader', 'less-loader'],
+                },
+                {
+                    test: /\.less$/,
+                    exclude: /node_modules/,
+                    use: [
+                        styleLoader,
+                        {
+                            loader: 'css-loader',
+                            options: {
+                                localsConvention: 'camelCaseOnly',
+                                modules: {
+                                    localIdentName: '[local]__[hash:base64:5]',
+                                    context: resolveRoot(__dirname, 'src'),
+                                },
+                            },
+                        },
                         {
                             loader: 'less-loader',
                             options: {
                                 javascriptEnabled: true,
-                                paths: [
-                                    resolveRoot('node_modules'),
-                                    resolveRoot('src'),
-                                ],
+                                paths: [resolveRoot('src')],
                             },
                         },
-                    ]),
+                    ],
                 },
             ],
         },
