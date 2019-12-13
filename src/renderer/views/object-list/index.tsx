@@ -1,4 +1,4 @@
-import './index.styl';
+import './index.less';
 
 import { default as React, useState, useEffect } from 'react';
 

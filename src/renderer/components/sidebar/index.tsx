@@ -1,4 +1,4 @@
-import './index.styl';
+import styles from './index.less';
 
 import React from 'react';
 
@@ -16,10 +16,10 @@ export default function Sidebar() {
     const foldSidebar = useCallback(() => setFold(!isFold), [isFold]);
 
     return (
-        <aside className={stringifyClass('app-sidebar', {
-            'app-sidebar__fold': isFold,
+        <aside className={stringifyClass(styles.appSidebar, {
+            [styles.appSidebarFold]: isFold,
         })}>
-            <div className='menu-item menu-switch'>
+            <div className={`${styles.menuItem} ${styles.menuSwitch}`}>
                 <AIcon
                     type='menu'
                     className='menu-item__icon'
@@ -30,15 +30,15 @@ export default function Sidebar() {
                 <div
                     key={item.route}
                     onClick={() => history.push({ pathname: item.route })}
-                    className={stringifyClass('menu-item', {
-                        'menu-item__highlight': item.route === router.pathname,
+                    className={stringifyClass(styles.menuItem, {
+                        [styles.menuItemHighlight]: item.route === router.pathname,
                     })}>
                     {item.isAntdIcon
                         ? <AIcon type={item.icon} />
                         : <BIcon type={item.icon as any} />
                     }
-                    <span className='menu-item__title'>{item.title}</span>
-                </div>
+                    <span className={styles.menuItemTitle}>{item.title}</span>
+                </div>,
             )}
         </aside>
     );

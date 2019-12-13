@@ -1,4 +1,4 @@
-@import '../../css/variable.styl';
+@import '../../css/variable.less';
 
 main#tags-collection {
     margin: 0 auto;
@@ -14,20 +14,20 @@ main#tags-collection {
             margin-top: 0;
         }
 
-        boxPaddingX = 6px;
-        boxPaddingY = 4px;
+        @BoxPaddingX: 6px;
+        @BoxPaddingY: 4px;
 
         .ant-tag {
-            cursor pointer
+            cursor: pointer;
         }
 
         .tags-group-card__header {
             display: inline-block;
-            padding: boxPaddingY 0;
-            border-bottom: 1px solid BlackExtraLight;
+            padding: @BoxPaddingY 0;
+            border-bottom: 1px solid @BlackExtraLight;
 
             .tags-group-card__title {
-                margin: 0 12px 0 boxPaddingX;
+                margin: 0 12px 0 @BoxPaddingX;
                 font-size: 110%;
             }
 
@@ -39,7 +39,7 @@ main#tags-collection {
         }
 
         .tags-group-card__content {
-            padding: 10px boxPaddingX;
+            padding: 10px @BoxPaddingX;
         }
 
         .tags-group__add {
