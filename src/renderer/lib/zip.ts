@@ -3,7 +3,9 @@ import path from 'path';
 import JSZip from 'jszip';
 import naturalCompare from 'string-natural-compare';
 
-import { handleError } from './error';
+import { handleError } from './print';
+
+import { readdirs, mkdirp } from 'utils/node';
 import { isArray, isString } from 'utils/shared';
 
 /**
@@ -118,7 +120,7 @@ export default class Zip {
         const files = Object.entries(this._zip.files).filter(([, data]) => !data.dir);
         const maxFiles = files.length;
 
-        for (let i = 0; i < maxFiles; i ++) {
+        for (let i = 0; i < maxFiles; i++) {
             const [inner, data] = files[i];
             const filePath = path.join(targetDir, inner);
             const fileDir = path.dirname(filePath);
@@ -183,4 +185,56 @@ export default class Zip {
             };
         }
     }
+}
+
+/** 生成异步文件列表迭代器 */
+export function *zipFiles(zip: string) {
+    // 所有文件
+    const files = Object.keys(this._zip.files).sort(naturalCompare);
+}
+
+/** 压缩包写入硬盘 */
+function zipToDisk(zip: JSZip, targetFile: string) {
+    return zip.generateAsync({ type: 'nodebuffer', compression: 'STORE' })
+        .then((data: Buffer) => fs.writeFile(targetFile, data));
+}
+
+/** 打包文件夹 */
+export async function packageDir(dir: string, targetDir = path.dirname(dir)) {
+    const stat = await fs.stat(dir).catch(() => void 0);
+
+    if (!stat || !stat.isDirectory()) {
+        handleError('路径不是文件夹');
+        return;
+    }
+
+    /** 压缩包文件 */
+    const zip = new JSZip();
+    /** 文件夹名称 */
+    const fileName = path.basename(dir);
+    /** 文件夹内所有子文件 */
+    const files = await readdirs(dir);
+
+    for (let i = 0; i < files.length; i++) {
+        const filePath = files[i];
+        const relPath = path.relative(dir, filePath);
+        const fileContent = await fs.readFile(filePath);
+
+        zip.file(relPath, fileContent);
+    }
+
+    // 创建文件夹
+    await mkdirp(targetDir);
+    // 压缩包写入硬盘
+    await zipToDisk(zip, path.join(targetDir, `${fileName}.zip`));
+}
+
+/** 解包文件夹 */
+export function unpackZip(zip: string, targetDir = path.dirname(zip)) {
+    //
+}
+
+/** 从压缩包中移除文件 */
+export function removeFile(zip: string, files: string[]) {
+    //
 }

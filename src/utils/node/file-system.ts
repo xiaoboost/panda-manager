@@ -5,7 +5,9 @@ import { promisify } from 'util';
 
 const stat = promisify(fs.stat);
 const readdir = promisify(fs.readdir);
-const remove = promisify(fs.unlink);
+const unlink = promisify(fs.unlink);
+const exists = promisify(fs.exists);
+const mkdir = promisify(fs.mkdir);
 
 /** 遍历文件夹下的所有文件 */
 async function filesOperation(base: string, opt: (file: string, stat: fs.Stats) => void | Promise<void>) {
@@ -59,13 +61,31 @@ export async function fileSize(base: string) {
 }
 
 /** 删除文件或文件夹 */
-export async function removeFile(base: string) {
+export async function remove(base: string) {
     const fileStat = await stat(base);
 
     if (fileStat.isDirectory()) {
-        await filesOperation(base, (file) => remove(file));
+        await filesOperation(base, (file) => unlink(file));
     }
     else {
-        await remove(base);
+        await unlink(base);
+    }
+}
+
+/** 依照路径创建文件夹 */
+export async function mkdirp(target: string) {
+    // 待创建的路径
+    const dirs: string[] = [];
+
+    let dir = target;
+
+    while (await exists(dir)) {
+        dirs.push(dir);
+        dir = path.dirname(dir);
+    }
+
+    while (dirs.length > 0) {
+        const current = dirs.shift()!;
+        await mkdir(current);
     }
 }
