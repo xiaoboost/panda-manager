@@ -9,7 +9,7 @@ import DetailPage from './detail-page';
 export default class Manga extends Module.BaseModule implements Module.ModuleInstance {
     /** 指定为漫画类型 */
     static type = Module.ModuleType.Manga;
-    
+
     /** 列表封面组件 */
     static ListCover = ListCover;
     /** 详情页面组件 */

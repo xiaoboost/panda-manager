@@ -205,7 +205,7 @@ export class Database {
     private _progress = Promise.resolve();
     /** 数据库数据 */
     private _data: Record<string, Table> = {};
-    
+
     /** 初始化准备就绪 */
     ready: Promise<void>;
 

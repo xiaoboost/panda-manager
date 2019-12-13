@@ -44,7 +44,7 @@ async function fromDir(dir: string): Promise<Preview> {
     const position: [number, number][] = [];
     /** 文件夹内所有文件 */
     const allFiles = (await readdirs(dir)).sort(naturalCompare);
-    
+
     for (let i = 0; i < allFiles.length; i++) {
         const file = allFiles[i];
 
@@ -74,7 +74,7 @@ async function fromDir(dir: string): Promise<Preview> {
         else {
             thumbnails = await concat(thumbnails, preview);
         }
-        
+
         // 记录当前图片在预览总图中右下角的坐标
         position.push([
             imageSize(thumbnails).width!,

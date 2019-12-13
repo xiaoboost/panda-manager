@@ -22,7 +22,7 @@ export async function createMeta(file: string) {
             if (!buf) {
                 buf = await readFile(file);
             }
-            
+
             return buf;
         },
     };

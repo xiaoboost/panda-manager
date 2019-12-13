@@ -46,7 +46,7 @@ export interface BaseModuleData {
     fileSize: number;
     /** 文件最后修改的时间 */
     lastModified: number;
-    
+
     /** 标签数据 */
     tags: number[];
 }

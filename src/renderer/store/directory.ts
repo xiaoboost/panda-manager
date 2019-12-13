@@ -95,7 +95,7 @@ export async function remove(input: string) {
 
     // 等待初始化完成
     await ready;
-    
+
     // 变更配置
     Config.data = {
         ...Config.data,
