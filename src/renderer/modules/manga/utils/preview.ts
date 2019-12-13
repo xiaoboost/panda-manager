@@ -91,7 +91,7 @@ async function fromDir(dir: string): Promise<Preview> {
 
 async function fromZip(file: string | Buffer): Promise<Preview> {
     const zip = await Zip.fromFile(file);
-
+    return {} as any;
 }
 
 /** 生成预览数据 */

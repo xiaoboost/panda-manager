@@ -1,4 +1,3 @@
-import 'antd/lib/message/style';
 import Message from 'antd/lib/message';
 
 const prefix = '(panda-manager)';

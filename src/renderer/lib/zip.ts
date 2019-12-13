@@ -59,18 +59,18 @@ export default class Zip {
     static async fromFile(file: string | Buffer) {
         const zip = new Zip(isString(file) ? path.parse(file).name : 'placeholder');
 
-        const content = await fs.readFile(zipPath);
+        // const content = await fs.readFile(zipPath);
         // if ()
 
         // FIXME: zip 文件夹内部路径含有非英文字符绘乱码
-        await zip._zip.loadAsync(content, {
-            // decodeFileName(bytes: Buffer) {
-            //     return IconvLite.decode(bytes, 'gbk');
-            // },
-        });
+        // await zip._zip.loadAsync(content, {
+        //     // decodeFileName(bytes: Buffer) {
+        //     //     return IconvLite.decode(bytes, 'gbk');
+        //     // },
+        // });
 
-        debugger;
-        return zip;
+        // debugger;
+        // return zip;
     }
     /** 读取需要压缩的文件夹 */
     static async fromDirectory(directory: string) {
@@ -145,22 +145,22 @@ export default class Zip {
     }
     /** 将压缩包写入硬盘 */
     write(targetDir: string) {
-        const targetFile = path.join(targetDir, `${this.name}.zip`);
+        // const targetFile = path.join(targetDir, `${this.name}.zip`);
 
-        return new Promise<boolean>((resolve) => {
-            this._zip
-                .generateNodeStream({
-                    type: 'nodebuffer',
-                    compression: 'STORE',
-                    streamFiles: true,
-                })
-                .pipe(fs.createWriteStream(targetFile))
-                .on('finish', () => resolve(true))
-                .on('error', () => {
-                    handleError(handleError.messages.zipBroken, targetFile);
-                    resolve(false);
-                });
-        });
+        // return new Promise<boolean>((resolve) => {
+        //     this._zip
+        //         .generateNodeStream({
+        //             type: 'nodebuffer',
+        //             compression: 'STORE',
+        //             streamFiles: true,
+        //         })
+        //         .pipe(fs.createWriteStream(targetFile))
+        //         .on('finish', () => resolve(true))
+        //         .on('error', () => {
+        //             handleError(handleError.messages.zipBroken, targetFile);
+        //             resolve(false);
+        //         });
+        // });
     }
     /** 生成异步的文件列表迭代器 */
     async *files() {
