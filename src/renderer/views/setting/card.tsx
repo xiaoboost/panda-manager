@@ -1,3 +1,5 @@
+import styles from './index.less';
+
 import { default as React, PropsWithChildren } from 'react';
 
 interface CardProps {
@@ -6,9 +8,9 @@ interface CardProps {
 
 export default function Card(props: PropsWithChildren<CardProps>) {
     return (
-        <section className='setting-section'>
-            <header className='setting-title'>{props.title}</header>
-            <article className='setting-card'>{props.children}</article>
+        <section className={styles.settingSection}>
+            <header className={styles.settingTitle}>{props.title}</header>
+            <article className={styles.settingCard}>{props.children}</article>
         </section>
     );
 }

@@ -1,3 +1,5 @@
+import styles from './index.less';
+
 import { default as React, FunctionComponent } from 'react';
 
 import { shell } from 'electron';
@@ -64,7 +66,7 @@ export default function Directories() {
     return (
         <Card title='文件夹'>
             {/** 文件夹列表 */}
-            <div className='setting-box'>
+            <div className={styles.settingBox}>
                 <CardLine
                     title='文件目录'
                     subtitle='目录内的所有 zip 压缩包以及文件夹（不包含子文件夹内容）'>

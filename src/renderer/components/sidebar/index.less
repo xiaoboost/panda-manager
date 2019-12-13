@@ -11,38 +11,38 @@
     width: 140px;
 
     transition: width .3s, border .3s;
+}
 
-    .menu-item {
-        height: 40px;
-        line-height: 40px;
-        color: #666;
-        padding: 0 12px 0 10px;
-        border-left: 2px solid @WhiteMask;
+.menu-item {
+    height: 40px;
+    line-height: 40px;
+    color: #666;
+    padding: 0 12px 0 10px;
+    border-left: 2px solid @WhiteMask;
 
-        display: flex;
-        align-items: center;
-        flex-wrap: nowrap;
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
 
-        overflow-x: hidden;
+    overflow-x: hidden;
 
-        &.menu-switch {
-            color: #000;
-            margin-bottom: 5px;
-        }
-
-        &.menu-item__highlight {
-            color: @Black;
-            background-color: @Gray + #040404;
-
-            padding-left: 10px;
-            border-color: @Black;
-        }
+    &.menu-switch {
+        color: #000;
+        margin-bottom: 5px;
     }
 
-    .menu-item__title {
-        margin-left: 15px;
-        flex-shrink: 0;
+    &.menu-item__highlight {
+        color: @Black;
+        background-color: @Gray + #040404;
+
+        padding-left: 10px;
+        border-color: @Black;
     }
+}
+
+.menu-item__title {
+    margin-left: 15px;
+    flex-shrink: 0;
 }
 
 .app-sidebar.app-sidebar__fold {

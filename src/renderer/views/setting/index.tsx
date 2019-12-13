@@ -1,13 +1,12 @@
-import './index.less';
-
+import { mainSetting } from './index.less';
 import { default as React } from 'react';
 
-import Directories from './directories';
 import Display from './display';
+import Directories from './directories';
 
 export default function Setting() {
     return (
-        <main id='main-setting'>
+        <main id={mainSetting}>
             <Directories />
             <Display />
         </main>

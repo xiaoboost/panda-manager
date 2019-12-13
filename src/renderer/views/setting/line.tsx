@@ -1,3 +1,5 @@
+import styles from './index.less';
+
 import { default as React, PropsWithChildren } from 'react';
 
 /** 选项卡片选项属性 */
@@ -9,10 +11,10 @@ interface CardLineProps {
 
 /** 选项卡片元素 */
 export default function CardLine(props: PropsWithChildren<CardLineProps>) {
-    return <div className={ props.isSubline ? 'setting-subline' : 'setting-line' }>
+    return <div className={ props.isSubline ? styles.settingSubline : styles.settingLine }>
         <span>
-            <div className='setting-line__name'>{props.title}</div>
-            { props.subtitle ? <div className='setting-line__subname'>{props.subtitle}</div> : ''}
+            <div className={styles.settingLineName}>{props.title}</div>
+            { props.subtitle ? <div className={styles.settingLineSubname}>{props.subtitle}</div> : ''}
         </span>
         <span>{props.children}</span>
     </div>;
