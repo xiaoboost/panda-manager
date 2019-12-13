@@ -13,6 +13,7 @@ export function uid() {
     }
     else {
         lastIndex = 0;
+        lastTime = now;
         return lastTime * 100;
     }
 }
