@@ -28,7 +28,7 @@ function buildTag() {
 export const version = buildTag();
 
 /** 当前模式的样式读取器 */
-const styleLoader = process.env.NODE_ENV === 'development' ? 'style-loader' : loader;
+const styleLoader = isDevelopment ? 'style-loader' : loader;
 
 /** 生成 webpack 基础配置 */
 export function webpackBaseConfig(mode: 'main' | 'renderer'): Webpack.Configuration {
@@ -93,7 +93,7 @@ export function webpackBaseConfig(mode: 'main' | 'renderer'): Webpack.Configurat
                             options: {
                                 localsConvention: 'camelCaseOnly',
                                 modules: {
-                                    localIdentName: '[local]__[hash:base64:5]',
+                                    localIdentName: isDevelopment ? '[local]__[hash:base64:5]' : '[hash:base64:6]',
                                     context: resolveRoot(__dirname, 'src'),
                                 },
                             },
