@@ -1,13 +1,13 @@
-ant-btn-color(name, color) {
-    .ant-btn.ant-btn-{name} {
+.ant-btn-color(@name, @color) {
+    .ant-btn.ant-btn-@{name} {
         color: #fff;
         border-color: color;
         background-color: color;
     }
 }
 
-ant-btn-color(success, #67c23a);
-ant-btn-color(warning, #e6a23c);
+.ant-btn-color(success, #67c23a);
+.ant-btn-color(warning, #e6a23c);
 
 .ant-modal-wrap {
     .ant-modal-confirm {
