@@ -3,18 +3,14 @@ import styles from './index.less';
 import { default as React, FunctionComponent } from 'react';
 
 import { shell } from 'electron';
+import { Config, Directory } from 'renderer/store';
 import { warnDialog, selectDirectory } from 'renderer/lib/dialog';
-import { useWatcher, useCallback, useListCallback } from 'src/utils/react';
+import { useWatcher, useCallback, useListCallback } from 'utils/react';
 
 import Card from './card';
 import CardLine from './line';
 
 import { Icon } from 'antd';
-
-import {
-    Config,
-    Directory,
-} from 'renderer/store';
 
 interface DirsListProps {
     paths: string[];
