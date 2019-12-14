@@ -16,12 +16,12 @@ interface TagBaseData {
 }
 
 /** 标签数据 */
-interface TagData extends TagBaseData {
+export interface TagData extends TagBaseData {
     tagGroupId: number;
 }
 
 /** 标签集数据 */
-interface TagGroupData extends TagBaseData {
+export interface TagGroupData extends TagBaseData {
     /** 包含的标签编号 */
     tags: number[];
 }

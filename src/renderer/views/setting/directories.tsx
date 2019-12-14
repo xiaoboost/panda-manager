@@ -3,7 +3,7 @@ import styles from './index.less';
 import { default as React, FunctionComponent } from 'react';
 
 import { shell } from 'electron';
-import { warnDialog, selectDirectory } from 'renderer/lib/interface';
+import { warnDialog, selectDirectory } from 'renderer/lib/dialog';
 import { useWatcher, useCallback, useListCallback } from 'src/utils/react';
 
 import Card from './card';
@@ -24,8 +24,10 @@ interface DirsListProps {
 const DirsList: FunctionComponent<DirsListProps> = function DirPathList({ paths, remove }) {
     const openFolder = useListCallback(paths, (dir) => () => shell.openItem(dir));
     const removeList = useListCallback(paths, (dir) => () => {
-        warnDialog('确认删除', `确定要删除此文件夹？\n${dir}`)
-            .then(() => remove(dir));
+        warnDialog({
+            title: '确认删除',
+            content: `确定要删除此文件夹？\n${dir}`,
+        }).then(() => remove(dir));
     });
 
     return <>
