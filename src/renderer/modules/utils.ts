@@ -3,6 +3,7 @@ import { readFile } from 'fs-extra';
 import { warn } from 'renderer/lib/print';
 
 import * as Module from './module';
+import * as Manga from './manga';
 
 import {
     toMap,
@@ -10,8 +11,6 @@ import {
     resolveUserDir,
     resolveTempDir,
 } from 'utils/shared';
-
-import { default as Manga } from './manga';
 
 /** 模块模板数据 */
 export const modules: Module.Module[] = [Manga];
