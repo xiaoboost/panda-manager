@@ -14,6 +14,10 @@ const sortByList = [
         label: '按名称',
     },
     {
+        value: Config.SortBy.size,
+        label: '按原文件大小',
+    },
+    {
         value: Config.SortBy.lastModified,
         label: '按最后的修改时间',
     },
