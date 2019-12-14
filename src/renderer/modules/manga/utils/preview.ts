@@ -10,6 +10,8 @@ import { isString } from 'utils/shared';
 import { zipFiles } from 'renderer/lib/zip';
 import { compress, concat } from 'renderer/lib/image';
 
+import { coverPath, previewPath } from './path';
+
 /** 预览数据 */
 interface Preview {
     cover: Buffer;
@@ -155,5 +157,20 @@ export async function buildPreview(file: string | Buffer) {
     }
     else {
         return await fromZip(file);
+    }
+}
+
+/** 将预览数据写入硬盘 */
+export async function writePriview(id: number, data: Partial<Preview>) {
+    if (data.cover) {
+        const cover = coverPath(id);
+        await fs.mkdirp(path.dirname(cover));
+        await fs.writeFile(cover, data.cover);
+    }
+
+    if (data.thumbnails) {
+        const preview = previewPath(id);
+        await fs.mkdirp(path.dirname(preview));
+        await fs.writeFile(preview, data.thumbnails);
     }
 }

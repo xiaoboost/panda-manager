@@ -1,10 +1,9 @@
-import { uid, resolveUserDir, resolveTempDir } from 'utils/shared';
-
 type Component = () => JSX.Element;
 type PromiseComp<T = any> = T | Promise<T>;
 
 /** 创建元数据时的上下文 */
 export interface FromContext {
+    id: number;
     file: string;
     buffer(): PromiseComp<Buffer>;
 }
@@ -12,22 +11,6 @@ export interface FromContext {
 /** 模块类型 */
 export const enum ModuleType {
     Manga,
-}
-
-/** 模块基类 */
-export abstract class BaseModule {
-    id: number;
-
-    constructor(id = uid()) {
-        this.id = id;
-    }
-
-    get metaDir() {
-        return resolveUserDir('metas', this.id);
-    }
-    get tempDir() {
-        return resolveTempDir(this.id);
-    }
 }
 
 /** 模块类储存数据 */
@@ -51,16 +34,8 @@ export interface BaseModuleData {
     tags: number[];
 }
 
-/** 模块类实例数据接口 */
-export interface ModuleInstance extends BaseModuleData {
-    /** 元数据存放的路径 */
-    metaDir: string;
-    /** 临时文件存放路径 */
-    tempDir: string;
-}
-
-/** 模块类静态接口 */
-export interface ModuleStatic {
+/** 模块静态接口 */
+export interface Module {
     /** 模块类型 */
     type: ModuleType;
 
@@ -71,7 +46,4 @@ export interface ModuleStatic {
     ListCover: Component;
     /** 详情页面组件 */
     DetailPage: Component;
-
-    /** 类接口 */
-    new (): ModuleInstance;
 }

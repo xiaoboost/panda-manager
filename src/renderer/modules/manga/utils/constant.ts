@@ -1,4 +1,4 @@
-import { BaseModuleData } from '../../module';
+import { BaseModuleData } from 'renderer/modules';
 
 /** 漫画模块储存数据 */
 export interface MangaData extends BaseModuleData {

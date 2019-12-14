@@ -49,6 +49,6 @@ export const handleError: HandleError = (msg: string, info?: string) => {
             ? ErrorMessage[msg]
             : `${ErrorMessage[msg]}：\n ${info}`,
     );
-}
+};
 
 handleError.messages = ErrorMessage;

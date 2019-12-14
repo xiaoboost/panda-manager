@@ -1,14 +1,20 @@
 import { readFile } from 'fs-extra';
 
 import { warn } from 'renderer/lib/print';
-import { toMap } from 'utils/shared';
-
-import { default as Manga } from './manga';
 
 import * as Module from './module';
 
+import {
+    toMap,
+    uid,
+    resolveUserDir,
+    resolveTempDir,
+} from 'utils/shared';
+
+import { default as Manga } from './manga';
+
 /** 模块模板数据 */
-export const modules: Module.ModuleStatic[] = [Manga];
+export const modules: Module.Module[] = [Manga];
 /** 模块类型索引 */
 const modulesMap = toMap(modules, (target) => target.type);
 
@@ -18,13 +24,8 @@ export async function createMeta(file: string) {
 
     const context: Module.FromContext = {
         file,
-        buffer: async () => {
-            if (!buf) {
-                buf = await readFile(file);
-            }
-
-            return buf;
-        },
+        id: uid(),
+        buffer: () => buf ? buf : readFile(file).then((data) => (buf = data)),
     };
 
     try {
@@ -46,4 +47,14 @@ export async function createMeta(file: string) {
 /** 由类型获得模块 */
 export function getModule(type: Module.ModuleType) {
     return modulesMap[type];
+}
+
+/** 项目元数据文件夹 */
+export function metaDir(id: number) {
+    return resolveUserDir('metas', id);
+}
+
+/** 项目临时文件夹 */
+export function tempDir(id: number) {
+    return resolveTempDir('metas', id);
 }
