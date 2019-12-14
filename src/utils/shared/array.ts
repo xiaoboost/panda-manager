@@ -105,7 +105,7 @@ export function unique<T>(arr: T[], label?: (value: T, index: number) => Index):
             .map(({ value }) => value);
     }
     else {
-        labelMap = toMap(arr as any);
+        labelMap = toBoolMap(arr as any);
         return arr.filter((item) => !labelMap[item as any]);
     }
 }
@@ -135,9 +135,16 @@ export function transArr<T>(item?: T | T[]): T[] {
 }
 
 /** 生成`hash`查询表 */
-export function toMap<T extends Index>(arr: T[]): Record<T, boolean>;
-export function toMap<T, U extends Index>(arr: T[], cb: (val: T, index: number) => U): Record<U, boolean>;
-export function toMap<T, U extends Index>(arr: T[], cb?: (val: T, index: number) => U) {
+export function toMap<T extends object, U extends Index>(arr: T[], toKey: (val: T, index: number) => U): Record<U, T | undefined> {
+    const map: Record<U, T> = {} as any;
+    arr.forEach((val, i) => (map[toKey(val, i)] = val));
+    return map;
+}
+
+/** 生成`hash`布尔查询表 */
+export function toBoolMap<T extends Index>(arr: T[]): Record<T, boolean>;
+export function toBoolMap<T, U extends Index>(arr: T[], cb: (val: T, index: number) => U): Record<U, boolean>;
+export function toBoolMap<T, U extends Index>(arr: T[], cb?: (val: T, index: number) => U) {
     const map: Record<Index, boolean> = {};
 
     if (!cb) {
@@ -152,6 +159,6 @@ export function toMap<T, U extends Index>(arr: T[], cb?: (val: T, index: number)
 
 /** 在`rest`数组中，且不在`arr`数组中的 */
 export function exclude<T extends Index>(arr: T[], rest: T[]) {
-    const map = toMap(arr);
+    const map = toBoolMap(arr);
     return rest.filter((key) => !map[key]);
 }

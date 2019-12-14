@@ -7,7 +7,7 @@ import { ready as configReady, data as Config } from './config';
 import { createMeta } from 'renderer/modules';
 import { handleError } from 'renderer/lib/print';
 
-import { concat, toMap, exclude } from 'utils/shared';
+import { concat, toBoolMap, exclude } from 'utils/shared';
 
 /** 文件队列是否空闲 */
 let loading = false;
@@ -63,7 +63,7 @@ export const ready = (async function init() {
     const exInDatabase = exclude(filesInDisk, filesInDatabase);
 
     if (exInDatabase.length > 0) {
-        const exMap = toMap(exInDatabase);
+        const exMap = toBoolMap(exInDatabase);
         Objects.where(({ filePath }) => exMap[filePath]).remove();
     }
 

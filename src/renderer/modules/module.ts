@@ -1,4 +1,3 @@
-type Component = () => JSX.Element;
 type PromiseComp<T = any> = T | Promise<T>;
 
 /** 创建元数据时的上下文 */
@@ -34,6 +33,11 @@ export interface BaseModuleData {
     tags: number[];
 }
 
+export interface ListCoverProps {
+    id: number;
+    onClick: () => void;
+}
+
 /** 模块静态接口 */
 export interface Module {
     /** 模块类型 */
@@ -43,7 +47,7 @@ export interface Module {
     from(context: FromContext): PromiseComp<BaseModuleData | undefined>;
 
     /** 列表页封面组件 */
-    ListCover: Component;
+    ListCover: (props: ListCoverProps) => JSX.Element;
     /** 详情页面组件 */
-    DetailPage: Component;
+    DetailPage: () => JSX.Element;
 }

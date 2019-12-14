@@ -1,7 +1,11 @@
-import './index.styl';
+import styles from './index.less';
+import React from 'react';
 
-import { default as React } from 'react';
+import { coverPath } from '../utils';
+import { ListCoverProps } from 'renderer/modules';
 
-export default function ListCover() {
-    return <div>漫画列表封面</div>;
+export default function ListCover({ id, onClick }: ListCoverProps) {
+    return <div onClick={onClick}>
+        <img src={coverPath(id)} />
+    </div>;
 }
