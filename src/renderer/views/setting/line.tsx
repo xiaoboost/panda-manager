@@ -14,7 +14,7 @@ export default function CardLine(props: PropsWithChildren<CardLineProps>) {
     return <div className={ props.isSubline ? styles.settingSubline : styles.settingLine }>
         <span>
             <div className={styles.settingLineName}>{props.title}</div>
-            { props.subtitle ? <div className={styles.settingLineSubname}>{props.subtitle}</div> : ''}
+            { props.subtitle ?? <div className={styles.settingLineSubname}>{props.subtitle}</div>}
         </span>
         <span>{props.children}</span>
     </div>;

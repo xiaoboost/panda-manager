@@ -10,11 +10,11 @@ import { resolveRoot } from './env';
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 
-/**
- * Generate tag of build
- * @returns {string}
- */
-function buildTag() {
+/** 当前版本号 */
+export { version } from '../package.json';
+
+/** 当前编译时间 */
+export const buildTag = (() => {
     const now = new Date();
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -22,10 +22,7 @@ function buildTag() {
     const time = now.toTimeString().slice(0, 8);
 
     return `${year}.${month}.${date} - ${time}`;
-}
-
-/** 当前版本号 */
-export const version = buildTag();
+})();
 
 /** 当前模式的样式读取器 */
 const styleLoader = isDevelopment ? 'style-loader' : loader;
@@ -131,10 +128,12 @@ export function devBuild(BaseConfig: Webpack.Configuration, message: string) {
     // 每个模块用 eval() 执行, SourceMap 作为 DataUrl 添加到文件末尾
     BaseConfig.devtool = 'eval-source-map';
 
+    BaseConfig.optimization!.namedChunks = true;
+    BaseConfig.optimization!.namedModules = true;
+    BaseConfig.optimization!.noEmitOnErrors = true;
+
     // 调试用的插件
     BaseConfig.plugins!.push(
-        new Webpack.NamedModulesPlugin(),
-        new Webpack.NoEmitOnErrorsPlugin(),
         new FriendlyErrorsPlugin({
             compilationSuccessInfo: {
                 messages: [message],

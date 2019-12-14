@@ -1,3 +1,4 @@
+import Chalk from 'chalk';
 import Webpack from 'webpack';
 
 import CopyWebpackPlugin from 'copy-webpack-plugin';
@@ -7,7 +8,7 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import OptimizeCSSPlugin from 'optimize-css-assets-webpack-plugin';
 
 import { renderer } from '../env';
-import { webpackBaseConfig, version } from '../utils';
+import { webpackBaseConfig, version, buildTag } from '../utils';
 
 const { resolve, assert, output, publicPath } = renderer;
 
@@ -41,8 +42,8 @@ baseConfig.plugins = baseConfig.plugins!.concat([
     new HtmlWebpackPlugin({
         filename: 'index.html',
         data: {
-            build: version,
-            year: new Date().getFullYear(),
+            version,
+            build: buildTag,
         },
         template: resolve('index.html'),
         inject: true,
@@ -56,7 +57,7 @@ baseConfig.plugins = baseConfig.plugins!.concat([
     }),
     new ProgressBarPlugin({
         width: 40,
-        format: '> building: [:bar] :percent (:elapsed seconds)',
+        format: `${Chalk.green('> building:')} [:bar] ${Chalk.green(':percent')} (:elapsed seconds)`,
     }),
 ]);
 
