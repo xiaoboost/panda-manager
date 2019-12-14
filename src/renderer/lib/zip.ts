@@ -36,7 +36,7 @@ async function readZip(file: string | Buffer) {
 }
 
 /** 压缩包写入硬盘 */
-function zipToDisk(zip: JSZip, targetFile: string) {
+function writeZip(zip: JSZip, targetFile: string) {
     return zip.generateAsync({ type: 'nodebuffer', compression: 'STORE' })
         .then((data: Buffer) => fs.writeFile(targetFile, data));
 }
@@ -98,7 +98,7 @@ export async function packageDir(dir: string, targetDir = path.dirname(dir)) {
     // 创建文件夹
     await fs.mkdirp(targetDir);
     // 压缩包写入硬盘
-    await zipToDisk(zip, path.join(targetDir, `${fileName}.zip`));
+    await writeZip(zip, path.join(targetDir, `${fileName}.zip`));
 }
 
 /** 解包文件夹 */
@@ -113,9 +113,4 @@ export async function unpackZip(file: string, targetDir = path.dirname(file)) {
         await fs.mkdirp(fileFullDir);
         await fs.writeFile(fileFull, image.buffer);
     }
-}
-
-/** 从压缩包中移除文件 */
-export function removeFile(zip: string, files: string[]) {
-    //
 }

@@ -1,6 +1,9 @@
 type PromiseComp<T = any> = T | Promise<T>;
 
-/** 创建元数据时的上下文 */
+/**
+ * 创建元数据时的上下文
+ * TODO: 这里还可以是文件夹
+ */
 export interface FromContext {
     id: number;
     file: string;
