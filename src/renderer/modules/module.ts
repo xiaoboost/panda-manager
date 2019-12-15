@@ -35,7 +35,6 @@ export interface BaseModuleData {
 
 export interface ListCoverProps {
     id: number;
-    onClick: () => void;
 }
 
 /** 模块静态接口 */

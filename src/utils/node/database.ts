@@ -10,7 +10,7 @@ type DatabaseInFile = Record<string, object[]>;
 
 /** 生成编号 */
 const newId = ({ id }: { id?: any }) => {
-    if (id) {
+    if (!id) {
         return uid();
     }
 

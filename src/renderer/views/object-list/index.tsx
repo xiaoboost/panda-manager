@@ -1,29 +1,38 @@
-import './index.less';
+import styles from './index.less';
 
 import React from 'react';
 
 import { useWatcher } from 'utils/react';
+import { stringifyClass } from 'utils/web';
 import { getModule } from 'renderer/modules';
 import { Objects } from 'renderer/store/database';
 
-export default function ItemList() {
+export default function ObjectsList() {
     const [rows] = useWatcher(Objects);
 
     return (
-        <main id='item-list'>
+        <main id={styles.objectsList}>
             {rows.map(({ data }) => {
-                const module = getModule(data.id);
+                const module = getModule(data.type);
 
                 if (!module) {
                     return '';
                 }
+                
+                // onClick={clickHandler}
+                // onDoubleClick={dbClickHandler}
 
                 return (
-                    <module.ListCover
-                        key={data.id}
-                        id={data.id}
-                        onClick={() => void 0}
-                    />
+                    <div
+                        className={stringifyClass(styles.objectItem, {
+                            [styles.objectItemSelected]: true,
+                        })}>
+                        <div className={styles.objectItemMask}>
+                            <div className={styles.objectItemMaskOutside}></div>
+                            <div className={styles.objectItemMaskInside}></div>
+                        </div>
+                        <module.ListCover id={data.id} />
+                    </div>
                 );
             })}
         </main>
