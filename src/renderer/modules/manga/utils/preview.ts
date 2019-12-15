@@ -8,7 +8,7 @@ import { readdirs } from 'utils/node';
 import { isString } from 'utils/shared';
 
 import { zipFiles } from 'renderer/lib/zip';
-import { compress, concat } from 'renderer/lib/image';
+import { isImage, compress, concat } from 'renderer/lib/image';
 
 import { coverPath, previewPath } from './path';
 
@@ -36,10 +36,10 @@ const PriviewCompress = {
     },
 };
 
-/** 允许的图片后缀 */
-const allowImageExt = ['.png', '.jpg', '.jepg', '.bmp'];
+/** 有效图片数量 */
+const leastNumber = 3;
 
-async function fromDir(dir: string): Promise<Preview> {
+async function fromDir(dir: string): Promise<Preview | undefined> {
     /** 封面图片数据 */
     let cover = Buffer.from('');
     /** 预览图片数据 */
@@ -52,13 +52,14 @@ async function fromDir(dir: string): Promise<Preview> {
     for (let i = 0; i < allFiles.length; i++) {
         const file = allFiles[i];
 
+        // 当前图片
+        const image = await fs.readFile(file);
+
         // 跳过不允许的文件后缀
-        if (!allowImageExt.includes(path.extname(file).toLowerCase())) {
+        if (!isImage(image)) {
             continue;
         }
 
-        // 当前图片
-        const image = await fs.readFile(file);
         // 生成预览图片
         const preview = await compress(image, {
             type: 'jpg',
@@ -85,6 +86,11 @@ async function fromDir(dir: string): Promise<Preview> {
             imageSize(preview).height!,
         ]);
     }
+    
+    // 如果少于 3 张图片，则跳过
+    if (position.length <= leastNumber) {
+        return;
+    }
 
     return {
         cover,
@@ -93,7 +99,7 @@ async function fromDir(dir: string): Promise<Preview> {
     };
 }
 
-async function fromZip(zip: string | Buffer): Promise<Preview> {
+async function fromZip(zip: string | Buffer): Promise<Preview | undefined> {
     /** 封面图片数据 */
     let cover = Buffer.from('');
     /** 预览图片数据 */
@@ -102,14 +108,14 @@ async function fromZip(zip: string | Buffer): Promise<Preview> {
     const position: [number, number][] = [];
 
     // 迭代压缩包内的数据
-    for await (const file of zipFiles(zip)) {
+    for await (const { buffer, index } of zipFiles(zip)) {
         // 跳过不允许的文件后缀
-        if (!allowImageExt.includes(path.extname(file.path).toLowerCase())) {
+        if (!isImage(buffer)) {
             continue;
         }
 
         // 当前图片
-        const image = file.buffer;
+        const image = buffer;
         // 生成预览图片
         const preview = await compress(image, {
             type: 'jpg',
@@ -117,7 +123,7 @@ async function fromZip(zip: string | Buffer): Promise<Preview> {
         });
 
         // 第一页
-        if (file.index === 0) {
+        if (index === 0) {
             // 预览图片
             thumbnails = preview;
             // 压缩首页
@@ -135,6 +141,11 @@ async function fromZip(zip: string | Buffer): Promise<Preview> {
             imageSize(thumbnails).width!,
             imageSize(preview).height!,
         ]);
+    }
+
+    // 如果少于 3 张图片，则跳过
+    if (position.length <= leastNumber) {
+        return;
     }
 
     return {

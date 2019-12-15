@@ -119,3 +119,14 @@ export function concat(main: Buffer, extend: Buffer) {
         }])
         .toBuffer();
 }
+
+/** 是否是图片 */
+export function isImage(image: Buffer) {
+    try {
+        const { type } = imageSize(image);
+        return Boolean(type);
+    }
+    catch (e) {
+        return false;
+    }
+}
