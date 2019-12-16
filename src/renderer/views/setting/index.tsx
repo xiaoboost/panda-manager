@@ -1,4 +1,5 @@
-import { mainSetting } from './index.less';
+import styles from './index.less';
+
 import { default as React } from 'react';
 
 import Display from './display';
@@ -6,7 +7,7 @@ import Directories from './directories';
 
 export default function Setting() {
     return (
-        <main id={mainSetting}>
+        <main id={styles.mainSetting}>
             <Directories />
             <Display />
         </main>
