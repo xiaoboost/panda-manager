@@ -33,14 +33,7 @@
                 "options": {
                     "classnameTransform": "camelCaseOnly",
                     "customMatcher": "\\.less$",
-                    "rendererOptions": {
-                        "less": {
-                            "paths": [
-                                "./node_modules/",
-                                "./src/"
-                            ]
-                        }
-                    }
+                    "customRenderer": "./build/less-renderer.js"
                 }
             }
         ]

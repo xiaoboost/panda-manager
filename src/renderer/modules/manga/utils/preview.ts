@@ -86,7 +86,7 @@ async function fromDir(dir: string): Promise<Preview | undefined> {
             imageSize(preview).height!,
         ]);
     }
-    
+
     // 如果少于 3 张图片，则跳过
     if (position.length <= leastNumber) {
         return;

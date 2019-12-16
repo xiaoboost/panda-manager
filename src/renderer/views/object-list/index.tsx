@@ -18,12 +18,13 @@ export default function ObjectsList() {
                 if (!module) {
                     return '';
                 }
-                
+
                 // onClick={clickHandler}
                 // onDoubleClick={dbClickHandler}
 
                 return (
                     <div
+                        key={data.id}
                         className={stringifyClass(styles.objectItem, {
                             [styles.objectItemSelected]: true,
                         })}>
