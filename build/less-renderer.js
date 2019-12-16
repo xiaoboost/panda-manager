@@ -9,6 +9,7 @@ module.exports = (css, { logger }) => {
             .replace(/@import[^\n]+/g, '')
             .match(/([.#][^ {\n,']+)/g)
             .filter((select) => !/#[0-9a-fA-F]/.test(select))
+            .filter((select) => !/\.[0-9]/.test(select))
             .join(', ');
 
         return `${context} {\n    position: relative;\n}\n`;
