@@ -2,18 +2,18 @@ import './index.less';
 
 import React from 'react';
 
-import { warn } from 'renderer/lib/print';
+// import { warn } from 'renderer/lib/print';
 // import { tagGroups } from 'renderer/store';
-import { useWatcher } from 'src/utils/react';
-import { deleteConfirm } from 'renderer/lib/dialog';
-import { TagGroup, TagGroupData } from 'renderer/lib/tag';
+// import { useWatcher } from 'src/utils/react';
+// import { deleteConfirm } from 'renderer/lib/dialog';
+// import { TagGroup, TagGroupData } from 'renderer/lib/tag';
 
-import { Button, Icon } from 'antd';
+// import { Button, Icon } from 'antd';
 
-import TagGroupComp from './tag-group';
-import { editTagByModal, FormType } from './tag-edit';
+// import TagGroupComp from './tag-group';
+// import { editTagByModal, FormType } from './tag-edit';
 
-import { deleteVal } from 'utils/shared';
+// import { deleteVal } from 'utils/shared';
 
 export default function TagCollection() {
     return <div>标签集合</div>;

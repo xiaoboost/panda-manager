@@ -43,7 +43,7 @@ export default function ObjectsList() {
         }
         // 右键
         else if (ev.button === 2) {
-            console.log(`右键：${data.id}`)
+            console.log(`右键：${data.id}`);
         }
     });
     const backgroundClickHandler = (ev: React.MouseEvent) => {
@@ -67,7 +67,7 @@ export default function ObjectsList() {
                     </div>
                     {(() => {
                         const { ListCover } = getModule(data.type)!;
-                        return <ListCover id={data.id} />
+                        return <ListCover id={data.id} />;
                     })()}
                 </div>
             ))}
