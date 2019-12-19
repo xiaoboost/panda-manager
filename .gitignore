@@ -1,6 +1,9 @@
 .vscode/
+_temp/
 dist/
 doc/
-_temp/
-node_modules/
 draft/
+node_modules/
+
+/packages/*/node_modules/
+/packages/*/package-lock.json

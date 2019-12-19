@@ -1,0 +1,9 @@
+{
+    "extends": "../../tsconfig.json",
+    "include": ["../../typings", "src"],
+    "exclude": ["node_modules"],
+    "compilerOptions": {
+        "module": "ESNext",
+        "target": "esnext"
+    }
+}

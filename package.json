@@ -1,6 +1,6 @@
 {
   "name": "panda-manager",
-  "version": "0.1.0",
+  "version": "0.1.0-alpha.0",
   "description": "panda-manager is a cross platform manga/doujinshi manager with tag",
   "main": "dist/main/index.js",
   "scripts": {
