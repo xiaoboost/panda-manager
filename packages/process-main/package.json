@@ -1,7 +1,7 @@
 {
   "name": "@panda-manager/process-renderer",
   "version": "0.1.0-alpha.0",
-  "description": "panda-manager main renderer",
+  "description": "panda-manager main process",
   "files": ["index.js"],
   "author": "xiao",
   "license": "MIT",
