@@ -1,0 +1,56 @@
+@import '../../css/variable.less';
+
+main#tags-collection {
+    margin: 0 auto;
+    max-width: 1000px;
+
+    .tags-group-card {
+        margin: 10px 0 20px 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+
+        &:first-child {
+            margin-top: 0;
+        }
+
+        @BoxPaddingX: 6px;
+        @BoxPaddingY: 4px;
+
+        .ant-tag {
+            cursor: pointer;
+        }
+
+        .tags-group-card__header {
+            display: inline-block;
+            padding: @BoxPaddingY 0;
+            border-bottom: 1px solid @BlackExtraLight;
+
+            .tags-group-card__title {
+                margin: 0 12px 0 @BoxPaddingX;
+                font-size: 110%;
+            }
+
+            .tags-group-card__action {
+                color: Blue;
+                cursor: pointer;
+                margin-right: 10px;
+            }
+        }
+
+        .tags-group-card__content {
+            padding: 10px @BoxPaddingX;
+        }
+
+        .tags-group__add {
+            background-color: '#fff';
+            border-style: dashed;
+        }
+    }
+
+    .tags-group-menu {
+        [index-data="delete"] * {
+            color: Red;
+        }
+    }
+}

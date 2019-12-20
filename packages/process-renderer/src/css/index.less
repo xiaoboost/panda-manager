@@ -1,0 +1,33 @@
+:global {
+    @import './variable.less';
+    @import './font.less';
+    @import './app.less';
+    @import './antd.less';
+
+    * {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        cursor: inherit;
+        user-select: inherit;
+        box-sizing: border-box;
+        -webkit-margin-before: 0;
+        -webkit-margin-after: 0;
+    }
+
+    html, body, #app {
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        user-select: none;
+        cursor: default;
+        color: Black;
+        font-family: font-default;
+        font-size: font-default-size;
+        .font-smoothing();
+    }
+
+    input, textarea {
+        cursor: text;
+    }
+}
