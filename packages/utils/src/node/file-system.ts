@@ -3,11 +3,13 @@ import * as path from 'path';
 
 import { promisify } from 'util';
 
-const stat = promisify(fs.stat);
-const readdir = promisify(fs.readdir);
-const unlink = promisify(fs.unlink);
-const exists = promisify(fs.exists);
-const mkdir = promisify(fs.mkdir);
+export const readFile = promisify(fs.readFile);
+export const writeFile = promisify(fs.writeFile);
+export const stat = promisify(fs.stat);
+export const readdir = promisify(fs.readdir);
+export const rm = promisify(fs.unlink);
+export const exists = promisify(fs.exists);
+export const mkdir = promisify(fs.mkdir);
 
 /** 遍历文件夹下的所有文件 */
 async function filesOperation(base: string, opt: (file: string, stat: fs.Stats) => void | Promise<void>) {
@@ -61,14 +63,14 @@ export async function fileSize(base: string) {
 }
 
 /** 删除文件或文件夹 */
-export async function remove(base: string) {
+export async function rmrf(base: string) {
     const fileStat = await stat(base);
 
     if (fileStat.isDirectory()) {
-        await filesOperation(base, (file) => unlink(file));
+        await filesOperation(base, (file) => rm(file));
     }
     else {
-        await unlink(base);
+        await rm(base);
     }
 }
 
@@ -85,7 +87,6 @@ export async function mkdirp(target: string) {
     }
 
     while (dirs.length > 0) {
-        const current = dirs.shift()!;
-        await mkdir(current);
+        await mkdir(dirs.shift()!);
     }
 }
