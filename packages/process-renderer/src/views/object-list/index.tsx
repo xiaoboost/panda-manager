@@ -2,10 +2,11 @@ import styles from './index.less';
 
 import React from 'react';
 
-import { stringifyClass } from 'utils/web';
-import { Database, Config } from 'renderer/store';
-import { getModule, BaseModuleData } from 'renderer/modules';
-import { useWatcher, useMap, useListCallback } from 'utils/react';
+import { stringifyClass } from '@utils/web';
+import { useWatcher, useMap, useListCallback } from '@utils/react-use';
+import { getModule, BaseModuleData } from '@panda/module-controller';
+
+import { Database, Config } from '../../store';
 
 import stringNaturalCompare from 'string-natural-compare';
 

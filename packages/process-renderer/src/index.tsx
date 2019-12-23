@@ -1,6 +1,5 @@
 import './css';
 import 'antd/dist/antd.css';
-import 'renderer/lib/native';
 
 import * as React from 'react';
 

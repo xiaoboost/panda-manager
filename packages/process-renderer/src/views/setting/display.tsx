@@ -5,8 +5,8 @@ import CardLine from './line';
 
 import { Switch, Select } from 'antd';
 
-import { Config } from 'renderer/store';
-import { useWatcher, useCallback } from 'utils/react';
+import { Config } from '../../store';
+import { useWatcher, useCallback } from '@utils/react-use';
 
 const sortByList = [
     {
