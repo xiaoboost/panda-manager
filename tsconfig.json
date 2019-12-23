@@ -34,7 +34,7 @@
                 "options": {
                     "classnameTransform": "camelCaseOnly",
                     "customMatcher": "\\.less$",
-                    "customRenderer": "./build/less-renderer.js"
+                    "customRenderer": "../../build/less-renderer.js"
                 }
             }
         ]
