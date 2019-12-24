@@ -3,11 +3,11 @@ import styles from './index.less';
 import React from 'react';
 
 import { remote } from 'electron';
-import { stringifyClass } from 'utils/web';
-import { useIsFocus, useIsMaximize, useRouter, useCallback } from 'utils/react';
+import { stringifyClass } from '@utils/web';
+import { useIsFocus, useIsMaximize, useRouter, useCallback } from '@utils/react-use';
 
-import AIcon from 'antd/es/icon';
-import BIcon from 'renderer/components/icon';
+import { Icon as AIcon } from 'antd';
+import { Icon as BIcon } from '@utils/components';
 
 // TODO: 按键按下也应该有效果
 

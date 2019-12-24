@@ -2,11 +2,11 @@ import styles from './index.less';
 
 import React from 'react';
 
-import { stringifyClass } from 'utils/web';
-import { useRouter, useState, useCallback } from 'utils/react';
+import { stringifyClass } from '@utils/web';
+import { useRouter, useState, useCallback } from '@utils/react-use';
 
-import AIcon from 'antd/es/icon';
-import BIcon from 'renderer/components/icon';
+import { Icon as AIcon } from 'antd';
+import { Icon as BIcon } from '@utils/components';
 
 import MenuList from './menu';
 
