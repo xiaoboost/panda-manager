@@ -1,17 +1,15 @@
 import Webpack from 'webpack';
 import TerserPlugin from 'terser-webpack-plugin';
-import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 import FriendlyErrorsPlugin from 'friendly-errors-webpack-plugin';
 
-import { loader } from 'mini-css-extract-plugin';
+import { join } from 'path';
 import { removeSync as rm, readdirSync, statSync } from 'fs-extra';
 
-import { resolveRoot } from './env';
+/** 定位到项目根目录 */
+export const resolveRoot = (...dir: string[]) => join(__dirname, '../', ...dir);
 
-const isDevelopment = process.env.NODE_ENV === 'development';
-
-/** 当前版本号 */
-export { version } from '../package.json';
+/** 生成项目路径定位函数 */
+export const resolvePackage = (name: string) => (...dir: string[]) => resolveRoot('packages', name, ...dir);
 
 /** 当前编译时间 */
 export const buildTag = (() => {
@@ -24,100 +22,35 @@ export const buildTag = (() => {
     return `${year}.${month}.${date} - ${time}`;
 })();
 
-/** 当前模式的样式读取器 */
-const styleLoader = isDevelopment ? 'style-loader' : loader;
+/** webpack 别名 */
+export function webpackAlias() {
+    const packages = readdirSync(resolveRoot('packages'))
+        .map((name) => ({
+            name,
+            path: resolveRoot(`packages/${name}/src`),
+        }))
+        .reduce((map, { name, path }) => {
+            map[name] = path;
+            return map;
+        }, {});
 
-/** 生成 webpack 基础配置 */
-export function webpackBaseConfig(mode: 'main' | 'renderer'): Webpack.Configuration {
     return {
-        mode: process.env.NODE_ENV as Webpack.Configuration['mode'],
-        target: `electron-${mode}` as Webpack.Configuration['target'],
-        node: {
-            __dirname: false,
-            __filename: false,
-        },
-        externals: {
-            'fs-extra': 'commonjs fs-extra',
-        },
-        optimization: {
-            minimizer: [],
-        },
-        resolve: {
-            extensions: ['.tsx', '.ts', '.js', '.jsx', '.json', '.styl', '.less', '.css'],
-            mainFiles: ['index.tsx', 'index.ts', 'index.js', 'index.styl', 'index.less', 'index.css'],
-            alias: {
-                src: resolveRoot('src'),
-                main: resolveRoot('src/main'),
-                renderer: resolveRoot('src/renderer'),
-                utils: resolveRoot('src/utils/shared'),
-            },
-            plugins: [
-                new TsconfigPathsPlugin({
-                    configFile: resolveRoot(`tsconfig.build.${mode}.json`),
-                }),
-            ],
-        },
-        module: {
-            rules: [
-                {
-                    test: /\.tsx?$/,
-                    exclude: /node_modules/,
-                    loader: 'ts-loader',
-                    options: {
-                        configFile: resolveRoot(`tsconfig.build.${mode}.json`),
-                    },
-                },
-                {
-                    test: /\.node$/,
-                    use: 'node-loader',
-                },
-                {
-                    test: /\.css$/,
-                    use: [styleLoader, 'css-loader'],
-                },
-                {
-                    test: /\.less$/,
-                    include: /node_modules/,
-                    use: [styleLoader, 'css-loader', 'less-loader'],
-                },
-                {
-                    test: /\.less$/,
-                    exclude: /node_modules/,
-                    use: [
-                        styleLoader,
-                        {
-                            loader: 'css-loader',
-                            options: {
-                                localsConvention: 'camelCaseOnly',
-                                modules: {
-                                    localIdentName: isDevelopment ? '[local]__[hash:base64:5]' : '[hash:base64:6]',
-                                    context: resolveRoot(__dirname, 'src'),
-                                },
-                            },
-                        },
-                        {
-                            loader: 'less-loader',
-                            options: {
-                                javascriptEnabled: true,
-                                paths: [resolveRoot('src')],
-                            },
-                        },
-                    ],
-                },
-            ],
-        },
-        plugins: [
-            new Webpack.optimize.ModuleConcatenationPlugin(),
-            new Webpack.HashedModuleIdsPlugin({
-                hashFunction: 'sha256',
-                hashDigest: 'hex',
-                hashDigestLength: 6,
-            }),
-            new Webpack.DefinePlugin({
-                'process.env.NODE_ENV': isDevelopment ? '"development"' : '"production"',
-            }),
-        ],
+        '@utils': resolveRoot('packages/utils/src'),
+        ...packages,
     };
+}
+
+/** 检查编译项目是否存在 */
+export function checkProjectName(name: string) {
+    const paths = readdirSync(resolveRoot('packages'));
+    const isExist = paths.includes(name);
+
+    if (!isExist) {
+        return false;
+    }
+
+    const stat = statSync(resolveRoot('packages', name));
+    return stat.isDirectory();
 }
 
 /** 调试模式 */
@@ -187,18 +120,4 @@ export function build(BaseConfig: Webpack.Configuration) {
             children: false,
         }));
     });
-}
-
-/** 检查编译项目是否存在 */
-export function checkProjectName(name: string) {
-    const paths = readdirSync(resolveRoot('src'));
-    const isExist = paths.includes(name);
-
-    if (!isExist) {
-        return false;
-    }
-
-    const stat = statSync(resolveRoot('src', name));
-
-    return stat.isDirectory();
 }
