@@ -1,5 +1,5 @@
-import * as fs from 'fs-extra';
 import * as path from 'path';
+import * as fs from '@utils/node/file-system';
 
 import { ready as databaseReady, Objects } from './database';
 import { ready as configReady, data as Config } from './config';
@@ -26,7 +26,7 @@ const filesQueue: string[] = new Proxy([], {
 
             (async () => {
                 while (target.length > 0) {
-                    const meta = await createMeta(target.shift()!);
+                    const meta: any = await createMeta(target.shift()!);
 
                     if (meta) {
                         Objects.insert(meta);

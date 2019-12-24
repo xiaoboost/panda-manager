@@ -1,4 +1,6 @@
 import Webpack from 'webpack';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 
 import { loader } from 'mini-css-extract-plugin';
@@ -15,10 +17,8 @@ export const webpackConfig: Webpack.Configuration = {
     entry: resolve('src/index.tsx'),
     output: {
         path: resolveRoot('dist/renderer'),
+        publicPath: './',
         filename: 'script.js',
-    },
-    optimization: {
-        minimizer: [],
     },
     resolve: {
         extensions: ['.tsx', '.ts', '.js', '.jsx', '.json', '.styl', '.less', '.css'],
@@ -80,16 +80,20 @@ export const webpackConfig: Webpack.Configuration = {
         ],
     },
     plugins: [
-        new Webpack.optimize.ModuleConcatenationPlugin(),
-        new Webpack.HashedModuleIdsPlugin({
-            hashFunction: 'sha256',
-            hashDigest: 'hex',
-            hashDigestLength: 6,
+        new MiniCssExtractPlugin({
+            filename: 'style.css',
         }),
-        new Webpack.DefinePlugin({
-            'process.env.NODE_ENV': isDevelopment
-                ? '"development"'
-                : '"production"',
+        new HtmlWebpackPlugin({
+            filename: 'index.html',
+            template: resolve('src/index.html'),
+            inject: true,
+            minify: {
+                removeComments: !isDevelopment,
+                collapseWhitespace: !isDevelopment,
+                ignoreCustomComments: [/^-/],
+            },
+            chunksSortMode: 'dependency',
+            excludeChunks: [],
         }),
     ],
 };

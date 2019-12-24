@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
+import Chalk from 'chalk';
 import Webpack from 'webpack';
 import TerserPlugin from 'terser-webpack-plugin';
+import ProgressBarPlugin from 'progress-bar-webpack-plugin';
+import OptimizeCSSPlugin from 'optimize-css-assets-webpack-plugin';
 import FriendlyErrorsPlugin from 'friendly-errors-webpack-plugin';
 
 import { join } from 'path';
@@ -55,6 +58,34 @@ function checkProjectName(name: string) {
     return stat.isDirectory();
 }
 
+/** 设置 webpack 的公共属性 */
+function webpackCommon(config: Webpack.Configuration) {
+    if (!config.optimization) {
+        config.optimization = {};
+    }
+
+    if (!config.optimization.minimizer) {
+        config.optimization.minimizer = [];
+    }
+
+    if (!config.plugins) {
+        config.plugins = [];
+    }
+
+    config.plugins = config.plugins.concat([
+        new Webpack.optimize.ModuleConcatenationPlugin(),
+        new Webpack.HashedModuleIdsPlugin({
+            hashFunction: 'sha256',
+            hashDigest: 'hex',
+            hashDigestLength: 6,
+        }),
+        new ProgressBarPlugin({
+            width: 40,
+            format: `${Chalk.green('> building:')} [:bar] ${Chalk.green(':percent')} (:elapsed seconds)`,
+        }),
+    ]);
+}
+
 /** 调试模式 */
 export function devBuild(name: string) {
     if (!checkProjectName(name)) {
@@ -62,12 +93,12 @@ export function devBuild(name: string) {
         process.exit(1);
     }
 
-    const { webpackConfig: BaseConfig } = require(resolveRoot('packages', name, 'webpack.ts'));
-
-    console.log(BaseConfig.output!.path!);
+    const BaseConfig: Webpack.Configuration = require(resolveRoot('packages', name, 'webpack.ts')).webpackConfig;
 
     // 删除输出文件夹
     rm(BaseConfig.output!.path!);
+
+    webpackCommon(BaseConfig);
 
     // 每个模块用 eval() 执行, SourceMap 作为 DataUrl 添加到文件末尾
     BaseConfig.devtool = 'eval-source-map';
@@ -77,14 +108,17 @@ export function devBuild(name: string) {
     BaseConfig.optimization!.noEmitOnErrors = true;
 
     // 调试用的插件
-    BaseConfig.plugins!.push(
+    BaseConfig.plugins = BaseConfig.plugins!.concat([
+        new Webpack.DefinePlugin({
+            'process.env.NODE_ENV': '"production"',
+        }),
         new FriendlyErrorsPlugin({
             compilationSuccessInfo: {
                 messages: [`Project '${name}' compile done.`],
                 notes: [],
             },
         }),
-    );
+    ]);
 
     const compiler = Webpack(BaseConfig);
 
@@ -104,12 +138,16 @@ export function build(name: string) {
         process.exit(1);
     }
 
-    const { webpackConfig: BaseConfig } = require(resolveRoot('packages', name, 'webpack.ts'));
+    const BaseConfig: Webpack.Configuration = require(resolveRoot('packages', name, 'webpack.ts')).webpackConfig;
 
     // 删除输出文件夹
     rm(BaseConfig.output!.path!);
 
-    BaseConfig.optimization!.minimizer!.push(
+    webpackCommon(BaseConfig);
+
+    BaseConfig.optimization!.minimize = true;
+
+    BaseConfig.optimization!.minimizer = BaseConfig.optimization!.minimizer!.concat([
         new TerserPlugin({
             test: /\.js$/i,
             cache: false,
@@ -122,7 +160,14 @@ export function build(name: string) {
                 },
             },
         }),
-    );
+    ]);
+
+    BaseConfig.plugins = BaseConfig.plugins!.concat([
+        new OptimizeCSSPlugin(),
+        new Webpack.DefinePlugin({
+            'process.env.NODE_ENV': '"production"',
+        }),
+    ]);
 
     Webpack(BaseConfig, (err, stats) => {
         if (err) {
