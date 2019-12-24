@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+
 import Webpack from 'webpack';
 import TerserPlugin from 'terser-webpack-plugin';
 import FriendlyErrorsPlugin from 'friendly-errors-webpack-plugin';
@@ -41,7 +43,7 @@ export function webpackAlias() {
 }
 
 /** 检查编译项目是否存在 */
-export function checkProjectName(name: string) {
+function checkProjectName(name: string) {
     const paths = readdirSync(resolveRoot('packages'));
     const isExist = paths.includes(name);
 
@@ -54,7 +56,16 @@ export function checkProjectName(name: string) {
 }
 
 /** 调试模式 */
-export function devBuild(BaseConfig: Webpack.Configuration, message: string) {
+export function devBuild(name: string) {
+    if (!checkProjectName(name)) {
+        console.error(`Project '${name}' is not exist!`);
+        process.exit(1);
+    }
+
+    const { webpackConfig: BaseConfig } = require(resolveRoot('packages', name, 'webpack.ts'));
+
+    console.log(BaseConfig.output!.path!);
+
     // 删除输出文件夹
     rm(BaseConfig.output!.path!);
 
@@ -69,7 +80,7 @@ export function devBuild(BaseConfig: Webpack.Configuration, message: string) {
     BaseConfig.plugins!.push(
         new FriendlyErrorsPlugin({
             compilationSuccessInfo: {
-                messages: [message],
+                messages: [`Project '${name}' compile done.`],
                 notes: [],
             },
         }),
@@ -87,7 +98,14 @@ export function devBuild(BaseConfig: Webpack.Configuration, message: string) {
 }
 
 /** 编译模式 */
-export function build(BaseConfig: Webpack.Configuration) {
+export function build(name: string) {
+    if (!checkProjectName(name)) {
+        console.error(`Project '${name}' is not exist!`);
+        process.exit(1);
+    }
+
+    const { webpackConfig: BaseConfig } = require(resolveRoot('packages', name, 'webpack.ts'));
+
     // 删除输出文件夹
     rm(BaseConfig.output!.path!);
 

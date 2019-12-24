@@ -1,7 +1,6 @@
+import { writeFile, readJSON } from '@utils/node';
 import { resolveUserDir, debounce } from '@utils/shared';
 import { BrowserWindow, BrowserWindowConstructorOptions } from 'electron';
-
-import * as fs from 'fs-extra';
 
 const fileName = 'window-state.json';
 const filePath = resolveUserDir(fileName);
@@ -36,17 +35,17 @@ function writeState(opt: Partial<WindowState> = {}) {
         ...opt,
     });
 
-    fs.writeJSON(filePath, state);
+    writeFile(filePath, JSON.stringify(state));
 }
 
 export async function windowStateKeeper(options: BrowserWindowConstructorOptions = {}) {
-    const config: WindowState = await fs.readJSON(filePath).catch(() => ({
+    const config = await readJSON<WindowState>(filePath, {
         isMaximize: false,
-        height: options.height,
-        width: options.width,
+        height: options.height || 600,
+        width: options.width || 800,
         top: options.y,
         left: options.x,
-    }));
+    });
 
     Object.assign(state, config);
 

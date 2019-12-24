@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { existsSync, mkdirpSync } from 'fs-extra';
+import { existsSync, mkdirp } from '../node';
 import { app as originApp, remote } from 'electron';
 
 /** 软件名称 */
@@ -23,12 +23,12 @@ const userDir = process.env.NODE_ENV === 'development'
 
 // 如果没有临时文件夹，则创建
 if (!existsSync(tempDir)) {
-    mkdirpSync(tempDir);
+    mkdirp(tempDir);
 }
 
 // 如果没有用户文件夹，则创建
 if (!existsSync(userDir)) {
-    mkdirpSync(userDir);
+    mkdirp(userDir);
 }
 
 /** 由软件根目录的相对路径转变为绝对路径 */

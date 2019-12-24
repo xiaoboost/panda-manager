@@ -1,6 +1,5 @@
-import { readFile, writeFile } from 'fs-extra';
-
 import { gzip, gunzip } from './zlib';
+import { readFile, writeFile } from './file-system';
 import { uid, debounce, Watcher } from '../shared';
 
 /** 基础数据行 */

@@ -11,6 +11,10 @@ export const rm = promisify(fs.unlink);
 export const exists = promisify(fs.exists);
 export const mkdir = promisify(fs.mkdir);
 
+export {
+    existsSync,
+} from 'fs';
+
 /** 遍历文件夹下的所有文件 */
 async function filesOperation(base: string, opt: (file: string, stat: fs.Stats) => void | Promise<void>) {
     const files = await readdir(base);
@@ -37,6 +41,25 @@ async function folderSize(base: string) {
     });
 
     return result;
+}
+
+/** 读取 json 文件 */
+export async function readJSON<T extends object>(path: string): Promise<T | undefined>;
+export async function readJSON<T extends object>(path: string, initVal: T): Promise<T>;
+export async function readJSON<T extends object>(path: string, initVal?: T) {
+    const content = (await readFile(path).catch(() => '')).toString();
+
+    if (!content) {
+        return initVal;
+    }
+
+    try {
+        return JSON.parse(content) as T;
+    }
+    catch (e) {
+        console.warn(e);
+        return initVal;
+    }
 }
 
 /** 获取文件夹内所有文件路径 */
