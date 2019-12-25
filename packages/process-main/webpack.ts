@@ -1,7 +1,7 @@
 import Webpack from 'webpack';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 
-import { webpackAlias, resolvePackage, resolveRoot } from '../../build/utils';
+import { resolvePackage, resolveRoot } from '../../build/utils';
 
 const resolve = resolvePackage('process-main');
 
@@ -21,7 +21,6 @@ export const webpackConfig: Webpack.Configuration = {
     resolve: {
         extensions: ['.ts', '.js', '.json'],
         mainFiles: ['index.ts', 'index.js'],
-        alias: webpackAlias(),
         plugins: [
             new TsconfigPathsPlugin({
                 configFile: resolve('tsconfig.json'),

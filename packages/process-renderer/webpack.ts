@@ -4,7 +4,7 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 
 import { loader } from 'mini-css-extract-plugin';
-import { webpackAlias, resolvePackage, resolveRoot } from '../../build/utils';
+import { resolvePackage, resolveRoot } from '../../build/utils';
 
 const resolve = resolvePackage('process-renderer');
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -23,7 +23,6 @@ export const webpackConfig: Webpack.Configuration = {
     resolve: {
         extensions: ['.tsx', '.ts', '.js', '.jsx', '.json', '.styl', '.less', '.css'],
         mainFiles: ['index.tsx', 'index.ts', 'index.js', 'index.styl', 'index.less', 'index.css'],
-        alias: webpackAlias(),
         plugins: [
             new TsconfigPathsPlugin({
                 configFile: resolve('tsconfig.json'),

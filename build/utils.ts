@@ -28,7 +28,7 @@ export const buildTag = (() => {
 })();
 
 /** webpack 别名 */
-export function webpackAlias() {
+function webpackAlias() {
     const packages = readdirSync(resolveRoot('packages'))
         .map((name) => ({
             name,
@@ -60,6 +60,19 @@ function checkProjectName(name: string) {
 
 /** 设置 webpack 的公共属性 */
 function webpackCommon(config: Webpack.Configuration) {
+    if (!config.resolve) {
+        config.resolve = {};
+    }
+
+    if (!config.resolve.alias) {
+        config.resolve.alias = {};
+    }
+
+    config.resolve.alias = {
+        ...config.resolve.alias,
+        ...webpackAlias(),
+    };
+
     if (!config.optimization) {
         config.optimization = {};
     }
