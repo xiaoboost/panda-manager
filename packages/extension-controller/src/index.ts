@@ -1,29 +1,28 @@
 import { VM } from 'vm2';
-import { Module } from './types';
+import { Extension } from './types';
+import { extensions } from './utils';
+import { Context } from './context';
 
 import { resolveUserDir } from '@utils/shared';
 
-import * as ModuleContext from './context';
 import * as fs from '@utils/node/file-system';
 
 export * from './types';
-export { getModule } from './utils';
+export { getExtension } from './utils';
 
 /** 扩展的储存路径 */
 const extensionPath = resolveUserDir('extensions');
-/** 扩展列表 */
-const extensions: Module[] = [];
 
 /** 创建项目元数据 */
-export async function createMeta(path: string) {
-    // ..
-}
+// export async function createMeta(path: string) {
 
-function createModule(code: string) {
+// }
+
+function readExtension(code: string) {
     /** 模块沙盒 */
     const vm = new VM({
         sandbox: {
-            ...ModuleContext,
+            panda: Context,
             modules: {
                 exports: {},
             },
@@ -31,13 +30,13 @@ function createModule(code: string) {
     });
 
     const subModule = vm.run(
-        `(function getModule() {
+        `(function getExtension() {
             ${code};
             return modules.exports;
         })()`,
     );
 
-    return subModule as Module;
+    return subModule as Extension;
 }
 
 export const ready = (async () => {
@@ -55,7 +54,7 @@ export const ready = (async () => {
             continue;
         }
 
-        const module = createModule(content.toString());
+        const module = readExtension(content.toString());
 
         extensions.push(module);
     }

@@ -50,6 +50,8 @@ module.exports =  {
         '@typescript-eslint/prefer-interface': 'off',
         // 调试时警告，生产时禁止未使用过的变量，在函数参数中，最后一个参数必须使用
         '@typescript-eslint/no-unused-vars': isProduction ? ['error', { 'vars': 'all', 'args': 'after-used' }] : 'warn',
+        // 允许 namespace
+        '@typescript-eslint/no-namespace': 'off',
 
         // common
         // 不允许扩展原生数据结构

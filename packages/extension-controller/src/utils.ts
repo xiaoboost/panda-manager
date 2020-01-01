@@ -1,12 +1,12 @@
 import { readFile } from 'fs-extra';
-import { Module, ModuleType, ModuleOption } from './types';
+import { Extension } from './types';
 
 import * as utils from '@utils/shared';
 
 /** 模块模板数据 */
-export const modules: Module[] = [];
+export const extensions: Extension[] = [];
 /** 模块类型索引 */
-const modulesMap = utils.toMap(modules, (target) => target.type);
+const extensionMap = utils.toMap(extensions, ({ name }) => name);
 
 function getBuf(path: string) {
     let buf: Buffer;
@@ -15,11 +15,6 @@ function getBuf(path: string) {
         path,
         buffer: () => buf ? buf : readFile(path).then((data) => (buf = data)),
     };
-}
-
-/** 加载插件 */
-export function use(module: ModuleOption) {
-    // ..
 }
 
 /** 创建文件元数据 */
@@ -31,9 +26,15 @@ export async function createMeta(file: string) {
     };
 
     // 搜索符合条件的模块
-    for (let i = 0; i < modules.length; i++) {
+    for (let i = 0; i < extensions.length; i++) {
+        const extension = extensions[i];
+
+        if (!extension.from) {
+            continue;
+        }
+
         try {
-            const meta = await modules[i].from(context);
+            const meta = await extension.from(context);
 
             if (meta) {
                 return meta;
@@ -47,12 +48,12 @@ export async function createMeta(file: string) {
 }
 
 /** 由类型获得模块 */
-export function getModule(type: ModuleType) {
-    return modulesMap[type];
+export function getExtension(name: string) {
+    return extensionMap[name];
 }
 
 /** 项目元数据文件夹 */
-export function metaDir(id: number) {
+export function userDir(id: number) {
     return utils.resolveUserDir('metas', id);
 }
 

@@ -7,16 +7,8 @@ export interface FromContext {
     buffer(): PromiseComp<Buffer>;
 }
 
-/** 模块类型 */
-export const enum ModuleType {
-    Manga,
-}
-
-/** 模块类储存数据 */
-export interface BaseModuleData {
-    /** 模块类型 */
-    type: ModuleType;
-
+/** 文件数据储存数据 */
+export interface BaseFileData {
     /** 项目编号 */
     id: number;
     /** 项目名称 */
@@ -33,41 +25,22 @@ export interface BaseModuleData {
     tags: number[];
 }
 
+/** 列表封面组件传递数据 */
 export interface ListCoverProps {
     id: number;
 }
 
-/** 模块静态接口 */
-export interface Module {
-    /** 模块类型 */
-    type: ModuleType;
+/** 扩展静态接口 */
+export interface Extension {
+    /** 扩展名称 */
+    name: string;
 
     /** 列表页封面组件 */
-    ListCover: (props: ListCoverProps) => JSX.Element;
+    ListCover?: (props: ListCoverProps) => JSX.Element;
     /** 详情页面组件 */
-    DetailPage: () => JSX.Element;
-
+    DetailPage?: () => JSX.Element;
     /** 从真实的文件中中生成当前模块实例数据 */
-    from(context: FromContext): PromiseComp<BaseModuleData | undefined>;
-    /** 模块安装 */
-    install(): void;
-}
-
-/** 传递给模块上下文 */
-export interface InstallContext {
-    metaDir(id: number): string;
-    tempDir(id: number): string;
-}
-
-/** 组件暴露的回调 */
-export interface ModuleOption {
-    /** 模块本身 */
-    module: Module;
-
-    /** 加载模块 */
-    install?(context: InstallContext): void;
-    /** 使能模块 */
-    enabel?(): void;
-    /** 禁用模块 */
-    disable?(): void;
+    from?(context: FromContext): PromiseComp<BaseFileData | undefined>;
+    /** 爬虫方法 */
+    spider?(): void;
 }
