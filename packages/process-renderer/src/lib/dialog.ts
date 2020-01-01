@@ -23,14 +23,10 @@ export function warnDialog(props: WarnOptions) {
 }
 
 /** 选择文件夹 */
-export function selectDirectory() {
-    return new Promise<string>((resolve) => {
-        const win = remote.getCurrentWindow();
+export function selectDirectory(): Promise<string | undefined> {
+    const win = remote.getCurrentWindow();
 
-        remote.dialog.showOpenDialog(win, { properties: ['openDirectory'] }, (paths) => {
-            if (paths) {
-                resolve(paths[0]);
-            }
-        });
+    return remote.dialog.showOpenDialog(win, { properties: ['openDirectory'] }).then((paths) => {
+        return paths ? paths[0] : undefined;
     });
 }
