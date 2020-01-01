@@ -52,8 +52,13 @@ export function getExtension(name: string) {
     return extensionMap[name];
 }
 
+/** 获取所有模块列表 */
+export function getAllExtensions() {
+    return extensions.slice();
+}
+
 /** 项目元数据文件夹 */
-export function userDir(id: number) {
+export function metaDir(id: number) {
     return utils.resolveUserDir('metas', id);
 }
 
