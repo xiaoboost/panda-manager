@@ -1,7 +1,7 @@
 {
-  "name": "@panda-manager/module-controller",
+  "name": "@panda-manager/extension-controller",
   "version": "0.1.0-alpha.0",
-  "description": "panda-manager module controller",
+  "description": "panda-manager extension controller",
   "files": ["index.js"],
   "author": "xiao",
   "license": "MIT",

@@ -1,7 +1,7 @@
 {
-  "name": "@panda-manager/module-manga",
+  "name": "@panda-manager/extension-manga",
   "version": "0.1.0-alpha.0",
-  "description": "panda-manager manga module",
+  "description": "panda-manager extension of manga",
   "files": ["index.js"],
   "author": "xiao",
   "license": "MIT",

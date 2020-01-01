@@ -30,6 +30,7 @@ export const buildTag = (() => {
 /** webpack 别名 */
 function webpackAlias() {
     const packages = readdirSync(resolveRoot('packages'))
+        .filter((name) => name !== 'utils')
         .map((name) => ({
             name,
             path: resolveRoot(`packages/${name}/src`),
