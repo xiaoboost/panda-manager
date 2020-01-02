@@ -1,7 +1,7 @@
 import * as fs from '@utils/node/file-system';
 import * as image from '@utils/modules/image';
 
-import { tempDir, userDir } from './utils';
+import { tempDir, metaDir } from './utils';
 
 import antd from 'antd';
 
@@ -11,7 +11,7 @@ const OriginContext = {
     antd,
     resolvePath: {
         tempDir,
-        userDir,
+        metaDir,
     },
 };
 
