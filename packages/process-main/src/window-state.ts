@@ -1,6 +1,7 @@
-import { writeFile, readJSON } from '@utils/node';
-import { resolveUserDir, debounce } from '@utils/shared';
 import { BrowserWindow, BrowserWindowConstructorOptions } from 'electron';
+
+import { writeFile, readJSON, exists, mkdirp } from '@utils/node';
+import { resolveUserDir, resolveTempDir, debounce } from '@utils/shared';
 
 const fileName = 'window-state.json';
 const filePath = resolveUserDir(fileName);
@@ -38,7 +39,25 @@ function writeState(opt: Partial<WindowState> = {}) {
     writeFile(filePath, JSON.stringify(state));
 }
 
+/** 初始化配置文件夹 */
+async function initDir() {
+    const checkDir = async (dir: string) => {
+        if (!(await exists(dir))) {
+            await mkdirp(dir);
+        }
+    };
+
+    return Promise.all([
+        checkDir(resolveTempDir()),
+        checkDir(resolveUserDir()),
+    ]);
+}
+
 export async function windowStateKeeper(options: BrowserWindowConstructorOptions = {}) {
+    // 等待配置文件夹初始化
+    await initDir();
+
+    // 配置初始化
     const config = await readJSON<WindowState>(filePath, {
         isMaximize: false,
         height: options.height || 600,

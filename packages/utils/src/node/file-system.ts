@@ -104,7 +104,7 @@ export async function mkdirp(target: string) {
 
     let dir = target;
 
-    while (await exists(dir)) {
+    while (!(await exists(dir))) {
         dirs.push(dir);
         dir = path.dirname(dir);
     }

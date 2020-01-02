@@ -1,5 +1,4 @@
 import { join } from 'path';
-import { existsSync, mkdirp } from '../node';
 import { app as originApp, remote } from 'electron';
 
 /** 软件名称 */
@@ -21,16 +20,6 @@ const userDir = process.env.NODE_ENV === 'development'
     ? join(app.getPath('temp'), `${appName}-dev-userdir`)
     : app.getPath('userData');
 
-// 如果没有临时文件夹，则创建
-if (!existsSync(tempDir)) {
-    mkdirp(tempDir);
-}
-
-// 如果没有用户文件夹，则创建
-if (!existsSync(userDir)) {
-    mkdirp(userDir);
-}
-
 /** 由软件根目录的相对路径转变为绝对路径 */
 export function resolveRoot(...paths: (string | number)[]) {
     return join(appRoot, ...paths.map(String));
@@ -48,5 +37,5 @@ export function resolveUserDir(...paths: (string | number)[]) {
 
 /** 由临时资源目录的相对路径转变为绝对路径 */
 export function resolveTempDir(...paths: (string | number)[]) {
-    return join(tempDir, appName, ...paths.map(String));
+    return join(tempDir, ...paths.map(String));
 }
