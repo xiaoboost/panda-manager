@@ -1,14 +1,13 @@
 import Webpack from 'webpack';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 
-import { webpackAlias, resolvePackage, resolveRoot } from '../../build/utils';
+import { resolvePackage, resolveRoot } from '../../build/utils';
 
 const resolve = resolvePackage('process-manga');
 const isDevelopment = process.env.NODE_ENV === 'development';
 
 /** 编译配置 */
 export const webpackConfig: Webpack.Configuration = {
-    mode: process.env.NODE_ENV as Webpack.Configuration['mode'],
     target: 'electron-renderer' as Webpack.Configuration['target'],
     entry: resolve('src/index.ts'),
     output: {
@@ -21,7 +20,6 @@ export const webpackConfig: Webpack.Configuration = {
     resolve: {
         extensions: ['.tsx', '.ts', '.js', '.jsx', '.json', '.styl', '.less', '.css'],
         mainFiles: ['index.tsx', 'index.ts', 'index.js', 'index.styl', 'index.less', 'index.css'],
-        alias: webpackAlias(),
         plugins: [
             new TsconfigPathsPlugin({
                 configFile: resolve('tsconfig.json'),

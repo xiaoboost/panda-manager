@@ -12,8 +12,6 @@ const styleLoader = isDevelopment ? 'style-loader' : loader;
 
 /** 编译配置 */
 export const webpackConfig: Webpack.Configuration = {
-    mode: process.env.NODE_ENV as Webpack.Configuration['mode'],
-    target: 'electron-renderer' as Webpack.Configuration['target'],
     entry: resolve('src/index.tsx'),
     output: {
         path: resolveRoot('dist/renderer'),

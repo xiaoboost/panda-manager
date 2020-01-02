@@ -7,8 +7,6 @@ const resolve = resolvePackage('process-main');
 
 /** 编译配置 */
 export const webpackConfig: Webpack.Configuration = {
-    mode: process.env.NODE_ENV as Webpack.Configuration['mode'],
-    target: 'electron-main' as Webpack.Configuration['target'],
     node: {
         __dirname: false,
         __filename: false,

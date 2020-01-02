@@ -27,6 +27,20 @@ export const buildTag = (() => {
     return `${year}.${month}.${date} - ${time}`;
 })();
 
+/** webpack 外部模块 */
+function webpackExternals(): Record<string, string> {
+    return [
+        'process', 'buffer', 'util', 'sys', 'events', 'stream', 'path',
+        'querystring', 'punycode', 'url', 'string_decoder', 'http', 'https',
+        'os', 'assert', 'constants', 'timers', 'console', 'vm', 'zlib', 'tty',
+        'domain', 'dns', 'dgram', 'child_process', 'cluster', 'module', 'net',
+        'readline', 'repl', 'tls', 'crypto', 'fs', 'electron',
+    ].reduce((map, name) => {
+        map[name] = `commonjs ${name}`;
+        return map;
+    }, {});
+}
+
 /** webpack 别名 */
 function webpackAlias() {
     const packages = readdirSync(resolveRoot('packages'))
@@ -98,6 +112,11 @@ function webpackCommon(config: Webpack.Configuration) {
             format: `${Chalk.green('> building:')} [:bar] ${Chalk.green(':percent')} (:elapsed seconds)`,
         }),
     ]);
+
+    config.externals = {
+        ...(config.externals as object || {}),
+        ...webpackExternals(),
+    };
 }
 
 /** 调试模式 */
@@ -108,6 +127,10 @@ export function devBuild(name: string) {
     }
 
     const BaseConfig: Webpack.Configuration = require(resolveRoot('packages', name, 'webpack.ts')).webpackConfig;
+
+    if (!BaseConfig.mode) {
+        BaseConfig.mode = 'development';
+    }
 
     // 删除输出文件夹
     rm(BaseConfig.output!.path!);
@@ -153,6 +176,10 @@ export function build(name: string) {
     }
 
     const BaseConfig: Webpack.Configuration = require(resolveRoot('packages', name, 'webpack.ts')).webpackConfig;
+
+    if (!BaseConfig.mode) {
+        BaseConfig.mode = 'production';
+    }
 
     // 删除输出文件夹
     rm(BaseConfig.output!.path!);
