@@ -27,6 +27,11 @@ export const webpackConfig: Webpack.Configuration = {
             }),
         ],
     },
+    performance: {
+        hints: false,
+        maxEntrypointSize: 2048000,
+        maxAssetSize: 2048000,
+    },
     module: {
         rules: [
             {

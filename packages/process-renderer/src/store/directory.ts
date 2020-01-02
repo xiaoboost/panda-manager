@@ -4,8 +4,8 @@ import * as fs from '@utils/node/file-system';
 import { ready as databaseReady, Objects } from './database';
 import { ready as configReady, data as Config } from './config';
 
-import { createMeta } from '@panda/module-controller';
 import { concat, toBoolMap, exclude } from '@utils/shared';
+import { createMeta, ready as exReady } from '@panda/extension-controller';
 
 /** 文件队列是否空闲 */
 let loading = false;
@@ -25,6 +25,8 @@ const filesQueue: string[] = new Proxy([], {
             loading = true;
 
             (async () => {
+                await exReady;
+
                 while (target.length > 0) {
                     const meta: any = await createMeta(target.shift()!);
 

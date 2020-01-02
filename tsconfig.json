@@ -5,7 +5,7 @@
         "strict": true,
         "strictPropertyInitialization": true,
         "moduleResolution": "node",
-        "target": "esnext",
+        "target": "es2017",
         "jsx": "react",
         "allowSyntheticDefaultImports": true,
         "resolveJsonModule": true,

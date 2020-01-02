@@ -1,6 +1,6 @@
 import { Database } from '@utils/node';
 import { resolveUserDir } from '@utils/shared';
-import { BaseModuleData } from '@panda/module-controller';
+import { BaseFileData } from '@panda/extension-controller';
 
 /** 全局数据库 */
 const database = new Database(resolveUserDir('database'));
@@ -29,7 +29,7 @@ export interface TagGroupData extends TagBaseData {
 /** 数据库初始化完成 */
 export const ready = database.ready;
 /** 文件数据表 */
-export const Objects = database.use<BaseModuleData>('objects');
+export const Objects = database.use<BaseFileData>('objects');
 /** 标签数据表 */
 export const Tags = database.use<TagData>('tags');
 /** 标签集数据表 */

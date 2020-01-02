@@ -23,10 +23,18 @@ export function warnDialog(props: WarnOptions) {
 }
 
 /** 选择文件夹 */
-export function selectDirectory(): Promise<string | undefined> {
+export function selectDirectory() {
     const win = remote.getCurrentWindow();
 
-    return remote.dialog.showOpenDialog(win, { properties: ['openDirectory'] }).then((paths) => {
-        return paths ? paths[0] : undefined;
+    /**
+     * 这里这么写是为了保证本函数的 then 触发时一定有选择路径
+     * 如果直接返回 remote.dialog.showOpenDialog().then 的话，不管有没有选中都一定会返回
+     */
+    return new Promise<string>((resolve) => {
+        remote.dialog.showOpenDialog(win, { properties: ['openDirectory'] }).then((paths) => {
+            if (paths) {
+                resolve(paths[0]);
+            }
+        });
     });
 }

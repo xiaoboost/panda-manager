@@ -4,7 +4,7 @@ import React from 'react';
 
 import { stringifyClass } from '@utils/web';
 import { useWatcher, useMap, useListCallback } from '@utils/react-use';
-import { getModule, BaseModuleData } from '@panda/module-controller';
+import { getExtension, BaseFileData } from '@panda/extension-controller';
 
 import { Database, Config } from '../../store';
 
@@ -16,25 +16,26 @@ export default function ObjectsList() {
     const sortMethod = (() => {
         const val = Math.pow(-1, Number(!sort.asc));
         if (sort.by === Config.SortBy.name) {
-            return (pre: BaseModuleData, next: BaseModuleData) => {
+            return (pre: BaseFileData, next: BaseFileData) => {
                 return val * stringNaturalCompare(pre.name, next.name);
             };
         }
         else if (sort.by === Config.SortBy.size) {
-            return (pre: BaseModuleData, next: BaseModuleData) => {
+            return (pre: BaseFileData, next: BaseFileData) => {
                 return pre.fileSize > next.fileSize ? val : -1 * val;
             };
         }
         else {
-            return (pre: BaseModuleData, next: BaseModuleData) => {
+            return (pre: BaseFileData, next: BaseFileData) => {
                 return pre.lastModified > next.lastModified ? val : -1 * val;
             };
         }
     })();
 
-    const datas = rows.map(({ data }) => data)
-        .sort(sortMethod)
-        .filter(({ type }) => Boolean(getModule(type)));
+    const datas = rows.map(({ data }) => data).sort(sortMethod).filter((item) => {
+        const ex = getExtension(item.extension);
+        return Boolean(ex?.ListCover);
+    });
 
     const [selected, setSelected] = useMap<Record<number, boolean>>({});
     const itemClickHandler = useListCallback(datas, (data) => (ev: React.MouseEvent) => {
@@ -67,8 +68,8 @@ export default function ObjectsList() {
                         <div className={styles.objectItemMaskInside}></div>
                     </div>
                     {(() => {
-                        const { ListCover } = getModule(data.type)!;
-                        return <ListCover id={data.id} />;
+                        const { ListCover } = getExtension(data.extension)!;
+                        return ListCover ? <ListCover id={data.id} /> : '';
                     })()}
                 </div>
             ))}

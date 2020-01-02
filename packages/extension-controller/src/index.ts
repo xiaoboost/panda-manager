@@ -1,6 +1,9 @@
 export * from './types';
 
-export { ready } from './load';
+export {
+    ready,
+    createMeta,
+} from './load';
 
 export {
     metaDir,

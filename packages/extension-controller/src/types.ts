@@ -14,6 +14,8 @@ export interface BaseFileData {
     /** 项目名称 */
     name: string;
 
+    /** 此文件由哪个扩展解析 */
+    extension: string;
     /** 实际文件路径 */
     filePath: string;
     /** 文件大小 - 单位：kb */

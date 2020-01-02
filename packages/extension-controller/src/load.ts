@@ -2,7 +2,7 @@ import { extensions } from './utils';
 
 import { uid } from '@utils/shared';
 import { readFile } from '@utils/node';
-import { Extension as MangaExtension } from '@panda/extension-manga';
+// import { Extension as MangaExtension } from '@panda/extension-manga';
 
 function getBuf(path: string) {
     let buf: Buffer;
@@ -44,5 +44,5 @@ export async function createMeta(file: string) {
 }
 
 export const ready = (async () => {
-    extensions.push(MangaExtension);
+    // extensions.push(MangaExtension);
 })();
