@@ -7,6 +7,7 @@ const resolve = resolvePackage('process-main');
 
 /** 编译配置 */
 export const webpackConfig: Webpack.Configuration = {
+    target: 'electron-main',
     node: {
         __dirname: false,
         __filename: false,

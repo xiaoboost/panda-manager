@@ -153,7 +153,7 @@ export function devBuild(name: string) {
     // 调试用的插件
     BaseConfig.plugins = BaseConfig.plugins!.concat([
         new Webpack.DefinePlugin({
-            'process.env.NODE_ENV': '"production"',
+            'process.env.NODE_ENV': '"development"',
         }),
         new FriendlyErrorsPlugin({
             compilationSuccessInfo: {
