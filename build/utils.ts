@@ -29,13 +29,19 @@ export const buildTag = (() => {
 
 /** webpack 外部模块 */
 function webpackExternals(): Record<string, string> {
-    return [
+    const nodeModules = [
         'process', 'buffer', 'util', 'sys', 'events', 'stream', 'path',
         'querystring', 'punycode', 'url', 'string_decoder', 'http', 'https',
         'os', 'assert', 'constants', 'timers', 'console', 'vm', 'zlib', 'tty',
         'domain', 'dns', 'dgram', 'child_process', 'cluster', 'module', 'net',
-        'readline', 'repl', 'tls', 'crypto', 'fs', 'electron',
-    ].reduce((map, name) => {
+        'readline', 'repl', 'tls', 'crypto', 'fs',
+    ];
+
+    const externalModules = [
+        'electron',
+    ];
+
+    return nodeModules.concat(externalModules).reduce((map, name) => {
         map[name] = `commonjs ${name}`;
         return map;
     }, {});
