@@ -6,6 +6,7 @@ import TerserPlugin from 'terser-webpack-plugin';
 import ProgressBarPlugin from 'progress-bar-webpack-plugin';
 import OptimizeCSSPlugin from 'optimize-css-assets-webpack-plugin';
 import FriendlyErrorsPlugin from 'friendly-errors-webpack-plugin';
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 
 import { join } from 'path';
 import { removeSync as rm, readdirSync, statSync } from 'fs-extra';
@@ -211,6 +212,9 @@ export function build(name: string) {
 
     BaseConfig.plugins = BaseConfig.plugins!.concat([
         new OptimizeCSSPlugin(),
+        new BundleAnalyzerPlugin({
+            analyzerPort: 9876,
+        }),
         new Webpack.DefinePlugin({
             'process.env.NODE_ENV': '"production"',
         }),

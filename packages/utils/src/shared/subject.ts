@@ -163,4 +163,10 @@ export class Watcher<T> extends Subject<T> {
             this.observe(callback);
         });
     }
+    /** 扩展并生成新的监控器 */
+    computed<U>(cb: (val: T) => U): Watcher<U> {
+        const watcher = new Watcher(cb(this._data));
+        this.observe((val) => (watcher.data = cb(val) as any));
+        return watcher;
+    }
 }
