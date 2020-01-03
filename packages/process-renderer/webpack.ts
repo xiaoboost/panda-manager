@@ -13,7 +13,7 @@ const styleLoader = isDevelopment ? 'style-loader' : loader;
 /** 编译配置 */
 export const webpackConfig: Webpack.Configuration = {
     target: 'electron-renderer',
-    entry: resolve('src/index.tsx'),
+    entry: resolve('src/init/index.ts'),
     output: {
         path: resolveRoot('dist/renderer'),
         publicPath: './',

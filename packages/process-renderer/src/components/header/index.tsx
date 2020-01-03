@@ -11,7 +11,7 @@ import { Icon as BIcon } from '@utils/components';
 
 // TODO: 按键按下也应该有效果
 
-export default function Header() {
+export function Header() {
     const isFocus = useIsFocus();
     const isMaximize = useIsMaximize();
     const router = useRouter();

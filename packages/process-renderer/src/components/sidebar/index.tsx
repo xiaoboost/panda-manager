@@ -10,7 +10,7 @@ import { Icon as BIcon } from '@utils/components';
 
 import MenuList from './menu';
 
-export default function Sidebar() {
+export function Sidebar() {
     const [isFold, setFold] = useState(false);
     const { history, location: router } = useRouter();
     const foldSidebar = useCallback(() => setFold(!isFold), [isFold]);
