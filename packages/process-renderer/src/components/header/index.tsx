@@ -31,7 +31,7 @@ export function Header() {
         <header
             onDoubleClick={headerDbClick}
             className={stringifyClass(styles.appHeader,  {
-                [styles.appHeaderFocus]: isFocus,
+                [styles.appHeaderUnfocus]: !isFocus,
             })}>
             <span>
                 <span onDoubleClick={logoDbClickStop}>

@@ -7,7 +7,7 @@
 
     color: #fff;
     font-size: 12px;
-    background-color: #666;
+    background-color: @Black;
 
     flex-grow: 0;
     flex-shrink: 0;
@@ -31,7 +31,11 @@
         -webkit-app-region: no-drag;
 
         &:hover {
-            background-color: @Red;
+            background-color: @BlackLight;
+        }
+
+        &.icon-close:hover {
+            background-color: @Red !important;
         }
     }
 
@@ -45,16 +49,12 @@
     }
 }
 
-.app-header.app-header__focus {
-    background-color: @Black;
+.app-header.app-header__unfocus {
+    background-color: @BlackLight;
 
     .app-title-bar__icon {
         &:hover {
-            background-color: @BlackLight;
-        }
-
-        &.icon-close:hover {
-            background-color: @Red;
+            background-color: @BlackLighter;
         }
     }
 }
