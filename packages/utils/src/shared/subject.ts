@@ -3,6 +3,10 @@ import { isFunc } from './assert';
 type EventHandler<T = any> = (...payloads: T[]) => any;
 type ReadonlyObject<T> = T extends object ? Readonly<T> : T;
 
+type GetWatcherType<W> = W extends Watcher<infer R> ? R : never;
+type GetWatcherListType<W extends readonly Watcher<any>[]> = { [K in keyof W]: GetWatcherType<W[K]> };
+type CreateWtacherList<V extends readonly any[]> = { [K in keyof V]: Watcher<V[K]> };
+
 /** 频道订阅者 */
 export class ChannelSubject {
     /** 事件数据 */
@@ -80,15 +84,10 @@ export class Subject<T> {
 
     /** 注册观测器 */
     observe(ev: EventHandler<T>) {
-        /** 注销观测器 */
-        const unObserve = () => {
-            this._events = this._events.filter((cb) => cb !== ev);
-        };
-
         // 添加观测器
         this._events.push(ev);
-
-        return unObserve;
+        // 返回注销观测器的函数
+        return () => this.unObserve(ev);
     }
 
     /** 注销全部观测器 */
@@ -113,6 +112,28 @@ export class Subject<T> {
 
 /** 监控者 */
 export class Watcher<T> extends Subject<T> {
+    static computed<
+        Watchers extends readonly Watcher<any>[],
+        Params extends GetWatcherListType<Watchers>,
+        Values extends readonly any[],
+    >(watchers: Watchers, cb: (...args: Params) => Values): CreateWtacherList<Values> {
+        const initVals = cb(...watchers.map(({ _data }) => _data) as any);
+        const newWatchers = initVals.map((init) => new Watcher(init));
+
+        // 更新所有观测器的回调
+        const observeCb = () => {
+            const current: Params = watchers.map(({ _data }) => _data) as any;
+            cb(...current).forEach((val, i) => {
+                newWatchers[i].data = val;
+            });
+        };
+
+        // 绑定回调
+        watchers.forEach((watcher) => watcher.observe(observeCb));
+
+        return newWatchers as any;
+    }
+
     /** 原始值 */
     protected _data: T;
 
@@ -133,24 +154,13 @@ export class Watcher<T> extends Subject<T> {
         this._data = initVal;
     }
 
-    /** 只监听一次变化 */
-    once() {
-        return new Promise<ReadonlyObject<T>>((resolve) => {
-            const callback = (val: T) => {
-                this.unObserve(callback);
-                resolve(val as ReadonlyObject<T>);
-            };
-
-            this.observe(callback);
-        });
-    }
-    /** 当值与输入相等时触发 */
-    when(val: T | ((item: T) => boolean)) {
-        const func = isFunc(val) ? val : (item: T) => item === val;
-
-        if (func(this.data)) {
-            return Promise.resolve(this.data);
-        }
+    /** 监听一次变化 */
+    once(val?: T | ((item: T) => boolean)) {
+        const func = arguments.length === 0
+            ? () => true
+            : isFunc(val)
+                ? val
+                : (item: T) => item === val;
 
         return new Promise<ReadonlyObject<T>>((resolve) => {
             const callback = (item: T) => {
