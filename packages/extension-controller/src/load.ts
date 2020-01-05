@@ -55,7 +55,7 @@ export async function createMeta(file: string) {
 }
 
 async function loadExtension(name: string) {
-    const data = await readJSON<PackageInfo>(join(extensionPath, name, 'package.json'));
+    const data = await readJSON<PackageInfo>(join(extensionPath, name, 'manifest.json'));
 
     if (!data || !data.main) {
         return;
@@ -74,7 +74,8 @@ async function loadExtension(name: string) {
         eval: false,
     });
 
-    return vm.run(script);
+    const result = vm.run(script);
+    return result.default ? result.default : result;
 }
 
 export const ready = (async () => {
@@ -82,8 +83,13 @@ export const ready = (async () => {
 
     await Promise.all(pluginDirs.map(async (name) => {
         const ex = await loadExtension(name);
+
         if (ex) {
             extensions.push(ex);
         }
     }));
+
+    if (process.env.NODE_ENV === 'development') {
+        console.log(extensions);
+    }
 })();

@@ -1,9 +1,7 @@
 import * as path from 'path';
-import * as fs from 'fs-extra';
-
 import * as utils from './';
+import * as fs from '@utils/node/file-system';
 
-import { fileSize } from '@utils/node';
 import { FromContext } from '@panda/extension-controller';
 
 export async function from(context: FromContext): Promise<utils.MangaData | undefined> {
@@ -31,17 +29,18 @@ export async function from(context: FromContext): Promise<utils.MangaData | unde
     await utils.writePriview(context.id, preview);
 
     // 生成数据
-    return {
-        id: context.id,
-        category: utils.Category.NonH,
-        name: path.basename(context.path),
-        filePath: context.path,
-        fileSize: isDirectory
-            ? await fileSize(context.path)
-            : fileStat.size,
-        tags: [],
-        isDirectory,
-        lastModified: new Date(fileStat.mtime).getTime(),
-        previewPositions: preview.position,
-    };
+    return {} as any;
+    // return {
+    //     id: context.id,
+    //     category: utils.Category.NonH,
+    //     name: path.basename(context.path),
+    //     filePath: context.path,
+    //     fileSize: isDirectory
+    //         ? await fileSize(context.path)
+    //         : fileStat.size,
+    //     tags: [],
+    //     isDirectory,
+    //     lastModified: new Date(fileStat.mtime).getTime(),
+    //     previewPositions: preview.position,
+    // };
 }

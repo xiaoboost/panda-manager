@@ -1,10 +1,9 @@
-import { join } from 'path';
-import { metaDir } from '@panda/extension-controller';
+const { userPath } = panda.resolve;
 
 export function coverPath(id: number) {
-    return join(metaDir(id), 'cover.jpg');
+    return userPath(id, 'cover.jpg');
 }
 
 export function previewPath(id: number) {
-    return join(metaDir(id), 'preview.jpg');
+    return userPath(id, 'preview.jpg');
 }

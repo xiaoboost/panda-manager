@@ -1,8 +1,6 @@
-import { Extension as ExtensionModule } from '@panda/extension-controller';
+// import { ListCover } from './list-cover';
 
-import { ListCover } from './list-cover';
-
-export const Extension: ExtensionModule = {
+export default {
     name: 'manga',
-    ListCover,
+    // ListCover,
 };
