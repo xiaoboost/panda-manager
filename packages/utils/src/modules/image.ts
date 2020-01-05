@@ -18,6 +18,10 @@ interface PngImageCompressOption extends PngOptions {
     size?: Partial<ImageSize>;
 }
 
+export {
+    imageSize,
+};
+
 /** 压缩图片 */
 export function compress(image: Buffer, options: JpgImageCompressOption): Promise<Buffer>;
 export function compress(image: Buffer, options: PngImageCompressOption): Promise<Buffer>;

@@ -1,4 +1,6 @@
 import * as fs from './file-system';
+
+import { join } from 'path';
 import { transArr } from '../shared/array';
 
 export function fileLock(path: string | string[]) {
@@ -13,7 +15,7 @@ export function fileLock(path: string | string[]) {
     Object.keys(fs).forEach((key) => {
         const originVal = fs[key] as any;
 
-        fsLock[key] = (...args: any) => {
+        fsLock[key] = (...args: any[]) => {
             if (!checkPath(args[0])) {
                 throw new Error('(fs-lock) illegal path');
             }
@@ -23,4 +25,21 @@ export function fileLock(path: string | string[]) {
     });
 
     return fsLock;
+}
+
+export function fsWithBasePath(base: string) {
+    const fsWithBase: typeof fs = {} as any;
+
+    Object.keys(fs).forEach((key) => {
+        const originVal = fs[key] as any;
+
+        fsWithBase[key] = (...args: any[]) => {
+            const inputPath = join('/', args[0]);
+            const realPath = join(base, inputPath);
+            const newArgs = [realPath, ...args.slice(1)];
+            return originVal(...newArgs);
+        };
+    });
+
+    return fsWithBase;
 }
