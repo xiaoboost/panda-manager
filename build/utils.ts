@@ -39,7 +39,7 @@ function webpackExternals(): Record<string, string> {
     ];
 
     const externalModules = [
-        'electron',
+        'electron', 'vm2',
     ];
 
     return nodeModules.concat(externalModules).reduce((map, name) => {

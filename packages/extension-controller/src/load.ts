@@ -1,8 +1,17 @@
+import { join } from 'path';
+import { VM, VMScript } from 'vm2';
+import { uid, resolveRoot } from '@utils/shared';
+import { readFile, readJSON, readdir } from '@utils/node/file-system';
+// import { Extension as MangaExtension } from '@panda/extension-manga';
+
+import { Context } from './context';
 import { extensions } from './utils';
 
-import { uid } from '@utils/shared';
-import { readFile } from '@utils/node';
-// import { Extension as MangaExtension } from '@panda/extension-manga';
+interface PackageInfo {
+    main: string;
+    name: string;
+    version: string;
+}
 
 function getBuf(path: string) {
     let buf: Buffer;
@@ -12,6 +21,8 @@ function getBuf(path: string) {
         buffer: () => buf ? buf : readFile(path).then((data) => (buf = data)),
     };
 }
+
+const extensionPath = resolveRoot('extensions');
 
 /** 创建项目元数据 */
 export async function createMeta(file: string) {
@@ -43,6 +54,36 @@ export async function createMeta(file: string) {
     }
 }
 
+async function loadExtension(name: string) {
+    const data = await readJSON<PackageInfo>(join(extensionPath, name, 'package.json'));
+
+    if (!data || !data.main) {
+        return;
+    }
+
+    const scriptPath = join(extensionPath, name, data.main);
+    const scriptFile = await readFile(scriptPath);
+
+    if (!scriptFile) {
+        return;
+    }
+
+    const script = new VMScript(scriptFile.toString(), scriptPath);
+    const vm = new VM({
+        sandbox: Context(data.name),
+        eval: false,
+    });
+
+    return vm.run(script);
+}
+
 export const ready = (async () => {
-    // extensions.push(MangaExtension);
+    const pluginDirs = await readdir(extensionPath);
+
+    await Promise.all(pluginDirs.map(async (name) => {
+        const ex = await loadExtension(name);
+        if (ex) {
+            extensions.push(ex);
+        }
+    }));
 })();

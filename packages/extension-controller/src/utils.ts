@@ -58,11 +58,11 @@ export function getAllExtensions() {
 }
 
 /** 项目元数据文件夹 */
-export function metaDir(id: number) {
-    return utils.resolveUserDir('metas', id);
+export function userDir(name: string) {
+    return utils.resolveUserDir(`extension-${name}`);
 }
 
 /** 项目临时文件夹 */
-export function tempDir(id: number) {
-    return utils.resolveTempDir('metas', id);
+export function tempDir(name: string) {
+    return utils.resolveTempDir(`extension-${name}`);
 }
