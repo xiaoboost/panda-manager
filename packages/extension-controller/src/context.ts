@@ -10,7 +10,7 @@ export function Context(name: string) {
     const baseUserPath = userDir(name);
     const baseTempPath = tempDir(name);
 
-    const OriginContext = {
+    return {
         path,
         console,
         require: () => void 0,
@@ -24,10 +24,4 @@ export function Context(name: string) {
             image,
         },
     };
-
-    return new Proxy(OriginContext, {
-        set() {
-            throw new Error('Cann\'t modify extension context.');
-        },
-    });
 }
