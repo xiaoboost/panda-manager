@@ -20,8 +20,8 @@ export const webpackConfig: Webpack.Configuration = {
         filename: 'script.js',
     },
     resolve: {
-        extensions: ['.tsx', '.ts', '.js', '.jsx', '.json', '.styl', '.less', '.css'],
-        mainFiles: ['index.tsx', 'index.ts', 'index.js', 'index.styl', 'index.less', 'index.css'],
+        extensions: ['.tsx', '.ts', '.js', '.jsx', '.json', '.less', '.css'],
+        mainFiles: ['index.tsx', 'index.ts', 'index.js', 'index.less', 'index.css'],
         plugins: [
             new TsconfigPathsPlugin({
                 configFile: resolve('tsconfig.json'),

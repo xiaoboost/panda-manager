@@ -145,7 +145,9 @@ export function devBuild(name: string) {
     webpackCommon(BaseConfig);
 
     // 每个模块用 eval() 执行, SourceMap 作为 DataUrl 添加到文件末尾
-    BaseConfig.devtool = 'eval-source-map';
+    if (!BaseConfig.devtool) {
+        BaseConfig.devtool = 'eval-source-map';
+    }
 
     BaseConfig.optimization!.namedChunks = true;
     BaseConfig.optimization!.namedModules = true;
@@ -205,6 +207,9 @@ export function build(name: string) {
                 safari10: false,
                 output: {
                     comments: /^!/,
+                },
+                compress: {
+                    negate_iife: false,
                 },
             },
         }),

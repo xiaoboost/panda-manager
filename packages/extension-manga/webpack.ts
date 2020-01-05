@@ -2,24 +2,41 @@ import Webpack from 'webpack';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 
 import { resolvePackage, resolveRoot } from '../../build/utils';
+import { mkdirp, readJSON, writeFile } from '../utils/src/node/file-system';
 
-const resolve = resolvePackage('process-manga');
+const outputDir = 'dist/extensions/manga';
+const resolve = resolvePackage('extension-manga');
 const isDevelopment = process.env.NODE_ENV === 'development';
+
+async function writeManifest() {
+    const data = await readJSON(resolve('package.json'));
+
+    if (!data) {
+        throw new Error('Can not found package.json');
+    }
+
+    await mkdirp(outputDir);
+    await writeFile(resolveRoot(outputDir, 'manifest.json'), JSON.stringify({
+        name: 'Manga',
+        version: data['version'],
+        main: 'index.js',
+    }));
+}
+
+writeManifest();
 
 /** 编译配置 */
 export const webpackConfig: Webpack.Configuration = {
     target: 'electron-renderer' as Webpack.Configuration['target'],
     entry: resolve('src/index.ts'),
+    devtool: 'nosources-source-map',
     output: {
-        path: resolveRoot('dist/modules'),
-        filename: 'manga.js',
-    },
-    optimization: {
-        minimizer: [],
+        path: resolveRoot(outputDir),
+        filename: 'index.js',
     },
     resolve: {
-        extensions: ['.tsx', '.ts', '.js', '.jsx', '.json', '.styl', '.less', '.css'],
-        mainFiles: ['index.tsx', 'index.ts', 'index.js', 'index.styl', 'index.less', 'index.css'],
+        extensions: ['.tsx', '.ts', '.js', '.jsx', '.json', '.less', '.css'],
+        mainFiles: ['index.tsx', 'index.ts', 'index.js', 'index.less', 'index.css'],
         plugins: [
             new TsconfigPathsPlugin({
                 configFile: resolve('tsconfig.json'),
@@ -35,10 +52,6 @@ export const webpackConfig: Webpack.Configuration = {
                 options: {
                     configFile: resolve('tsconfig.json'),
                 },
-            },
-            {
-                test: /\.node$/,
-                use: 'node-loader',
             },
             {
                 test: /\.css$/,
@@ -75,17 +88,4 @@ export const webpackConfig: Webpack.Configuration = {
             },
         ],
     },
-    plugins: [
-        new Webpack.optimize.ModuleConcatenationPlugin(),
-        new Webpack.HashedModuleIdsPlugin({
-            hashFunction: 'sha256',
-            hashDigest: 'hex',
-            hashDigestLength: 6,
-        }),
-        new Webpack.DefinePlugin({
-            'process.env.NODE_ENV': isDevelopment
-                ? '"development"'
-                : '"production"',
-        }),
-    ],
 };
