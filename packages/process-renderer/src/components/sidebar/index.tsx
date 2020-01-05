@@ -31,7 +31,7 @@ export function Sidebar() {
                     className={stringifyClass(styles.menuItem, {
                         [styles.menuItemHighlight]: item.route === router.pathname,
                     })}>
-                    {item.Icon}
+                    <item.Icon />
                     <span className={styles.menuItemTitle}>{item.title}</span>
                 </div>,
             )}
