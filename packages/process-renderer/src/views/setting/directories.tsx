@@ -10,7 +10,11 @@ import { useWatcher, useCallback, useListCallback } from '@utils/react-use';
 import Card from './card';
 import CardLine from './line';
 
-import { Icon } from 'antd';
+import {
+    FolderOpenOutlined,
+    FolderAddOutlined,
+    DeleteOutlined,
+} from '@ant-design/icons';
 
 interface DirsListProps {
     paths: string[];
@@ -32,24 +36,20 @@ const DirsList: FunctionComponent<DirsListProps> = function DirPathList({ paths,
                 isSubline
                 key={i}
                 title={path}>
-                <Icon
+                <FolderOpenOutlined
+                    onClick={openFolder[i]}
                     style={{
                         color: 'rgba(0, 0, 0, .4)',
                         fontSize: '14px',
                     }}
-                    onClick={openFolder[i]}
-                    type='folder-open'
-                    theme='outlined'
                 />
-                <Icon
+                <DeleteOutlined
+                    onClick={removeList[i]}
                     style={{
                         color: '#faad14',
                         fontSize: '14px',
                         marginLeft: '8px',
                     }}
-                    onClick={removeList[i]}
-                    type='delete'
-                    theme='outlined'
                 />
             </CardLine>
         ))}
@@ -68,11 +68,9 @@ export default function Directories() {
                 <CardLine
                     title='文件目录'
                     subtitle='目录内的所有 zip 压缩包以及文件夹（不包含子文件夹内容）'>
-                    <Icon
+                    <FolderAddOutlined
                         style={{ fontSize: '20px' }}
                         onClick={add}
-                        type='folder-add'
-                        theme='outlined'
                     />
                 </CardLine>
                 {directories.length === 0

@@ -1,6 +1,4 @@
-import { readFile, writeFile } from 'fs-extra';
-
-import { gzip, gunzip } from '@utils/node';
+import { gzip, gunzip, readFile, writeFile } from '@utils/node';
 import { Watcher, debounce, resolveUserDir } from '@utils/shared';
 
 /** 配置文件路径 */

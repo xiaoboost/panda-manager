@@ -1,6 +1,6 @@
-import { readFile } from 'fs-extra';
 import { Extension } from './types';
 
+import * as fs from '@utils/node/file-system';
 import * as utils from '@utils/shared';
 
 /** 模块模板数据 */
@@ -13,7 +13,7 @@ function getBuf(path: string) {
 
     return {
         path,
-        buffer: () => buf ? buf : readFile(path).then((data) => (buf = data)),
+        buffer: () => buf ? buf : fs.readFile(path).then((data) => (buf = data)),
     };
 }
 

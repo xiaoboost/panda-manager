@@ -1,10 +1,10 @@
-import fs from 'fs-extra';
 import path from 'path';
 import JSZip from 'jszip';
 // import IconvLite from 'iconv-lite';
 import naturalCompare from 'string-natural-compare';
 
-import { readdirs } from '../node';
+import * as fs from '../node/file-system';
+
 import { isString } from '../shared';
 
 /** 读取压缩包 */
@@ -84,7 +84,7 @@ export async function packageDir(dir: string, targetDir = path.dirname(dir)) {
     /** 文件夹名称 */
     const fileName = path.basename(dir);
     /** 文件夹内所有子文件 */
-    const files = await readdirs(dir);
+    const files = await fs.readdirs(dir);
 
     for (let i = 0; i < files.length; i++) {
         const filePath = files[i];

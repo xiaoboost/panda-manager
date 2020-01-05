@@ -5,8 +5,7 @@ import React from 'react';
 import { stringifyClass } from '@utils/web';
 import { useRouter, useState, useCallback } from '@utils/react-use';
 
-import { Icon as AIcon } from 'antd';
-import { Icon as BIcon } from '@utils/components';
+import { MenuOutlined } from '@ant-design/icons';
 
 import MenuList from './menu';
 
@@ -20,8 +19,7 @@ export function Sidebar() {
             [styles.appSidebarFold]: isFold,
         })}>
             <div className={`${styles.menuItem} ${styles.menuSwitch}`}>
-                <AIcon
-                    type='menu'
+                <MenuOutlined
                     className='menu-item__icon'
                     onClick={foldSidebar}
                 />
@@ -33,10 +31,7 @@ export function Sidebar() {
                     className={stringifyClass(styles.menuItem, {
                         [styles.menuItemHighlight]: item.route === router.pathname,
                     })}>
-                    {item.isAntdIcon
-                        ? <AIcon type={item.icon} />
-                        : <BIcon type={item.icon as any} />
-                    }
+                    {item.Icon}
                     <span className={styles.menuItemTitle}>{item.title}</span>
                 </div>,
             )}

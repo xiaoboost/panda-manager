@@ -6,8 +6,14 @@ import { remote } from 'electron';
 import { stringifyClass } from '@utils/web';
 import { useIsFocus, useIsMaximize, useRouter, useCallback } from '@utils/react-use';
 
-import { Icon as AIcon } from 'antd';
-import { Icon as BIcon } from '@utils/components';
+import { Bamboo, Recover } from '@utils/components';
+
+import {
+    ArrowLeftOutlined,
+    MinusOutlined,
+    CloseOutlined,
+    BorderOutlined,
+} from '@ant-design/icons';
 
 // TODO: 按键按下也应该有效果
 
@@ -36,9 +42,8 @@ export function Header() {
             <span>
                 <span onDoubleClick={logoDbClickStop}>
                     {router.location.pathname === '/'
-                        ? <BIcon className={styles.appTitleBarLogo} type='bamboo' />
-                        : <AIcon
-                            type='arrow-left'
+                        ? <Bamboo className={styles.appTitleBarLogo} />
+                        : <ArrowLeftOutlined
                             className={styles.appTitleBarIcon}
                             onClick={routerBack}
                         />
@@ -48,27 +53,23 @@ export function Header() {
             </span>
             <span>
                 {/* 最小化 */}
-                <AIcon
-                    type='minus'
+                <MinusOutlined
                     className={styles.appTitleBarIcon}
                     onClick={minimize}
                 />
                 {isMaximize
                     /* 还原 */
-                    ? <BIcon
-                        type='recover'
+                    ? <Recover
                         className={styles.appTitleBarIcon}
                         onClick={unmaximize}
                     />
                     /* 最大化 */
-                    : <AIcon
-                        type='border'
+                    : <BorderOutlined
                         className={styles.appTitleBarIcon}
                         onClick={maximize}
                     />}
                 {/* 关闭 */}
-                <AIcon
-                    type='close'
+                <CloseOutlined
                     className={`${styles.appTitleBarIcon} ${styles.iconClose}`}
                     onClick={close}
                 />
