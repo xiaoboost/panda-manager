@@ -9,4 +9,3 @@ export * from './array';
 export * from './object';
 export * from './time';
 export * from './uid';
-export * from './native';

@@ -1,6 +1,6 @@
 import { join } from 'path';
 import { VM, VMScript } from 'vm2';
-import { uid, resolveRoot, _eval } from '@utils/shared';
+import { uid, resolveRoot } from '@utils/shared';
 import { readFile, readJSON, readdir } from '@utils/node/file-system';
 
 import { Context } from './context';
@@ -82,8 +82,10 @@ async function loadExtension(name: string): Promise<Extension | undefined> {
         });
 
         /* eslint-disable @typescript-eslint/no-unused-vars */
-        result = (function(self: typeof context) {
-            return _eval(`
+        result = (function(_window: typeof context) {
+            /* eslint-disable no-eval */
+            return eval(`
+                const self = _window;
                 ${globalKeys.join('\n')}\n
                 ${scriptFile};
             `);
