@@ -10,23 +10,26 @@ export default function useWatcher<T>(watcher: Watcher<T>) {
     const update = useForceUpdate();
     const state = useRef(watcher.data);
 
-    const handleChange = (isBaseType(watcher.data) || isArray(watcher.data))
+    const setStatus = (isBaseType(watcher.data) || isArray(watcher.data))
         ? (val: T) => {
-            state.current = val as any;
-            update();
+            watcher.data = val as any;
         }
         : (val: Partial<T>) => {
-            state.current = {
+            watcher.data = {
                 ...state.current,
                 ...val,
             };
-            update();
         };
+
+    function handleChange(val: T) {
+        state.current = val as any;
+        update();
+    }
 
     useEffect(() => {
         watcher.observe(handleChange);
         return () => watcher.unObserve(handleChange);
     }, []);
 
-    return [state.current, handleChange] as const;
+    return [state.current, setStatus] as const;
 }
