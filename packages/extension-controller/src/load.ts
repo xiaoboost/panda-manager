@@ -1,10 +1,10 @@
 import { join } from 'path';
 import { VM, VMScript } from 'vm2';
-import { uid, resolveRoot } from '@utils/shared';
+import { uid, resolveRoot, _eval } from '@utils/shared';
 import { readFile, readJSON, readdir } from '@utils/node/file-system';
-// import { Extension as MangaExtension } from '@panda/extension-manga';
 
 import { Context } from './context';
+import { Extension } from './types';
 import { extensions } from './utils';
 
 interface PackageInfo {
@@ -54,7 +54,7 @@ export async function createMeta(file: string) {
     }
 }
 
-async function loadExtension(name: string) {
+async function loadExtension(name: string): Promise<Extension | undefined> {
     const data = await readJSON<PackageInfo>(join(extensionPath, name, 'manifest.json'));
 
     if (!data || !data.main) {
@@ -62,19 +62,43 @@ async function loadExtension(name: string) {
     }
 
     const scriptPath = join(extensionPath, name, data.main);
-    const scriptFile = await readFile(scriptPath);
+    let scriptFile = (await readFile(scriptPath).catch(() => '')).toString().trim();
 
     if (!scriptFile) {
         return;
     }
 
-    const script = new VMScript(scriptFile.toString(), scriptPath);
-    const vm = new VM({
-        sandbox: Context(data.name),
-        eval: false,
-    });
+    // 取消顶级作用域中的函数表达式
+    if (scriptFile.indexOf('!function') === 0) {
+        scriptFile = `(${scriptFile.slice(1)})`;
+    }
 
-    const result = vm.run(script);
+    let result;
+    const context = Context(data.name);
+
+    if (process.env.NODE_ENV === 'development') {
+        const globalKeys = Object.keys(context).map((key) => {
+            return `const ${key} = self.${key};`;
+        });
+
+        /* eslint-disable @typescript-eslint/no-unused-vars */
+        result = (function(self: typeof context) {
+            return _eval(`
+                ${globalKeys.join('\n')}\n
+                ${scriptFile};
+            `);
+        })(context);
+    }
+    else {
+        const script = new VMScript(scriptFile, scriptPath);
+        const vm = new VM({
+            sandbox: context,
+            eval: false,
+        });
+
+        result = vm.run(script);
+    }
+
     return result.default ? result.default : result;
 }
 
