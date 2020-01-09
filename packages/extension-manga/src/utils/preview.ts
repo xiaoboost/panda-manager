@@ -1,14 +1,21 @@
-import * as path from 'path';
-import * as fs from '@utils/node/file-system';
-
 import naturalCompare from 'string-natural-compare';
 
-import { imageSize } from 'image-size';
 import { isString } from '@utils/shared';
-import { zipFiles } from '@utils/modules/zip';
-import { isImage, compress, concat } from '@utils/modules/image';
-
 import { coverPath, previewPath } from './path';
+
+const {
+    fs,
+    path,
+    image: {
+        isImage,
+        imageSize,
+        compress,
+        concat,
+    },
+    zip: {
+        zipFiles,
+    },
+} = panda;
 
 /** 预览数据 */
 interface Preview {

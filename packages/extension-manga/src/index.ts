@@ -1,6 +1,10 @@
-// import { ListCover } from './list-cover';
+import { ListCover } from './list-cover';
+import { from } from './utils';
 
-export default {
+const Manga: panda.Extension = {
     name: 'manga',
-    // ListCover,
+    from,
+    ListCover,
 };
+
+export default Manga;

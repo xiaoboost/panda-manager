@@ -1,7 +1,5 @@
-import { BaseFileData } from '@panda/extension-controller';
-
 /** 漫画模块储存数据 */
-export interface MangaData extends BaseFileData {
+export interface MangaData extends panda.BaseFileData {
     /** 当前漫画类别 */
     category: Category;
     /** 当前漫画是否是文件夹 */

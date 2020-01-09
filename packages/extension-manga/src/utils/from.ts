@@ -1,10 +1,9 @@
-import * as path from 'path';
-import * as utils from './';
-import * as fs from '@utils/node/file-system';
+import { MangaData } from './constant';
+import { buildPreview, writePriview } from './preview';
 
-import { FromContext } from '@panda/extension-controller';
+const { fs, path } = panda;
 
-export async function from(context: FromContext): Promise<utils.MangaData | undefined> {
+export async function from(context: panda.FromContext): Promise<MangaData | undefined> {
     // 读取压缩包信息
     const fileStat = await fs.stat(context.path);
     // 是否是文件夹
@@ -17,8 +16,8 @@ export async function from(context: FromContext): Promise<utils.MangaData | unde
 
     // 生成预览文件数据
     const preview = isDirectory
-        ? await utils.buildPreview(context.path)
-        : await utils.buildPreview(await context.buffer());
+        ? await buildPreview(context.path)
+        : await buildPreview(await context.buffer());
 
     // 生成预览出错
     if (!preview) {
@@ -26,7 +25,7 @@ export async function from(context: FromContext): Promise<utils.MangaData | unde
     }
 
     // 预览数据写入硬盘
-    await utils.writePriview(context.id, preview);
+    await writePriview(context.id, preview);
 
     // 生成数据
     return {} as any;
