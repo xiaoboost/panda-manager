@@ -2,28 +2,25 @@ import Webpack from 'webpack';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 
 import { resolvePackage, resolveRoot } from '../../build/utils';
-import { mkdirp, readJSON, writeFile } from '../utils/src/node/file-system';
+import { readJSON, writeFile } from '../utils/src/node/file-system';
 
 const outputDir = 'dist/extensions/manga';
 const resolve = resolvePackage('extension-manga');
 const isDevelopment = process.env.NODE_ENV === 'development';
 
-async function writeManifest() {
+export async function after() {
     const data = await readJSON(resolve('package.json'));
 
     if (!data) {
         throw new Error('Can not found package.json');
     }
 
-    await mkdirp(outputDir);
     await writeFile(resolveRoot(outputDir, 'manifest.json'), JSON.stringify({
         name: 'Manga',
         version: data['version'],
         main: 'index.js',
     }));
 }
-
-writeManifest();
 
 /** 编译配置 */
 export const webpackConfig: Webpack.Configuration = {

@@ -110,6 +110,6 @@ export async function mkdirp(target: string) {
     }
 
     while (dirs.length > 0) {
-        await mkdir(dirs.shift()!);
+        await mkdir(dirs.pop()!);
     }
 }

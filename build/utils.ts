@@ -127,13 +127,14 @@ function webpackCommon(config: Webpack.Configuration) {
 }
 
 /** 调试模式 */
-export function devBuild(name: string) {
+export async function devBuild(name: string) {
     if (!checkProjectName(name)) {
         console.error(`Project '${name}' is not exist!`);
         process.exit(1);
     }
 
-    const BaseConfig: Webpack.Configuration = require(resolveRoot('packages', name, 'webpack.ts')).webpackConfig;
+    const config = require(resolveRoot('packages', name, 'webpack.ts'));
+    const BaseConfig: Webpack.Configuration = config.webpackConfig;
 
     if (!BaseConfig.mode) {
         BaseConfig.mode = 'development';
@@ -168,23 +169,26 @@ export function devBuild(name: string) {
 
     const compiler = Webpack(BaseConfig);
 
-    compiler.watch(
-        { ignored: /node_modules/ },
-        (err?: Error) => (
-            (err && console.error(err.stack || err)) ||
-            (err && (err as any).details && console.error((err as any).details))
-        ),
-    );
+    compiler.watch({ ignored: /node_modules/ }, (err?: Error) => {
+        if (err) {
+            console.error(err.stack || err);
+        }
+
+        if (config.after) {
+            config.after();
+        }
+    });
 }
 
 /** 编译模式 */
-export function build(name: string) {
+export async function build(name: string) {
     if (!checkProjectName(name)) {
         console.error(`Project '${name}' is not exist!`);
         process.exit(1);
     }
 
-    const BaseConfig: Webpack.Configuration = require(resolveRoot('packages', name, 'webpack.ts')).webpackConfig;
+    const config = require(resolveRoot('packages', name, 'webpack.ts'));
+    const BaseConfig: Webpack.Configuration = config.webpackConfig;
 
     if (!BaseConfig.mode) {
         BaseConfig.mode = 'production';
@@ -195,8 +199,8 @@ export function build(name: string) {
 
     webpackCommon(BaseConfig);
 
+    BaseConfig.devtool = undefined;
     BaseConfig.optimization!.minimize = true;
-
     BaseConfig.optimization!.minimizer = BaseConfig.optimization!.minimizer!.concat([
         new TerserPlugin({
             test: /\.js$/i,
@@ -228,6 +232,10 @@ export function build(name: string) {
     Webpack(BaseConfig, (err, stats) => {
         if (err) {
             throw err;
+        }
+
+        if (config.after) {
+            config.after();
         }
 
         console.log(stats.toString({
