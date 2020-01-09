@@ -1,7 +1,7 @@
 import { join } from 'path';
 import { VM, VMScript } from 'vm2';
-import { uid, resolveRoot } from '@utils/shared';
-import { readFile, readJSON, readdir } from '@utils/node/file-system';
+import { uid, resolveRoot, resolveUserDir } from '@utils/shared';
+import { readFile, readJSON, readdir, exists, mkdirp } from '@utils/node/file-system';
 
 import { Context } from './context';
 import { Extension } from './types';
@@ -22,7 +22,9 @@ function getBuf(path: string) {
     };
 }
 
-const extensionPath = resolveRoot('extensions');
+const extensionPath = process.env.NODE_ENV === 'development'
+    ? resolveRoot('extensions')
+    : resolveUserDir('extensions');
 
 /** 创建项目元数据 */
 export async function createMeta(file: string) {
@@ -105,6 +107,10 @@ async function loadExtension(name: string): Promise<Extension | undefined> {
 }
 
 export const ready = (async () => {
+    if (!await exists(extensionPath)) {
+        await mkdirp(extensionPath);
+    }
+
     const pluginDirs = await readdir(extensionPath);
 
     await Promise.all(pluginDirs.map(async (name) => {
