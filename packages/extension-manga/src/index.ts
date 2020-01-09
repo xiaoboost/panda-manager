@@ -1,8 +1,8 @@
 import { ListCover } from './list-cover';
-import { from } from './utils';
+import { from, name } from './utils';
 
 const Manga: panda.Extension = {
-    name: 'manga',
+    name,
     from,
     ListCover,
 };

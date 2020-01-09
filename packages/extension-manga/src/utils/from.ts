@@ -1,4 +1,4 @@
-import { MangaData } from './constant';
+import { MangaData, Category, name } from './constant';
 import { buildPreview, writePriview } from './preview';
 
 const { fs, path } = panda;
@@ -28,18 +28,18 @@ export async function from(context: panda.FromContext): Promise<MangaData | unde
     await writePriview(context.id, preview);
 
     // 生成数据
-    return {} as any;
-    // return {
-    //     id: context.id,
-    //     category: utils.Category.NonH,
-    //     name: path.basename(context.path),
-    //     filePath: context.path,
-    //     fileSize: isDirectory
-    //         ? await fileSize(context.path)
-    //         : fileStat.size,
-    //     tags: [],
-    //     isDirectory,
-    //     lastModified: new Date(fileStat.mtime).getTime(),
-    //     previewPositions: preview.position,
-    // };
+    return {
+        id: context.id,
+        extension: name,
+        category: Category.NonH,
+        name: path.basename(context.path),
+        filePath: context.path,
+        fileSize: isDirectory
+            ? await fs.fileSize(context.path)
+            : fileStat.size,
+        tags: [],
+        isDirectory,
+        lastModified: new Date(fileStat.mtime).getTime(),
+        previewPositions: preview.position,
+    };
 }

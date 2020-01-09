@@ -8,6 +8,9 @@ export interface MangaData extends panda.BaseFileData {
     previewPositions: [number, number][];
 }
 
+/** 模块名称 */
+export const name = 'Manga';
+
 /** 漫画类别枚举 */
 export const enum Category {
     Doujinshi,
