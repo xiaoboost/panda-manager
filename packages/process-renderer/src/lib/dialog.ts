@@ -31,9 +31,9 @@ export function selectDirectory() {
      * 如果直接返回 remote.dialog.showOpenDialog().then 的话，不管有没有选中都一定会返回
      */
     return new Promise<string>((resolve) => {
-        remote.dialog.showOpenDialog(win, { properties: ['openDirectory'] }).then((paths) => {
-            if (paths) {
-                resolve(paths[0]);
+        remote.dialog.showOpenDialog(win, { properties: ['openDirectory'] }).then(({ filePaths }) => {
+            if (filePaths[0]) {
+                resolve(filePaths[0]);
             }
         });
     });
