@@ -59,7 +59,7 @@ class Table<Map extends object = object> extends Watcher<TableRow<Map>[]> {
         const table = new Table<Map>(this._database);
 
         // 直接引用原数据表数据
-        Object.defineProperty(table, '_data', this._data);
+        table['_data'] = this._data;
 
         // 复制内部查询条件
         table._limit = this._limit;
