@@ -11,8 +11,8 @@ const resolve = (base: string) => (...paths: (string | number)[]) => {
 };
 
 export function Context(name: string) {
-    const baseUserPath = userDir(name);
-    const baseTempPath = tempDir(name);
+    const baseUserPath = userDir(name.toLowerCase());
+    const baseTempPath = tempDir(name.toLowerCase());
 
     return {
         console,

@@ -28,8 +28,7 @@ export function fsLock({ read, write }: LockPermision) {
                 return true;
             }
 
-            const norInput = normalize(input);
-            return path.indexOf(norInput) === 0;
+            return normalize(input).indexOf(path) === 0;
         });
     }
 
@@ -38,7 +37,7 @@ export function fsLock({ read, write }: LockPermision) {
 
         fsLock[key] = (...args: any[]) => {
             if (!checkPath(readPath, args[0])) {
-                throw new Error('(fs-lock) illegal path');
+                throw new Error('(fs-lock) read illegal path');
             }
 
             return originVal(...args);
@@ -50,7 +49,7 @@ export function fsLock({ read, write }: LockPermision) {
 
         fsLock[key] = (...args: any[]) => {
             if (!checkPath(writePath, args[0])) {
-                throw new Error('(fs-lock) illegal path');
+                throw new Error('(fs-lock) write illegal path');
             }
 
             return originVal(...args);
