@@ -1,13 +1,11 @@
 import { Extension } from './types';
 
-import { toMap, uid } from '@utils/shared';
+import { uid } from '@utils/shared';
 import { readFile } from '@utils/node/file-system';
 import { resolveUserDir, resolveTempDir } from '@utils/node/env';
 
 /** 模块模板数据 */
 export const extensions: Extension[] = [];
-/** 模块类型索引 */
-const extensionMap = toMap(extensions, ({ name }) => name);
 
 function getBuf(path: string) {
     let buf: Buffer;
@@ -50,7 +48,7 @@ export async function createMeta(file: string) {
 
 /** 由类型获得模块 */
 export function getExtension(name: string) {
-    return extensionMap[name];
+    return extensions.find((ex) => ex.name === name);
 }
 
 /** 获取所有模块列表 */
