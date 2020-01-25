@@ -1,5 +1,5 @@
-import { Database } from '@utils/node';
-import { resolveUserDir } from '@utils/shared';
+import { Database } from '@utils/node/database';
+import { resolveUserDir } from '@utils/node/env';
 import { BaseFileData } from '@panda/extension-controller';
 
 /** 全局数据库 */

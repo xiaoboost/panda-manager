@@ -1,6 +1,7 @@
 import { join } from 'path';
 import { VM, VMScript } from 'vm2';
-import { uid, resolveRoot, resolveUserDir } from '@utils/shared';
+import { uid } from '@utils/shared';
+import { resolveRoot, resolveUserDir } from '@utils/node/env';
 import { readFile, readJSON, readdir, exists, mkdirp } from '@utils/node/file-system';
 
 import { Context } from './context';

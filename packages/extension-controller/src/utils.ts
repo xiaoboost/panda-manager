@@ -1,19 +1,20 @@
 import { Extension } from './types';
 
-import * as fs from '@utils/node/file-system';
-import * as utils from '@utils/shared';
+import { toMap, uid } from '@utils/shared';
+import { readFile } from '@utils/node/file-system';
+import { resolveUserDir, resolveTempDir } from '@utils/node/env';
 
 /** 模块模板数据 */
 export const extensions: Extension[] = [];
 /** 模块类型索引 */
-const extensionMap = utils.toMap(extensions, ({ name }) => name);
+const extensionMap = toMap(extensions, ({ name }) => name);
 
 function getBuf(path: string) {
     let buf: Buffer;
 
     return {
         path,
-        buffer: () => buf ? buf : fs.readFile(path).then((data) => (buf = data)),
+        buffer: () => buf ? buf : readFile(path).then((data) => (buf = data)),
     };
 }
 
@@ -21,7 +22,7 @@ function getBuf(path: string) {
 export async function createMeta(file: string) {
     // 文件上下文
     const context = {
-        id: utils.uid(),
+        id: uid(),
         ...getBuf(file),
     };
 
@@ -59,10 +60,10 @@ export function getAllExtensions() {
 
 /** 项目元数据文件夹 */
 export function userDir(name: string) {
-    return utils.resolveUserDir(`extension-${name}`);
+    return resolveUserDir(`extension-${name}`);
 }
 
 /** 项目临时文件夹 */
 export function tempDir(name: string) {
-    return utils.resolveTempDir(`extension-${name}`);
+    return resolveTempDir(`extension-${name}`);
 }

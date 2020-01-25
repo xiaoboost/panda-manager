@@ -1,7 +1,7 @@
 import { format } from 'url';
 import { app, BrowserWindow } from 'electron';
 
-import { resolveRender } from '@utils/shared';
+import { resolveRender } from '@utils/node/env';
 import { windowStateKeeper } from './window-state';
 
 /** 主窗口 */

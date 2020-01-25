@@ -1,5 +1,7 @@
-import { gzip, gunzip, readFile, writeFile } from '@utils/node';
-import { Watcher, debounce, resolveUserDir } from '@utils/shared';
+import { Watcher, debounce } from '@utils/shared';
+import { gzip, gunzip } from '@utils/node/zlib';
+import { resolveUserDir } from '@utils/node/env';
+import { readFile, writeFile } from '@utils/node/file-system';
 
 /** 配置文件路径 */
 const configPath = resolveUserDir('config');

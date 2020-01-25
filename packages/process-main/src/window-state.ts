@@ -1,7 +1,8 @@
 import { BrowserWindow, BrowserWindowConstructorOptions } from 'electron';
 
-import { writeFile, readJSON, exists, mkdirp } from '@utils/node';
-import { resolveUserDir, resolveTempDir, debounce } from '@utils/shared';
+import { writeFile, readJSON, exists, mkdirp } from '@utils/node/file-system';
+import { resolveUserDir, resolveTempDir } from '@utils/node/env';
+import { debounce } from '@utils/shared';
 
 const fileName = 'window-state.json';
 const filePath = resolveUserDir(fileName);
@@ -71,7 +72,7 @@ export async function windowStateKeeper(options: BrowserWindowConstructorOptions
     // 最大化
     if (config.isMaximize) {
         options.center = true;
-        options.show = false;
+        // options.show = false;
     }
     else {
         options.width = config.width;
