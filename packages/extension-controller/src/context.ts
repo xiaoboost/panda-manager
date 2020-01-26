@@ -1,8 +1,8 @@
 import { fsLock } from '@utils/node/file-lock';
 
 import * as path from 'path';
-import * as zip from '@utils/modules/zip';
-import * as image from '@utils/modules/image';
+import * as zip from '@utils/node/zip';
+import * as image from '@utils/node/image';
 
 import { tempDir, userDir } from './utils';
 
