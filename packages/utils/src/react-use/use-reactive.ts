@@ -1,7 +1,7 @@
 import { useRef } from 'react';
-import { default as useForceUpdate } from './use-force-update';
+import { useForceUpdate } from './use-force-update';
 
-export default function useReactive<T extends object>(initVal: T) {
+export function useReactive<T extends object>(initVal: T) {
     /** 强制更新 */
     const forceUpdate = useForceUpdate();
     /** 当前状态 */

@@ -3,14 +3,14 @@ import styles from './index.less';
 import React from 'react';
 
 import { stringifyClass } from '@utils/web';
-import { useWatcher, useMap, useListCallback } from '@utils/react-use';
+import { useWatcher, useMap } from '@utils/react-use';
 import { getExtension, BaseFileData } from '@panda/extension-controller';
 
 import { Database, Config } from '../../store';
 
 import stringNaturalCompare from 'string-natural-compare';
 
-export default function ObjectsList() {
+export function ObjectsList() {
     const [rows] = useWatcher(Database.Objects);
     const [{ sort }] = useWatcher(Config.data);
     const sortMethod = (() => {
@@ -38,7 +38,7 @@ export default function ObjectsList() {
     });
 
     const [selected, setSelected] = useMap<Record<number, boolean>>({});
-    const itemClickHandler = useListCallback(datas, (data) => (ev: React.MouseEvent) => {
+    const itemClickHandler = (data: BaseFileData) => (ev: React.MouseEvent) => {
         // 左键
         if (ev.button === 0) {
             setSelected.set(data.id, !selected[data.id]);
@@ -47,7 +47,7 @@ export default function ObjectsList() {
         else if (ev.button === 2) {
             console.log(`右键：${data.id}`);
         }
-    });
+    };
     const backgroundClickHandler = (ev: React.MouseEvent) => {
         if (ev.currentTarget === ev.target) {
             setSelected.reset();
@@ -56,10 +56,10 @@ export default function ObjectsList() {
 
     return (
         <main id={styles.objectsList} onClick={backgroundClickHandler}>
-            {datas.map((data, i) => (
+            {datas.map((data) => (
                 <div
                     key={data.id}
-                    onClick={itemClickHandler[i]}
+                    onClick={itemClickHandler(data)}
                     className={stringifyClass(styles.objectItem, {
                         [styles.objectItemSelected]: selected[data.id],
                     })}>

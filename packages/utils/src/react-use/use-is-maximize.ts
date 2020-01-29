@@ -1,7 +1,7 @@
 import { remote } from 'electron';
 import { useState, useEffect } from 'react';
 
-export default function useIsMaximize() {
+export function useIsMaximize() {
     const win = remote.getCurrentWindow();
     const [isMaximize, setState] = useState(win.isMaximized());
 

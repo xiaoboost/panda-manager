@@ -1,7 +1,6 @@
 import React from 'react';
 
-import Card from './card';
-import CardLine from './line';
+import { Card, CardLine } from './card';
 
 import { Switch, Select } from 'antd';
 
@@ -23,7 +22,7 @@ const sortByList = [
     },
 ];
 
-export default function Display() {
+export function Display() {
     const [{ sort }, setConfig] = useWatcher(Config.data);
     const setSort = (val: Partial<Config.SortOption>) => setConfig({
         sort: {

@@ -6,7 +6,7 @@ import { useParams } from 'react-router';
 import { Database } from '../../store';
 import { getExtension } from '@panda/extension-controller';
 
-export default function ItemDetail() {
+export function ObjectDetail() {
     const params = useParams<{ id: string }>();
     const [file] = Database.Objects.where((data) => data.id === +params.id).limit(1).toQuery();
 

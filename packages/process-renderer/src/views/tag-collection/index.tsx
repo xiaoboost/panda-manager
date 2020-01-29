@@ -15,7 +15,7 @@ import React from 'react';
 
 // import { deleteVal } from 'utils/shared';
 
-export default function TagCollection() {
+export function TagCollection() {
     return <div>标签集合</div>;
     // const [groups, setGroup] = useWatcher(tagGroups);
 

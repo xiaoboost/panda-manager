@@ -1,7 +1,7 @@
 import { remote } from 'electron';
 import { useState, useEffect } from 'react';
 
-export default function useIsFocus() {
+export function useIsFocus() {
     const win = remote.getCurrentWindow();
     const [isFocus, setState] = useState(win.isFocused());
 

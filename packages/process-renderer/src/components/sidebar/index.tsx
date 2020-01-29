@@ -3,16 +3,22 @@ import styles from './index.less';
 import React from 'react';
 
 import { stringifyClass } from '@utils/web';
-import { useRouter, useState, useCallback } from '@utils/react-use';
-
 import { MenuOutlined } from '@ant-design/icons';
 
-import MenuList from './menu';
+import { MenuList } from './menu';
+
+import {
+    useLocation,
+    useHistory,
+    useState,
+    useCallback,
+} from '@utils/react-use';
 
 export function Sidebar() {
     const [isFold, setFold] = useState(false);
-    const { history, location: router } = useRouter();
     const foldSidebar = useCallback(() => setFold(!isFold), [isFold]);
+    const history = useHistory();
+    const router = useLocation();
 
     return (
         <aside className={stringifyClass(styles.appSidebar, {

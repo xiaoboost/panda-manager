@@ -4,9 +4,16 @@ import React from 'react';
 
 import { remote } from 'electron';
 import { stringifyClass } from '@utils/web';
-import { useIsFocus, useIsMaximize, useRouter, useCallback } from '@utils/react-use';
 
 import { Bamboo, Recover } from '@utils/components';
+
+import {
+    useIsFocus,
+    useIsMaximize,
+    useCallback,
+    useLocation,
+    useHistory,
+} from '@utils/react-use';
 
 import {
     ArrowLeftOutlined,
@@ -20,7 +27,8 @@ import {
 export function Header() {
     const isFocus = useIsFocus();
     const isMaximize = useIsMaximize();
-    const router = useRouter();
+    const location = useLocation();
+    const history = useHistory();
 
     const win = remote.getCurrentWindow();
 
@@ -28,7 +36,6 @@ export function Header() {
     const unmaximize = useCallback(() => win.unmaximize(), [win]);
     const minimize = useCallback(() => win.minimize(), [win]);
     const close = useCallback(() => win.close(), [win]);
-    const routerBack = useCallback(() => router.history.goBack(), [router]);
 
     const logoDbClickStop = useCallback((ev: React.MouseEvent) => ev.stopPropagation(), []);
     const headerDbClick = useCallback(() => isMaximize ? win.unmaximize() : win.maximize(), [win, isMaximize]);
@@ -41,11 +48,11 @@ export function Header() {
             })}>
             <span>
                 <span onDoubleClick={logoDbClickStop}>
-                    {router.location.pathname === '/'
+                    {location.pathname === '/'
                         ? <Bamboo className={styles.appTitleBarLogo} />
                         : <ArrowLeftOutlined
                             className={styles.appTitleBarIcon}
-                            onClick={routerBack}
+                            onClick={() => history.goBack()}
                         />
                     }
                 </span>

@@ -5,10 +5,9 @@ import { default as React, FunctionComponent } from 'react';
 import { shell } from 'electron';
 import { Config, Directory } from '../../store';
 import { warnDialog, selectDirectory } from '../../lib/dialog';
-import { useWatcher, useCallback, useListCallback } from '@utils/react-use';
+import { useWatcher, useCallback } from '@utils/react-use';
 
-import Card from './card';
-import CardLine from './line';
+import { Card, CardLine } from './card';
 
 import {
     FolderOpenOutlined,
@@ -22,14 +21,6 @@ interface DirsListProps {
 }
 
 const DirsList: FunctionComponent<DirsListProps> = function DirPathList({ paths, remove }) {
-    const openFolder = useListCallback(paths, (dir) => () => shell.openItem(dir));
-    const removeList = useListCallback(paths, (dir) => () => {
-        warnDialog({
-            title: '确认删除',
-            content: `确定要删除此文件夹？\n${dir}`,
-        }).then(() => remove(dir));
-    });
-
     return <>
         {paths.map((path, i) => (
             <CardLine
@@ -37,18 +28,24 @@ const DirsList: FunctionComponent<DirsListProps> = function DirPathList({ paths,
                 key={i}
                 title={path}>
                 <FolderOpenOutlined
-                    onClick={openFolder[i]}
+                    onClick={() => shell.openItem(path)}
                     style={{
                         color: 'rgba(0, 0, 0, .4)',
                         fontSize: '14px',
                     }}
                 />
                 <DeleteOutlined
-                    onClick={removeList[i]}
                     style={{
                         color: '#faad14',
                         fontSize: '14px',
                         marginLeft: '8px',
+                    }}
+                    onClick={async () => {
+                        await warnDialog({
+                            title: '确认删除',
+                            content: `确定要删除此文件夹？\n${path}`,
+                        });
+                        remove(path);
                     }}
                 />
             </CardLine>
@@ -56,7 +53,7 @@ const DirsList: FunctionComponent<DirsListProps> = function DirPathList({ paths,
     </>;
 };
 
-export default function Directories() {
+export function Directories() {
     const [{ directories }] = useWatcher(Config.data);
     const add = useCallback(() => selectDirectory().then(Directory.add), []);
     const remove = useCallback((dir: string) => Directory.remove(dir), []);

@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-export default function useForceUpdate() {
+export function useForceUpdate() {
     const [, dispatch] = useState<{}>(Object.create(null));
 
     // 设置新参数，强制更新
