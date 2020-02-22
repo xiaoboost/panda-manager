@@ -2,7 +2,7 @@ import './console';
 
 export * from './assert';
 export * from './subject';
-export * from './async';
+export * from './func';
 export * from './clone';
 export * from './array';
 export * from './object';

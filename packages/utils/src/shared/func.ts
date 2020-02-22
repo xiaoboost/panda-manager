@@ -50,3 +50,51 @@ export function debounce<T extends AnyFunction>(delay: number | T, cb?: T): (...
         timer = setTimeout(() => cbt(...args), time);
     };
 }
+
+/** 限制异步函数并发数量 */
+export function concurrent(fn: () => Promise<void>, limit = 1): () => Promise<void> {
+    let count = 0;
+
+    return function currentFunc() {
+        if (count >= limit) {
+            return Promise.resolve();
+        }
+
+        // 并发计数器 + 1
+        count++;
+
+        return fn().finally(() => count--);
+    };
+}
+
+interface RunLimit<T extends AnyFunction> {
+    /** 被包裹的函数本体 */
+    (...args: Parameters<T>): ReturnType<T>;
+    /** 重置运行次数计数器 */
+    reset(): void;
+}
+
+/** 限制函数运行次数 */
+export function runCountLimit<T extends AnyFunction>(func: T, limit = 1): RunLimit<T> {
+    let count = 0;
+    let lastResult: ReturnType<T>;
+
+    const countFunc: RunLimit<T> = function countFunc(...args: Parameters<T>) {
+        if (count >= limit) {
+            return lastResult;
+        }
+
+        // 计数器 + 1
+        count++;
+
+        lastResult = func(...args);
+
+        return lastResult;
+    };
+
+    countFunc.reset = () => {
+        count = 0;
+    };
+
+    return countFunc;
+}
