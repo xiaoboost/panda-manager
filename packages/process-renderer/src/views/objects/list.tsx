@@ -1,16 +1,16 @@
+import React from 'react';
 import styles from './index.less';
 
-import React from 'react';
-
 import { stringifyClass } from '@utils/web';
-import { useWatcher, useMap } from '@utils/react-use';
+import { useWatcher } from '@utils/react-use';
+import { useMap } from 'react-use';
 import { getExtension, BaseFileData } from '@panda/extension-controller';
 
-import { Database, Config } from '../../store';
+import { Database, Config } from '@renderer/store';
 
 import stringNaturalCompare from 'string-natural-compare';
 
-export function ObjectsList() {
+export function ObjectList() {
     const [rows] = useWatcher(Database.Objects);
     const [{ sort }] = useWatcher(Config.data);
     const sortMethod = (() => {

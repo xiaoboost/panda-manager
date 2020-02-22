@@ -1,19 +1,14 @@
-import styles from './index.less';
-
 import React from 'react';
+import styles from './index.less';
 
 import { remote } from 'electron';
 import { stringifyClass } from '@utils/web';
 
 import { Bamboo, Recover } from '@utils/components';
 
-import {
-    useIsFocus,
-    useIsMaximize,
-    useCallback,
-    useLocation,
-    useHistory,
-} from '@utils/react-use';
+import { useCallback } from 'react';
+import { useLocation, useHistory } from 'react-router';
+import { useIsFocus, useIsMaximize } from '@utils/react-use';
 
 import {
     ArrowLeftOutlined,

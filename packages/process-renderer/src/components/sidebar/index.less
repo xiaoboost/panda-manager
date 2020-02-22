@@ -9,43 +9,28 @@
     background-color: @WhiteMask;
 
     width: 140px;
-
     transition: width .3s, border .3s;
-}
 
-.menu-item {
-    height: 40px;
-    line-height: 40px;
-    color: #666;
-    padding: 0 12px 0 10px;
-    border-left: 2px solid @WhiteMask;
-
-    display: flex;
-    align-items: center;
-    flex-wrap: nowrap;
-
-    overflow-x: hidden;
-
-    &.menu-switch {
-        color: #000;
-        margin-bottom: 5px;
+    &.app-sidebar__fold {
+        width: 80px;
+        border-right: 0;
     }
 
-    &.menu-item__highlight {
-        color: @Black;
-        background-color: @Gray + #040404;
+    :global {
+        .ant-menu {
+            background-color: transparent;
+        }
 
-        padding-left: 10px;
-        border-color: @Black;
+        .anticon {
+            font-size: 110%;
+        }
+
+        .ant-menu-item > a {
+            display: inline-block;
+        }
+
+        .ant-menu-inline-collapsed .ant-menu-item > a {
+            display: block;
+        }
     }
-}
-
-.menu-item__title {
-    margin-left: 15px;
-    flex-shrink: 0;
-}
-
-.app-sidebar.app-sidebar__fold {
-    width: 40px;
-    border-right: 0;
 }

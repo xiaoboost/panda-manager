@@ -1,20 +1,61 @@
 import { Books } from '@utils/components/icon';
-import { TagsOutlined, SettingOutlined } from '@ant-design/icons';
+import { Router, RouterNames } from '@renderer/router';
+import { TagsOutlined, SettingOutlined, ApiOutlined } from '@ant-design/icons';
 
 export const MenuList = [
     {
-        title: '漫画列表',
-        route: '/',
+        label: '漫画列表',
         Icon: Books,
+        routerName: RouterNames.ObjectList,
+        path: Router.toPath({
+            name: RouterNames.ObjectList,
+        }),
     },
     {
-        title: '标签列表',
-        route: '/tags',
+        label: '标签列表',
         Icon: TagsOutlined,
+        routerName: RouterNames.TagGroupList,
+        path: Router.toPath({
+            name: RouterNames.TagGroupList,
+        }),
     },
     {
-        title: '设置',
-        route: '/setting',
+        label: '插件列表',
+        Icon: ApiOutlined,
+        routerName: RouterNames.ExtensionList,
+        path: Router.toPath({
+            name: RouterNames.ExtensionList,
+        }),
+    },
+    {
+        label: '设置',
         Icon: SettingOutlined,
+        routerName: RouterNames.Setting,
+        path: Router.toPath({
+            name: RouterNames.Setting,
+        }),
     },
 ];
+
+/** 由路径获取当前高亮路由名称 */
+export function getRouteNameByPath(path: string) {
+    const router = Router.findRouterByPath(path);
+
+    if (!router) {
+        return null;
+    }
+
+    const lightRouterName = router.router.meta?.sidebarLight
+        ? router.router.meta?.sidebarLight
+        : router.router.name;
+
+    for (let i = 0; i < MenuList.length; i++) {
+        const main = MenuList[i];
+
+        if (main.routerName === lightRouterName) {
+            return main.routerName;
+        }
+    }
+
+    return null;
+}

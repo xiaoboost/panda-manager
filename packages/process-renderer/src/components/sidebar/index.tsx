@@ -3,44 +3,45 @@ import styles from './index.less';
 import React from 'react';
 
 import { stringifyClass } from '@utils/web';
-import { MenuOutlined } from '@ant-design/icons';
+import { MenuList, getRouteNameByPath } from './menu';
 
-import { MenuList } from './menu';
-
-import {
-    useLocation,
-    useHistory,
-    useState,
-    useCallback,
-} from '@utils/react-use';
+import { Menu } from 'antd';
+import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router';
+import { useState, useCallback } from 'react';
+import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 
 export function Sidebar() {
+    const { pathname } = useLocation();
     const [isFold, setFold] = useState(false);
     const foldSidebar = useCallback(() => setFold(!isFold), [isFold]);
-    const history = useHistory();
-    const router = useLocation();
+    const defaultSelectedId = getRouteNameByPath(pathname);
+    const defaultSelectedKey = defaultSelectedId ? String(defaultSelectedId) : '';
+    const menuIndent = 24;
 
     return (
         <aside className={stringifyClass(styles.appSidebar, {
             [styles.appSidebarFold]: isFold,
         })}>
-            <div className={`${styles.menuItem} ${styles.menuSwitch}`}>
-                <MenuOutlined
-                    className='menu-item__icon'
-                    onClick={foldSidebar}
-                />
-            </div>
-            {MenuList.map((item) =>
-                <div
-                    key={item.route}
-                    onClick={() => history.push({ pathname: item.route })}
-                    className={stringifyClass(styles.menuItem, {
-                        [styles.menuItemHighlight]: item.route === router.pathname,
-                    })}>
-                    <item.Icon />
-                    <span className={styles.menuItemTitle}>{item.title}</span>
-                </div>,
-            )}
+            <Menu
+                theme='light'
+                mode='inline'
+                inlineCollapsed={isFold}
+                inlineIndent={menuIndent}
+                defaultSelectedKeys={[defaultSelectedKey]}>
+                <li className='ant-menu-item' style={{ paddingLeft: menuIndent }}>
+                    {isFold
+                        ? <MenuUnfoldOutlined onClick={foldSidebar} />
+                        : <MenuFoldOutlined onClick={foldSidebar} />
+                    }
+                </li>
+                {MenuList.map((Item) => (
+                    <Menu.Item key={Item.routerName}>
+                        <Item.Icon />
+                        <Link to={Item.path}>{Item.label}</Link>
+                    </Menu.Item>
+                ))}
+            </Menu>
         </aside>
     );
 }

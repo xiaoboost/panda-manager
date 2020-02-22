@@ -1,11 +1,11 @@
+import React from 'react';
 import styles from './index.less';
 
-import { default as React, FunctionComponent } from 'react';
-
 import { shell } from 'electron';
-import { Config, Directory } from '../../store';
-import { warnDialog, selectDirectory } from '../../lib/dialog';
-import { useWatcher, useCallback } from '@utils/react-use';
+import { useWatcher } from '@utils/react-use';
+import { Config, Directory } from '@renderer/store';
+import { warnDialog, selectDirectory } from '@renderer/lib/dialog';
+import { FunctionComponent, useCallback } from 'react';
 
 import { Card, CardLine } from './card';
 

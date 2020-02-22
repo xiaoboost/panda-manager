@@ -3,7 +3,7 @@ import './index.less';
 import React from 'react';
 
 import { useParams } from 'react-router';
-import { Database } from '../../store';
+import { Database } from '@renderer/store';
 import { getExtension } from '@panda/extension-controller';
 
 export function ObjectDetail() {

@@ -1,15 +1,15 @@
-import styles from './index.less';
+import { InputRouterParam } from '@renderer/lib/router';
 
-import { default as React } from 'react';
+import { Setting } from './setting';
 
-import { Display } from './display';
-import { Directories } from './directories';
-
-export function Setting() {
-    return (
-        <main id={styles.mainSetting}>
-            <Directories />
-            <Display />
-        </main>
-    );
+export enum RouterNames {
+    Setting = 300,
 }
+
+export const Routers: InputRouterParam[] = [
+    {
+        path: '/setting',
+        name: RouterNames.Setting,
+        component: Setting,
+    },
+];

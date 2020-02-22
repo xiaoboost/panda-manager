@@ -1,15 +1,25 @@
+import React from 'react';
 import styles from './index.less';
-
-import { default as React, PropsWithChildren } from 'react';
 
 import { Header } from '../header';
 import { Sidebar } from '../sidebar';
 
 import { useIsFocus } from '@utils/react-use';
 import { stringifyClass } from '@utils/web';
+import { PropsWithChildren } from 'react';
 
 export function Layout({ children }: PropsWithChildren<{}>) {
     const isFocus = useIsFocus();
+
+    // const [loading] = usePromiseState(ready);
+
+    // if (loading) {
+    //     return <div className={styles.app}>
+    //         <div className={styles.appLoading}>
+    //             <LoadingOutlined />
+    //         </div>
+    //     </div>;
+    // }
 
     return (
         <div
