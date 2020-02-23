@@ -4,9 +4,12 @@ import styles from './index.less';
 import { stringifyClass } from '@utils/web';
 import { useWatcher } from '@utils/react-use';
 import { useMap } from 'react-use';
-import { getExtension, BaseFileData } from '@panda/extension-controller';
 
-import { Database, Config } from '@renderer/store';
+import { getExtension } from '@renderer/store/extensions';
+import { BaseFileData } from '@panda/extension-controller';
+
+import * as Config from '@renderer/store/config';
+import * as Database from '@renderer/store/database';
 
 import stringNaturalCompare from 'string-natural-compare';
 

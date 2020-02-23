@@ -32,8 +32,24 @@ export interface ListCoverProps {
     id: number;
 }
 
+/** 插件配置文件内容 */
+export interface PackageInfo {
+    /** 唯一 id 编号 */
+    id: string;
+    /** 主进程代码文件路径 */
+    main: string;
+    /** 图标文件路径 */
+    icon: string;
+    /** 插件名称 */
+    name: string;
+    /** 插件当前版本号 */
+    version: string;
+    /** 插件功能描述 */
+    description: string;
+}
+
 /** 扩展静态接口 */
-export interface Extension {
+export interface Extension extends PackageInfo {
     /** 扩展名称 */
     name: string;
 

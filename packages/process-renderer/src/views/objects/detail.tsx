@@ -3,8 +3,9 @@ import './index.less';
 import React from 'react';
 
 import { useParams } from 'react-router';
-import { Database } from '@renderer/store';
-import { getExtension } from '@panda/extension-controller';
+
+import * as Database from '@renderer/store/database';
+import * as Extension from '@renderer/store/extensions';
 
 export function ObjectDetail() {
     const params = useParams<{ id: string }>();
@@ -14,7 +15,7 @@ export function ObjectDetail() {
         return <div>项目不存在</div>;
     }
 
-    const ex = getExtension(file.data.extension);
+    const ex = Extension.getExtension(file.data.extension);
 
     if (!ex?.DetailPage) {
         return <div>插件不存在</div>;

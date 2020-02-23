@@ -5,7 +5,7 @@ import { ready as databaseReady, Objects } from './database';
 import { ready as configReady, data as Config } from './config';
 
 import { concat, toBoolMap, exclude } from '@utils/shared';
-import { createMeta, ready as exReady } from '@panda/extension-controller';
+import { createMeta, ready as exReady } from './extensions';
 
 /** 文件队列是否空闲 */
 let loading = false;

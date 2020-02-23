@@ -3,9 +3,10 @@ import React from 'react';
 import { Switch, Select } from 'antd';
 import { Card, CardLine } from './card';
 
-import { Config } from '@renderer/store';
-import { useWatcher } from '@utils/react-use';
 import { useCallback } from 'react';
+import { useWatcher } from '@utils/react-use';
+
+import * as Config from '@renderer/store/config';
 
 const sortByList = [
     {

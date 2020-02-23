@@ -3,9 +3,11 @@ import styles from './index.less';
 
 import { shell } from 'electron';
 import { useWatcher } from '@utils/react-use';
-import { Config, Directory } from '@renderer/store';
 import { warnDialog, selectDirectory } from '@renderer/lib/dialog';
 import { FunctionComponent, useCallback } from 'react';
+
+import * as Config from '@renderer/store/config';
+import * as Directory from '@renderer/store/directory';
 
 import { Card, CardLine } from './card';
 
