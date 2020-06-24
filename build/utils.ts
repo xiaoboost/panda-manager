@@ -1,21 +1,23 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-
 import Chalk from 'chalk';
 import Webpack from 'webpack';
 import TerserPlugin from 'terser-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 import ProgressBarPlugin from 'progress-bar-webpack-plugin';
 import OptimizeCSSPlugin from 'optimize-css-assets-webpack-plugin';
 import FriendlyErrorsPlugin from 'friendly-errors-webpack-plugin';
+
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 
-import { join } from 'path';
-import { removeSync as rm, readdirSync, statSync } from 'fs-extra';
+import * as path from 'path';
+import * as fs from 'fs-extra';
+
+const isDevelopment = process.env.NODE_ENV === 'development';
+const modeName = isDevelopment ? 'development' : 'production';
 
 /** 定位到项目根目录 */
-export const resolveRoot = (...dir: string[]) => join(__dirname, '../', ...dir);
-
-/** 生成项目路径定位函数 */
-export const resolvePackage = (name: string) => (...dir: string[]) => resolveRoot('packages', name, ...dir);
+export const resolve = (...dir: string[]) => path.join(__dirname, '../', ...dir);
 
 /** 当前编译时间 */
 export const buildTag = (() => {
@@ -28,86 +30,124 @@ export const buildTag = (() => {
     return `${year}.${month}.${date} - ${time}`;
 })();
 
-/** webpack 外部模块 */
-function webpackExternals(): Record<string, string> {
-    const nodeModules = [
-        'process', 'buffer', 'util', 'sys', 'events', 'stream', 'path',
-        'querystring', 'punycode', 'url', 'string_decoder', 'http', 'https',
-        'os', 'assert', 'constants', 'timers', 'console', 'vm', 'zlib', 'tty',
-        'domain', 'dns', 'dgram', 'child_process', 'cluster', 'module', 'net',
-        'readline', 'repl', 'tls', 'crypto', 'fs',
-    ];
+/** nodejs 内置模块 */
+const builtinModules = [
+    'process', 'buffer', 'util', 'sys', 'events', 'stream', 'path',
+    'querystring', 'punycode', 'url', 'string_decoder', 'http', 'https',
+    'os', 'assert', 'constants', 'timers', 'console', 'vm', 'zlib', 'tty',
+    'domain', 'dns', 'dgram', 'child_process', 'cluster', 'module', 'net',
+    'readline', 'repl', 'tls', 'crypto', 'fs',
+];
 
-    const externalModules = [
-        'electron', 'vm2',
-    ];
+const externalModules = (() => {
+    const result: string[] = [];
+    const dir = resolve('node_modules');
 
-    return nodeModules.concat(externalModules).reduce((map, name) => {
-        map[name] = `commonjs ${name}`;
-        return map;
-    }, {});
-}
+    fs.readdirSync(dir).forEach((name) => {
+        if (name[0] === '@') {
+            result.push(...fs.readdirSync(path.resolve(dir, name)).map((inner) => `${name}/${inner}`));
+        }
+        else {
+            result.push(name);
+        }
+    });
 
-/** webpack 别名 */
-function webpackAlias() {
-    const packages = readdirSync(resolveRoot('packages'))
-        .filter((name) => name !== 'utils')
-        .map((name) => ({
-            name,
-            path: resolveRoot(`packages/${name}/src`),
-        }))
-        .reduce((map, { name, path }) => {
-            map[name] = path;
-            return map;
-        }, {});
+    return result;
+})();
 
-    return {
-        '@utils': resolveRoot('packages/utils/src'),
-        ...packages,
-    };
-}
-
-/** 检查编译项目是否存在 */
-function checkProjectName(name: string) {
-    const paths = readdirSync(resolveRoot('packages'));
-    const isExist = paths.includes(name);
-
-    if (!isExist) {
-        return false;
-    }
-
-    const stat = statSync(resolveRoot('packages', name));
-    return stat.isDirectory();
-}
-
-/** 设置 webpack 的公共属性 */
-function webpackCommon(config: Webpack.Configuration) {
-    if (!config.resolve) {
-        config.resolve = {};
-    }
-
-    if (!config.resolve.alias) {
-        config.resolve.alias = {};
-    }
-
-    config.resolve.alias = {
-        ...config.resolve.alias,
-        ...webpackAlias(),
-    };
-
-    if (!config.optimization) {
-        config.optimization = {};
-    }
-
-    if (!config.optimization.minimizer) {
-        config.optimization.minimizer = [];
-    }
-
-    if (!config.plugins) {
-        config.plugins = [];
-    }
-
-    config.plugins = config.plugins.concat([
+/** 公共配置 */
+const webpackCommonConfig: Webpack.Configuration = {
+    target: 'electron-main',
+    externals: builtinModules,
+    mode: modeName,
+    node: {
+        __dirname: false,
+        __filename: false,
+    },
+    entry: {
+        client: resolve('src/main/index.ts'),
+        renderer: resolve('src/renderer/init/index.ts'),
+    },
+    output: {
+        path: resolve('dist/generated'),
+        filename: 'scripts/[name].js',
+    },
+    resolve: {
+        extensions: ['.tsx', '.ts', '.js', '.jsx', '.json', '.less', '.css'],
+        mainFiles: ['index.tsx', 'index.ts', 'index.js', 'index.less', 'index.css'],
+        plugins: [
+            new TsconfigPathsPlugin({
+                configFile: resolve('tsconfig.json'),
+            }),
+        ],
+    },
+    performance: {
+        hints: false,
+        maxEntrypointSize: 2048000,
+        maxAssetSize: 2048000,
+    },
+    module: {
+        rules: [
+            {
+                test: /\.tsx?$/,
+                exclude: /node_modules/,
+                loader: 'ts-loader',
+                options: {
+                    configFile: resolve('tsconfig.json'),
+                },
+            },
+            {
+                test: /\.css$/,
+                use: ['css-loader'],
+            },
+            {
+                test: /\.styl$/,
+                include: /node_modules/,
+                use: ['css-loader', 'stylus-loader'],
+            },
+            {
+                test: /\.styl$/,
+                exclude: /node_modules/,
+                use: [
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            localsConvention: 'camelCaseOnly',
+                            modules: {
+                                context: resolve('src'),
+                                localIdentName: isDevelopment
+                                    ? '[local]__[hash:base64:5]'
+                                    : '[hash:base64:6]',
+                            },
+                        },
+                    },
+                    {
+                        loader: 'stylus-loader',
+                        options: {
+                            javascriptEnabled: true,
+                            paths: [resolve('src')],
+                        },
+                    },
+                ],
+            },
+        ],
+    },
+    optimization: {
+        splitChunks: {
+            maxInitialRequests: Infinity,
+            minSize: 0,
+            minChunks: 1,
+            name: true,
+            cacheGroups: {
+                commons: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: 'common',
+                    chunks: 'all',
+                },
+            },
+        },
+    },
+    plugins: [
         new Webpack.optimize.ModuleConcatenationPlugin(),
         new Webpack.HashedModuleIdsPlugin({
             hashFunction: 'sha256',
@@ -118,124 +158,84 @@ function webpackCommon(config: Webpack.Configuration) {
             width: 40,
             format: `${Chalk.green('> building:')} [:bar] ${Chalk.green(':percent')} (:elapsed seconds)`,
         }),
-    ]);
-
-    config.externals = {
-        ...(config.externals as object || {}),
-        ...webpackExternals(),
-    };
-}
-
-/** 调试模式 */
-export async function devBuild(name: string) {
-    if (!checkProjectName(name)) {
-        console.error(`Project '${name}' is not exist!`);
-        process.exit(1);
-    }
-
-    const config = require(resolveRoot('packages', name, 'webpack.ts'));
-    const BaseConfig: Webpack.Configuration = config.webpackConfig;
-
-    if (!BaseConfig.mode) {
-        BaseConfig.mode = 'development';
-    }
-
-    // 删除输出文件夹
-    rm(BaseConfig.output!.path!);
-
-    webpackCommon(BaseConfig);
-
-    // 每个模块用 eval() 执行, SourceMap 作为 DataUrl 添加到文件末尾
-    if (!BaseConfig.devtool) {
-        BaseConfig.devtool = 'eval-source-map';
-    }
-
-    BaseConfig.optimization!.namedChunks = true;
-    BaseConfig.optimization!.namedModules = true;
-    BaseConfig.optimization!.noEmitOnErrors = true;
-
-    // 调试用的插件
-    BaseConfig.plugins = BaseConfig.plugins!.concat([
         new Webpack.DefinePlugin({
-            'process.env.NODE_ENV': '"development"',
+            'process.env.NODE_ENV': JSON.stringify(modeName),
         }),
         new FriendlyErrorsPlugin({
             compilationSuccessInfo: {
-                messages: [`Project '${name}' compile done.`],
+                messages: ['Project compile done.'],
                 notes: [],
             },
         }),
+        new HtmlWebpackPlugin({
+            filename: 'index.html',
+            template: resolve('src/renderer/index.html'),
+            inject: true,
+            excludeChunks: [],
+            minify: {
+                removeComments: !isDevelopment,
+                collapseWhitespace: !isDevelopment,
+                ignoreCustomComments: [/^-/],
+            },
+        }),
+    ],
+};
+
+if (isDevelopment) {
+    webpackCommonConfig.devtool = 'source-map';
+    webpackCommonConfig.externals = builtinModules.concat(externalModules);
+    webpackCommonConfig.plugins = (webpackCommonConfig.plugins || []).concat([
+        new MiniCssExtractPlugin({
+            filename: 'styles/renderer.css',
+        }),
     ]);
-
-    const compiler = Webpack(BaseConfig);
-
-    compiler.watch({ ignored: /node_modules/ }, (err?: Error) => {
-        if (err) {
-            console.error(err.stack || err);
-        }
-
-        if (config.after) {
-            config.after();
-        }
-    });
 }
 
-/** 编译模式 */
-export async function build(name: string) {
-    if (!checkProjectName(name)) {
-        console.error(`Project '${name}' is not exist!`);
-        process.exit(1);
+if (!isDevelopment) {
+    if (!webpackCommonConfig.optimization) {
+        webpackCommonConfig.optimization = {};
     }
 
-    const config = require(resolveRoot('packages', name, 'webpack.ts'));
-    const BaseConfig: Webpack.Configuration = config.webpackConfig;
-
-    if (!BaseConfig.mode) {
-        BaseConfig.mode = 'production';
-    }
-
-    // 删除输出文件夹
-    rm(BaseConfig.output!.path!);
-
-    webpackCommon(BaseConfig);
-
-    BaseConfig.devtool = undefined;
-    BaseConfig.optimization!.minimize = true;
-    BaseConfig.optimization!.minimizer = BaseConfig.optimization!.minimizer!.concat([
+    webpackCommonConfig.optimization.minimize = true;
+    webpackCommonConfig.optimization.minimizer = [
         new TerserPlugin({
             test: /\.js$/i,
             cache: false,
             terserOptions: {
-                ecma: 7,
+                ecma: 8,
                 ie8: false,
                 safari10: false,
                 output: {
                     comments: /^!/,
                 },
-                compress: {
-                    negate_iife: false,
-                },
             },
         }),
-    ]);
+    ];
 
-    BaseConfig.plugins = BaseConfig.plugins!.concat([
+    webpackCommonConfig.plugins = (webpackCommonConfig.plugins || []).concat([
         new OptimizeCSSPlugin(),
         new BundleAnalyzerPlugin({
             analyzerPort: 9876,
         }),
-        new Webpack.DefinePlugin({
-            'process.env.NODE_ENV': '"production"',
-        }),
     ]);
+}
 
-    Webpack(BaseConfig, (err, stats) => {
+/** 调试模式 */
+async function devBuild() {
+    const compiler = Webpack(webpackCommonConfig);
+
+    compiler.watch({ ignored: /node_modules/ }, (err?: Error) => {
+        if (err) {
+            console.error(err.stack || err);
+        }
+    });
+}
+
+/** 编译模式 */
+async function build() {
+    Webpack(webpackCommonConfig, (err, stats) => {
         if (err) {
             throw err;
-        }
-
-        if (config.after) {
-            config.after();
         }
 
         console.log(stats.toString({
@@ -247,4 +247,11 @@ export async function build(name: string) {
             children: false,
         }));
     });
+}
+
+if (isDevelopment) {
+    devBuild();
+}
+else {
+    build();
 }

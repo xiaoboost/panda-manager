@@ -26,6 +26,8 @@ module.exports =  {
         'react/prop-types': 'off',
 
         // typescript
+        // 允许函数不写返回类型
+        '@typescript-eslint/explicit-module-boundary-types': 'off',
         // 重载函数的定义必须是连续的
         '@typescript-eslint/adjacent-overload-signatures': 'error',
         // 允许非空断言
