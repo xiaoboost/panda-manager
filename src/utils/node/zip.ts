@@ -5,7 +5,7 @@ import naturalCompare from 'string-natural-compare';
 
 import * as fs from '../node/file-system';
 
-import { isString } from '../shared';
+import { isString } from '../shared/assert';
 
 /** 读取压缩包 */
 async function readZip(file: string | Buffer) {

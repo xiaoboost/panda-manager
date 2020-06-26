@@ -30,10 +30,11 @@
                 "name": "typescript-plugin-css-modules",
                 "options": {
                     "classnameTransform": "camelCaseOnly",
-                    "customMatcher": "\\.less$",
-                    "customRenderer": "../../build/less-renderer.js"
+                    "customMatcher": "\\.less$"
                 }
             }
         ]
-    }
+    },
+    "include": ["src", "build", "typings"],
+    "exclude": ["node_modules", "packages"]
 }

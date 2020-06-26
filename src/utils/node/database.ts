@@ -6,9 +6,9 @@ import { debounce } from '../shared/func';
 import { Watcher } from '../shared/subject';
 
 /** 基础数据行 */
-type TableRowData<T extends AnyObject> = T & { id: number };
+type TableRowData<T extends object> = T & { id: number };
 /** 数据库文件在文件系统中的储存结构 */
-type DatabaseInFile = Record<string, AnyObject[]>;
+type DatabaseInFile = Record<string, object[]>;
 
 /** 生成编号 */
 const newId = ({ id }: { id?: any }) => {
@@ -21,7 +21,7 @@ const newId = ({ id }: { id?: any }) => {
 };
 
 /** 数据行类 */
-class TableRow<Map extends AnyObject> extends Watcher<TableRowData<Map>> {
+class TableRow<Map extends object> extends Watcher<TableRowData<Map>> {
     constructor(data: Map & { id?: any }) {
         super({
             ...data,
@@ -43,7 +43,7 @@ class TableRow<Map extends AnyObject> extends Watcher<TableRowData<Map>> {
 }
 
 /** 数据表类 */
-class Table<Map extends AnyObject = AnyObject> extends Watcher<TableRow<Map>[]> {
+class Table<Map extends object = object> extends Watcher<TableRow<Map>[]> {
     /** 按照哪列排序 */
     private _orderBy: keyof TableRowData<Map> = 'id';
     /** 查询条件回调 */
@@ -256,7 +256,7 @@ export class Database {
     writeDisk = debounce(200, () => this._writeDisk());
 
     /** 使用某个表 */
-    use<Map extends AnyObject = AnyObject>(name: string): Table<Map> {
+    use<Map extends object = object>(name: string): Table<Map> {
         if (!this._data[name]) {
             this._data[name] = new Table(this);
         }

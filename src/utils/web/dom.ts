@@ -1,4 +1,4 @@
-import { isString, isObject } from '../shared';
+import { isString, isObject } from '../shared/assert';
 
 export type ClassObject = Record<string, boolean>;
 export type ClassInput = string | undefined | ClassObject;

@@ -1,7 +1,7 @@
 import { format } from 'url';
 import { app, BrowserWindow } from 'electron';
 
-import { resolveRender } from 'src/utils/node/env';
+import { resolveRoot } from 'src/utils/node/env';
 import { windowStateKeeper } from './window-state';
 
 /** 主窗口 */
@@ -21,7 +21,7 @@ export async function install() {
     });
 
     win.loadURL(format({
-        pathname: resolveRender('index.html'),
+        pathname: resolveRoot('pages/renderer.html'),
         protocol: 'file:',
         slashes: true,
     }));

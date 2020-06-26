@@ -1,7 +1,9 @@
 .vscode/*
+.eslintrc.js
 
-bin/*
+bin/
 dist/
+build/
 node_modules/*
 
 index.js
