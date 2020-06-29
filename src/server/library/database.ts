@@ -1,9 +1,9 @@
-import { gzip, gunzip } from './zlib';
-import { readFile, writeFile } from './file-system';
+import { gzip, gunzip } from 'src/utils/node/zlib';
+import { readFile, writeFile } from 'src/utils/node/file-system';
 
-import { uid } from '../shared/uid';
-import { debounce } from '../shared/func';
-import { Watcher } from '../shared/subject';
+import { uid } from 'src/utils/shared/uid';
+import { debounce } from 'src/utils/shared/func';
+import { Watcher } from 'src/utils/shared/subject';
 
 /** 基础数据行 */
 type TableRowData<T extends object> = T & { id: number };
