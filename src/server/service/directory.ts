@@ -61,10 +61,10 @@ const ready = (async function init() {
     // 删除数据库中存在，而实际不存在的数据
     const exInDatabase = exclude(filesInDisk, filesInDatabase);
 
-    if (exInDatabase.length > 0) {
-        const exMap = toBoolMap(exInDatabase);
-        Objects.where(({ filePath }) => exMap[filePath]).remove();
-    }
+    // if (exInDatabase.length > 0) {
+    //     const exMap = toBoolMap(exInDatabase);
+    //     Objects.where(({ filePath }) => exMap[filePath]).remove();
+    // }
 
     // 实际存在而数据库中没有的，则要添加
     filesQueue.push(...exclude(filesInDatabase, filesInDisk));
@@ -100,6 +100,7 @@ export async function remove(input: string) {
     data.directories = data.directories.filter((dir) => dir !== input);
 }
 
-export function get() {
+export async function get() {
+    await Config.ready;
     return [...data.directories];
 }
