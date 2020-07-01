@@ -98,7 +98,7 @@ export const rendererConfig: Webpack.Configuration = {
             cacheGroups: {
                 commons: {
                     test: /[\\/]node_modules[\\/]/,
-                    name: 'common',
+                    name: 'renderer-common',
                     chunks: 'all',
                 },
             },

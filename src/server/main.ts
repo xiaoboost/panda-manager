@@ -13,7 +13,7 @@ import {
     Config,
 } from './controller';
 
-async function route(param: EventData): Promise<EventData> {
+async function route(param: EventData<any>): Promise<EventData<any>> {
     const { data, name } = param;
 
     let err = '';
@@ -22,6 +22,14 @@ async function route(param: EventData): Promise<EventData> {
     switch (name) {
         case EventName.GetConfig: {
             result = await Config.get();
+            break;
+        }
+        case EventName.UpdateConfig: {
+            result = await Config.patchConfig(data);
+            break;
+        }
+        case EventName.UpdateSortOption: {
+            result = await Config.patchSort(data);
             break;
         }
         default: {
@@ -37,10 +45,15 @@ async function route(param: EventData): Promise<EventData> {
 }
 
 async function service(event: IpcMainEvent, param: EventData) {
-    debugger;
-
-    const result = await route(param);
-    event.reply(toRendererEventName, result);
+    try {
+        event.reply(toRendererEventName, await route(param));
+    }
+    catch (e) {
+        event.reply(toRendererEventName, {
+            ...param,
+            error: e.message,
+        });
+    }
 }
 
 export function install() {
