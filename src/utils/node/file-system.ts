@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import * as Stream from 'stream';
 
 import { promisify } from 'util';
 
@@ -112,4 +113,46 @@ export async function mkdirp(target: string) {
     while (dirs.length > 0) {
         await mkdir(dirs.pop()!);
     }
+}
+
+class WriteSharedBuffer extends Stream.Writable {
+    _buffer: SharedArrayBuffer;
+    _view: Uint8Array;
+    _index = 0;
+
+    constructor(len = 0) {
+        super();
+        this._buffer = new SharedArrayBuffer(len);
+        this._view = new Uint8Array(this._buffer);
+    }
+
+    _write(chunk: Buffer, encoding: BufferEncoding, next: (error?: Error | null) => void) {
+        const chunkView = new Uint8Array(chunk.buffer);
+
+        for (let i = 0; i < chunkView.byteLength; i++) {
+            this._view[this._index + i] = chunkView[i];
+        }
+
+        this._index += chunkView.byteLength;
+
+        next();
+    }
+}
+
+/** 读取文件并设置为 SharedArrayBuffer */
+export async function readFileAsShared(path: string) {
+    const fileStat = await stat(path);
+    const writeStream = new WriteSharedBuffer(fileStat.size);
+    const readStream = fs.createReadStream(path);
+
+    return new Promise((resolve, reject) => {
+        readStream
+            .pipe(writeStream)
+            .on('error', (err) => reject(err))
+            .on('finish', () => {
+                readStream.destroy();
+                writeStream.destroy();
+                resolve(writeStream._buffer);
+            });
+    });
 }
