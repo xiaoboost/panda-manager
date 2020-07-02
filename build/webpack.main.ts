@@ -2,6 +2,8 @@ import Webpack from 'webpack';
 import TerserPlugin from 'terser-webpack-plugin';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 import FriendlyErrorsPlugin from 'friendly-errors-webpack-plugin';
+import GenerateJsonWebpackPlugin from 'generate-json-webpack-plugin';
+import PackageConfig from '../package.json';
 
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 
@@ -65,6 +67,13 @@ export const clientConfig: Webpack.Configuration = {
         }),
         new Webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify(modeName),
+        }),
+        new GenerateJsonWebpackPlugin('package.json', {
+            name: PackageConfig.name,
+            version: PackageConfig.version,
+            description: PackageConfig.description,
+            main: PackageConfig.main,
+            author: PackageConfig.author,
         }),
     ],
 };

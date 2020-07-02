@@ -5,20 +5,6 @@ import { clientConfig } from './webpack.main';
 import { rendererConfig } from './webpack.renderer';
 
 function devBuild() {
-    // const clientCompiler = Webpack(clientConfig);
-    // const rendererCompiler = Webpack(rendererConfig);
-    // const watchConfig: Webpack.ICompiler.WatchOptions = {
-    //     ignored: /node_modules/,
-    // };
-    // const watchCb: Webpack.ICompiler.Handler = (err) => {
-    //     if (err) {
-    //         console.error(err.stack || err);
-    //     }
-    // };
-
-    // clientCompiler.watch(watchConfig, watchCb);
-    // rendererCompiler.watch(watchConfig, watchCb);
-    
     const compiler = Webpack([clientConfig, rendererConfig]);
 
     compiler.watch({ ignored: /node_modules/ }, (err?: Error) => {

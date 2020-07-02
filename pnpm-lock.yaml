@@ -3,6 +3,7 @@ devDependencies:
   '@types/copy-webpack-plugin': 6.0.0
   '@types/friendly-errors-webpack-plugin': 0.1.2
   '@types/fs-extra': 9.0.1
+  '@types/generate-json-webpack-plugin': 0.3.1
   '@types/html-webpack-plugin': 3.2.3
   '@types/lodash': 4.14.157
   '@types/mini-css-extract-plugin': 0.9.1
@@ -25,6 +26,7 @@ devDependencies:
   file-loader: 6.0.0_webpack@4.43.0
   friendly-errors-webpack-plugin: 1.7.0_webpack@4.43.0
   fs-extra: 9.0.1
+  generate-json-webpack-plugin: 1.0.0
   html-webpack-plugin: 4.3.0_webpack@4.43.0
   iconv-lite: 0.6.0
   jszip: 3.5.0
@@ -253,6 +255,13 @@ packages:
     resolution:
       integrity: sha1-kcj8TFH21dvkTCypqwkxC9AMeRg=
       tarball: '@types/fs-extra/download/@types/fs-extra-9.0.1.tgz'
+  /@types/generate-json-webpack-plugin/0.3.1:
+    dependencies:
+      '@types/webpack': 4.41.18
+    dev: true
+    resolution:
+      integrity: sha1-Y9XF5oTi1c2Dr8n9q6AncAUL7YM=
+      tarball: '@types/generate-json-webpack-plugin/download/@types/generate-json-webpack-plugin-0.3.1.tgz'
   /@types/history/4.7.6:
     dev: true
     resolution:
@@ -3346,6 +3355,11 @@ packages:
     resolution:
       integrity: sha1-GwqzvVU7Kg1jmdKcDj6gslIHgyc=
       tarball: functional-red-black-tree/download/functional-red-black-tree-1.0.1.tgz
+  /generate-json-webpack-plugin/1.0.0:
+    dev: true
+    resolution:
+      integrity: sha1-UY52LrihUveozCr1YXLA3FjfqYk=
+      tarball: generate-json-webpack-plugin/download/generate-json-webpack-plugin-1.0.0.tgz
   /generic-names/1.0.3:
     dependencies:
       loader-utils: 0.2.17
@@ -8819,6 +8833,7 @@ specifiers:
   '@types/copy-webpack-plugin': ^6.0.0
   '@types/friendly-errors-webpack-plugin': ^0.1.2
   '@types/fs-extra': ^9.0.1
+  '@types/generate-json-webpack-plugin': ^0.3.1
   '@types/html-webpack-plugin': ^3.2.3
   '@types/lodash': ^4.14.157
   '@types/mini-css-extract-plugin': ^0.9.1
@@ -8841,6 +8856,7 @@ specifiers:
   file-loader: ^6.0.0
   friendly-errors-webpack-plugin: ^1.7.0
   fs-extra: ^9.0.1
+  generate-json-webpack-plugin: ^1.0.0
   html-webpack-plugin: ^4.3.0
   iconv-lite: ^0.6.0
   jszip: ^3.5.0
