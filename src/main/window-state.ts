@@ -72,7 +72,6 @@ export async function windowStateKeeper(options: BrowserWindowConstructorOptions
     // 最大化
     if (config.isMaximize) {
         options.center = true;
-        // options.show = false;
     }
     else {
         options.width = config.width;

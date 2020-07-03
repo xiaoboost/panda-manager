@@ -1,12 +1,29 @@
 // import { imageSize } from 'image-size';
 // import { default as Sharp, JpegOptions, PngOptions } from 'sharp';
 
+// import Jimp from 'jimp';
+
 interface ImageSize {
     width: number;
     height: number;
     maxWidth: number;
     maxHeight: number;
 }
+
+interface CompressOption {
+    type?: 'jpg' | 'png';
+    size?: Partial<ImageSize>;
+}
+
+// export async function compress(image: Buffer, { type = 'jpg' }: CompressOption = {}) {
+//     // ..
+
+//     const img = await Jimp.create(image);
+
+//     img
+//         .resize()
+//         .getBuffer();
+// }
 
 // interface JpgImageCompressOption extends JpegOptions {
 //     type: 'jpg';

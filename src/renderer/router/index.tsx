@@ -9,15 +9,15 @@ import * as Setting from '../views/setting';
 const routers = [
     {
         path: '/',
-        component: Objects.Renderer,
+        component: Objects.Render,
     },
     {
         path: '/tags',
-        component: Tags.Renderer,
+        component: Tags.Render,
     },
     {
         path: '/setting',
-        component: Setting.Renderer,
+        component: Setting.Render,
     },
 ];
 

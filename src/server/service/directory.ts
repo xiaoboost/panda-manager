@@ -70,34 +70,16 @@ const ready = (async function init() {
     filesQueue.push(...exclude(filesInDatabase, filesInDisk));
 })();
 
-export async function add(input: string) {
-    if (data.directories.includes(input)) {
-        // FIXME: 等待修复
-        return;
-    }
-
+export async function update(paths: string[]) {
     // 等待初始化完成
     await ready;
 
     // 变更配置
-    data.directories = data.directories.concat([input]);
+    data.directories = paths;
 
-    // 待处理文件进入队列
-    const files = await readdir(input);
-    filesQueue.push(...files.map((file) => join(input, file)));
-}
-
-export async function remove(input: string) {
-    // 当前文件夹列表不包含输入路径，直接退出
-    if (!Config.data.directories.includes(input)) {
-        return;
-    }
-
-    // 等待初始化完成
-    await ready;
-
-    // 变更配置
-    data.directories = data.directories.filter((dir) => dir !== input);
+    // // 待处理文件进入队列
+    // const files = await readdir(input);
+    // filesQueue.push(...files.map((file) => join(input, file)));
 }
 
 export async function get() {

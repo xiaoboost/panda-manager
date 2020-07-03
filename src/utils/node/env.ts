@@ -10,7 +10,7 @@ const app = originApp ? originApp : remote.app;
 const initCWD = app.getAppPath();
 
 /** 软件根目录 */
-const appRoot = process.env.NODE_ENV === 'development' ? join(initCWD, 'dist/generated') : initCWD;
+const appRoot = process.env.NODE_ENV === 'development' ? initCWD : initCWD;
 /** 软件临时件夹路径 */
 const tempDir = join(app.getPath('temp'), appName);
 /** 缓存文件夹路径 */

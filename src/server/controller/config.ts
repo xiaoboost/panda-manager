@@ -11,9 +11,15 @@ export async function get(): Promise<ConfigData> {
 }
 
 export async function patchConfig(data: Partial<ConfigData>) {
-    // ..
+    if (data.directories) {
+        await Dir.update(data.directories);
+    }
+
+    if (data.sort) {
+        await patchSort(data.sort);
+    }
 }
 
 export async function patchSort(data: Partial<SortOption>) {
-    // ..
+    await Sort.patch(data);
 }
