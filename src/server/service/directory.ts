@@ -6,8 +6,6 @@ import { Config, Database } from '../model';
 import { readdir } from 'src/utils/node/file-system';
 import { concat, exclude, toBoolMap } from 'src/utils/shared/array';
 
-const { data } = Config;
-
 /** 文件队列是否空闲 */
 let loading = false;
 /** 待处理的文件队列 */
@@ -75,7 +73,7 @@ export async function update(paths: string[]) {
     await ready;
 
     // 变更配置
-    data.directories = paths;
+    Config.data.directories = paths;
 
     // // 待处理文件进入队列
     // const files = await readdir(input);
@@ -84,5 +82,5 @@ export async function update(paths: string[]) {
 
 export async function get() {
     await Config.ready;
-    return [...data.directories];
+    return [...Config.data.directories];
 }
