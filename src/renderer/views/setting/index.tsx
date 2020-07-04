@@ -12,8 +12,8 @@ export function Render() {
 
     return (
         <main id={styles.mainSetting}>
-            <Directories paths={data?.directories || []} />
-            <Display />
+            <Directories paths={data?.directories} />
+            <Display sort={data?.sort} />
         </main>
     );
 }

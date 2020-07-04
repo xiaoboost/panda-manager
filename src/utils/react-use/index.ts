@@ -6,3 +6,4 @@ export { useForceUpdate } from './use-force-update';
 export { usePromiseState } from './use-promise-state';
 export { useMounted } from './use-mounted';
 export { useServer } from './use-server';
+export { useFollow } from './use-follow';

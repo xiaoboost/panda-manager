@@ -1,18 +1,16 @@
 import { Config } from '../model';
 import { SortOption } from '../model/types';
 
-const { data, ready } = Config;
-
 export async function patch(sort: Partial<SortOption>): Promise<void> {
-    await ready;
+    await Config.ready;
 
-    data.sort = {
-        ...data.sort,
+    Config.data.sort = {
+        ...Config.data.sort,
         ...sort,
     };
 }
 
 export async function get(): Promise<SortOption> {
-    await ready;
-    return { ...data.sort };
+    await Config.ready;
+    return { ...Config.data.sort };
 }

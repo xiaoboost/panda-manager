@@ -49,11 +49,11 @@ function AddDirectory({ add }: AddProps) {
 }
 
 interface Props {
-    paths: string[];
+    paths?: string[];
 }
 
 export function Render({ paths }: Props) {
-    const [dirs, setDirs] = useProp(paths);
+    const [dirs, setDirs] = useProp(paths || []);
 
     const add = (path: string) => {
         if (dirs.includes(path)) {
@@ -65,12 +65,10 @@ export function Render({ paths }: Props) {
             return;
         }
 
-        const arr = dirs.concat([path]);
+        const directories = dirs.concat([path]);
 
-        setDirs(arr);
-        toServer(EventName.UpdateConfig, {
-            directories: arr,
-        });
+        setDirs(directories);
+        toServer(EventName.UpdateConfig, { directories });
     };
     const remove = async (path: string) => {
         await warn({
@@ -80,12 +78,10 @@ export function Render({ paths }: Props) {
             cancelText: '取消',
         });
 
-        const arr = deleteVal(dirs, path, false);
+        const directories = deleteVal(dirs, path, false);
 
-        setDirs(arr);
-        toServer(EventName.UpdateConfig, {
-            directories: deleteVal(paths, path),
-        });
+        setDirs(directories);
+        toServer(EventName.UpdateConfig, { directories });
     };
 
     return (
