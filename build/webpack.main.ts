@@ -2,10 +2,11 @@ import Webpack from 'webpack';
 import TerserPlugin from 'terser-webpack-plugin';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 import FriendlyErrorsPlugin from 'friendly-errors-webpack-plugin';
-import GenerateJsonWebpackPlugin from 'generate-json-webpack-plugin';
+import GenerateJsonPlugin from 'generate-json-webpack-plugin';
 import PackageConfig from '../package.json';
 
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
+import { RequireSplitChunkPlugin } from 'require-split-chunk-webpack-plugin';
 
 import {
     modeName,
@@ -68,7 +69,7 @@ export const clientConfig: Webpack.Configuration = {
         new Webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify(modeName),
         }),
-        new GenerateJsonWebpackPlugin('package.json', {
+        new GenerateJsonPlugin('package.json', {
             name: PackageConfig.name,
             version: PackageConfig.version,
             description: PackageConfig.description,
@@ -94,6 +95,19 @@ if (isDevelopment) {
 else {
     clientConfig.optimization = {
         minimize: true,
+        splitChunks: {
+            maxInitialRequests: Infinity,
+            minSize: 0,
+            minChunks: 1,
+            name: true,
+            cacheGroups: {
+                commons: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: 'main-common',
+                    chunks: 'all',
+                },
+            },
+        },
         minimizer: [
             new TerserPlugin({
                 test: /\.js$/i,
@@ -109,6 +123,10 @@ else {
             }),
         ],
     };
+
+    clientConfig.plugins = clientConfig.plugins!.concat([
+        new RequireSplitChunkPlugin(),
+    ]);
 
     if (isAnalyzer) {
         clientConfig.plugins = clientConfig.plugins!.concat([

@@ -1,5 +1,4 @@
-import '../styles';
-import 'antd/dist/antd.css';
+import './style';
 
 import { render } from 'react-dom';
 import { createElement } from 'react';

@@ -82,7 +82,10 @@ export const rendererConfig: Webpack.Configuration = {
                     {
                         loader: 'stylus-loader',
                         options: {
-                            paths: [resolve('src/renderer')],
+                            paths: [
+                                resolve('node_modules'),
+                                resolve('src/renderer'),
+                            ],
                         },
                     },
                 ],
