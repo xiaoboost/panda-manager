@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './index.styl';
 
 import { shell } from 'electron';
-import { useProp } from 'src/utils/react-use';
+import { useFollow } from 'src/utils/react-use';
 import { deleteVal } from 'src/utils/shared/array';
 import { toServer, EventName } from 'src/server/renderer';
 import { warn, info, selectDirectory } from 'src/renderer/lib/dialog';
@@ -53,7 +53,7 @@ interface Props {
 }
 
 export function Render({ paths }: Props) {
-    const [dirs, setDirs] = useProp(paths || []);
+    const [dirs, setDirs] = useFollow(paths || []);
 
     const add = (path: string) => {
         if (dirs.includes(path)) {

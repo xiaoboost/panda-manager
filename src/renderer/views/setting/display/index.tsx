@@ -3,7 +3,7 @@ import React from 'react';
 import { Switch, Select } from 'antd';
 import { Card, CardLine } from '../card';
 
-import { useProp } from 'src/utils/react-use';
+import { useFollow } from 'src/utils/react-use';
 import { toServer, SortOption, SortBy, EventName } from 'src/server/renderer';
 
 const sortByList = [
@@ -26,7 +26,7 @@ interface Props {
 }
 
 export function Render({ sort: prop }: Props) {
-    const [sort, setOpt] = useProp(prop || {
+    const [sort, setOpt] = useFollow(prop || {
         by: SortBy.name,
         asc: true,
     });
