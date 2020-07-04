@@ -1,5 +1,5 @@
 import { resolveUserDir } from 'src/utils/node/env';
-import { Database as DB } from 'src/server/library/database';
+import { Database as DB } from 'src/utils/data/database';
 import { TagData, TagGroupData, BaseFileData } from './types';
 
 /** 数据库 */

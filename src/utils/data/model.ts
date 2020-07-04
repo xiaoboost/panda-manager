@@ -1,6 +1,8 @@
 import { isObject } from 'src/utils/shared/assert';
 import { gzip, gunzip } from 'src/utils/node/zlib';
 import { readFile, writeFile } from 'src/utils/node/file-system';
+import { debounce } from 'src/utils/shared/func';
+import { isUndef, isDef } from 'src/utils/shared/assert';
 
 export class Model<T> {
     /** 数据 */
@@ -27,7 +29,7 @@ export class Model<T> {
         return this._ready;
     }
 
-    private get path() {
+    get path() {
         return process.env.NODE_ENV === 'development'
             ? `${this._path}.json`
             : this._path;
@@ -38,25 +40,6 @@ export class Model<T> {
         this._path = path;
         this.read();
         this.proxy();
-    }
-
-    private read() {
-        this._ready = new Promise(async (resolve) => {
-            try {
-                let buf = await readFile(this.path);
-
-                if (process.env.NODE_ENV === 'production') {
-                    buf = await gunzip(buf);
-                }
-
-                this.data = JSON.parse(buf.toString());
-            }
-            catch (err) {
-                this.write();
-            }
-
-            resolve();
-        });
     }
 
     private proxy() {
@@ -76,7 +59,7 @@ export class Model<T> {
         }
     }
 
-    private async write() {
+    private async _write() {
         if (process.env.NODE_ENV === 'development') {
             await writeFile(this.path, JSON.stringify(this._val, null, 2));
         }
@@ -84,5 +67,36 @@ export class Model<T> {
         if (process.env.NODE_ENV === 'production') {
             await writeFile(this.path, await gzip(JSON.stringify(this._val)));
         }
+    }
+
+    read() {
+        this._ready = new Promise(async (resolve) => {
+            try {
+                let buf = await readFile(this.path);
+
+                if (process.env.NODE_ENV === 'production') {
+                    buf = await gunzip(buf);
+                }
+
+                this.data = JSON.parse(buf.toString());
+            }
+            catch (err) {
+                this.write();
+            }
+
+            resolve();
+        });
+    }
+
+    write = debounce(200, () => this._write());
+
+    fill(val: T) {
+        const { data } = this;
+
+        Object.entries(val).forEach(([key, val]) => {
+            if (isUndef(data[key]) && isDef(val)) {
+                data[key] = val;
+            }
+        });
     }
 }

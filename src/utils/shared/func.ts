@@ -1,3 +1,5 @@
+import { isFunc } from './assert';
+
 /** 延迟函数 */
 export function delay(time = 0) {
     return new Promise((resolve) => setTimeout(resolve, time));
@@ -29,10 +31,16 @@ export function wait(fn: () => boolean, interval = 200, stopTimeout = 60000) {
     })();
 }
 
+type ReturnPromiseType<T> = T extends (...args: any) => Promise<infer R>
+    ? R
+    : T extends (...args: any) => infer R
+        ? R
+        : any;
+
 /** 防抖动函数包装 */
-export function debounce<T extends AnyFunction>(cb: T): (...args: Parameters<T>) => void;
-export function debounce<T extends AnyFunction>(delay: number, cb: T): (...args: Parameters<T>) => void;
-export function debounce<T extends AnyFunction>(delay: number | T, cb?: T): (...args: Parameters<T>) => void {
+export function debounce<T extends AnyFunction>(cb: T): (...args: Parameters<T>) => Promise<ReturnPromiseType<T>>;
+export function debounce<T extends AnyFunction>(delay: number, cb: T): (...args: Parameters<T>) => Promise<ReturnPromiseType<T>>;
+export function debounce<T extends AnyFunction>(delay: number | T, cb?: T): (...args: Parameters<T>) => Promise<ReturnPromiseType<T>> {
     let timer: ReturnType<typeof setTimeout>;
     let time: number, cbt: T;
 
@@ -45,9 +53,33 @@ export function debounce<T extends AnyFunction>(delay: number | T, cb?: T): (...
         time = delay;
     }
 
+    let _resolve: (value?: ReturnPromiseType<T> | PromiseLike<ReturnPromiseType<T>> | undefined) => void;
+    let _reject: (error: any) => void;
+
+    const end = new Promise<ReturnPromiseType<T>>((resolve, reject) => {
+        _resolve = resolve;
+        _reject = reject;
+    });
+
     return function delayInDebounce(...args: any[]) {
         clearTimeout(timer);
-        timer = setTimeout(() => cbt(...args), time);
+        timer = setTimeout(() => {
+            try {
+                const result = cbt(...args);
+
+                if (result && isFunc(result.then)) {
+                    result.then(_resolve);
+                }
+                else {
+                    _resolve(result);
+                }
+            }
+            catch (e) {
+                _reject(e);
+            }
+        }, time);
+
+        return end;
     };
 }
 

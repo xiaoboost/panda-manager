@@ -92,7 +92,7 @@ class Table<Map extends object = object> extends Watcher<TableRow<Map>[]> {
         const last = this._data.slice();
 
         this._data.push(...data.map((item) => new TableRow(item)));
-        this._database.writeDisk();
+        this._database.write();
 
         this.notify(this._data, last);
     }
@@ -126,7 +126,7 @@ class Table<Map extends object = object> extends Watcher<TableRow<Map>[]> {
         // 表长度重新赋值
         table.length -= count;
 
-        this._database.writeDisk();
+        this._database.write();
         this.notify(this._data, last);
     }
     /** 修改条目 */
@@ -139,7 +139,7 @@ class Table<Map extends object = object> extends Watcher<TableRow<Map>[]> {
 
         row.set(data);
 
-        this._database.writeDisk();
+        this._database.write();
 
         return true;
     }
@@ -207,17 +207,26 @@ export class Database {
     private _progress = Promise.resolve();
     /** 数据库数据 */
     private _data: Record<string, Table> = {};
-
     /** 初始化准备就绪 */
-    ready: Promise<void>;
+    private _ready: Promise<void>;
 
     constructor(path: string) {
         this._path = path;
-        this.ready = this._readDisk();
+        this._ready = this.read();
+    }
+
+    private get path() {
+        return process.env.NODE_ENV === 'development'
+            ? `${this._path}.json`
+            : this._path;
+    }
+
+    get ready() {
+        return this._ready;
     }
 
     /** 数据写入硬盘 */
-    private _writeDisk() {
+    private _write() {
         this._progress = this._progress.then(async () => {
             const data: DatabaseInFile = {};
 
@@ -225,35 +234,41 @@ export class Database {
                 data[name] = table['_data'].map((row) => row['_data']);
             });
 
-            await writeFile(this._path, await gzip(JSON.stringify(data)));
+            if (process.env.NODE_ENV === 'development') {
+                await writeFile(this.path, JSON.stringify(data, null, 2));
+            }
+
+            if (process.env.NODE_ENV === 'production') {
+                await writeFile(this.path, await gzip(JSON.stringify(data)));
+            }
         });
 
         return this._progress;
     }
     /** 从硬盘读取数据 */
-    private _readDisk() {
-        this._progress = this._progress.then(async () => {
-            let data: DatabaseInFile = {};
+    async read() {
+        let data: DatabaseInFile = {};
 
-            try {
-                const buf = await gunzip(await readFile(this._path));
-                data = JSON.parse(buf.toString());
-            }
-            catch (err) {
-                console.error(err);
-                this.writeDisk();
+        try {
+            let buf = await readFile(this.path);
+
+            if (process.env.NODE_ENV === 'production') {
+                buf = await gunzip(buf);
             }
 
-            Object.entries((data)).forEach(([name, tableData]) => {
-                this.use(name).insert(...tableData);
-            });
+            data = JSON.parse(buf.toString());
+        }
+        catch (err) {
+            this.write();
+        }
+
+        Object.entries((data)).forEach(([name, tableData]) => {
+            this.use(name).insert(...tableData);
         });
-
-        return this._progress;
     }
 
     /** 将数据库写入硬盘 */
-    writeDisk = debounce(200, () => this._writeDisk());
+    write = debounce(200, () => this._write());
 
     /** 使用某个表 */
     use<Map extends object = object>(name: string): Table<Map> {

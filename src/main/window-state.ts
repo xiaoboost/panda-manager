@@ -1,11 +1,10 @@
 import { BrowserWindow, BrowserWindowConstructorOptions } from 'electron';
 
-import { writeFile, readJSON, exists, mkdirp } from 'src/utils/node/file-system';
-import { resolveUserDir, resolveTempDir } from 'src/utils/node/env';
-import { debounce } from 'src/utils/shared/func';
+import { Model } from 'src/utils/data/model';
 
-const fileName = 'window-state.json';
-const filePath = resolveUserDir(fileName);
+import { debounce } from 'src/utils/shared/func';
+import { exists, mkdirp } from 'src/utils/node/file-system';
+import { resolveUserDir, resolveTempDir } from 'src/utils/node/env';
 
 /** 全局配置文件基础接口 */
 interface WindowState {
@@ -21,8 +20,8 @@ interface WindowState {
     top?: number;
 }
 
-/** 当前窗口状态缓存 */
-const state: WindowState = {
+/** 初始化窗口状态 */
+const initState: WindowState = {
     width: 800,
     height: 600,
     left: undefined,
@@ -30,15 +29,8 @@ const state: WindowState = {
     isMaximize: false,
 };
 
-/** 保存配置 */
-function writeState(opt: Partial<WindowState> = {}) {
-    Object.assign(state, {
-        ...state,
-        ...opt,
-    });
-
-    writeFile(filePath, JSON.stringify(state));
-}
+/** 当前窗口状态 */
+const state = new Model<WindowState>(initState, resolveUserDir('window-state'));
 
 /** 初始化配置文件夹 */
 async function initDir() {
@@ -59,7 +51,10 @@ export async function windowStateKeeper(options: BrowserWindowConstructorOptions
     await initDir();
 
     // 配置初始化
-    const config = await readJSON(filePath, {
+    await state.ready;
+
+    // 合并输入配置
+    state.fill({
         isMaximize: false,
         height: options.height || 600,
         width: options.width || 800,
@@ -67,46 +62,43 @@ export async function windowStateKeeper(options: BrowserWindowConstructorOptions
         left: options.x,
     });
 
-    Object.assign(state, config);
-
     // 最大化
-    if (config.isMaximize) {
+    if (state.data.isMaximize) {
         options.center = true;
     }
     else {
-        options.width = config.width;
-        options.height = config.height;
-        options.x = config.left;
-        options.y = config.top;
+        options.width = state.data.width;
+        options.height = state.data.height;
+        options.x = state.data.left;
+        options.y = state.data.top;
     }
 
     const win = new BrowserWindow(options);
 
-    if (config.isMaximize) {
+    if (state.data.isMaximize) {
         win.maximize();
     }
 
-    win.on('close', () => writeState());
+    win.on('close', () => state.write());
 
-    win.on('maximize', () => writeState({
-        isMaximize: true,
-    }));
-
-    win.on('unmaximize', () => writeState({
-        isMaximize: false,
-    }));
+    win.on('maximize', () => (state.data.isMaximize = true));
+    win.on('unmaximize', () => (state.data.isMaximize = false));
 
     win.on('resize', debounce(() => {
         if (!win.isMaximized()) {
             const [width, height] = win.getSize();
-            writeState({ width, height });
+
+            state.data.width = width;
+            state.data.height = height;
         }
     }));
 
     win.on('move', debounce(() => {
         if (!win.isMaximized()) {
             const [left, top] = win.getPosition();
-            writeState({ left, top });
+
+            state.data.left = left;
+            state.data.top = top;
         }
     }));
 

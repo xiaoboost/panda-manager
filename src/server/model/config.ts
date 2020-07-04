@@ -1,4 +1,4 @@
-import { Model } from 'src/server/library/model';
+import { Model } from 'src/utils/data/model';
 import { resolveUserDir } from 'src/utils/node/env';
 import { SortBy, ConfigData } from './types';
 
