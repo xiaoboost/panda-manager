@@ -2,9 +2,10 @@ import React from 'react';
 import styles from './index.styl';
 
 import { shell } from 'electron';
-import { warnDialog, selectDirectory } from 'src/renderer/lib/dialog';
-import { toServer, EventName } from 'src/server/renderer';
+import { useProp } from 'src/utils/react-use';
 import { deleteVal } from 'src/utils/shared/array';
+import { toServer, EventName } from 'src/server/renderer';
+import { warn, info, selectDirectory } from 'src/renderer/lib/dialog';
 
 import { Card, CardLine } from '../card';
 
@@ -49,20 +50,42 @@ function AddDirectory({ add }: AddProps) {
 
 interface Props {
     paths: string[];
-    update(): void;
 }
 
-export function Render({ paths, update }: Props) {
-    const add = (path: string) => {
-        toServer(EventName.UpdateConfig, {
-            directories: paths.concat([path]),
-        }).then(update);
-    };
+export function Render({ paths }: Props) {
+    const [dirs, setDirs] = useProp(paths);
 
-    const remove = (path: string) => {
+    const add = (path: string) => {
+        if (dirs.includes(path)) {
+            info({
+                title: '文件夹重复',
+                content: '不可以选择重复文件夹。',
+                okText: '关闭',
+            });
+            return;
+        }
+
+        const arr = dirs.concat([path]);
+
+        setDirs(arr);
+        toServer(EventName.UpdateConfig, {
+            directories: arr,
+        });
+    };
+    const remove = async (path: string) => {
+        await warn({
+            title: '删除',
+            content: `确定删除该路径吗？该操作是不可逆的。\n${path}`,
+            okText: '删除',
+            cancelText: '取消',
+        });
+
+        const arr = deleteVal(dirs, path, false);
+
+        setDirs(arr);
         toServer(EventName.UpdateConfig, {
             directories: deleteVal(paths, path),
-        }).then(update);
+        });
     };
 
     return (
@@ -70,9 +93,9 @@ export function Render({ paths, update }: Props) {
             {/** 文件夹列表 */}
             <div className={styles.settingBox}>
                 <AddDirectory add={add} />
-                {paths.length === 0
+                {dirs.length === 0
                     ? <CardLine isSubline title='尚未添加目录' />
-                    : paths.map((path) => <Directory
+                    : dirs.map((path) => <Directory
                         key={path}
                         path={path}
                         remove={() => remove(path)}

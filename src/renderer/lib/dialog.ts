@@ -2,14 +2,31 @@ import { Modal } from 'antd';
 import { remote } from 'electron';
 import { ModalFuncProps } from 'antd/es/modal';
 
-type WarnOptions = Omit<ModalFuncProps, 'okType' | 'onOk' | 'onCancel' | 'keyboard'>;
+type ModalOptions = Omit<ModalFuncProps, 'okType' | 'onOk' | 'onCancel' | 'keyboard'>;
 
-export function warnDialog(props: WarnOptions) {
+export function warn(props: ModalOptions) {
     return new Promise<void>((resolve, reject) => {
         Modal.confirm({
             okText: '确定',
             cancelText: '取消',
             okType: 'danger',
+            ...props,
+            style: {
+                top: '30%',
+                ...props.style,
+            },
+            keyboard: true,
+            onOk: () => resolve(),
+            onCancel: () => reject(),
+        });
+    });
+}
+
+export function info(props: ModalOptions) {
+    return new Promise<void>((resolve, reject) => {
+        Modal.info({
+            okText: '确定',
+            okType: 'primary',
             ...props,
             style: {
                 top: '30%',
