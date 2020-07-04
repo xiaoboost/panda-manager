@@ -5,43 +5,33 @@ import React from 'react';
 import { stringifyClass } from 'src/utils/web/dom';
 import { MenuList, getRouteNameByPath } from './menu';
 
-import { Menu } from 'antd';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router';
-import { useState, useCallback } from 'react';
-import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 
 export function Sidebar() {
     const { pathname } = useLocation();
-    const [isFold, setFold] = useState(false);
-    const foldSidebar = useCallback(() => setFold(!isFold), [isFold]);
-    const defaultSelectedId = getRouteNameByPath(pathname);
-    const defaultSelectedKey = defaultSelectedId ? String(defaultSelectedId) : '';
-    const menuIndent = 24;
+    const highlight = getRouteNameByPath(pathname);
 
     return (
-        <aside className={stringifyClass(styles.appSidebar, {
-            [styles.appSidebarFold]: isFold,
-        })}>
-            <Menu
-                theme='light'
-                mode='inline'
-                inlineCollapsed={isFold}
-                inlineIndent={menuIndent}
-                defaultSelectedKeys={[defaultSelectedKey]}>
-                <li className='ant-menu-item' style={{ paddingLeft: menuIndent }}>
-                    {isFold
-                        ? <MenuUnfoldOutlined onClick={foldSidebar} />
-                        : <MenuFoldOutlined onClick={foldSidebar} />
-                    }
-                </li>
-                {MenuList.map((Item) => (
-                    <Menu.Item key={Item.name}>
-                        <Item.Icon />
-                        <Link to={Item.path}>{Item.label}</Link>
-                    </Menu.Item>
+        <aside className={styles.appSidebar}>
+            <ul className={styles.appMenuList}>
+                {MenuList.map((item) => (
+                    <li
+                        key={item.name}
+                        className={stringifyClass(styles.appMenuItem, {
+                            [styles.appMenuItemHighlight]: highlight === item.name,
+                        })}
+                    >
+                        <item.Icon className={styles.appMenuItemIcon} />
+                        <Link
+                            to={item.path}
+                            className={styles.appMenuItemLink}
+                        >
+                            {item.label}
+                        </Link>
+                    </li>
                 ))}
-            </Menu>
+            </ul>
         </aside>
     );
 }
