@@ -14,6 +14,8 @@ export const mkdir = promisify(fs.mkdir);
 
 export {
     existsSync,
+    createReadStream,
+    createWriteStream,
 } from 'fs';
 
 /** 遍历文件夹下的所有文件 */

@@ -1,5 +1,6 @@
 import * as path from 'path';
 import * as fs from 'fs-extra';
+import * as yaml from 'yaml';
 
 export const isDevelopment = process.argv.includes('--development');
 export const isAnalyzer = process.argv.includes('--analyze');
@@ -22,17 +23,17 @@ export const builtinModules = [
 
 /** node_modules 模块 */
 export const externalModules = (() => {
-    const result: string[] = [];
-    const dir = resolve('node_modules');
+    const file = fs.readFileSync(resolve('pnpm-lock.yaml'));
+    const lock = yaml.parse(file.toString());
+    const packages = Object.keys(lock.packages).map((pack) => {
+        const matcher = /\/[^\/]+$/g.exec(pack);
 
-    fs.readdirSync(dir).forEach((name) => {
-        if (name[0] === '@') {
-            result.push(...fs.readdirSync(path.resolve(dir, name)).map((inner) => `${name}/${inner}`));
+        if (!matcher) {
+            return null;
         }
-        else {
-            result.push(name);
-        }
+
+        return pack.substring(1, matcher.index);
     });
 
-    return result;
+    return packages;
 })();

@@ -66,12 +66,12 @@ export async function extend(main: Buffer, extended: Buffer, opt: ExtendOption =
 
 function install() {
     interface EventData {
-        id: number;
         name: string;
         params: any[];
+        meta: any;
     }
 
-    parentPort!.on('message', async ({ id, name, params }: EventData) => {
+    parentPort!.on('message', async ({ meta, name, params }: EventData) => {
         let data;
 
         if (name === 'compress') {
@@ -81,7 +81,7 @@ function install() {
             data = await extend(...params as [any, any, any]);
         }
 
-        parentPort!.postMessage({ id, name, data });
+        parentPort!.postMessage({ meta, name, data });
     });
 }
 

@@ -1,6 +1,6 @@
 import path from 'path';
 import JSZip from 'jszip';
-// import IconvLite from 'iconv-lite';
+import IconvLite from 'iconv-lite';
 import naturalCompare from 'string-natural-compare';
 
 import * as fs from '../node/file-system';
@@ -9,35 +9,31 @@ import { isString } from '../shared/assert';
 
 /** 读取压缩包 */
 async function readZip(file: string | Buffer) {
-    let buf: Buffer;
+    let zip: JSZip;
+
+    const opt: JSZip.JSZipLoadOptions = {
+        decodeFileName(bytes: Buffer) {
+            return IconvLite.decode(bytes, 'gbk');
+        },
+    } as any;
 
     if (isString(file)) {
-        const stat = await fs.stat(file).catch(() => void 0);
-
-        if (!stat || stat.isDirectory()) {
-            console.error('压缩包不存在');
-            return;
-        }
-
-        buf = await fs.readFile(file);
+        zip = await JSZip.loadAsync(fs.createReadStream(file), opt);
     }
     else {
-        buf = file;
+        zip = await JSZip.loadAsync(file, opt);
     }
-
-    // FIXME: zip 文件夹内部路径含有非英文字符绘乱码
-    const zip = await JSZip.loadAsync(buf, {
-        // decodeFileName() {
-        // },
-    });
 
     return zip;
 }
 
 /** 压缩包写入硬盘 */
 function writeZip(zip: JSZip, targetFile: string) {
-    return zip.generateAsync({ type: 'nodebuffer', compression: 'STORE' })
-        .then((data: Buffer) => fs.writeFile(targetFile, data));
+    return new Promise((resove) => {
+        zip.generateNodeStream({ type: 'nodebuffer', compression: 'STORE' })
+            .pipe(fs.createWriteStream(targetFile))
+            .on('finish', resove);
+    });
 }
 
 /** 生成异步文件列表迭代器 */
@@ -50,8 +46,8 @@ export async function *zipFiles(file: string | Buffer) {
 
     // 所有文件
     const files = Object.keys(zip.files)
-        .sort(naturalCompare)
-        .filter((name) => !zip.files[name].dir);
+        .filter((name) => !zip.files[name].dir)
+        .sort(naturalCompare);
 
     // 迭代所有文件
     for (let i = 0; i < files.length; i++) {
