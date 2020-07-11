@@ -30,7 +30,12 @@
                 "name": "typescript-plugin-css-modules",
                 "options": {
                     "classnameTransform": "camelCaseOnly",
-                    "customMatcher": "\\.less$"
+                    "customMatcher": "\\.styl$",
+                    "rendererOptions": {
+                        "stylus": {
+                            "paths": ["./src/renderer", "node_modules"]
+                        }
+                    }
                 }
             }
         ]
