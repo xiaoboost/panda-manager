@@ -1,13 +1,14 @@
-export { EventName } from './utils/types';
-
 import { ipcRenderer } from 'electron';
+
+import {
+    toMainEventName,
+    toRendererEventName,
+} from './utils/constant';
 
 import {
     EventData,
     EventName,
-    toMainEventName,
-    toRendererEventName,
-} from './utils/types';
+} from 'src/utils/typings';
 
 interface SwitchCache {
     resolve(data?: any): void;

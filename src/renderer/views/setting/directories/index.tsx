@@ -4,7 +4,8 @@ import styles from './index.styl';
 import { shell } from 'electron';
 import { useFollow } from 'src/utils/react-use';
 import { deleteVal } from 'src/utils/shared/array';
-import { toServer, EventName } from 'src/server/renderer';
+import { toServer } from 'src/server/renderer';
+import { EventName } from 'src/utils/typings';
 import { warn, info, selectDirectory } from 'src/renderer/lib/dialog';
 
 import { Card, CardLine, CardBox } from '../card';

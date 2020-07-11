@@ -1,11 +1,14 @@
 import { BrowserWindow, ipcMain, IpcMainEvent } from 'electron';
 
 import {
-    EventData,
-    EventName,
     toMainEventName,
     toRendererEventName,
-} from './utils/types';
+} from './utils/constant';
+
+import {
+    EventData,
+    EventName,
+} from 'src/utils/typings';
 
 import {
     Config,

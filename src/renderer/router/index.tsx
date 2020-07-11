@@ -3,13 +3,13 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 
 import * as Tags from '../views/tags';
-import * as Files from '../views/files';
 import * as Setting from '../views/setting';
+import * as FilesList from '../views/files/list';
 
 const routers = [
     {
         path: '/',
-        component: Files.Render,
+        component: FilesList.Render,
     },
     {
         path: '/tags',

@@ -2,7 +2,8 @@ import { useMounted } from './use-mounted';
 import { useState, useEffect, useRef } from 'react';
 import { isArray, isBoolean, isUndef } from 'src/utils/shared/assert';
 
-import { toServer, EventName } from 'src/server/renderer';
+import { toServer } from 'src/server/renderer';
+import { EventName } from 'src/utils/typings';
 
 type FetchData<T> = (
     {

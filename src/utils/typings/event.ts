@@ -1,14 +1,14 @@
-export const toMainEventName = '_to_main_event';
-export const toRendererEventName = '_to_renderer_event';
-
+/** 通信事件名称 */
 export enum EventName {
     GetConfig,
     UpdateConfig,
     UpdateSortOption,
-    GetObjectList,
-    GetObjectDetail,
+    GetFilesList,
+    GetFileDetail,
+    UpdateFilesList,
 }
 
+/** 事件数据 */
 export interface EventData<T = undefined> {
     name: EventName;
     id: number;
