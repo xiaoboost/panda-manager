@@ -56,7 +56,7 @@ class WorkerProcess {
     }
 
     /** 对子进程发起请求 */
-    async post<T>(...args: any[]): Promise<T> {
+    async post<T>(name: string, ...args: any[]): Promise<T> {
         this.isBusy = true;
 
         let freeSwitch!: (worker: WorkerProcess) => void;
@@ -65,7 +65,10 @@ class WorkerProcess {
         this._freePromise = new Promise<WorkerProcess>((resolve) => (freeSwitch = resolve));
         this._resultPromise = new Promise<T>((resolve) => (resultSwitch = resolve));
 
-        this._worker.postMessage(args);
+        this._worker.postMessage({
+            _name: name,
+            params: args,
+        });
 
         const result = await onceMessage<T>(this._worker);
 
@@ -92,6 +95,10 @@ export class WorkerPool {
     private _workers: WorkerProcess[] = [];
     /** worker 脚本路径 */
     private _path = '';
+    /** 结果缓存 */
+    private _reuslts: any[] = [];
+    /** 当前发出请求的标记 */
+    private _sub = 0;
 
     constructor(path: string, option: Partial<WorkerPoolOption> = {}) {
         this._path = path;
@@ -101,19 +108,7 @@ export class WorkerPool {
         };
     }
 
-    /** 获取当前空闲 worker */
-    async getIdleWorker() {
-        // worker 少于最大数量
-        if (this._workers.length < this._opt.max - 1) {
-
-        }
-        const index = this._idles.findIndex((item) => item);
-
-        if (index >= 0) {
-            return this._workers[index];
-        }
-    }
-
+    /** 创建新的 worker */
     createWorker() {
         const worker = new WorkerProcess(this._path);
 
@@ -122,7 +117,51 @@ export class WorkerPool {
         return worker;
     }
 
-    async send(params: any) {
-        // ..
+    /** 获取当前空闲 worker */
+    async getIdleWorker() {
+        // worker 少于最大数量
+        if (this._workers.length < this._opt.max - 1) {
+            return this.createWorker();
+        }
+        
+        // 等待空闲
+        await Promise.race(this._workers.map(({ waitFreeWorker }) => waitFreeWorker()));
+
+        const idle = this._workers.find((worker) => !worker.isBusy);
+
+        if (idle) {
+            return idle;
+        }
+        else {
+            throw 'Error idle worker';
+        }
+    }
+
+    /** 发送请求 */
+    async send(name: string, ...params: any[]) {
+        const sub = this._sub++;
+        const worker = await this.getIdleWorker();
+
+        worker
+            .post(name, ...params)
+            .then((result) => {
+                debugger;
+                this._reuslts[sub] = result;
+            });
+    }
+
+    /**
+     * 获取所有缓存
+     *  - 此函数将会等待当前所有请求结束
+     */
+    async getResult() {
+        // 等待所有请求结束
+        await Promise.all(this._workers.map(({ waitFreeWorker }) => waitFreeWorker()));
+
+        const results = this._reuslts;
+
+        this._reuslts = [];
+
+        return results
     }
 }
