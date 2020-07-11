@@ -7,7 +7,7 @@ import { deleteVal } from 'src/utils/shared/array';
 import { toServer, EventName } from 'src/server/renderer';
 import { warn, info, selectDirectory } from 'src/renderer/lib/dialog';
 
-import { Card, CardLine } from '../card';
+import { Card, CardLine, CardBox } from '../card';
 
 import {
     FolderOpenOutlined,
@@ -87,7 +87,7 @@ export function Render({ paths }: Props) {
     return (
         <Card title='文件夹'>
             {/** 文件夹列表 */}
-            <div className={styles.settingBox}>
+            <CardBox>
                 <AddDirectory add={add} />
                 {dirs.length === 0
                     ? <CardLine isSubline title='尚未添加目录' />
@@ -97,7 +97,7 @@ export function Render({ paths }: Props) {
                         remove={() => remove(path)}
                     />)
                 }
-            </div>
+            </CardBox>
         </Card>
     );
 }

@@ -1,7 +1,7 @@
 import * as Dir from '../service/directory';
 import * as Sort from '../service/sort';
 
-import { ConfigData, SortOption } from '../model/types';
+import { ConfigData, SortOption } from 'src/utils/typings';
 
 export async function get(): Promise<ConfigData> {
     return {

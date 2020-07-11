@@ -33,3 +33,9 @@ export function CardLine(props: PropsWithChildren<CardLineProps>) {
         <span>{props.children}</span>
     </div>;
 }
+
+export function CardBox({ children }: PropsWithChildren<{}>) {
+    return <div className={styles.settingBox}>
+        {children}
+    </div>;
+}

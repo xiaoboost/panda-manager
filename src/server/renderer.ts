@@ -1,5 +1,3 @@
-export * from './model/types';
-
 export { EventName } from './utils/types';
 
 import { ipcRenderer } from 'electron';

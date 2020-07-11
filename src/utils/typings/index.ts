@@ -1,3 +1,14 @@
+/** 文件封面数据 */
+export interface FileCoverData {
+    id: number;
+    file: string;
+}
+
+/** 文件类型 */
+export const enum FileType {
+    Mange,
+}
+
 /** 排序方式 */
 export const enum SortBy {
     name,
@@ -43,7 +54,7 @@ export interface BaseFileData {
     /** 项目编号 */
     id: number;
     /** 项目名称 */
-    name: string;
+    type: FileType;
 
     /** 此文件由哪个扩展解析 */
     extension: string;

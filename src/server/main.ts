@@ -1,5 +1,3 @@
-export * from './model/types';
-
 import { BrowserWindow, ipcMain, IpcMainEvent } from 'electron';
 
 import {

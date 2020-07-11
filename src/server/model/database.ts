@@ -1,6 +1,6 @@
 import { resolveUserDir } from 'src/utils/node/env';
 import { Database as DB } from 'src/utils/data/database';
-import { TagData, TagGroupData, BaseFileData } from './types';
+import { TagData, TagGroupData, BaseFileData } from 'src/utils/typings';
 
 /** 数据库 */
 export const Database = new DB(resolveUserDir('database'));

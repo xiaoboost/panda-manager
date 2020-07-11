@@ -35,5 +35,5 @@ export const externalModules = (() => {
         return pack.substring(1, matcher.index);
     });
 
-    return packages;
+    return packages.filter((item): item is string => Boolean(item));
 })();

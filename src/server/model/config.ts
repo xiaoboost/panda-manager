@@ -1,6 +1,6 @@
 import { Model } from 'src/utils/data/model';
 import { resolveUserDir } from 'src/utils/node/env';
-import { SortBy, ConfigData } from './types';
+import { SortBy, ConfigData } from 'src/utils/typings';
 
 /** 配置文件路径 */
 const configPath = resolveUserDir('config');

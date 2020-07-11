@@ -4,7 +4,8 @@ import { Switch, Select } from 'antd';
 import { Card, CardLine } from '../card';
 
 import { useFollow } from 'src/utils/react-use';
-import { toServer, SortOption, SortBy, EventName } from 'src/server/renderer';
+import { toServer, EventName } from 'src/server/renderer';
+import { SortOption, SortBy } from 'src/utils/typings';
 
 const sortByList = [
     {

@@ -1,5 +1,5 @@
 import { Config } from '../model';
-import { SortOption } from '../model/types';
+import { SortOption } from 'src/utils/typings';
 
 export async function patch(sort: Partial<SortOption>): Promise<void> {
     await Config.ready;

@@ -1,5 +1,5 @@
 import { Objects } from '../model';
-import { BaseFileData } from '../model/types';
+import { BaseFileData } from 'src/utils/typings';
 
 export function getAll() {
     return Objects.toQuery();
