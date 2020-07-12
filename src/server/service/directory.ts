@@ -1,6 +1,6 @@
 import { join } from 'path';
 
-import { getAll } from './object';
+import { getAll } from './files';
 import { Config, Database } from '../model';
 
 import { readdir } from 'src/utils/node/file-system';

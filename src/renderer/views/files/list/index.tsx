@@ -31,7 +31,6 @@ export function Render() {
         }
     }, [origin]);
 
-
     return (
         <main className={styles.filesList}>
             {JSON.stringify(list)}

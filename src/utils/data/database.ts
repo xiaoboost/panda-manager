@@ -87,6 +87,10 @@ class Table<Map extends object = object> extends Watcher<TableRow<Map>[]> {
         this._database = database;
     }
 
+    get ready() {
+        return this._database.ready;
+    }
+
     /** 添加条目 */
     insert(...data: Map[]) {
         const last = this._data.slice();

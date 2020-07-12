@@ -6,7 +6,7 @@ import { TagData, TagGroupData, BaseFileData } from 'src/utils/typings';
 export const Database = new DB(resolveUserDir('database'));
 
 /** 文件数据表 */
-export const Objects = Database.use<BaseFileData>('objects');
+export const Files = Database.use<BaseFileData>('objects');
 /** 标签数据表 */
 export const Tags = Database.use<TagData>('tags');
 /** 标签集数据表 */
