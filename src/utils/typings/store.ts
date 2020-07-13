@@ -5,7 +5,7 @@ export interface FileCoverData {
 }
 
 /** 文件类型 */
-export const enum FileType {
+export const enum FileKind {
     Mange,
 }
 
@@ -54,7 +54,7 @@ export interface BaseFileData {
     /** 项目编号 */
     id: number;
     /** 项目名称 */
-    type: FileType;
+    kind: FileKind;
 
     /** 此文件由哪个扩展解析 */
     extension: string;

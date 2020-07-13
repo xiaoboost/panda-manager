@@ -1,70 +1,25 @@
-import { join } from 'path';
+import flatten from 'lodash/flatten';
 
-import { getAll } from './files';
-import { Config, Database } from '../model';
+import { Config } from '../model';
+import { filesQueue } from './files-queue';
+import { remove, search } from './files';
 
-import { readdir } from 'src/utils/node/file-system';
-import { concat, exclude, toBoolMap } from 'src/utils/shared/array';
-
-/** 文件队列是否空闲 */
-let loading = false;
-/** 待处理的文件队列 */
-const filesQueue: string[] = new Proxy([], {
-    set(target: string[], prop: string, val) {
-        // 普通属性，直接设置属性
-        if (prop !== 'length') {
-            return Reflect.set(target, prop, val);
-        }
-
-        // 设置长度属性的结果
-        const result = Reflect.set(target, prop, val);
-
-        // 队列空闲且非空，则启动处理
-        if (!loading && target.length > 0) {
-            loading = true;
-
-            // (async () => {
-            //     while (target.length > 0) {
-            //         const meta: any = await createMeta(target.shift()!);
-
-            //         if (meta) {
-            //             Objects.insert(meta);
-            //         }
-            //     }
-
-            //     loading = false;
-            // })();
-        }
-
-        return result;
-    },
-});
+import { readdirs } from 'src/utils/node/file-system';
+import { exclude } from 'src/utils/shared/array';
 
 /** 初始化 */
 const ready = (async function init() {
     // 等待初始化
-    await Promise.all([Config.ready, Database.ready]);
+    await Config.ready;
 
     // 当前数据库中的所有项目
-    const filesInDatabase = getAll().map(({ data }) => data.filePath);
+    const filesInDatabase = (await search()).map(({ data }) => data.filePath);
     // 实际存在于硬盘中的文件
-    const filesInDisk = concat(
-        await Promise.all(Config.data.directories.map(async (dir) => {
-            const dirs = await readdir(dir).catch(() => [] as string[]);
-            return dirs.map((file) => join(dir, file));
-        })),
-        (val) => val,
-    );
+    const filesInDisk = flatten(await Promise.all(Config.data.directories.map(readdirs)));
 
-    // 删除数据库中存在，而实际不存在的数据
-    const exInDatabase = exclude(filesInDisk, filesInDatabase);
-
-    // if (exInDatabase.length > 0) {
-    //     const exMap = toBoolMap(exInDatabase);
-    //     Objects.where(({ filePath }) => exMap[filePath]).remove();
-    // }
-
-    // 实际存在而数据库中没有的，则要添加
+    // 删除数据库中存在，而硬盘中不存在的数据
+    remove(exclude(filesInDisk, filesInDatabase));
+    // 添加硬盘中存在，而数据库中不存在的数据
     filesQueue.push(...exclude(filesInDatabase, filesInDisk));
 })();
 
