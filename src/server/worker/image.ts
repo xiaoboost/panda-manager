@@ -72,16 +72,24 @@ function install() {
     }
 
     parentPort!.on('message', async ({ meta, name, params }: EventData) => {
-        let data;
+        let data, message = '';
 
-        if (name === 'compress') {
-            data = await compress(...params as [any, any]);
+        try {
+            if (name === 'compress') {
+                data = await compress(...params as [any, any]);
+            }
+            else if (name === 'extend') {
+                data = await extend(...params as [any, any, any]);
+            }
+            else {
+                message = `unknow method: ${name}.`;
+            }
         }
-        else if (name === 'extend') {
-            data = await extend(...params as [any, any, any]);
+        catch (e) {
+            message = e.message;
         }
 
-        parentPort!.postMessage({ meta, name, data });
+        parentPort!.postMessage({ meta, name, data, message });
     });
 }
 

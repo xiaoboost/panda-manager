@@ -7,7 +7,7 @@ export interface MangaData extends BaseFileData {
     /** 当前漫画是否是文件夹 */
     isDirectory: boolean;
     /** 预览图片坐标列表 */
-    previewPositions: [number, number][];
+    previewSizes: (readonly [number, number])[];
 }
 
 /** 模块名称 */

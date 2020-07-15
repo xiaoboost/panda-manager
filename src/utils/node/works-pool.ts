@@ -56,7 +56,7 @@ class WorkerProcess {
     }
 
     /** 对子进程发起请求 */
-    async post<T>(name: string, ...args: any[]): Promise<T> {
+    async post<T>(name: string, ...params: any[]): Promise<T> {
         this.isBusy = true;
 
         let freeSwitch!: (worker: WorkerProcess) => void;
@@ -66,8 +66,8 @@ class WorkerProcess {
         this._resultPromise = new Promise<T>((resolve) => (resultSwitch = resolve));
 
         this._worker.postMessage({
-            _name: name,
-            params: args,
+            name,
+            params,
         });
 
         const result = await onceMessage<T>(this._worker);
@@ -120,7 +120,7 @@ export class WorkerPool {
     /** 获取当前空闲 worker */
     async getIdleWorker() {
         // worker 少于最大数量
-        if (this._workers.length < this._opt.max - 1) {
+        if (this._workers.length < this._opt.max) {
             return this.createWorker();
         }
 
@@ -144,17 +144,14 @@ export class WorkerPool {
 
         worker
             .post(name, ...params)
-            .then((result) => {
-                debugger;
-                this._reuslts[sub] = result;
-            });
+            .then((result) => (this._reuslts[sub] = result));
     }
 
     /**
      * 获取所有缓存
      *  - 此函数将会等待当前所有请求结束
      */
-    async getResult() {
+    async getResult<T>(): Promise<T[]> {
         // 等待所有请求结束
         await Promise.all(this._workers.map(({ waitFreeWorker }) => waitFreeWorker()));
 

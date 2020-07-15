@@ -9,20 +9,14 @@ import { isString } from '../shared/assert';
 
 /** 读取压缩包 */
 async function readZip(file: string | Buffer) {
-    let zip: JSZip;
-
     const opt: JSZip.JSZipLoadOptions = {
         decodeFileName(bytes: Buffer) {
             return IconvLite.decode(bytes, 'gbk');
         },
     } as any;
 
-    if (isString(file)) {
-        zip = await JSZip.loadAsync(fs.createReadStream(file), opt);
-    }
-    else {
-        zip = await JSZip.loadAsync(file, opt);
-    }
+    const buf = isString(file) ? await fs.readFile(file) : file;
+    const zip = await JSZip.loadAsync(buf, opt);
 
     return zip;
 }

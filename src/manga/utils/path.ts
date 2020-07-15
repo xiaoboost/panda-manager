@@ -7,3 +7,8 @@ export function cover(id: number) {
 export function preview(id: number) {
     return resolveUserDir(id, 'preview.jpg');
 }
+
+export const path = {
+    cover,
+    preview,
+};

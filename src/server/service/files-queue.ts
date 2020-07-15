@@ -1,6 +1,7 @@
 import { Files } from '../model/database';
+import { delay } from 'src/utils/shared/func';
 
-import * as Manga from '../../manga';
+import * as Manga from '../../manga/main';
 
 /** 文件处理队列 */
 class FilesQueue extends Array<string> {
@@ -22,6 +23,8 @@ class FilesQueue extends Array<string> {
     }
 
     async start() {
+        await delay();
+
         while (this.length > 0) {
             const file = this.shift()!;
             const result = await Manga.from(file);

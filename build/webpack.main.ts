@@ -27,10 +27,14 @@ export const clientConfig: Webpack.Configuration = {
         __dirname: false,
         __filename: false,
     },
-    entry: resolve('src/main/index.ts'),
+    entry: {
+        client: resolve('src/main/index.ts'),
+        image: resolve('src/server/worker/image.ts'),
+    },
     output: {
         path: outputDir,
-        filename: 'scripts/client.js',
+        filename: 'scripts/[name].js',
+        publicPath: '../',
         libraryTarget: 'commonjs',
     },
     resolve: {
@@ -103,7 +107,7 @@ else {
             cacheGroups: {
                 commons: {
                     test: /[\\/]node_modules[\\/]/,
-                    name: 'main-common',
+                    name: 'client-common',
                     chunks: 'all',
                 },
             },

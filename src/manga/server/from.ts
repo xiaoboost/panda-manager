@@ -1,4 +1,4 @@
-import { MangaData, Category, kind } from './constant';
+import { MangaData, Category, kind } from '../utils/constant';
 import { buildPreview, writePriview } from './preview';
 
 import * as path from 'path';
@@ -20,9 +20,7 @@ export async function from(file: string): Promise<MangaData | undefined> {
     }
 
     // 生成预览文件数据
-    const preview = isDirectory
-        ? await buildPreview(file)
-        : await buildPreview(await fs.readFile(file));
+    const preview = await buildPreview(file);
 
     // 生成预览出错
     if (!preview) {
@@ -43,6 +41,6 @@ export async function from(file: string): Promise<MangaData | undefined> {
         filePath: file,
         fileSize: isDirectory ? await fs.fileSize(file) : fileStat.size,
         lastModified: new Date(fileStat.mtime).getTime(),
-        previewPositions: preview.position,
+        previewSizes: preview.sizes,
     };
 }

@@ -7,10 +7,9 @@ import { remove, search } from './files';
 import { readdirs } from 'src/utils/node/file-system';
 import { exclude } from 'src/utils/shared/array';
 
-/** 初始化 */
-const ready = (async function init() {
-    // 等待初始化
-    await Config.ready;
+async function _update(paths: string[]) {
+    // 更新配置
+    Config.data.directories = paths;
 
     // 当前数据库中的所有项目
     const filesInDatabase = (await search()).map(({ data }) => data.filePath);
@@ -21,18 +20,21 @@ const ready = (async function init() {
     remove(exclude(filesInDisk, filesInDatabase));
     // 添加硬盘中存在，而数据库中不存在的数据
     filesQueue.push(...exclude(filesInDatabase, filesInDisk));
+}
+
+/** 初始化 */
+const ready = (async function init() {
+    // 等待初始化
+    await Config.ready;
+    // 首次更新
+    await _update(Config.data.directories);
 })();
 
 export async function update(paths: string[]) {
     // 等待初始化完成
     await ready;
-
-    // 变更配置
-    Config.data.directories = paths;
-
-    // // 待处理文件进入队列
-    // const files = await readdir(input);
-    // filesQueue.push(...files.map((file) => join(input, file)));
+    // 更新路径
+    await _update(paths);
 }
 
 export async function get() {

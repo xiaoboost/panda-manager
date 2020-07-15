@@ -4,7 +4,7 @@ import styles from './index.styl';
 import { useHistory } from 'react-router';
 import { stringifyClass } from 'src/utils/web/dom';
 
-import { path } from '../utils';
+import { cover } from '../utils/path';
 
 interface Props {
     id: number;
@@ -44,7 +44,7 @@ export function Render(props: Props) {
                 <div className={styles.mangaItemMaskOutside}></div>
                 <div className={styles.mangaItemMaskInside}></div>
             </div>
-            <img src={path.cover(props.id)} height='200' />
+            <img src={cover(props.id)} height='200' />
         </div>
     );
 }
