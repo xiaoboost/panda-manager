@@ -11,9 +11,7 @@ import { cover, preview } from '../utils/path';
 import * as path from 'path';
 import * as fs from 'src/utils/node/file-system';
 
-const imageWorker = new WorkerPool(resolveRoot('scripts/image.js'), {
-    max: 1,
-});
+const imageWorker = new WorkerPool(resolveRoot('scripts/image.js'));
 
 /** 预览数据 */
 interface Preview {
@@ -49,19 +47,18 @@ async function compositeImage(images: Buffer[]) {
         let index = 0;
 
         // 当前元素和下一个元素都存在
-        if (index < len && index + 1 < len) {
+        while (index < len && index + 1 < len) {
             await imageWorker.send('extend', imgs[index], imgs[index + 1]);
             index += 2;
         }
-        else {
-            const result = await imageWorker.getResult<Buffer>();
 
-            if (index === len) {
-                result.push(imgs[len - 1]);
-            }
+        const result = await imageWorker.getResult<Buffer>();
 
-            imgs = result;
+        if (index === len - 1) {
+            result.push(imgs[len - 1]);
         }
+
+        imgs = result;
     }
 
     return imgs[0];
@@ -128,9 +125,6 @@ async function fromDir(dir: string): Promise<Preview | undefined> {
 }
 
 async function fromZip(zip: string | Buffer): Promise<Preview | undefined> {
-    /** 预览图片的位置信息 */
-    const position: [number, number][] = [];
-
     // 迭代压缩包内的数据
     for await (const { buffer, index } of zipFiles(zip)) {
         // 跳过不允许的文件后缀
@@ -150,17 +144,17 @@ async function fromZip(zip: string | Buffer): Promise<Preview | undefined> {
         await imageWorker.send('compress', image, PriviewCompress);
     }
 
-    // 如果少于 3 张图片，则跳过
-    if (position.length <= leastNumber + 1) {
-        return;
-    }
-
     const compressed = await imageWorker.getResult<Buffer>();
     const thumbnails = compressed.slice(1);
     const sizes = thumbnails
         .map((img) => imageSize(img))
         .filter(isDef)
         .map(({ width, height }) => [width, height] as const);
+
+    // 如果少于 3 张图片，则跳过
+    if (thumbnails.length <= leastNumber) {
+        return;
+    }
 
     return {
         sizes,

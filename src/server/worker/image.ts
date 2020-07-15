@@ -16,6 +16,10 @@ const imageMime = {
 };
 
 export async function compress(image: Buffer, opt: CompressOption = {}) {
+    if (!Buffer.isBuffer(image)) {
+        image = Buffer.from(image);
+    }
+
     const img = await Jimp.create(image);
     const toMime = imageMime[opt.type || 'jpg'];
     const height = opt.height || 1e6;
@@ -33,6 +37,14 @@ interface ExtendOption {
 }
 
 export async function extend(main: Buffer, extended: Buffer, opt: ExtendOption = {}) {
+    if (!Buffer.isBuffer(main)) {
+        main = Buffer.from(main);
+    }
+
+    if (!Buffer.isBuffer(extended)) {
+        extended = Buffer.from(extended);
+    }
+
     const toMime = imageMime[opt.type || 'jpg'];
     const quality = opt.quality || 80;
 
@@ -71,8 +83,8 @@ function install() {
         meta: any;
     }
 
-    parentPort!.on('message', async ({ meta, name, params }: EventData) => {
-        let data, message = '';
+    parentPort!.on('message', async ({ meta = {}, name, params }: EventData) => {
+        let data, error = '';
 
         try {
             if (name === 'compress') {
@@ -82,14 +94,18 @@ function install() {
                 data = await extend(...params as [any, any, any]);
             }
             else {
-                message = `unknow method: ${name}.`;
+                error = `unknow method: ${name}.`;
             }
         }
         catch (e) {
-            message = e.message;
+            error = e.message;
         }
 
-        parentPort!.postMessage({ meta, name, data, message });
+        if (Buffer.isBuffer(data)) {
+            meta.isBuffer = true;
+        }
+
+        parentPort!.postMessage({ meta, name, data, error });
     });
 }
 

@@ -12,6 +12,12 @@ const onceMessage = <T = unknown>(worker: Worker) => new Promise<T>((resolve) =>
     worker.once('message', resolve);
 });
 
+interface MessageEventData<T> {
+    data: T;
+    meta?: any;
+    error?: string;
+}
+
 /** 进程类 */
 class WorkerProcess {
     /** 进程原始数据 */
@@ -70,17 +76,28 @@ class WorkerProcess {
             params,
         });
 
-        const result = await onceMessage<T>(this._worker);
+        const result = await onceMessage<MessageEventData<T>>(this._worker);
 
         this.isBusy = false;
 
+        if (result.meta?.isBuffer) {
+            result.data = Buffer.from(result.data) as any;
+        }
+
         // 下一个时钟周期触发
         setTimeout(() => {
+            if (result.data) {
+                resultSwitch(result.data);
+            }
+            else {
+                console.error(result.error);
+                resultSwitch(result.data);
+            }
+
             freeSwitch(this);
-            resultSwitch(result);
         });
 
-        return result;
+        return result.data;
     }
     /** 销毁当前子进程 */
     destroy() {
@@ -103,7 +120,7 @@ export class WorkerPool {
     constructor(path: string, option: Partial<WorkerPoolOption> = {}) {
         this._path = path;
         this._opt = {
-            max: option.max || (cpus().length / 4),
+            max: option.max || (cpus().length / 2),
             timeout: 10 * 60 * 1000,
         };
     }
@@ -125,7 +142,7 @@ export class WorkerPool {
         }
 
         // 等待空闲
-        await Promise.race(this._workers.map(({ waitFreeWorker }) => waitFreeWorker()));
+        await Promise.race(this._workers.map((worker) => worker.waitFreeWorker()));
 
         const idle = this._workers.find((worker) => !worker.isBusy);
 
@@ -153,10 +170,11 @@ export class WorkerPool {
      */
     async getResult<T>(): Promise<T[]> {
         // 等待所有请求结束
-        await Promise.all(this._workers.map(({ waitFreeWorker }) => waitFreeWorker()));
+        await Promise.all(this._workers.map((worker) => worker.waitFreeWorker()));
 
         const results = this._reuslts;
 
+        this._sub = 0;
         this._reuslts = [];
 
         return results;
