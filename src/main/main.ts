@@ -3,6 +3,7 @@ import { app, BrowserWindow } from 'electron';
 
 import { resolveRoot } from 'src/utils/node/env';
 import { windowStateKeeper } from './window-state';
+import { install as installServer } from 'src/server/main';
 
 /** 主窗口 */
 export let win: BrowserWindow | null;
@@ -37,4 +38,6 @@ export async function install() {
         win = null;
         app.quit();
     });
+
+    installServer(win);
 }

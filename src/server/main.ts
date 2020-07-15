@@ -16,10 +16,6 @@ async function service(event: IpcMainEvent, param: EventData) {
     }
 }
 
-export function install() {
+export function install(win: BrowserWindow) {
     ipcMain.on(toMainEventName, service);
-}
-
-export function toRenderer(win: BrowserWindow) {
-    win.webContents;
 }

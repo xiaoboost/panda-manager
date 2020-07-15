@@ -1,7 +1,11 @@
 import { Files } from '../model/database';
 import { delay } from 'src/utils/shared/func';
+import { BrowserWindow } from 'electron';
+import { EventName } from 'src/utils/typings';
 
 import * as Manga from '../../manga/main';
+
+let win: BrowserWindow;
 
 /** 文件处理队列 */
 class FilesQueue extends Array<string> {
@@ -34,10 +38,18 @@ class FilesQueue extends Array<string> {
             }
 
             Files.insert(result);
+
+            if (win) {
+                win.webContents.send(EventName.UpdateFilesList);
+            }
         }
 
         this._loading = false;
     }
+}
+
+export function insertWin(window: BrowserWindow) {
+    win = window;
 }
 
 export const filesQueue = new FilesQueue();
