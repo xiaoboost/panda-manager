@@ -1,21 +1,15 @@
 import naturalCompare from 'string-natural-compare';
 
+import { zipFiles } from 'src/utils/node/zip';
 import { isString } from 'src/utils/shared/assert';
-import { coverPath, previewPath } from './path';
+import { WorkerPool } from 'src/utils/node/works-pool';
 
-const {
-    fs,
-    path,
-    image: {
-        isImage,
-        imageSize,
-        compress,
-        concat,
-    },
-    zip: {
-        zipFiles,
-    },
-} = panda;
+import { cover, preview } from './path';
+
+import * as path from 'path';
+import * as fs from 'src/utils/node/file-system';
+
+const image = new WorkerPool('./image.js');
 
 /** 预览数据 */
 interface Preview {
@@ -27,18 +21,14 @@ interface Preview {
 /** 封面图片参数 */
 const CoverCompress = {
     quality: 90,
-    size: {
-        height: 400,
-    },
+    height: 400,
 };
 
 /** 预览图片参数 */
 const PriviewCompress = {
     quality: 80,
-    size: {
-        maxHeight: 142,
-        width: 100,
-    },
+    width: 100,
+    height: 142,
 };
 
 /** 有效图片数量 */
@@ -179,14 +169,14 @@ export async function buildPreview(file: string | Buffer) {
 /** 将预览数据写入硬盘 */
 export async function writePriview(id: number, data: Partial<Preview>) {
     if (data.cover) {
-        const cover = coverPath(id);
-        await fs.mkdirp(path.dirname(cover));
-        await fs.writeFile(cover, data.cover);
+        const coverPath = cover(id);
+        await fs.mkdirp(path.dirname(coverPath));
+        await fs.writeFile(coverPath, data.cover);
     }
 
     if (data.thumbnails) {
-        const preview = previewPath(id);
-        await fs.mkdirp(path.dirname(preview));
-        await fs.writeFile(preview, data.thumbnails);
+        const previewPath = preview(id);
+        await fs.mkdirp(path.dirname(previewPath));
+        await fs.writeFile(previewPath, data.thumbnails);
     }
 }

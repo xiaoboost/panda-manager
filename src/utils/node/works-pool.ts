@@ -123,7 +123,7 @@ export class WorkerPool {
         if (this._workers.length < this._opt.max - 1) {
             return this.createWorker();
         }
-        
+
         // 等待空闲
         await Promise.race(this._workers.map(({ waitFreeWorker }) => waitFreeWorker()));
 
@@ -133,7 +133,7 @@ export class WorkerPool {
             return idle;
         }
         else {
-            throw 'Error idle worker';
+            throw new Error('Error idle worker');
         }
     }
 
@@ -162,6 +162,6 @@ export class WorkerPool {
 
         this._reuslts = [];
 
-        return results
+        return results;
     }
 }

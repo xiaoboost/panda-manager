@@ -2,10 +2,12 @@ import React from 'react';
 import styles from './index.styl';
 
 import { useHistory } from 'react-router';
-import { FileCoverData } from 'src/utils/typings';
 import { stringifyClass } from 'src/utils/web/dom';
 
-interface Props extends FileCoverData {
+import { path } from '../utils';
+
+interface Props {
+    id: number;
     isSelected: boolean;
     onLeftClick: (ev: React.MouseEvent) => void;
     onRightClick: (ev: React.MouseEvent) => void;
@@ -42,7 +44,7 @@ export function Render(props: Props) {
                 <div className={styles.mangaItemMaskOutside}></div>
                 <div className={styles.mangaItemMaskInside}></div>
             </div>
-            <img src={props.file} height='200' />
+            <img src={path.cover(props.id)} height='200' />
         </div>
     );
 }

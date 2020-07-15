@@ -1,9 +1,3 @@
-/** 文件封面数据 */
-export interface FileCoverData {
-    id: number;
-    file: string;
-}
-
 /** 文件类型 */
 export const enum FileKind {
     Mange,
