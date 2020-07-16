@@ -11,6 +11,8 @@ export async function from(file: string): Promise<MangaData | undefined> {
     const fileStat = await fs.stat(file);
     // 是否是文件夹
     const isDirectory = fileStat.isDirectory();
+    // 文件名称
+    const name = path.parse(file).name;
     // 编号
     const id = uid();
 

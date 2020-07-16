@@ -48,7 +48,7 @@ class FilesQueue extends Array<string> {
     }
 }
 
-export function insertWin(window: BrowserWindow) {
+export function installFilesQueue(window: BrowserWindow) {
     win = window;
 }
 
