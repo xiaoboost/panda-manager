@@ -17,10 +17,16 @@ import {
     isAnalyzer,
 } from './utils';
 
+const externals: Record<string, string> = {};
+
+builtinModules.forEach((name) => {
+    externals[name] = `commonjs ${name}`;
+});
+
 /** 公共配置 */
 export const rendererConfig: Webpack.Configuration = {
     target: 'electron-renderer',
-    externals: builtinModules,
+    externals: externals,
     mode: modeName,
     entry: {
         renderer: resolve('src/renderer/init/index.ts'),

@@ -18,7 +18,7 @@ export const builtinModules = [
     'querystring', 'punycode', 'url', 'string_decoder', 'http', 'https',
     'os', 'assert', 'constants', 'timers', 'console', 'vm', 'zlib', 'tty',
     'domain', 'dns', 'dgram', 'child_process', 'cluster', 'module', 'net',
-    'readline', 'repl', 'tls', 'crypto', 'fs',
+    'readline', 'repl', 'tls', 'crypto', 'fs', 'electron',
 ];
 
 /** node_modules 模块 */
