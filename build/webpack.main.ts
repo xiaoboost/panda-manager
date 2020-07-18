@@ -127,7 +127,7 @@ else {
         ],
     };
 
-    clientConfig.externals =builtinModules;
+    clientConfig.externals = builtinModules;
     clientConfig.plugins = clientConfig.plugins!.concat([
         new RequireSplitChunkPlugin(),
     ]);
