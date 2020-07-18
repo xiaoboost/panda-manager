@@ -8,3 +8,11 @@ export enum EventName {
     UpdateFilesList = 'update-files-list',
     OpenFile = 'open-file',
 }
+
+/** 事件数据 */
+export interface EventData<T = undefined> {
+    name: EventName;
+    $$id: number;
+    data: T;
+    error?: string;
+}

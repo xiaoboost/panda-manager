@@ -55,6 +55,9 @@ interface Props {
 
 export function Render({ paths }: Props) {
     const [dirs, setDirs] = useFollow(paths || []);
+    const patch = (params: any) => toServer(EventName.UpdateConfig, {
+        params,
+    });
 
     const add = (path: string) => {
         if (dirs.includes(path)) {
@@ -69,7 +72,7 @@ export function Render({ paths }: Props) {
         const directories = dirs.concat([path]);
 
         setDirs(directories);
-        toServer(EventName.UpdateConfig, { directories });
+        patch({ directories });
     };
     const remove = async (path: string) => {
         await warn({
@@ -82,7 +85,7 @@ export function Render({ paths }: Props) {
         const directories = deleteVal(dirs, path, false);
 
         setDirs(directories);
-        toServer(EventName.UpdateConfig, { directories });
+        patch({ directories });
     };
 
     return (

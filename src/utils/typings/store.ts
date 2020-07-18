@@ -1,10 +1,10 @@
 /** 文件类型 */
-export const enum FileKind {
+export enum FileKind {
     Mange,
 }
 
 /** 排序方式 */
-export const enum SortBy {
+export enum SortBy {
     name,
     lastModified,
     size,

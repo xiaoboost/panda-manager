@@ -4,6 +4,7 @@ import { route } from './controller';
 import { EventData } from 'src/utils/typings';
 import { toMainEventName, toRendererEventName } from './utils/constant';
 
+import { installFiles } from './service/files';
 import { installFilesQueue } from './service/files-queue';
 
 async function service(event: IpcMainEvent, param: EventData) {
@@ -20,5 +21,7 @@ async function service(event: IpcMainEvent, param: EventData) {
 
 export function install(win: BrowserWindow) {
     ipcMain.on(toMainEventName, service);
+
+    installFiles(win);
     installFilesQueue(win);
 }

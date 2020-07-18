@@ -33,7 +33,9 @@ export function Render({ sort: prop }: Props) {
     });
     const setSort = (val: Partial<SortOption>) => {
         setOpt({ ...sort, ...val });
-        toServer(EventName.UpdateSortOption, val);
+        toServer(EventName.UpdateSortOption, {
+            params: val,
+        });
     };
     const sortByHandler = (by: SortBy) => setSort({ by });
     const sortAscHandler = (asc: boolean) => setSort({ asc });

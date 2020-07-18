@@ -10,6 +10,8 @@ import { useServer } from 'src/utils/react-use';
 import { stringifyClass } from 'src/utils/web/dom';
 import { BaseFileData, EventName, FileKind } from 'src/utils/typings';
 
+import { LoadingOutlined } from '@ant-design/icons';
+
 interface CoverProps {
     id: number;
     kind: FileKind;
@@ -19,7 +21,7 @@ interface CoverProps {
 }
 
 function Cover(props: CoverProps) {
-    const { loading, progress, fetch: openFile } = useServer(EventName.OpenFile, {
+    const { loading, fetch: openFile } = useServer(EventName.OpenFile, {
         id: props.id,
     });
 
@@ -36,13 +38,13 @@ function Cover(props: CoverProps) {
 
     // 双击解压
     const dbClickHandler = (ev: React.MouseEvent) => {
-        if (ev.button !== 0) {
-            return;
+        // 左键
+        if (ev.button === 0) {
+            if (!loading) {
+                openFile();
+            }
+            // history.push(`/detail/${props.id}`);
         }
-
-        openFile();
-
-        // history.push(`/detail/${props.id}`);
     };
 
     return (
@@ -56,9 +58,9 @@ function Cover(props: CoverProps) {
                 <div className={styles.fileSeletedMaskOutside}></div>
                 <div className={styles.fileSeletedMaskInside}></div>
             </div>
-            {loading && progress > 0 &&
+            {loading &&
                 <div className={styles.fileProgressMask}>
-                    进度条
+                    <LoadingOutlined />
                 </div>
             }
             <div className={styles.fileCoverInner}>

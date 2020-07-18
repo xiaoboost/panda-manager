@@ -65,12 +65,6 @@ async function compositeImage(images: Buffer[]) {
 }
 
 async function fromDir(dir: string): Promise<Preview | undefined> {
-    /** 封面图片数据 */
-    const cover = Buffer.from('');
-    /** 预览图片数据 */
-    const thumbnail = Buffer.from('');
-    /** 预览图片的位置信息 */
-    const sizes: [number, number][] = [];
     /** 文件夹内所有文件 */
     const allFiles = (await fs.readdirs(dir)).sort(naturalCompare);
 
@@ -85,32 +79,21 @@ async function fromDir(dir: string): Promise<Preview | undefined> {
             continue;
         }
 
-        // // 生成预览图片
-        // const preview = await compress(image, {
-        //     type: 'jpg',
-        //     ...PriviewCompress,
-        // });
+        // 生成封面
+        if (i === 0) {
+            await imageWorker.send('compress', image, CoverCompress);
+        }
 
-        // // 第一页
-        // if (i === 0) {
-        //     // 预览图片
-        //     thumbnails = preview;
-        //     // 压缩首页
-        //     cover = await compress(image, {
-        //         type: 'jpg',
-        //         ...CoverCompress,
-        //     });
-        // }
-        // else {
-        //     thumbnails = await concat(thumbnails, preview);
-        // }
-
-        // // 记录当前图片在预览总图中右下角的坐标
-        // position.push([
-        //     imageSize(thumbnails)!.width,
-        //     imageSize(preview)!.height,
-        // ]);
+        // 生成预览图片
+        await imageWorker.send('compress', image, PriviewCompress);
     }
+
+    const compressed = await imageWorker.getResult<Buffer>();
+    const thumbnails = compressed.slice(1);
+    const sizes = thumbnails
+        .map((img) => imageSize(img))
+        .filter(isDef)
+        .map(({ width, height }) => [width, height] as const);
 
     // 如果少于 3 张图片，则跳过
     if (sizes.length <= leastNumber) {
@@ -118,9 +101,9 @@ async function fromDir(dir: string): Promise<Preview | undefined> {
     }
 
     return {
-        cover,
-        thumbnail,
         sizes,
+        cover: compressed[0],
+        thumbnail: await compositeImage(thumbnails),
     };
 }
 

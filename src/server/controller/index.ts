@@ -29,6 +29,10 @@ export async function route(param: EventData<any>): Promise<EventData<any>> {
             result = await Files.search();
             break;
         }
+        case EventName.OpenFile: {
+            result = await Files.open(data.id);
+            break;
+        }
         default: {
             err = 'Unkonw Method.';
         }

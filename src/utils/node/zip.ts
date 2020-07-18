@@ -54,14 +54,19 @@ export async function *zipFiles(file: string | Buffer) {
             buffer,
             /** 相对于压缩包本身的路径 */
             path: file,
-            /** 下标 */
+            /** 当前是第几个 */
             index: i,
+            /** 总数 */
+            total: files.length,
         };
     }
 }
 
 /** 打包文件夹 */
-export async function packageDir(dir: string, targetDir = path.dirname(dir)) {
+export async function packageDir(
+    dir: string,
+    targetDir = path.dirname(dir),
+) {
     const stat = await fs.stat(dir).catch(() => void 0);
 
     if (!stat || !stat.isDirectory()) {
@@ -91,7 +96,11 @@ export async function packageDir(dir: string, targetDir = path.dirname(dir)) {
 }
 
 /** 解包文件夹 */
-export async function unpackZip(file: string, targetDir = path.dirname(file)) {
+export async function unpackZip(
+    file: string,
+    targetDir = path.dirname(file),
+    onProgress?: (progress: number) => any,
+) {
     // 压缩包的基础名称
     const fileName = path.parse(file).name;
     // 迭代压缩包内的所有文件
@@ -101,5 +110,9 @@ export async function unpackZip(file: string, targetDir = path.dirname(file)) {
 
         await fs.mkdirp(fileFullDir);
         await fs.writeFile(fileFull, image.buffer);
+
+        if (onProgress) {
+            onProgress(Number.parseFloat((image.index / image.total).toFixed(2)));
+        }
     }
 }

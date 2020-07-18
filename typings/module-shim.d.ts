@@ -4,3 +4,5 @@ declare module '*.styl' {
 }
 
 declare module 'simple-node-logger';
+
+declare type ProgressCb = (progress: number) => any;

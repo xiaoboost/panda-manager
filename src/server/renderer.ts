@@ -3,10 +3,13 @@ import { ipcRenderer } from 'electron';
 import {
     toMainEventName,
     toRendererEventName,
-    toRendererProgressEventName,
+    toProgressEventName,
 } from './utils/constant';
 
-import { EventName } from 'src/utils/typings';
+import {
+    EventData,
+    EventName,
+} from 'src/utils/typings';
 
 interface SwitchCache {
     onProgress?(progress: number): void;
@@ -17,14 +20,6 @@ interface SwitchCache {
 interface RequestConfig<T = any> {
     onProgress?(progress: number): any;
     params?: T;
-}
-
-/** 事件数据 */
-export interface EventData<T = undefined> {
-    name: EventName;
-    $$id: number;
-    data: T;
-    error?: string;
 }
 
 interface ProgressEvent {
@@ -56,15 +51,13 @@ export function install() {
         delete eventMap[id];
     });
 
-    ipcRenderer.on(toRendererProgressEventName, (_, event: ProgressEvent) => {
+    ipcRenderer.on(toProgressEventName, (_, event: ProgressEvent) => {
         const { $$id: id, progress } = event;
         const switchCache = eventMap[id];
 
-        if (!switchCache?.onProgress) {
-            return;
+        if (switchCache?.onProgress) {
+            switchCache.onProgress(progress);
         }
-
-        switchCache?.onProgress(progress);
     });
 }
 
