@@ -1,18 +1,42 @@
 import { BrowserWindow, ipcMain, IpcMainEvent } from 'electron';
 
 import { route } from './controller';
-import { EventData } from 'src/utils/typings';
-import { toMainEventName, toRendererEventName } from './utils/constant';
-
-import { installFiles } from './service/files';
+import { EventData, ProgressEvent } from 'src/utils/typings';
 import { installFilesQueue } from './service/files-queue';
+
+import * as names from './utils/constant';
+
+let local: BrowserWindow;
+
+function toRenderProgress($$id: number, progress: number) {
+    if (!local) {
+        return;
+    }
+
+    const data: ProgressEvent = {
+        $$id,
+        progress,
+    };
+
+    local.webContents.send(names.toProgressEventName, data);
+}
 
 async function service(event: IpcMainEvent, param: EventData) {
     try {
-        event.reply(toRendererEventName, await route(param));
+        const result = await route(param, {
+            win: local,
+            onProgress(progress: number) {
+                toRenderProgress(param.$$id, progress);
+            },
+        });
+
+        event.reply(names.toRendererEventName, {
+            ...param,
+            data: result,
+        });
     }
     catch (e) {
-        event.reply(toRendererEventName, {
+        event.reply(names.toRendererEventName, {
             ...param,
             error: e.message,
         });
@@ -20,8 +44,8 @@ async function service(event: IpcMainEvent, param: EventData) {
 }
 
 export function install(win: BrowserWindow) {
-    ipcMain.on(toMainEventName, service);
+    ipcMain.on(names.toMainEventName, service);
 
-    installFiles(win);
+    local = win;
     installFilesQueue(win);
 }

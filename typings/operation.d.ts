@@ -20,3 +20,5 @@ declare type AnyObject<T = unknown> = Record<string, T>;
 declare type AnyFunction = (...args: any[]) => any;
 
 declare type GetString<T> = T extends string ? T : never;
+
+declare type Func<T = any> = (param: T) => any;

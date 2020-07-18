@@ -4,43 +4,37 @@ import * as Files from './files';
 import {
     EventData,
     EventName,
+    EventContext,
 } from 'src/utils/typings';
 
-export async function route(param: EventData<any>): Promise<EventData<any>> {
-    const { data, name } = param;
-
-    let err = '';
+export async function route(request: EventData<any>, context: EventContext): Promise<EventData<any>> {
     let result: any = void 0;
 
-    switch (name) {
+    switch (request.name) {
         case EventName.GetConfig: {
             result = await Config.get();
             break;
         }
         case EventName.UpdateConfig: {
-            result = await Config.patchConfig(data);
+            result = await Config.patchConfig(request);
             break;
         }
         case EventName.UpdateSortOption: {
-            result = await Config.patchSort(data);
+            result = await Config.patchSort(request);
             break;
         }
         case EventName.GetFilesList: {
-            result = await Files.search();
+            result = await Files.search(request);
             break;
         }
         case EventName.OpenFile: {
-            result = await Files.open(data.id);
+            result = await Files.open(request, context);
             break;
         }
         default: {
-            err = 'Unkonw Method.';
+            throw new Error(`Unkonw Method: ${name}`);
         }
     }
 
-    return {
-        ...param,
-        error: err,
-        data: result,
-    };
+    return result;
 }

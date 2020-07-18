@@ -1,7 +1,11 @@
 import * as Dir from '../service/directory';
 import * as Sort from '../service/sort';
 
-import { ConfigData, SortOption } from 'src/utils/typings';
+import {
+    EventData,
+    ConfigData,
+    SortOption,
+} from 'src/utils/typings';
 
 export async function get(): Promise<ConfigData> {
     return {
@@ -10,16 +14,16 @@ export async function get(): Promise<ConfigData> {
     };
 }
 
-export async function patchConfig(data: Partial<ConfigData>) {
+export async function patchConfig({ data }: EventData<Partial<ConfigData>>) {
     if (data.directories) {
         await Dir.update(data.directories);
     }
 
     if (data.sort) {
-        await patchSort(data.sort);
+        await Sort.patch(data.sort);
     }
 }
 
-export async function patchSort(data: Partial<SortOption>) {
+export async function patchSort({ data }: EventData<Partial<SortOption>>) {
     await Sort.patch(data);
 }

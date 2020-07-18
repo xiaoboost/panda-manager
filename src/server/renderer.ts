@@ -9,6 +9,7 @@ import {
 import {
     EventData,
     EventName,
+    ProgressEvent,
 } from 'src/utils/typings';
 
 interface SwitchCache {
@@ -20,11 +21,6 @@ interface SwitchCache {
 interface RequestConfig<T = any> {
     onProgress?(progress: number): any;
     params?: T;
-}
-
-interface ProgressEvent {
-    $$id: number;
-    progress: number;
 }
 
 /** 全局事件编号 */

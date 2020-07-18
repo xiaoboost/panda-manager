@@ -1,16 +1,16 @@
 import React from 'react';
 import styles from './index.styl';
 
-import { ipcRenderer, shell } from 'electron';
+import { ipcRenderer } from 'electron';
 import { useEffect } from 'react';
+import { Progress } from 'antd';
+
 import { Cover as MangaCover } from 'src/manga/renderer';
 
 // import { useHistory } from 'react-router';
 import { useServer } from 'src/utils/react-use';
 import { stringifyClass } from 'src/utils/web/dom';
 import { BaseFileData, EventName, FileKind } from 'src/utils/typings';
-
-import { LoadingOutlined } from '@ant-design/icons';
 
 interface CoverProps {
     id: number;
@@ -21,7 +21,7 @@ interface CoverProps {
 }
 
 function Cover(props: CoverProps) {
-    const { loading, fetch: openFile } = useServer(EventName.OpenFile, {
+    const { loading, progress, fetch: openFile } = useServer(EventName.OpenFile, {
         id: props.id,
     });
 
@@ -60,7 +60,16 @@ function Cover(props: CoverProps) {
             </div>
             {loading &&
                 <div className={styles.fileProgressMask}>
-                    <LoadingOutlined />
+                    <Progress
+                        type='circle'
+                        strokeColor={{
+                            '0%': '#FF6969',
+                            '100%': '#1890FF',
+                        }}
+                        showInfo={false}
+                        percent={progress * 100}
+                        width={60}
+                    />
                 </div>
             }
             <div className={styles.fileCoverInner}>

@@ -1,17 +1,8 @@
-import { BrowserWindow } from 'electron';
-
 import { Files } from '../model';
-import { toProgressEventName } from '../utils/constant';
 import { BaseFileData, FileKind } from 'src/utils/typings';
 import { transArr, toBoolMap } from 'src/utils/shared/array';
 
 import { Data as MangaData, open as openManga } from 'src/manga/main';
-
-let win: BrowserWindow;
-
-export function installFiles(window: BrowserWindow) {
-    win = window;
-}
 
 export function remove(input: string | string[]) {
     const exMap = toBoolMap(transArr(input));
@@ -31,7 +22,7 @@ export async function search() {
     return Files.toQuery();
 }
 
-export async function open(id: number) {
+export async function open(id: number, toProgress: Func<number>) {
     const file = Files.where((item) => item.id === id).toQuery()[0];
 
     if (!file) {
@@ -39,11 +30,7 @@ export async function open(id: number) {
     }
 
     if (file.data.kind === FileKind.Mange) {
-        await openManga(file.data as MangaData, (progress) => {
-            if (win) {
-                win.webContents.send(toProgressEventName, progress);
-            }
-        });
+        await openManga(file.data as MangaData, toProgress);
     }
     else {
         throw new Error(`Unknow file kind: ${FileKind[file.data.kind]}`);

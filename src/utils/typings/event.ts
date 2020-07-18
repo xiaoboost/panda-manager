@@ -1,3 +1,5 @@
+import { BrowserWindow } from 'electron';
+
 /** 通信事件名称 */
 export enum EventName {
     GetConfig = 'get-config',
@@ -9,10 +11,22 @@ export enum EventName {
     OpenFile = 'open-file',
 }
 
-/** 事件数据 */
+/** 事件交换数据格式 */
 export interface EventData<T = undefined> {
-    name: EventName;
-    $$id: number;
     data: T;
+    $$id: number;
+    name: EventName;
     error?: string;
+}
+
+/** 事件数据上下文 */
+export interface EventContext {
+    win: BrowserWindow;
+    onProgress(progress: number): any;
+}
+
+/** 进度事件 */
+export interface ProgressEvent {
+    $$id: number;
+    progress: number;
 }
