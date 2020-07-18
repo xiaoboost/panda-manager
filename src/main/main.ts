@@ -11,6 +11,7 @@ export let win: BrowserWindow | null;
 /** 创建主界面窗口 */
 export async function install() {
     win = await windowStateKeeper({
+        title: 'Panda Manager',
         width: 800,
         height: 600,
         center: true,

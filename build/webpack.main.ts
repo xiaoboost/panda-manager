@@ -21,7 +21,6 @@ import {
 /** 公共配置 */
 export const clientConfig: Webpack.Configuration = {
     target: 'electron-main',
-    externals: builtinModules.concat(externalModules),
     mode: modeName,
     node: {
         __dirname: false,
@@ -128,6 +127,7 @@ else {
         ],
     };
 
+    clientConfig.externals =builtinModules;
     clientConfig.plugins = clientConfig.plugins!.concat([
         new RequireSplitChunkPlugin(),
     ]);
