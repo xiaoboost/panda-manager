@@ -14,12 +14,12 @@ export const MenuList = [
         name: MenuItemName.List,
         path: '/',
     },
-    {
-        label: '标签列表',
-        Icon: TagsOutlined,
-        name: MenuItemName.Tags,
-        path: '/tags',
-    },
+    // {
+    //     label: '标签列表',
+    //     Icon: TagsOutlined,
+    //     name: MenuItemName.Tags,
+    //     path: '/tags',
+    // },
     {
         label: '设置',
         Icon: SettingOutlined,
