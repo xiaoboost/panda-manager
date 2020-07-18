@@ -8,18 +8,21 @@ import { EventName } from 'src/utils/typings';
 type FetchData<T> = (
     {
         fetch: () => Promise<T>;
+        progress: number;
         loading: true;
         error: null;
         data: null;
     } |
     {
         fetch: () => Promise<T>;
+        progress: number;
         loading: false;
         error: null;
         data: T;
     } |
     {
         fetch: () => Promise<T>;
+        progress: number;
         loading: false;
         error: string;
         data: null;
@@ -130,6 +133,7 @@ export const useServer: UseFetchMethod = <T>(...args: any[]) => {
     const [result, setResult] = useState<null | T>(null);
     const [error, setError] = useState<null | string>(null);
     const [allow, setAllow] = useState(immediate);
+    const [progress, setProgress] = useState(0);
     const [count, setCount] = useState(0);
     const isMounted = useMounted();
 
@@ -148,11 +152,15 @@ export const useServer: UseFetchMethod = <T>(...args: any[]) => {
         setLoading(true);
         setResult(null);
         setError(null);
+        setProgress(0);
     }
 
     /** 获取数据 */
     function fetch() {
-        toServer<T>(name, params)
+        toServer<T>(name, {
+            params,
+            onProgress: setProgress,
+        })
             .then((data) => {
                 if (!isMounted()) {
                     return;
@@ -160,6 +168,7 @@ export const useServer: UseFetchMethod = <T>(...args: any[]) => {
 
                 setLoading(false);
                 setResult(data);
+                setProgress(1);
                 promise.resolve(data);
             })
             .catch((error: string) => {
@@ -169,6 +178,7 @@ export const useServer: UseFetchMethod = <T>(...args: any[]) => {
 
                 setError(error);
                 setLoading(false);
+                setProgress(1);
                 promise.reject(error);
             });
     }
@@ -198,6 +208,7 @@ export const useServer: UseFetchMethod = <T>(...args: any[]) => {
         fetch: reFetch,
         loading,
         error,
+        progress,
         data: result,
     } as FetchData<T>;
 };

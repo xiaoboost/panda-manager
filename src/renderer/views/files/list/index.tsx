@@ -1,11 +1,11 @@
 import React from 'react';
 import styles from './index.styl';
 
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, shell } from 'electron';
 import { useEffect } from 'react';
 import { Cover as MangaCover } from 'src/manga/renderer';
 
-import { useHistory } from 'react-router';
+// import { useHistory } from 'react-router';
 import { useServer } from 'src/utils/react-use';
 import { stringifyClass } from 'src/utils/web/dom';
 import { BaseFileData, EventName, FileKind } from 'src/utils/typings';
@@ -19,9 +19,11 @@ interface CoverProps {
 }
 
 function Cover(props: CoverProps) {
-    let inner: JSX.Element | undefined;
+    const { loading, progress, fetch: openFile } = useServer(EventName.OpenFile, {
+        id: props.id,
+    });
 
-    const history = useHistory();
+    // const history = useHistory();
 
     const clickHandler = (ev: React.MouseEvent) => {
         if (ev.button === 0) {
@@ -32,21 +34,16 @@ function Cover(props: CoverProps) {
         }
     };
 
+    // 双击解压
     const dbClickHandler = (ev: React.MouseEvent) => {
         if (ev.button !== 0) {
             return;
         }
 
-        history.push(`/detail/${props.id}`);
+        openFile();
+
+        // history.push(`/detail/${props.id}`);
     };
-
-    if (props.kind === FileKind.Mange) {
-        inner = <MangaCover id={props.id} />;
-    }
-
-    if (!inner) {
-        return <></>;
-    }
 
     return (
         <div
@@ -55,12 +52,17 @@ function Cover(props: CoverProps) {
             className={stringifyClass(styles.fileCover, {
                 [styles.fileCoverSelected]: props.isSelected,
             })}>
-            <div className={styles.fileCoverMask}>
-                <div className={styles.fileCoverMaskOutside}></div>
-                <div className={styles.fileCoverMaskInside}></div>
+            <div className={styles.fileSeletedMask}>
+                <div className={styles.fileSeletedMaskOutside}></div>
+                <div className={styles.fileSeletedMaskInside}></div>
             </div>
+            {loading && progress > 0 &&
+                <div className={styles.fileProgressMask}>
+                    进度条
+                </div>
+            }
             <div className={styles.fileCoverInner}>
-                {inner}
+                <MangaCover id={props.id} />
             </div>
         </div>
     );
