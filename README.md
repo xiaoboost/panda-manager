@@ -21,5 +21,5 @@ See: #[New Issue](https://github.com/xiaoboost/panda-manager/issues/new)
 
 * [Electron](https://github.com/electron/electron)
 * [React](https://github.com/facebook/react)
-* [Ant.design](https://github.com/ant-design/ant-design)
+* [Ant Design](https://github.com/ant-design/ant-design)
 * [Jimp](https://github.com/oliver-moran/jimp)

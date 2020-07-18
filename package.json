@@ -8,7 +8,7 @@
     "dev": "npm run clear && ts-node-transpile-only --project tsconfig.compile.json ./build/webpack.ts --development",
     "build": "npm run clear && ts-node-transpile-only --project tsconfig.compile.json ./build/webpack.ts --production",
     "build:analyze": "npm run clear && ts-node-transpile-only --project tsconfig.compile.json ./build/webpack.ts --production --analyze",
-    "package": "rimraf ./dist && npm run build && electron-packager ./dist/generated --out=dist/package",
+    "package": "rimraf ./dist && npm run build && electron-packager ./dist/generated --out=dist/package --asar",
     "start": "electron --debug=5858 ./dist/generated"
   },
   "author": "xiaoboost",
