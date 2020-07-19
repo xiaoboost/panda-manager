@@ -47,11 +47,11 @@ export interface TagGroupData extends TagBaseData {
 export interface BaseFileData {
     /** 项目编号 */
     id: number;
-    /** 项目名称 */
+    /** 项目类型 */
     kind: FileKind;
+    /** 项目名称 */
+    name: string;
 
-    /** 此文件由哪个扩展解析 */
-    extension: string;
     /** 实际文件路径 */
     filePath: string;
     /** 文件大小 - 单位：kb */

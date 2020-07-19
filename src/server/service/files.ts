@@ -1,5 +1,5 @@
-import { Files } from '../model';
-import { BaseFileData, FileKind } from 'src/utils/typings';
+import { Files, Config } from '../model';
+import { BaseFileData, FileKind, SortBy } from 'src/utils/typings';
 import { transArr, toBoolMap } from 'src/utils/shared/array';
 
 import { Data as MangaData, open as openManga } from 'src/manga/main';
@@ -15,15 +15,32 @@ export function update(data: Partial<BaseFileData>) {
 
 export async function get(id: number) {
     await Files.ready;
+    const file = Files.limit(1).where((item) => item.id === id).toQuery()[0];
+
+    if (!file) {
+        throw new Error(`Can not find file from id: ${id}`);
+    }
+
+    return file.data;
 }
 
 export async function search() {
     await Files.ready;
-    return Files.toQuery();
+
+    const { sort } = Config.data;
+    const sortBy = {
+        [SortBy.name]: 'name',
+        [SortBy.size]: 'fileSize',
+        [SortBy.lastModified]: 'lastModified',
+    } as const;
+
+    return Files
+        .orderBy(sortBy[sort.by], sort.asc ? 'asc' : 'desc')
+        .toQuery();
 }
 
 export async function open(id: number, toProgress: Func<number>) {
-    const file = Files.where((item) => item.id === id).toQuery()[0];
+    const file = Files.limit(1).where((item) => item.id === id).toQuery()[0];
 
     if (!file) {
         throw new Error(`Can not find file from id: ${id}`);

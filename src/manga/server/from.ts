@@ -40,9 +40,9 @@ export async function from(file: string): Promise<MangaData | undefined> {
     return {
         id,
         kind,
+        name,
         isDirectory,
         tags: [],
-        extension: name,
         category: Category.NonH,
         filePath: file,
         fileSize: isDirectory ? await fs.fileSize(file) : fileStat.size,
