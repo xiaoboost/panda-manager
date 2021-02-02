@@ -1,7 +1,7 @@
 {
-  "name": "@panda/shared",
+  "name": "@panda/image",
   "version": "1.0.0",
-  "description": "panda-manager shared",
+  "description": "panda-manager image",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/types/index.d.ts",
@@ -25,7 +25,11 @@
     "url": "https://github.com/xiaoboost/panda-manager"
   },
   "dependencies": {
-    "electron": "^11.2.1"
+    "@jimp/bmp": "^0.16.1",
+    "@jimp/core": "^0.16.1",
+    "@jimp/jpeg": "^0.16.1",
+    "@jimp/plugin-scale": "^0.16.1",
+    "@jimp/png": "^0.16.1"
   },
   "devDependencies": {
     "rimraf": "^3.0.2",
