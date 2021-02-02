@@ -25,7 +25,8 @@
     "url": "https://github.com/xiaoboost/panda-manager"
   },
   "dependencies": {
-    "electron": "^11.2.1"
+    "electron": "^11.2.1",
+    "tslib": "^2.1.0"
   },
   "devDependencies": {
     "rimraf": "^3.0.2",

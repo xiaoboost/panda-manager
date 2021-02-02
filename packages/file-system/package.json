@@ -25,7 +25,8 @@
     "url": "https://github.com/xiaoboost/panda-manager"
   },
   "dependencies": {
-    "@panda/utils": "workspace:*"
+    "@panda/utils": "workspace:*",
+    "tslib": "^2.1.0"
   },
   "devDependencies": {
     "@types/node": "^14.14.22",

@@ -29,8 +29,11 @@
     "@jimp/core": "^0.16.1",
     "@jimp/custom": "^0.16.1",
     "@jimp/jpeg": "^0.16.1",
+    "@jimp/plugin-resize": "^0.16.1",
     "@jimp/plugin-scale": "^0.16.1",
-    "@jimp/png": "^0.16.1"
+    "@jimp/png": "^0.16.1",
+    "jimp": "^0.16.1",
+    "tslib": "^2.1.0"
   },
   "devDependencies": {
     "rimraf": "^3.0.2",
