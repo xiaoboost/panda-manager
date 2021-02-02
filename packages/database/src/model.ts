@@ -1,4 +1,5 @@
-import { gzip, gunzip, readFile, writeFile } from './utils';
+import { gzip, gunzip } from './utils';
+import { readFile, writeFile } from '@panda/fs';
 import { isObject, isUndef, isDef, debounce } from '@panda/utils';
 
 export class Model<T> {

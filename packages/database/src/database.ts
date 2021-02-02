@@ -1,4 +1,5 @@
-import { gzip, gunzip, readFile, writeFile } from './utils';
+import { gzip, gunzip } from './utils';
+import { readFile, writeFile } from '@panda/fs';
 import { uid, debounce, Watcher } from '@panda/utils';
 
 /** 基础数据行 */

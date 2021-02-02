@@ -138,6 +138,20 @@ importers:
       yaml: ^1.10.0
   packages/database:
     dependencies:
+      '@panda/fs': 'link:../file-system'
+      '@panda/utils': 'link:../utils'
+    devDependencies:
+      '@types/node': 14.14.22
+      rimraf: 3.0.2
+      typescript: 4.1.3
+    specifiers:
+      '@panda/fs': 'workspace:^1.0.0'
+      '@panda/utils': 'workspace:*'
+      '@types/node': ^14.14.22
+      rimraf: ^3.0.2
+      typescript: ^4.1.3
+  packages/file-system:
+    dependencies:
       '@panda/utils': 'link:../utils'
     devDependencies:
       '@types/node': 14.14.22
@@ -1001,6 +1015,7 @@ packages:
       regexpp: 3.1.0
       semver: 7.3.4
       tsutils: 3.17.1_typescript@4.1.3
+      typescript: 4.1.3
     dev: true
     engines:
       node: ^10.12.0 || >=12.0.0
@@ -1008,6 +1023,9 @@ packages:
       '@typescript-eslint/parser': ^4.0.0
       eslint: ^5.0.0 || ^6.0.0 || ^7.0.0
       typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
     resolution:
       integrity: sha1-It0wHOIoqqs0FrFOrRCx2z59MYA=
       tarball: '@typescript-eslint/eslint-plugin/download/@typescript-eslint/eslint-plugin-4.14.1.tgz?cache=0&sync_timestamp=1611734870089&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40typescript-eslint%2Feslint-plugin%2Fdownload%2F%40typescript-eslint%2Feslint-plugin-4.14.1.tgz'
@@ -1036,12 +1054,16 @@ packages:
       '@typescript-eslint/typescript-estree': 4.14.1_typescript@4.1.3
       debug: 4.3.1
       eslint: 7.19.0
+      typescript: 4.1.3
     dev: true
     engines:
       node: ^10.12.0 || >=12.0.0
     peerDependencies:
       eslint: ^5.0.0 || ^6.0.0 || ^7.0.0
       typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
     resolution:
       integrity: sha1-O9bCRxDNVX2ERmJShLzJxtUoF8Y=
       tarball: '@typescript-eslint/parser/download/@typescript-eslint/parser-4.14.1.tgz?cache=0&sync_timestamp=1611734871116&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40typescript-eslint%2Fparser%2Fdownload%2F%40typescript-eslint%2Fparser-4.14.1.tgz'
@@ -1072,11 +1094,15 @@ packages:
       lodash: 4.17.20
       semver: 7.3.4
       tsutils: 3.17.1_typescript@4.1.3
+      typescript: 4.1.3
     dev: true
     engines:
       node: ^10.12.0 || >=12.0.0
     peerDependencies:
       typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
     resolution:
       integrity: sha1-INO4yOPNyPdkvdXlsGBt2D2mB1s=
       tarball: '@typescript-eslint/typescript-estree/download/@typescript-eslint/typescript-estree-4.14.1.tgz?cache=0&sync_timestamp=1611734886041&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40typescript-eslint%2Ftypescript-estree%2Fdownload%2F%40typescript-eslint%2Ftypescript-estree-4.14.1.tgz'
@@ -2492,6 +2518,11 @@ packages:
     dev: true
     engines:
       node: '>=6.0'
+    peerDependencies:
+      supports-color: '*'
+    peerDependenciesMeta:
+      supports-color:
+        optional: true
     resolution:
       integrity: sha1-8NIpxQXgxtjEmsVT0bE9wYP2su4=
       tarball: debug/download/debug-4.3.1.tgz
@@ -7881,6 +7912,11 @@ packages:
     engines:
       node: '>=10.13.0'
     hasBin: true
+    peerDependencies:
+      webpack-cli: '*'
+    peerDependenciesMeta:
+      webpack-cli:
+        optional: true
     resolution:
       integrity: sha1-Gl/uhN1jVX5oM2sHdKxKHIGqLHM=
       tarball: webpack/download/webpack-5.19.0.tgz

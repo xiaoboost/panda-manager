@@ -15,7 +15,8 @@
     "dev": "tsc -w -p ./tsconfig.dev.json",
     "build:cjs": "tsc -p ./tsconfig.build.json --outDir ./dist/cjs -m CommonJS",
     "build:esm": "tsc -p ./tsconfig.build.json --outDir ./dist/esm -m ESNext",
-    "build": "pnpm run clear && pnpm run build:cjs && pnpm run build:esm"
+    "build": "pnpm run clear && pnpm run build:cjs && pnpm run build:esm",
+    "prepare": "pnpm run build"
   },
   "author": "xiaoboost",
   "license": "MIT",
@@ -24,6 +25,7 @@
     "url": "https://github.com/xiaoboost/panda-manager"
   },
   "dependencies": {
+    "@panda/fs": "workspace:*",
     "@panda/utils": "workspace:*"
   },
   "devDependencies": {
