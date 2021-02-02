@@ -1,7 +1,7 @@
 {
-  "name": "@panda/db",
+  "name": "@panda/shared",
   "version": "1.0.0",
-  "description": "panda-manager database",
+  "description": "panda-manager shared",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/types/index.d.ts",
@@ -15,7 +15,8 @@
     "dev": "tsc -w -p ./tsconfig.dev.json",
     "build:cjs": "tsc -p ./tsconfig.build.json --outDir ./dist/cjs -m CommonJS",
     "build:esm": "tsc -p ./tsconfig.build.json --outDir ./dist/esm -m ESNext",
-    "build": "pnpm run clear && pnpm run build:cjs && pnpm run build:esm"
+    "build": "pnpm run clear && pnpm run build:cjs && pnpm run build:esm",
+    "prepare": "pnpm run build"
   },
   "author": "xiaoboost",
   "license": "MIT",
@@ -24,11 +25,13 @@
     "url": "https://github.com/xiaoboost/panda-manager"
   },
   "dependencies": {
+    "@panda/db": "workspace:*",
     "@panda/fs": "workspace:*",
-    "@panda/utils": "workspace:*"
+    "@panda/shared": "workspace:*",
+    "@panda/utils": "workspace:*",
+    "electron": "^11.2.1"
   },
   "devDependencies": {
-    "@types/node": "^14.14.22",
     "rimraf": "^3.0.2",
     "typescript": "^4.1.3"
   }
