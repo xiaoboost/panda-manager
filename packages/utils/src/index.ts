@@ -6,3 +6,4 @@ export * from './object';
 export * from './subject';
 export * from './types';
 export * from './uid';
+export * from './natural-compare';
