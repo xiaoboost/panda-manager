@@ -1,6 +1,5 @@
 import Webpack from 'webpack';
 import TerserPlugin from 'terser-webpack-plugin';
-import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 import FriendlyErrorsPlugin from 'friendly-errors-webpack-plugin';
 import GenerateJsonPlugin from 'generate-json-webpack-plugin';
 import PackageConfig from '../package.json';
@@ -39,11 +38,14 @@ export const clientConfig: Webpack.Configuration = {
     resolve: {
         extensions: ['.ts', '.js', '.json'],
         mainFiles: ['index.ts', 'index.js'],
-        plugins: [
-            new TsconfigPathsPlugin({
-                configFile: resolve('tsconfig.json'),
-            }),
-        ],
+        alias: {
+            src: resolve('src'),
+        },
+        // plugins: [
+        //     new TsconfigPathsPlugin({
+        //         configFile: resolve('tsconfig.json'),
+        //     }),
+        // ],
     },
     performance: {
         hints: false,
@@ -64,7 +66,7 @@ export const clientConfig: Webpack.Configuration = {
     },
     plugins: [
         new Webpack.optimize.ModuleConcatenationPlugin(),
-        new Webpack.HashedModuleIdsPlugin({
+        new Webpack.ids.HashedModuleIdsPlugin({
             hashFunction: 'sha256',
             hashDigest: 'hex',
             hashDigestLength: 6,
@@ -102,7 +104,7 @@ else {
             maxInitialRequests: Infinity,
             minSize: 0,
             minChunks: 1,
-            name: true,
+            // name: true,
             cacheGroups: {
                 commons: {
                     test: /[\\/]node_modules[\\/]/,
@@ -114,9 +116,7 @@ else {
         minimizer: [
             new TerserPlugin({
                 test: /\.js$/i,
-                cache: false,
                 terserOptions: {
-                    ecma: 8,
                     ie8: false,
                     safari10: false,
                     output: {

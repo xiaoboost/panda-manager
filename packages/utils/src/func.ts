@@ -1,4 +1,5 @@
 import { isFunc } from './assert';
+import { AnyFunction } from './types';
 
 /** 延迟函数 */
 export function delay(time = 0) {
@@ -53,7 +54,7 @@ export function debounce<T extends AnyFunction>(delay: number | T, cb?: T): (...
         time = delay;
     }
 
-    let _resolve: (value?: ReturnPromiseType<T> | PromiseLike<ReturnPromiseType<T>> | undefined) => void;
+    let _resolve: (value: ReturnPromiseType<T> | PromiseLike<ReturnPromiseType<T>>) => void;
     let _reject: (error: any) => void;
 
     const end = new Promise<ReturnPromiseType<T>>((resolve, reject) => {

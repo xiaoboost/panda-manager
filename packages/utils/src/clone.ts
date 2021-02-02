@@ -1,8 +1,5 @@
-import {
-    isArray,
-    isBaseType,
-    isFunc,
-} from './assert';
+import { isArray, isBaseType, isFunc } from './assert';
+import { AnyObject } from './types';
 
 /**
  * 检查输入数据是否含有循环结构

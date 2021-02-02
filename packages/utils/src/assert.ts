@@ -1,3 +1,5 @@
+import { AnyFunction, AnyObject } from './types';
+
 const _toString = Object.prototype.toString;
 
 /** 基础类型 */

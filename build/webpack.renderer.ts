@@ -2,8 +2,7 @@ import Webpack from 'webpack';
 import TerserPlugin from 'terser-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
-import OptimizeCSSPlugin from 'optimize-css-assets-webpack-plugin';
+import CssMinimizerWebpackPlugin from 'css-minimizer-webpack-plugin';
 import FriendlyErrorsPlugin from 'friendly-errors-webpack-plugin';
 
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
@@ -38,11 +37,9 @@ export const rendererConfig: Webpack.Configuration = {
     resolve: {
         extensions: ['.tsx', '.ts', '.js', '.jsx', '.json', '.styl', '.css'],
         mainFiles: ['index.tsx', 'index.ts', 'index.js', 'index.styl', 'index.css'],
-        plugins: [
-            new TsconfigPathsPlugin({
-                configFile: resolve('tsconfig.json'),
-            }),
-        ],
+        alias: {
+            src: resolve('src'),
+        },
     },
     performance: {
         hints: false,
@@ -103,7 +100,6 @@ export const rendererConfig: Webpack.Configuration = {
             maxInitialRequests: Infinity,
             minSize: 0,
             minChunks: 1,
-            name: true,
             cacheGroups: {
                 commons: {
                     test: /[\\/]node_modules[\\/]/,
@@ -118,7 +114,7 @@ export const rendererConfig: Webpack.Configuration = {
         new MiniCssExtractPlugin({
             filename: 'styles/[name].css',
         }),
-        new Webpack.HashedModuleIdsPlugin({
+        new Webpack.ids.HashedModuleIdsPlugin({
             hashFunction: 'sha256',
             hashDigest: 'hex',
             hashDigestLength: 6,
@@ -156,12 +152,10 @@ if (isDevelopment) {
 else {
     rendererConfig.optimization!.minimize = true;
     rendererConfig.optimization!.minimizer = [
-        new OptimizeCSSPlugin(),
+        new CssMinimizerWebpackPlugin(),
         new TerserPlugin({
             test: /\.js$/i,
-            cache: false,
             terserOptions: {
-                ecma: 8,
                 ie8: false,
                 safari10: false,
                 output: {

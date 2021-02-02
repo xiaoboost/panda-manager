@@ -1,11 +1,6 @@
 import { checkCircularStructure } from './clone';
-
-import {
-    isFunc,
-    isArray,
-    isBaseType,
-    isObject,
-} from './assert';
+import { isFunc, isArray, isBaseType, isObject } from './assert';
+import { AnyObject } from './types';
 
 /**
  * 检查 key 是否存在于 obj 对象中

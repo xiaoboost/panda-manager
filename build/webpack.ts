@@ -2,10 +2,10 @@ import Webpack from 'webpack';
 
 import { isDevelopment } from './utils';
 import { clientConfig } from './webpack.main';
-import { rendererConfig } from './webpack.renderer';
+// import { rendererConfig } from './webpack.renderer';
 
 function devBuild() {
-    const compiler = Webpack([clientConfig, rendererConfig]);
+    const compiler = Webpack([clientConfig,]);
 
     compiler.watch({ ignored: /node_modules/ }, (err?: Error) => {
         if (err) {
@@ -16,13 +16,14 @@ function devBuild() {
 
 function build() {
     console.log('  Compiling...');
+    // rendererConfig
     
-    Webpack([clientConfig, rendererConfig], (err, stats) => {
-        if (err) {
+    Webpack([clientConfig, ], (err, stats) => {
+        if (err || !stats) {
             throw err;
         }
 
-        (stats as unknown as Webpack.compilation.MultiStats).stats.forEach((stat) => {
+        stats.stats.forEach((stat) => {
             console.log('\n' + stat.toString({
                 chunks: false,
                 chunkModules: false,

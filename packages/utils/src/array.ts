@@ -1,7 +1,5 @@
-import {
-    isFunc,
-    isDef,
-} from './assert';
+import { isFunc, isDef } from './assert';
+import { AnyObject } from './types';
 
 /** 索引类型 */
 type Index = string | number;

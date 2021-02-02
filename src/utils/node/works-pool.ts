@@ -81,7 +81,7 @@ class WorkerProcess {
         this.isBusy = false;
 
         if (result.meta?.isBuffer) {
-            result.data = Buffer.from(result.data) as any;
+            result.data = Buffer.from(result.data as any) as any;
         }
 
         // 下一个时钟周期触发
