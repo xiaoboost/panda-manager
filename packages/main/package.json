@@ -2,9 +2,7 @@
   "name": "@panda/shared",
   "version": "1.0.0",
   "description": "panda-manager shared",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
-  "types": "dist/types/index.d.ts",
+  "main": "dist/index.js",
   "files": [
     "dist",
     "README.md",
@@ -12,11 +10,8 @@
   ],
   "scripts": {
     "clear": "rimraf ./dist",
-    "dev": "tsc -w -p ./tsconfig.dev.json",
-    "build:cjs": "tsc -p ./tsconfig.build.json --outDir ./dist/cjs -m CommonJS",
-    "build:esm": "tsc -p ./tsconfig.build.json --outDir ./dist/esm -m ESNext",
-    "build": "pnpm run clear && pnpm run build:cjs && pnpm run build:esm",
-    "prepare": "pnpm run build"
+    "dev": "esbuild src/index.ts --bundle --watch --outfile=./dist/index.js --format=iife --define:process.env.NODE_ENV=\\\"development\\\" --main-fields=module,main --platform=node --target=es6",
+    "build": "esbuild src/index.ts --bundle --outfile=./dist/index.js --format=iife --define:process.env.NODE_ENV=\\\"production\\\" --main-fields=module,main --platform=node --target=es6 --minify"
   },
   "author": "xiaoboost",
   "license": "MIT",

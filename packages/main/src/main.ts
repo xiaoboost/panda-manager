@@ -18,7 +18,7 @@ export async function install() {
         minHeight: 600,
         minWidth: 800,
         webPreferences: {
-            nodeIntegration: true,
+            nodeIntegration: false,
             webSecurity: process.env.NODE_ENV !== 'development',
         },
     });
