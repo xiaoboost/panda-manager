@@ -1,37 +1,28 @@
-import Webpack from 'webpack';
-import TerserPlugin from 'terser-webpack-plugin';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import CssMinimizerWebpackPlugin from 'css-minimizer-webpack-plugin';
-import FriendlyErrorsPlugin from 'friendly-errors-webpack-plugin';
+const path = require('path');
+const webpack = require('webpack');
+const TerserPlugin = require('terser-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerWebpackPlugin = require('css-minimizer-webpack-plugin');
+const ProgressBarWebpackPlugin = require('progress-bar-webpack-plugin');
 
-import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
+const resolve = (...dir) => path.join(__dirname, ...dir);
+const isDevelopment = process.argv.includes('development');
+const stylusOptions = {
+    paths: [
+        resolve('node_modules'),
+        resolve('src'),
+    ],
+};
 
-import {
-    modeName,
-    resolve,
-    outputDir,
-    builtinModules,
-    isDevelopment,
-    isAnalyzer,
-} from './utils';
-
-const externals: Record<string, string> = {};
-
-builtinModules.forEach((name) => {
-    externals[name] = `commonjs ${name}`;
-});
-
-/** 公共配置 */
-export const rendererConfig: Webpack.Configuration = {
+const config = {
     target: 'electron-renderer',
-    externals: externals,
-    mode: modeName,
+    devtool: 'source-map',
     entry: {
-        renderer: resolve('src/renderer/init/index.ts'),
+        renderer: resolve('src/init/index.ts'),
     },
     output: {
-        path: outputDir,
+        path: resolve('dist'),
         filename: 'scripts/[name].js',
     },
     resolve: {
@@ -53,7 +44,7 @@ export const rendererConfig: Webpack.Configuration = {
                 exclude: /node_modules/,
                 loader: 'ts-loader',
                 options: {
-                    configFile: resolve('tsconfig.json'),
+                    configFile: resolve('tsconfig.build.json'),
                 },
             },
             {
@@ -63,7 +54,16 @@ export const rendererConfig: Webpack.Configuration = {
             {
                 test: /\.styl$/,
                 include: /node_modules/,
-                use: [MiniCssExtractPlugin.loader, 'css-loader', 'stylus-loader'],
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    {
+                        loader: 'stylus-loader',
+                        options: {
+                            stylusOptions,
+                        },
+                    },
+                ],
             },
             {
                 test: /\.styl$/,
@@ -73,9 +73,9 @@ export const rendererConfig: Webpack.Configuration = {
                     {
                         loader: 'css-loader',
                         options: {
-                            localsConvention: 'camelCaseOnly',
                             modules: {
-                                context: resolve('src/renderer'),
+                                localIdentContext: resolve('src'),
+                                exportLocalsConvention: "camelCaseOnly",
                                 localIdentName: isDevelopment
                                     ? '[local]__[hash:base64:5]'
                                     : '[hash:base64:6]',
@@ -85,10 +85,7 @@ export const rendererConfig: Webpack.Configuration = {
                     {
                         loader: 'stylus-loader',
                         options: {
-                            paths: [
-                                resolve('node_modules'),
-                                resolve('src/renderer'),
-                            ],
+                            stylusOptions,
                         },
                     },
                 ],
@@ -110,48 +107,34 @@ export const rendererConfig: Webpack.Configuration = {
         },
     },
     plugins: [
-        new Webpack.optimize.ModuleConcatenationPlugin(),
+        new webpack.optimize.ModuleConcatenationPlugin(),
+        new ProgressBarWebpackPlugin(),
         new MiniCssExtractPlugin({
             filename: 'styles/[name].css',
         }),
-        new Webpack.ids.HashedModuleIdsPlugin({
+        new webpack.ids.HashedModuleIdsPlugin({
             hashFunction: 'sha256',
             hashDigest: 'hex',
             hashDigestLength: 6,
         }),
-        new Webpack.DefinePlugin({
-            'process.env.NODE_ENV': JSON.stringify(modeName),
-        }),
         new HtmlWebpackPlugin({
-            filename: 'pages/renderer.html',
-            template: resolve('src/renderer/index.html'),
+            filename: 'views/renderer.html',
+            template: resolve('src/index.html'),
             inject: true,
-            excludeChunks: [],
-            chunks: ['renderer'],
+            scriptLoading: 'blocking',
             minify: {
-                removeComments: !isDevelopment,
-                collapseWhitespace: !isDevelopment,
+                removeComments: true,
+                collapseWhitespace: true,
                 ignoreCustomComments: [/^-/],
             },
         }),
     ],
 };
 
-if (isDevelopment) {
-    rendererConfig.watch = true;
-    rendererConfig.devtool = 'source-map';
-    rendererConfig.plugins = rendererConfig.plugins!.concat([
-        new FriendlyErrorsPlugin({
-            compilationSuccessInfo: {
-                messages: ['Project compile done.'],
-                notes: [],
-            },
-        }),
-    ]);
-}
-else {
-    rendererConfig.optimization!.minimize = true;
-    rendererConfig.optimization!.minimizer = [
+if (!isDevelopment) {
+    config.devtool = false;
+    config.optimization.minimize = true;
+    config.optimization.minimizer = [
         new CssMinimizerWebpackPlugin(),
         new TerserPlugin({
             test: /\.js$/i,
@@ -164,12 +147,6 @@ else {
             },
         }),
     ];
-
-    if (isAnalyzer) {
-        rendererConfig.plugins = rendererConfig.plugins!.concat([
-            new BundleAnalyzerPlugin({
-                analyzerPort: 9876,
-            }),
-        ]);
-    }
 }
+
+module.exports = config;

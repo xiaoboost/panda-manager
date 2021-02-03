@@ -24,7 +24,7 @@
     "@panda/fs": "workspace:*",
     "@panda/shared": "workspace:*",
     "@panda/utils": "workspace:*",
-    "electron": "^11.2.1"
+    "electron": "^11.2.2"
   },
   "devDependencies": {
     "esbuild": "^0.8.39",

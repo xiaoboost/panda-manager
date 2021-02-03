@@ -6,30 +6,30 @@ importers:
       electron-packager: ^15.2.0
   packages/database:
     dependencies:
-      '@panda/fs': 'link:../file-system'
-      '@panda/utils': 'link:../utils'
+      '@panda/fs': link:../file-system
+      '@panda/utils': link:../utils
       tslib: 2.1.0
     devDependencies:
       '@types/node': 14.14.22
       rimraf: 3.0.2
       typescript: 4.1.3
     specifiers:
-      '@panda/fs': 'workspace:*'
-      '@panda/utils': 'workspace:*'
+      '@panda/fs': workspace:*
+      '@panda/utils': workspace:*
       '@types/node': ^14.14.22
       rimraf: ^3.0.2
       tslib: ^2.1.0
       typescript: ^4.1.3
   packages/file-system:
     dependencies:
-      '@panda/utils': 'link:../utils'
+      '@panda/utils': link:../utils
       tslib: 2.1.0
     devDependencies:
       '@types/node': 14.14.22
       rimraf: 3.0.2
       typescript: 4.1.3
     specifiers:
-      '@panda/utils': 'workspace:*'
+      '@panda/utils': workspace:*
       '@types/node': ^14.14.22
       rimraf: ^3.0.2
       tslib: ^2.1.0
@@ -74,84 +74,87 @@ importers:
       typescript: ^4.1.3
   packages/main:
     dependencies:
-      '@panda/db': 'link:../database'
-      '@panda/fs': 'link:../file-system'
-      '@panda/shared': 'link:../shared'
-      '@panda/utils': 'link:../utils'
-      electron: 11.2.1
+      '@panda/db': link:../database
+      '@panda/fs': link:../file-system
+      '@panda/shared': link:../shared
+      '@panda/utils': link:../utils
+      electron: 11.2.2
     devDependencies:
       esbuild: 0.8.39
       rimraf: 3.0.2
       typescript: 4.1.3
     specifiers:
-      '@panda/db': 'workspace:*'
-      '@panda/fs': 'workspace:*'
-      '@panda/shared': 'workspace:*'
-      '@panda/utils': 'workspace:*'
-      electron: ^11.2.1
+      '@panda/db': workspace:*
+      '@panda/fs': workspace:*
+      '@panda/shared': workspace:*
+      '@panda/utils': workspace:*
+      electron: ^11.2.2
       esbuild: ^0.8.39
       rimraf: ^3.0.2
       typescript: ^4.1.3
   packages/react-use:
     dependencies:
-      '@panda/utils': 'link:../utils'
+      '@panda/utils': link:../utils
     devDependencies:
-      electron: 11.2.1
+      electron: 11.2.2
       react: 17.0.1
       rimraf: 3.0.2
       typescript: 4.1.3
     specifiers:
-      '@panda/utils': 'workspace:*'
-      electron: ^11.2.1
+      '@panda/utils': workspace:*
+      electron: ^11.2.2
       react: ^17.0.1
       rimraf: ^3.0.2
       typescript: ^4.1.3
   packages/renderer:
     dependencies:
       '@ant-design/icons': 4.4.0_react-dom@17.0.1+react@17.0.1
-      '@panda/shared': 'link:../shared'
-      '@panda/utils': 'link:../utils'
-      antd: 4.12.0_react-dom@17.0.1+react@17.0.1
-      electron: 11.2.1
+      '@panda/shared': link:../shared
+      '@panda/utils': link:../utils
+      antd: 4.12.1_react-dom@17.0.1+react@17.0.1
+      electron: 11.2.2
       react: 17.0.1
       react-dom: 17.0.1_react@17.0.1
       react-router: 5.2.0_react@17.0.1
       react-router-dom: 5.2.0_react@17.0.1
     devDependencies:
-      '@types/react': 17.0.0
+      '@types/node': 14.14.22
+      '@types/react': 17.0.1
       '@types/react-dom': 17.0.0
       '@types/react-router-dom': 5.1.7
-      chalk: 4.1.0
-      css-loader: 5.0.1_webpack@5.19.0
-      css-minimizer-webpack-plugin: 1.2.0_webpack@5.19.0
-      file-loader: 6.2.0_webpack@5.19.0
-      html-webpack-plugin: 4.5.1_webpack@5.19.0
-      mini-css-extract-plugin: 1.3.5_webpack@5.19.0
+      css-loader: 5.0.1_webpack@5.20.1
+      css-minimizer-webpack-plugin: 1.2.0_webpack@5.20.1
+      file-loader: 6.2.0_webpack@5.20.1
+      html-webpack-plugin: 5.0.0_webpack@5.20.1
+      mini-css-extract-plugin: 1.3.5_webpack@5.20.1
+      progress-bar-webpack-plugin: 2.1.0_webpack@5.20.1
       rimraf: 3.0.2
       stylus: 0.54.8
-      stylus-loader: 5.0.0_stylus@0.54.8+webpack@5.19.0
-      terser-webpack-plugin: 5.1.1_webpack@5.19.0
-      ts-loader: 8.0.14_typescript@4.1.3+webpack@5.19.0
+      stylus-loader: 5.0.0_stylus@0.54.8+webpack@5.20.1
+      terser-webpack-plugin: 5.1.1_webpack@5.20.1
+      ts-loader: 8.0.14_typescript@4.1.3+webpack@5.20.1
       typescript: 4.1.3
       typescript-plugin-css-modules: 3.1.0_typescript@4.1.3
-      url-loader: 4.1.1_file-loader@6.2.0+webpack@5.19.0
-      webpack: 5.19.0
+      url-loader: 4.1.1_file-loader@6.2.0+webpack@5.20.1
+      webpack: 5.20.1_webpack-cli@4.5.0
       webpack-bundle-analyzer: 4.4.0
+      webpack-cli: 4.5.0_ab976b710e47a1cb2562ea01d184f973
     specifiers:
       '@ant-design/icons': ^4.4.0
-      '@panda/shared': 'workspace:*'
-      '@panda/utils': 'workspace:*'
-      '@types/react': ^17.0.0
+      '@panda/shared': workspace:*
+      '@panda/utils': workspace:*
+      '@types/node': ^14.14.22
+      '@types/react': ^17.0.1
       '@types/react-dom': ^17.0.0
       '@types/react-router-dom': ^5.1.7
-      antd: ^4.12.0
-      chalk: ^4.1.0
+      antd: ^4.12.1
       css-loader: ^5.0.1
       css-minimizer-webpack-plugin: ^1.2.0
-      electron: ^11.2.1
+      electron: ^11.2.2
       file-loader: ^6.2.0
-      html-webpack-plugin: ^4.5.1
+      html-webpack-plugin: ^5.0.0
       mini-css-extract-plugin: ^1.3.5
+      progress-bar-webpack-plugin: ^2.1.0
       react: ^17.0.1
       react-dom: ^17.0.1
       react-router: ^5.2.0
@@ -164,17 +167,18 @@ importers:
       typescript: ^4.1.3
       typescript-plugin-css-modules: ^3.1.0
       url-loader: ^4.1.1
-      webpack: ^5.19.0
+      webpack: ^5.20.1
       webpack-bundle-analyzer: ^4.4.0
+      webpack-cli: ^4.5.0
   packages/shared:
     dependencies:
-      electron: 11.2.1
+      electron: 11.2.2
       tslib: 2.1.0
     devDependencies:
       rimraf: 3.0.2
       typescript: 4.1.3
     specifiers:
-      electron: ^11.2.1
+      electron: ^11.2.2
       rimraf: ^3.0.2
       tslib: ^2.1.0
       typescript: ^4.1.3
@@ -190,8 +194,8 @@ importers:
       typescript: ^4.1.3
   packages/zip:
     dependencies:
-      '@panda/fs': 'link:../file-system'
-      '@panda/utils': 'link:../utils'
+      '@panda/fs': link:../file-system
+      '@panda/utils': link:../utils
       iconv-lite: 0.6.2
       jszip: 3.5.0
       tslib: 2.1.0
@@ -199,8 +203,8 @@ importers:
       rimraf: 3.0.2
       typescript: 4.1.3
     specifiers:
-      '@panda/fs': 'workspace:*'
-      '@panda/utils': 'workspace:*'
+      '@panda/fs': workspace:*
+      '@panda/utils': workspace:*
       iconv-lite: ^0.6.2
       jszip: ^3.5.0
       rimraf: ^3.0.2
@@ -263,6 +267,13 @@ packages:
     resolution:
       integrity: sha1-WWke3QMe7cQxvaG99gElfAYomkA=
       tarball: '@ctrl/tinycolor/download/@ctrl/tinycolor-3.3.4.tgz'
+  /@discoveryjs/json-ext/0.5.2:
+    dev: true
+    engines:
+      node: '>=10.0.0'
+    resolution:
+      integrity: sha1-jwOiKgTeQ3JU6M6MyEujlokoh1I=
+      tarball: '@discoveryjs/json-ext/download/@discoveryjs/json-ext-0.5.2.tgz'
   /@electron/get/1.12.2:
     dependencies:
       debug: 4.3.1
@@ -761,11 +772,6 @@ packages:
     resolution:
       integrity: sha1-sWZeLEYaLNkvTBu/UNVFTeDUtCE=
       tarball: '@szmarczak/http-timer/download/@szmarczak/http-timer-1.1.2.tgz'
-  /@types/anymatch/1.3.1:
-    dev: true
-    resolution:
-      integrity: sha1-M2utwb7sudrMOL6izzKt9ieoQho=
-      tarball: '@types/anymatch/download/@types/anymatch-1.3.1.tgz'
   /@types/eslint-scope/3.7.0:
     dependencies:
       '@types/eslint': 7.2.6
@@ -836,7 +842,7 @@ packages:
     dev: true
     resolution:
       integrity: sha1-DSnzgkcsTM872W/wzkfa9be4Sxg=
-      tarball: '@types/node/download/@types/node-14.14.22.tgz?cache=0&sync_timestamp=1611188302966&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Fnode%2Fdownload%2F%40types%2Fnode-14.14.22.tgz'
+      tarball: '@types/node/download/@types/node-14.14.22.tgz?cache=0&sync_timestamp=1611191079932&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Fnode%2Fdownload%2F%40types%2Fnode-14.14.22.tgz'
   /@types/prop-types/15.7.3:
     dev: true
     resolution:
@@ -879,44 +885,14 @@ packages:
     resolution:
       integrity: sha1-WvPrf60oBwkvAEahMCt4I+J5Gbg=
       tarball: '@types/react/download/@types/react-17.0.0.tgz'
-  /@types/source-list-map/0.1.2:
-    dev: true
-    resolution:
-      integrity: sha1-AHiDYGP/rxdBI0m7o2QIfgrALsk=
-      tarball: '@types/source-list-map/download/@types/source-list-map-0.1.2.tgz'
-  /@types/tapable/1.0.6:
-    dev: true
-    resolution:
-      integrity: sha1-qcpLcKGLJwzLK8Cqr+/R1Ia36nQ=
-      tarball: '@types/tapable/download/@types/tapable-1.0.6.tgz'
-  /@types/uglify-js/3.11.1:
+  /@types/react/17.0.1:
     dependencies:
-      source-map: 0.6.1
+      '@types/prop-types': 15.7.3
+      csstype: 3.0.6
     dev: true
     resolution:
-      integrity: sha1-l/8w5hoKpodsJwtfU4c34tarjOs=
-      tarball: '@types/uglify-js/download/@types/uglify-js-3.11.1.tgz'
-  /@types/webpack-sources/2.1.0:
-    dependencies:
-      '@types/node': 14.14.22
-      '@types/source-list-map': 0.1.2
-      source-map: 0.7.3
-    dev: true
-    resolution:
-      integrity: sha1-iIKwvWLR4M5i8YPQ0Bty5ugujBA=
-      tarball: '@types/webpack-sources/download/@types/webpack-sources-2.1.0.tgz'
-  /@types/webpack/4.41.26:
-    dependencies:
-      '@types/anymatch': 1.3.1
-      '@types/node': 14.14.22
-      '@types/tapable': 1.0.6
-      '@types/uglify-js': 3.11.1
-      '@types/webpack-sources': 2.1.0
-      source-map: 0.6.1
-    dev: true
-    resolution:
-      integrity: sha1-J6MNfVMeFkifnHYHx0e+a8GkWe8=
-      tarball: '@types/webpack/download/@types/webpack-4.41.26.tgz'
+      integrity: sha1-6x8UB96o2jvHQYecEZKqcDq5l1s=
+      tarball: '@types/react/download/@types/react-17.0.1.tgz'
   /@types/yauzl/2.9.1:
     dependencies:
       '@types/node': 14.14.17
@@ -1046,6 +1022,40 @@ packages:
     resolution:
       integrity: sha1-aA0falNl1tQBl0qOlJ4FR04fq34=
       tarball: '@webassemblyjs/wast-printer/download/@webassemblyjs/wast-printer-1.11.0.tgz'
+  /@webpack-cli/configtest/1.0.1_webpack-cli@4.5.0+webpack@5.20.1:
+    dependencies:
+      webpack: 5.20.1_webpack-cli@4.5.0
+      webpack-cli: 4.5.0_ab976b710e47a1cb2562ea01d184f973
+    dev: true
+    peerDependencies:
+      webpack: 4.x.x || 5.x.x
+      webpack-cli: 4.x.x
+    resolution:
+      integrity: sha1-JBrs+9xxXu6WvtRH7UAuEuwXGTU=
+      tarball: '@webpack-cli/configtest/download/@webpack-cli/configtest-1.0.1.tgz'
+  /@webpack-cli/info/1.2.2_webpack-cli@4.5.0:
+    dependencies:
+      envinfo: 7.7.4
+      webpack-cli: 4.5.0_ab976b710e47a1cb2562ea01d184f973
+    dev: true
+    peerDependencies:
+      webpack-cli: 4.x.x
+    resolution:
+      integrity: sha1-7zwM2Ueh+gg+F0pZy3TgthlcI2w=
+      tarball: '@webpack-cli/info/download/@webpack-cli/info-1.2.2.tgz'
+  /@webpack-cli/serve/1.3.0_webpack-cli@4.5.0:
+    dependencies:
+      webpack-cli: 4.5.0_ab976b710e47a1cb2562ea01d184f973
+    dev: true
+    peerDependencies:
+      webpack-cli: 4.x.x
+      webpack-dev-server: '*'
+    peerDependenciesMeta:
+      webpack-dev-server:
+        optional: true
+    resolution:
+      integrity: sha1-JzDHcPXx8TJ2fGPcqqTsKPjFamw=
+      tarball: '@webpack-cli/serve/download/@webpack-cli/serve-1.3.0.tgz'
   /@xtuc/ieee754/1.2.0:
     dev: true
     resolution:
@@ -1105,6 +1115,13 @@ packages:
     resolution:
       integrity: sha1-l6ERlkmyEa0zaR2fn0hqjsn74KM=
       tarball: alphanum-sort/download/alphanum-sort-1.0.2.tgz
+  /ansi-colors/4.1.1:
+    dev: true
+    engines:
+      node: '>=6'
+    resolution:
+      integrity: sha1-y7muJWv3UK8eqzRPIpqif+lLo0g=
+      tarball: ansi-colors/download/ansi-colors-4.1.1.tgz
   /ansi-regex/2.1.1:
     dev: true
     engines:
@@ -1130,7 +1147,7 @@ packages:
     resolution:
       integrity: sha1-7dgDYornHATIWuegkG7a00tkiTc=
       tarball: ansi-styles/download/ansi-styles-4.3.0.tgz
-  /antd/4.12.0_react-dom@17.0.1+react@17.0.1:
+  /antd/4.12.1_react-dom@17.0.1+react@17.0.1:
     dependencies:
       '@ant-design/colors': 5.0.1
       '@ant-design/icons': 4.4.0_react-dom@17.0.1+react@17.0.1
@@ -1181,8 +1198,8 @@ packages:
       react: '>=16.9.0'
       react-dom: '>=16.9.0'
     resolution:
-      integrity: sha1-RsaZRyqwj21xwHBEp6M1yF1rW6k=
-      tarball: antd/download/antd-4.12.0.tgz
+      integrity: sha1-az4ENHUrMw6EhY/EznGWJQZQAIc=
+      tarball: antd/download/antd-4.12.1.tgz
   /any-base/1.1.0:
     dev: false
     resolution:
@@ -1483,6 +1500,16 @@ packages:
     resolution:
       integrity: sha1-zUJUFnelQzPPVBpJEIwUMrRMlCQ=
       tarball: chalk/download/chalk-2.4.2.tgz
+  /chalk/3.0.0:
+    dependencies:
+      ansi-styles: 4.3.0
+      supports-color: 7.2.0
+    dev: true
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha1-P3PCv1JlkfV0zEksUeJFY0n4ROQ=
+      tarball: chalk/download/chalk-3.0.0.tgz?cache=0&sync_timestamp=1609762239520&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fchalk%2Fdownload%2Fchalk-3.0.0.tgz
   /chalk/4.1.0:
     dependencies:
       ansi-styles: 4.3.0
@@ -1552,6 +1579,17 @@ packages:
     resolution:
       integrity: sha1-7oRy27Ep5yezHooQpCfe6d/kAIs=
       tarball: clean-stack/download/clean-stack-2.2.0.tgz
+  /clone-deep/4.0.1:
+    dependencies:
+      is-plain-object: 2.0.4
+      kind-of: 6.0.3
+      shallow-clone: 3.0.1
+    dev: true
+    engines:
+      node: '>=6'
+    resolution:
+      integrity: sha1-wZ/Zvbv4WUK0/ZechNz31fB8I4c=
+      tarball: clone-deep/download/clone-deep-4.0.1.tgz
   /clone-response/1.0.2:
     dependencies:
       mimic-response: 1.0.1
@@ -1642,6 +1680,13 @@ packages:
     resolution:
       integrity: sha1-B5LraC37wyWZm7K4T93duhEKxzw=
       tarball: commander/download/commander-6.2.1.tgz
+  /commander/7.0.0:
+    dev: true
+    engines:
+      node: '>= 10'
+    resolution:
+      integrity: sha1-Piu/2LtnJHYJgJiPtbIrfua3GrI=
+      tarball: commander/download/commander-7.0.0.tgz?cache=0&sync_timestamp=1610702240733&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fcommander%2Fdownload%2Fcommander-7.0.0.tgz
   /commondir/1.0.1:
     dev: true
     resolution:
@@ -1719,6 +1764,17 @@ packages:
     resolution:
       integrity: sha1-BA9yaAnFked6F8CjYmykW08Wixo=
       tarball: cosmiconfig/download/cosmiconfig-5.2.1.tgz
+  /cross-spawn/7.0.3:
+    dependencies:
+      path-key: 3.1.1
+      shebang-command: 2.0.0
+      which: 2.0.2
+    dev: true
+    engines:
+      node: '>= 8'
+    resolution:
+      integrity: sha1-9zqFudXUHQRVUcF34ogtSshXKKY=
+      tarball: cross-spawn/download/cross-spawn-7.0.3.tgz
   /css-color-names/0.0.4:
     dev: true
     resolution:
@@ -1734,7 +1790,7 @@ packages:
     resolution:
       integrity: sha1-wZiUD2OnbX42wecQGLABchBUyyI=
       tarball: css-declaration-sorter/download/css-declaration-sorter-4.0.1.tgz
-  /css-loader/5.0.1_webpack@5.19.0:
+  /css-loader/5.0.1_webpack@5.20.1:
     dependencies:
       camelcase: 6.2.0
       cssesc: 3.0.0
@@ -1748,7 +1804,7 @@ packages:
       postcss-value-parser: 4.1.0
       schema-utils: 3.0.0
       semver: 7.3.4
-      webpack: 5.19.0
+      webpack: 5.20.1_webpack-cli@4.5.0
     dev: true
     engines:
       node: '>= 10.13.0'
@@ -1757,7 +1813,7 @@ packages:
     resolution:
       integrity: sha1-nk3g1mNqYmalhb0JALQiyFU50l8=
       tarball: css-loader/download/css-loader-5.0.1.tgz
-  /css-minimizer-webpack-plugin/1.2.0_webpack@5.19.0:
+  /css-minimizer-webpack-plugin/1.2.0_webpack@5.20.1:
     dependencies:
       cacache: 15.0.5
       cssnano: 4.1.10
@@ -1767,7 +1823,7 @@ packages:
       schema-utils: 3.0.0
       serialize-javascript: 5.0.1
       source-map: 0.6.1
-      webpack: 5.19.0
+      webpack: 5.20.1_webpack-cli@4.5.0
       webpack-sources: 1.4.3
     dev: true
     engines:
@@ -1983,11 +2039,6 @@ packages:
       ms: 2.1.2
     engines:
       node: '>=6.0'
-    peerDependencies:
-      supports-color: '*'
-    peerDependenciesMeta:
-      supports-color:
-        optional: true
     resolution:
       integrity: sha1-8NIpxQXgxtjEmsVT0bE9wYP2su4=
       tarball: debug/download/debug-4.3.1.tgz
@@ -2162,7 +2213,7 @@ packages:
     resolution:
       integrity: sha1-JOgh//LtYf1x/uCS8qBjGzwMIqY=
       tarball: electron-to-chromium/download/electron-to-chromium-1.3.650.tgz
-  /electron/11.2.1:
+  /electron/11.2.2:
     dependencies:
       '@electron/get': 1.12.3
       '@types/node': 12.19.15
@@ -2172,8 +2223,8 @@ packages:
     hasBin: true
     requiresBuild: true
     resolution:
-      integrity: sha1-hkHdGmKRGhFE4Mc8NP2fN8zGXCs=
-      tarball: electron/download/electron-11.2.1.tgz
+      integrity: sha1-wuU+tWvSGuHcAbx4Hy9ry+DBgDM=
+      tarball: electron/download/electron-11.2.2.tgz
   /emojis-list/2.1.0:
     dev: true
     engines:
@@ -2222,6 +2273,15 @@ packages:
     resolution:
       integrity: sha1-UlxdhWaA+9UFLeRTrIPjIEmVi1w=
       tarball: enhanced-resolve/download/enhanced-resolve-5.7.0.tgz
+  /enquirer/2.3.6:
+    dependencies:
+      ansi-colors: 4.1.1
+    dev: true
+    engines:
+      node: '>=8.6'
+    resolution:
+      integrity: sha1-Kn/l3WNKHkElqXXsmU/1RW3Dc00=
+      tarball: enquirer/download/enquirer-2.3.6.tgz
   /entities/1.1.2:
     dev: true
     resolution:
@@ -2238,6 +2298,14 @@ packages:
     resolution:
       integrity: sha1-zcpVfcAJFSkX1hZuL+vh8DloXkM=
       tarball: env-paths/download/env-paths-2.2.0.tgz
+  /envinfo/7.7.4:
+    dev: true
+    engines:
+      node: '>=4'
+    hasBin: true
+    resolution:
+      integrity: sha1-xjEc3Tig6GgIwck0P2Z+QmfEoyA=
+      tarball: envinfo/download/envinfo-7.7.4.tgz
   /errno/0.1.8:
     dependencies:
       prr: 1.0.1
@@ -2390,6 +2458,23 @@ packages:
     resolution:
       integrity: sha1-k7h8GPjvzUICpGGuxN/AVWtjk3k=
       tarball: events/download/events-3.2.0.tgz
+  /execa/5.0.0:
+    dependencies:
+      cross-spawn: 7.0.3
+      get-stream: 6.0.0
+      human-signals: 2.1.0
+      is-stream: 2.0.0
+      merge-stream: 2.0.0
+      npm-run-path: 4.0.1
+      onetime: 5.1.2
+      signal-exit: 3.0.3
+      strip-final-newline: 2.0.0
+    dev: true
+    engines:
+      node: '>=10'
+    resolution:
+      integrity: sha1-QCmwAHmYqEH70QMuX03oajweM3Y=
+      tarball: execa/download/execa-5.0.0.tgz?cache=0&sync_timestamp=1606971015496&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fexeca%2Fdownload%2Fexeca-5.0.0.tgz
   /exif-parser/0.1.12:
     dev: false
     resolution:
@@ -2443,6 +2528,11 @@ packages:
     resolution:
       integrity: sha1-h0v2nG9ATCtdmcSBNBOZ/VWJJjM=
       tarball: fast-json-stable-stringify/download/fast-json-stable-stringify-2.1.0.tgz
+  /fastest-levenshtein/1.0.12:
+    dev: true
+    resolution:
+      integrity: sha1-mZD306iMxan/0fF0V0UlFwDUl+I=
+      tarball: fastest-levenshtein/download/fastest-levenshtein-1.0.12.tgz
   /fastparse/1.1.2:
     dev: true
     resolution:
@@ -2461,11 +2551,11 @@ packages:
     resolution:
       integrity: sha1-JcfInLH5B3+IkbvmHY85Dq4lbx4=
       tarball: fd-slicer/download/fd-slicer-1.1.0.tgz
-  /file-loader/6.2.0_webpack@5.19.0:
+  /file-loader/6.2.0_webpack@5.20.1:
     dependencies:
       loader-utils: 2.0.0
       schema-utils: 3.0.0
-      webpack: 5.19.0
+      webpack: 5.20.1_webpack-cli@4.5.0
     dev: true
     engines:
       node: '>= 10.13.0'
@@ -2536,16 +2626,6 @@ packages:
     resolution:
       integrity: sha1-l6/n1s3AvFkoWEt8jXsW6KmqXRk=
       tarball: find-up/download/find-up-4.1.0.tgz
-  /find-up/5.0.0:
-    dependencies:
-      locate-path: 6.0.0
-      path-exists: 4.0.0
-    dev: true
-    engines:
-      node: '>=10'
-    resolution:
-      integrity: sha1-TJKBnstwg1YeT0okCoa+UZj1Nvw=
-      tarball: find-up/download/find-up-5.0.0.tgz
   /flora-colossus/1.0.1:
     dependencies:
       debug: 4.3.1
@@ -2678,6 +2758,13 @@ packages:
     resolution:
       integrity: sha1-SWaheV7lrOZecGxLe+txJX1uItM=
       tarball: get-stream/download/get-stream-5.2.0.tgz
+  /get-stream/6.0.0:
+    dev: true
+    engines:
+      node: '>=10'
+    resolution:
+      integrity: sha1-PgASy2gnMZ2icG5gGhWD6GKaZxg=
+      tarball: get-stream/download/get-stream-6.0.0.tgz
   /gifwrap/0.9.2:
     dependencies:
       image-q: 1.1.1
@@ -2883,26 +2970,23 @@ packages:
     resolution:
       integrity: sha1-ki6W8fO7YIMsJjS3mIQJY4mx8FQ=
       tarball: html-minifier-terser/download/html-minifier-terser-5.1.1.tgz
-  /html-webpack-plugin/4.5.1_webpack@5.19.0:
+  /html-webpack-plugin/5.0.0_webpack@5.20.1:
     dependencies:
       '@types/html-minifier-terser': 5.1.1
-      '@types/tapable': 1.0.6
-      '@types/webpack': 4.41.26
       html-minifier-terser: 5.1.1
-      loader-utils: 1.4.0
+      loader-utils: 2.0.0
       lodash: 4.17.20
       pretty-error: 2.1.2
-      tapable: 1.1.3
-      util.promisify: 1.0.0
-      webpack: 5.19.0
+      tapable: 2.2.0
+      webpack: 5.20.1_webpack-cli@4.5.0
     dev: true
     engines:
-      node: '>=6.9'
+      node: '>=10.13.0'
     peerDependencies:
-      webpack: ^4.0.0 || ^5.0.0
+      webpack: ^5.20.0
     resolution:
-      integrity: sha1-QKrxtct48vI6gzM5mWJcIJKc2mU=
-      tarball: html-webpack-plugin/download/html-webpack-plugin-4.5.1.tgz
+      integrity: sha1-RXqd77M842gTUHi04Dh6J/P+JE0=
+      tarball: html-webpack-plugin/download/html-webpack-plugin-5.0.0.tgz
   /htmlparser2/3.10.1:
     dependencies:
       domelementtype: 1.3.1
@@ -2919,6 +3003,13 @@ packages:
     resolution:
       integrity: sha1-SekcXL82yblLz81xwj1SSex045A=
       tarball: http-cache-semantics/download/http-cache-semantics-4.1.0.tgz
+  /human-signals/2.1.0:
+    dev: true
+    engines:
+      node: '>=10.17.0'
+    resolution:
+      integrity: sha1-3JH8ukLk0G5Kuu0zs+ejwC9RTqA=
+      tarball: human-signals/download/human-signals-2.1.0.tgz
   /iconv-lite/0.6.2:
     dependencies:
       safer-buffer: 2.1.2
@@ -3009,6 +3100,17 @@ packages:
     resolution:
       integrity: sha1-M1238qev/VOqpHHUuAId7ja387E=
       tarball: import-from/download/import-from-2.1.0.tgz
+  /import-local/3.0.2:
+    dependencies:
+      pkg-dir: 4.2.0
+      resolve-cwd: 3.0.0
+    dev: true
+    engines:
+      node: '>=8'
+    hasBin: true
+    resolution:
+      integrity: sha1-qM/QQx0d5KIZlwPQA+PmI2T6bbY=
+      tarball: import-local/download/import-local-3.0.2.tgz
   /imurmurhash/0.1.4:
     dev: true
     engines:
@@ -3055,6 +3157,13 @@ packages:
     resolution:
       integrity: sha1-610Ql7dUL0x56jBg067gfQU4gPQ=
       tarball: insert-css/download/insert-css-2.0.0.tgz
+  /interpret/2.2.0:
+    dev: true
+    engines:
+      node: '>= 0.10'
+    resolution:
+      integrity: sha1-GnigtZZcQKVBbQB61vUK0nxBffk=
+      tarball: interpret/download/interpret-2.2.0.tgz
   /is-absolute-url/2.1.0:
     dev: true
     engines:
@@ -3163,6 +3272,15 @@ packages:
     resolution:
       integrity: sha1-Rz+wXZc3BeP9liBUUBjKjiLvSYI=
       tarball: is-obj/download/is-obj-2.0.0.tgz
+  /is-plain-object/2.0.4:
+    dependencies:
+      isobject: 3.0.1
+    dev: true
+    engines:
+      node: '>=0.10.0'
+    resolution:
+      integrity: sha1-LBY7P6+xtgbZ0Xko8FwqHDjgdnc=
+      tarball: is-plain-object/download/is-plain-object-2.0.4.tgz
   /is-regex/1.1.2:
     dependencies:
       call-bind: 1.0.2
@@ -3178,6 +3296,13 @@ packages:
     resolution:
       integrity: sha1-+xj4fOH+uSUWnJpAfBkxijIG7Yg=
       tarball: is-resolvable/download/is-resolvable-1.1.0.tgz
+  /is-stream/2.0.0:
+    dev: true
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha1-venDJoDW+uBBKdasnZIc54FfeOM=
+      tarball: is-stream/download/is-stream-2.0.0.tgz
   /is-svg/3.0.0:
     dependencies:
       html-comment-regex: 1.1.2
@@ -3219,6 +3344,18 @@ packages:
     resolution:
       integrity: sha1-XW3vPt6/boyoyunDAYOoBLX4voA=
       tarball: isbinaryfile/download/isbinaryfile-3.0.3.tgz
+  /isexe/2.0.0:
+    dev: true
+    resolution:
+      integrity: sha1-6PvzdNxVb/iUehDcsFctYz8s+hA=
+      tarball: isexe/download/isexe-2.0.0.tgz
+  /isobject/3.0.1:
+    dev: true
+    engines:
+      node: '>=0.10.0'
+    resolution:
+      integrity: sha1-TkMekrEalzFjaqH5yNHMvP2reN8=
+      tarball: isobject/download/isobject-3.0.1.tgz
   /jest-worker/26.6.2:
     dependencies:
       '@types/node': 14.14.22
@@ -3347,6 +3484,13 @@ packages:
     resolution:
       integrity: sha1-7MIoSG9pmR5J6UdkhaW+Ho/FxNk=
       tarball: keyv/download/keyv-3.1.0.tgz
+  /kind-of/6.0.3:
+    dev: true
+    engines:
+      node: '>=0.10.0'
+    resolution:
+      integrity: sha1-B8BQNKbDSfoG4k+jWqdttFgM5N0=
+      tarball: kind-of/download/kind-of-6.0.3.tgz
   /klona/2.0.4:
     dev: true
     engines:
@@ -3423,17 +3567,6 @@ packages:
     resolution:
       integrity: sha1-+G5jdNQyBabmxg6RlvF8Apm/s0g=
       tarball: loader-utils/download/loader-utils-0.2.17.tgz
-  /loader-utils/1.4.0:
-    dependencies:
-      big.js: 5.2.2
-      emojis-list: 3.0.0
-      json5: 1.0.1
-    dev: true
-    engines:
-      node: '>=4.0.0'
-    resolution:
-      integrity: sha1-xXm140yzSxp07cbB+za/o3HVphM=
-      tarball: loader-utils/download/loader-utils-1.4.0.tgz
   /loader-utils/2.0.0:
     dependencies:
       big.js: 5.2.2
@@ -3464,15 +3597,6 @@ packages:
     resolution:
       integrity: sha1-Gvujlq/WdqbUJQTQpno6frn2KqA=
       tarball: locate-path/download/locate-path-5.0.0.tgz
-  /locate-path/6.0.0:
-    dependencies:
-      p-locate: 5.0.0
-    dev: true
-    engines:
-      node: '>=10'
-    resolution:
-      integrity: sha1-VTIeswn+u8WcSAHZMackUqaB0oY=
-      tarball: locate-path/download/locate-path-6.0.0.tgz
   /lodash.camelcase/4.3.0:
     dev: true
     resolution:
@@ -3633,6 +3757,13 @@ packages:
     resolution:
       integrity: sha1-K0r5NEAXeYBu6YAmu0Lowa4YdrE=
       tarball: mime/download/mime-2.5.0.tgz
+  /mimic-fn/2.1.0:
+    dev: true
+    engines:
+      node: '>=6'
+    resolution:
+      integrity: sha1-ftLCzMyvhNP/y3pptXcR/CCDQBs=
+      tarball: mimic-fn/download/mimic-fn-2.1.0.tgz
   /mimic-response/1.0.1:
     engines:
       node: '>=4'
@@ -3659,11 +3790,11 @@ packages:
     resolution:
       integrity: sha1-ByFxVhv9ySLaCKYMIZekl8wtHV4=
       tarball: mini-create-react-context/download/mini-create-react-context-0.4.1.tgz
-  /mini-css-extract-plugin/1.3.5_webpack@5.19.0:
+  /mini-css-extract-plugin/1.3.5_webpack@5.20.1:
     dependencies:
       loader-utils: 2.0.0
       schema-utils: 3.0.0
-      webpack: 5.19.0
+      webpack: 5.20.1_webpack-cli@4.5.0
       webpack-sources: 1.4.3
     dev: true
     engines:
@@ -3848,6 +3979,15 @@ packages:
     resolution:
       integrity: sha1-JWzEe9DiGMJZxOlVC/QTvCGSr/k=
       tarball: npm-conf/download/npm-conf-1.1.3.tgz
+  /npm-run-path/4.0.1:
+    dependencies:
+      path-key: 3.1.1
+    dev: true
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha1-t+zR5e1T2o43pV4cImnguX7XSOo=
+      tarball: npm-run-path/download/npm-run-path-4.0.1.tgz
   /nth-check/1.0.2:
     dependencies:
       boolbase: 1.0.0
@@ -3918,6 +4058,15 @@ packages:
     resolution:
       integrity: sha1-WDsap3WWHUsROsF9nFC6753Xa9E=
       tarball: once/download/once-1.4.0.tgz
+  /onetime/5.1.2:
+    dependencies:
+      mimic-fn: 2.1.0
+    dev: true
+    engines:
+      node: '>=6'
+    resolution:
+      integrity: sha1-0Oluu1awdHbfHdnEgG5SN5hcpF4=
+      tarball: onetime/download/onetime-5.1.2.tgz
   /opener/1.5.2:
     dev: true
     hasBin: true
@@ -3975,15 +4124,6 @@ packages:
     resolution:
       integrity: sha1-o0KLtwiLOmApL2aRkni3wpetTwc=
       tarball: p-locate/download/p-locate-4.1.0.tgz
-  /p-locate/5.0.0:
-    dependencies:
-      p-limit: 3.1.0
-    dev: true
-    engines:
-      node: '>=10'
-    resolution:
-      integrity: sha1-g8gxXGeFAF470CGDlBHJ4RDm2DQ=
-      tarball: p-locate/download/p-locate-5.0.0.tgz
   /p-map/4.0.0:
     dependencies:
       aggregate-error: 3.1.0
@@ -4100,6 +4240,13 @@ packages:
     resolution:
       integrity: sha1-F0uSaHNVNP+8es5r9TpanhtcX18=
       tarball: path-is-absolute/download/path-is-absolute-1.0.1.tgz
+  /path-key/3.1.1:
+    dev: true
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha1-WB9q3mWMu6ZaDTOA3ndTKVBU83U=
+      tarball: path-key/download/path-key-3.1.1.tgz
   /path-parse/1.0.6:
     dev: true
     resolution:
@@ -4176,15 +4323,6 @@ packages:
     resolution:
       integrity: sha1-8JkTPfft5CLoHR2ESCcO6z5CYfM=
       tarball: pkg-dir/download/pkg-dir-4.2.0.tgz
-  /pkg-dir/5.0.0:
-    dependencies:
-      find-up: 5.0.0
-    dev: true
-    engines:
-      node: '>=10'
-    resolution:
-      integrity: sha1-oC1q6+a6EzqSj3Suwguv3+a452A=
-      tarball: pkg-dir/download/pkg-dir-5.0.0.tgz
   /plist/3.0.1:
     dependencies:
       base64-js: 1.5.1
@@ -4679,6 +4817,17 @@ packages:
     resolution:
       integrity: sha1-czIwDoQBYb2j5podHZGn1LwW8YI=
       tarball: process/download/process-0.11.10.tgz
+  /progress-bar-webpack-plugin/2.1.0_webpack@5.20.1:
+    dependencies:
+      chalk: 3.0.0
+      progress: 2.0.3
+      webpack: 5.20.1_webpack-cli@4.5.0
+    dev: true
+    peerDependencies:
+      webpack: ^1.3.0 || ^2 || ^3 || ^4 || ^5
+    resolution:
+      integrity: sha1-9/jIxGH0C4eo/xaEQ/SUKJsH7mU=
+      tarball: progress-bar-webpack-plugin/download/progress-bar-webpack-plugin-2.1.0.tgz
   /progress/2.0.3:
     engines:
       node: '>=0.4.0'
@@ -4827,7 +4976,7 @@ packages:
       react-dom: '>=16.9.0'
     resolution:
       integrity: sha1-X9ixjOIFdf8is24MXdvjY8E9tVU=
-      tarball: rc-drawer/download/rc-drawer-4.2.2.tgz
+      tarball: rc-drawer/download/rc-drawer-4.2.2.tgz?cache=0&sync_timestamp=1612362215971&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Frc-drawer%2Fdownload%2Frc-drawer-4.2.2.tgz
   /rc-dropdown/3.2.0_react-dom@17.0.1+react@17.0.1:
     dependencies:
       '@babel/runtime': 7.12.5
@@ -5397,6 +5546,15 @@ packages:
     resolution:
       integrity: sha1-m6dMAZsV02UnjS6Ru4xI17TULJ4=
       tarball: readdirp/download/readdirp-3.5.0.tgz?cache=0&sync_timestamp=1602588019864&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Freaddirp%2Fdownload%2Freaddirp-3.5.0.tgz
+  /rechoir/0.7.0:
+    dependencies:
+      resolve: 1.19.0
+    dev: true
+    engines:
+      node: '>= 0.10'
+    resolution:
+      integrity: sha1-MmUP1SwhqyUqpdZbGTEEQcfgOso=
+      tarball: rechoir/download/rechoir-0.7.0.tgz
   /regenerator-runtime/0.13.7:
     dev: false
     resolution:
@@ -5430,6 +5588,15 @@ packages:
     resolution:
       integrity: sha1-DpAg3T0hAkRY1OvSfiPkAmmBBGQ=
       tarball: resize-observer-polyfill/download/resize-observer-polyfill-1.5.1.tgz
+  /resolve-cwd/3.0.0:
+    dependencies:
+      resolve-from: 5.0.0
+    dev: true
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha1-DwB18bslRHZs9zumpuKt/ryxPy0=
+      tarball: resolve-cwd/download/resolve-cwd-3.0.0.tgz
   /resolve-from/3.0.0:
     dev: true
     engines:
@@ -5437,13 +5604,20 @@ packages:
     resolution:
       integrity: sha1-six699nWiBvItuZTM17rywoYh0g=
       tarball: resolve-from/download/resolve-from-3.0.0.tgz
+  /resolve-from/5.0.0:
+    dev: true
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha1-w1IlhD3493bfIcV1V7wIfp39/Gk=
+      tarball: resolve-from/download/resolve-from-5.0.0.tgz
   /resolve-pathname/3.0.0:
     dev: false
     resolution:
       integrity: sha1-mdAiJNPPJjaJvsuzk7xWAxMCXc0=
       tarball: resolve-pathname/download/resolve-pathname-3.0.0.tgz
   /resolve-url/0.2.1:
-    deprecated: 'https://github.com/lydell/resolve-url#deprecated'
+    deprecated: https://github.com/lydell/resolve-url#deprecated
     dev: true
     resolution:
       integrity: sha1-LGN/53yJOv0qZj/iGqkIAGjiBSo=
@@ -5455,7 +5629,7 @@ packages:
     dev: true
     resolution:
       integrity: sha1-GvW/YwQJc0oGfK4pMYqsf6KaJnw=
-      tarball: resolve/download/resolve-1.19.0.tgz
+      tarball: resolve/download/resolve-1.19.0.tgz?cache=0&sync_timestamp=1609762237579&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fresolve%2Fdownload%2Fresolve-1.19.0.tgz
   /responselike/1.0.2:
     dependencies:
       lowercase-keys: 1.0.1
@@ -5615,11 +5789,41 @@ packages:
     resolution:
       integrity: sha1-SysbJ+uAip+NzEgaWOXlb1mfP2E=
       tarball: set-immediate-shim/download/set-immediate-shim-1.0.1.tgz
+  /shallow-clone/3.0.1:
+    dependencies:
+      kind-of: 6.0.3
+    dev: true
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha1-jymBrZJTH1UDWwH7IwdppA4C76M=
+      tarball: shallow-clone/download/shallow-clone-3.0.1.tgz
   /shallowequal/1.1.0:
     dev: false
     resolution:
       integrity: sha1-GI1SHelbkIdAT9TctosT3wrk5/g=
       tarball: shallowequal/download/shallowequal-1.1.0.tgz
+  /shebang-command/2.0.0:
+    dependencies:
+      shebang-regex: 3.0.0
+    dev: true
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha1-zNCvT4g1+9wmW4JGGq8MNmY/NOo=
+      tarball: shebang-command/download/shebang-command-2.0.0.tgz
+  /shebang-regex/3.0.0:
+    dev: true
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha1-rhbxZE2HPsrYQ7AwexQzYtTEIXI=
+      tarball: shebang-regex/download/shebang-regex-3.0.0.tgz
+  /signal-exit/3.0.3:
+    dev: true
+    resolution:
+      integrity: sha1-oUEMLt2PB3sItOJTyOrPyvBXRhw=
+      tarball: signal-exit/download/signal-exit-3.0.3.tgz
   /simple-swizzle/0.2.2:
     dependencies:
       is-arrayish: 0.3.2
@@ -5781,6 +5985,13 @@ packages:
     resolution:
       integrity: sha1-IzTBjpx1n3vdVv3vfprj1YjmjtM=
       tarball: strip-bom/download/strip-bom-3.0.0.tgz
+  /strip-final-newline/2.0.0:
+    dev: true
+    engines:
+      node: '>=6'
+    resolution:
+      integrity: sha1-ibhS+y/L6Tb29LMYevsKEsGrWK0=
+      tarball: strip-final-newline/download/strip-final-newline-2.0.0.tgz
   /strip-outer/1.0.1:
     dependencies:
       escape-string-regexp: 1.0.5
@@ -5800,13 +6011,13 @@ packages:
     resolution:
       integrity: sha1-Zxj8r00eB9ihMYaQiB6NlnJqcdU=
       tarball: stylehacks/download/stylehacks-4.0.3.tgz
-  /stylus-loader/5.0.0_stylus@0.54.8+webpack@5.19.0:
+  /stylus-loader/5.0.0_stylus@0.54.8+webpack@5.20.1:
     dependencies:
       fast-glob: 3.2.5
       klona: 2.0.4
       normalize-path: 3.0.0
       stylus: 0.54.8
-      webpack: 5.19.0
+      webpack: 5.20.1_webpack-cli@4.5.0
     dev: true
     engines:
       node: '>= 10.13.0'
@@ -5916,7 +6127,7 @@ packages:
     resolution:
       integrity: sha1-0XJOm8wEuXexjVxXOzM6IgcimoM=
       tarball: tar/download/tar-6.1.0.tgz
-  /terser-webpack-plugin/5.1.1_webpack@5.19.0:
+  /terser-webpack-plugin/5.1.1_webpack@5.20.1:
     dependencies:
       jest-worker: 26.6.2
       p-limit: 3.1.0
@@ -5924,7 +6135,7 @@ packages:
       serialize-javascript: 5.0.1
       source-map: 0.6.1
       terser: 5.5.1
-      webpack: 5.19.0
+      webpack: 5.20.1_webpack-cli@4.5.0
     dev: true
     engines:
       node: '>= 10.13.0'
@@ -6024,7 +6235,7 @@ packages:
     resolution:
       integrity: sha1-QFkjkJWS1W94pYGENLC3hInKXys=
       tarball: truncate-utf8-bytes/download/truncate-utf8-bytes-1.0.2.tgz
-  /ts-loader/8.0.14_typescript@4.1.3+webpack@5.19.0:
+  /ts-loader/8.0.14_typescript@4.1.3+webpack@5.20.1:
     dependencies:
       chalk: 4.1.0
       enhanced-resolve: 4.5.0
@@ -6032,7 +6243,7 @@ packages:
       micromatch: 4.0.2
       semver: 7.3.4
       typescript: 4.1.3
-      webpack: 5.19.0
+      webpack: 5.20.1_webpack-cli@4.5.0
     dev: true
     engines:
       node: '>=10.0.0'
@@ -6166,18 +6377,18 @@ packages:
       integrity: sha1-mxpSWVIlhZ5V9mnZKPiMbFfyp34=
       tarball: uri-js/download/uri-js-4.4.1.tgz
   /urix/0.1.0:
-    deprecated: 'Please see https://github.com/lydell/urix#deprecated'
+    deprecated: Please see https://github.com/lydell/urix#deprecated
     dev: true
     resolution:
       integrity: sha1-2pN/emLiH+wf0Y1Js1wpNQZ6bHI=
       tarball: urix/download/urix-0.1.0.tgz
-  /url-loader/4.1.1_file-loader@6.2.0+webpack@5.19.0:
+  /url-loader/4.1.1_file-loader@6.2.0+webpack@5.20.1:
     dependencies:
-      file-loader: 6.2.0_webpack@5.19.0
+      file-loader: 6.2.0_webpack@5.20.1
       loader-utils: 2.0.0
       mime-types: 2.1.28
       schema-utils: 3.0.0
-      webpack: 5.19.0
+      webpack: 5.20.1_webpack-cli@4.5.0
     dev: true
     engines:
       node: '>= 10.13.0'
@@ -6214,14 +6425,6 @@ packages:
     resolution:
       integrity: sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=
       tarball: util-deprecate/download/util-deprecate-1.0.2.tgz
-  /util.promisify/1.0.0:
-    dependencies:
-      define-properties: 1.1.3
-      object.getownpropertydescriptors: 2.1.1
-    dev: true
-    resolution:
-      integrity: sha1-RA9xZaRZyaFtwUXrjnLzVocJcDA=
-      tarball: util.promisify/download/util.promisify-1.0.0.tgz?cache=0&sync_timestamp=1610193511041&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Futil.promisify%2Fdownload%2Futil.promisify-1.0.0.tgz
   /util.promisify/1.0.1:
     dependencies:
       define-properties: 1.1.3
@@ -6237,6 +6440,11 @@ packages:
     resolution:
       integrity: sha1-ihagXURWV6Oupe7MWxKk+lN5dyw=
       tarball: utila/download/utila-0.4.0.tgz
+  /v8-compile-cache/2.2.0:
+    dev: true
+    resolution:
+      integrity: sha1-lHHvo++RKNL3xqfKOcTda1BVsTI=
+      tarball: v8-compile-cache/download/v8-compile-cache-2.2.0.tgz
   /validate-npm-package-license/3.0.4:
     dependencies:
       spdx-correct: 3.1.1
@@ -6290,6 +6498,59 @@ packages:
     resolution:
       integrity: sha1-dAExBufisHy9ZPOlroR/foFIAsc=
       tarball: webpack-bundle-analyzer/download/webpack-bundle-analyzer-4.4.0.tgz
+  /webpack-cli/4.5.0_ab976b710e47a1cb2562ea01d184f973:
+    dependencies:
+      '@discoveryjs/json-ext': 0.5.2
+      '@webpack-cli/configtest': 1.0.1_webpack-cli@4.5.0+webpack@5.20.1
+      '@webpack-cli/info': 1.2.2_webpack-cli@4.5.0
+      '@webpack-cli/serve': 1.3.0_webpack-cli@4.5.0
+      colorette: 1.2.1
+      commander: 7.0.0
+      enquirer: 2.3.6
+      execa: 5.0.0
+      fastest-levenshtein: 1.0.12
+      import-local: 3.0.2
+      interpret: 2.2.0
+      rechoir: 0.7.0
+      v8-compile-cache: 2.2.0
+      webpack: 5.20.1_webpack-cli@4.5.0
+      webpack-bundle-analyzer: 4.4.0
+      webpack-merge: 5.7.3
+    dev: true
+    engines:
+      node: '>=10.13.0'
+    hasBin: true
+    peerDependencies:
+      '@webpack-cli/generators': '*'
+      '@webpack-cli/init': '*'
+      '@webpack-cli/migrate': '*'
+      webpack: 4.x.x || 5.x.x
+      webpack-bundle-analyzer: '*'
+      webpack-dev-server: '*'
+    peerDependenciesMeta:
+      '@webpack-cli/generators':
+        optional: true
+      '@webpack-cli/init':
+        optional: true
+      '@webpack-cli/migrate':
+        optional: true
+      webpack-bundle-analyzer:
+        optional: true
+      webpack-dev-server:
+        optional: true
+    resolution:
+      integrity: sha1-tSE7hK324fXeY5EzTJ+lOkiFBGY=
+      tarball: webpack-cli/download/webpack-cli-4.5.0.tgz
+  /webpack-merge/5.7.3:
+    dependencies:
+      clone-deep: 4.0.1
+      wildcard: 2.0.0
+    dev: true
+    engines:
+      node: '>=10.0.0'
+    resolution:
+      integrity: sha1-KgdU4Yd6Jai7qz0kdcpwoFJwghM=
+      tarball: webpack-merge/download/webpack-merge-5.7.3.tgz
   /webpack-sources/1.4.3:
     dependencies:
       source-list-map: 2.0.1
@@ -6308,7 +6569,7 @@ packages:
     resolution:
       integrity: sha1-BYkm8549RDGTtsMVRyKYBv/QK6w=
       tarball: webpack-sources/download/webpack-sources-2.2.0.tgz
-  /webpack/5.19.0:
+  /webpack/5.20.1_webpack-cli@4.5.0:
     dependencies:
       '@types/eslint-scope': 3.7.0
       '@types/estree': 0.0.46
@@ -6328,11 +6589,11 @@ packages:
       loader-runner: 4.2.0
       mime-types: 2.1.28
       neo-async: 2.6.2
-      pkg-dir: 5.0.0
       schema-utils: 3.0.0
       tapable: 2.2.0
-      terser-webpack-plugin: 5.1.1_webpack@5.19.0
+      terser-webpack-plugin: 5.1.1_webpack@5.20.1
       watchpack: 2.1.0
+      webpack-cli: 4.5.0_ab976b710e47a1cb2562ea01d184f973
       webpack-sources: 2.2.0
     dev: true
     engines:
@@ -6344,8 +6605,23 @@ packages:
       webpack-cli:
         optional: true
     resolution:
-      integrity: sha1-Gl/uhN1jVX5oM2sHdKxKHIGqLHM=
-      tarball: webpack/download/webpack-5.19.0.tgz
+      integrity: sha1-3+y8+2YFRBE6kjR5yMoQRP2/FTM=
+      tarball: webpack/download/webpack-5.20.1.tgz
+  /which/2.0.2:
+    dependencies:
+      isexe: 2.0.0
+    dev: true
+    engines:
+      node: '>= 8'
+    hasBin: true
+    resolution:
+      integrity: sha1-fGqN0KY2oDJ+ELWckobu6T8/UbE=
+      tarball: which/download/which-2.0.2.tgz
+  /wildcard/2.0.0:
+    dev: true
+    resolution:
+      integrity: sha1-p30g5SAMb6qsl55LOq3Hs91/j+w=
+      tarball: wildcard/download/wildcard-2.0.0.tgz
   /wrappy/1.0.2:
     resolution:
       integrity: sha1-tSQ9jz7BqjXxNkYFvA0QNuMKtp8=
