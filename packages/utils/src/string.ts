@@ -7,9 +7,7 @@ export type ClassInput = string | undefined | ClassObject;
 export function stringifyClass(...opt: ClassInput[]) {
   /** 解析 class 对象 */
   function parseClassObject(classObject: ClassObject) {
-    return Object.keys(classObject).filter(
-      (key) => classObject[key],
-    );
+    return Object.keys(classObject).filter((key) => classObject[key]);
   }
 
   const className: string[] = [];

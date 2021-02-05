@@ -1,10 +1,5 @@
 import { checkCircularStructure } from './clone';
-import {
-  isFunc,
-  isArray,
-  isBaseType,
-  isObject,
-} from './assert';
+import { isFunc, isArray, isBaseType, isObject } from './assert';
 import { AnyObject } from './types';
 
 /**
@@ -12,10 +7,7 @@ import { AnyObject } from './types';
  * @param obj 检查对象
  * @param key 检查的属性名称
  */
-export function hasOwn(
-  obj: AnyObject,
-  key: string,
-): boolean {
+export function hasOwn(obj: AnyObject, key: string): boolean {
   return Object.prototype.hasOwnProperty.call(obj, key);
 }
 
@@ -32,19 +24,13 @@ export function isEmpty(obj: AnyObject) {
  * @param from 被比较值
  * @param to 比较值
  */
-export function isEqual(
-  from: any,
-  to: any,
-  deepCheck = false,
-): boolean {
+export function isEqual(from: any, to: any, deepCheck = false): boolean {
   if (isBaseType(from)) {
     return from === to;
   }
 
   if (deepCheck && checkCircularStructure(from)) {
-    throw new Error(
-      '(isEqual) Can not have circular structure.',
-    );
+    throw new Error('(isEqual) Can not have circular structure.');
   }
 
   if (isFunc(from.isEqual)) {
@@ -56,27 +42,19 @@ export function isEqual(
       return false;
     } else {
       return from.every((item, i) =>
-        isBaseType(item)
-          ? item === to[i]
-          : isEqual(item, to[i]),
+        isBaseType(item) ? item === to[i] : isEqual(item, to[i]),
       );
     }
   } else {
     if (
       !isObject(to) ||
-      !Object.keys(from).every((key) =>
-        to.hasOwnProperty(key),
-      ) ||
-      !Object.keys(to).every((key) =>
-        from.hasOwnProperty(key),
-      )
+      !Object.keys(from).every((key) => to.hasOwnProperty(key)) ||
+      !Object.keys(to).every((key) => from.hasOwnProperty(key))
     ) {
       return false;
     } else {
       return Object.entries(from).every(([key, value]) =>
-        isBaseType(value)
-          ? value === to[key]
-          : isEqual(value, to[key]),
+        isBaseType(value) ? value === to[key] : isEqual(value, to[key]),
       );
     }
   }
@@ -87,10 +65,7 @@ export function isEqual(
  * @param from 待添加属性的对象
  * @param properties 添加的属性
  */
-export function def(
-  from: AnyObject,
-  properties: AnyObject,
-) {
+export function def(from: AnyObject, properties: AnyObject) {
   Object.entries(properties).forEach(([key, value]) =>
     Object.defineProperty(from, key, {
       configurable: true,
@@ -102,9 +77,7 @@ export function def(
 }
 
 /** 编译 JSON */
-export function parserBody<T = AnyObject>(
-  body: T | string,
-): T {
+export function parserBody<T = AnyObject>(body: T | string): T {
   let data = body;
 
   if (!body) {

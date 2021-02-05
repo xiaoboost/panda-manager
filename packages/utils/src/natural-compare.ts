@@ -1,8 +1,5 @@
 const defaultAlphabetIndexMap: number[] = [];
-const alphabetIndexMapCache: Record<
-  string,
-  number[] | undefined
-> = {};
+const alphabetIndexMapCache: Record<string, number[] | undefined> = {};
 
 function isNumberCode(code: number) {
   return code >= 48 /* '0' */ && code <= 57 /* '9' */;
@@ -15,11 +12,9 @@ function buildAlphabetIndexMap(alphabet: string) {
   }
 
   const indexMap = [];
-  const maxCharCode = alphabet
-    .split('')
-    .reduce((maxCode, char) => {
-      return Math.max(maxCode, char.charCodeAt(0));
-    }, 0);
+  const maxCharCode = alphabet.split('').reduce((maxCode, char) => {
+    return Math.max(maxCode, char.charCodeAt(0));
+  }, 0);
 
   for (let i = 0; i <= maxCharCode; i++) {
     indexMap.push(-1);
@@ -47,11 +42,7 @@ interface CompareOptions {
   alphabet?: string;
 }
 
-export function naturalCompare(
-  a: string,
-  b: string,
-  opts?: CompareOptions,
-) {
+export function naturalCompare(a: string, b: string, opts?: CompareOptions) {
   const lengthA = a.length;
   const lengthB = b.length;
 
@@ -67,9 +58,7 @@ export function naturalCompare(
     }
 
     if (opts.alphabet) {
-      alphabetIndexMap = buildAlphabetIndexMap(
-        opts.alphabet,
-      );
+      alphabetIndexMap = buildAlphabetIndexMap(opts.alphabet);
     }
   }
 
@@ -85,53 +74,34 @@ export function naturalCompare(
       let numStartA = indexA;
       let numStartB = indexB;
 
-      while (
-        charCodeA === 48 /* '0' */ &&
-        ++numStartA < lengthA
-      ) {
+      while (charCodeA === 48 /* '0' */ && ++numStartA < lengthA) {
         charCodeA = a.charCodeAt(numStartA);
       }
-      while (
-        charCodeB === 48 /* '0' */ &&
-        ++numStartB < lengthB
-      ) {
+      while (charCodeB === 48 /* '0' */ && ++numStartB < lengthB) {
         charCodeB = b.charCodeAt(numStartB);
       }
 
-      if (
-        numStartA !== numStartB &&
-        firstDifferenceInLeadingZeros === 0
-      ) {
-        firstDifferenceInLeadingZeros =
-          numStartA - numStartB;
+      if (numStartA !== numStartB && firstDifferenceInLeadingZeros === 0) {
+        firstDifferenceInLeadingZeros = numStartA - numStartB;
       }
 
       let numEndA = numStartA;
       let numEndB = numStartB;
 
-      while (
-        numEndA < lengthA &&
-        isNumberCode(a.charCodeAt(numEndA))
-      ) {
+      while (numEndA < lengthA && isNumberCode(a.charCodeAt(numEndA))) {
         ++numEndA;
       }
-      while (
-        numEndB < lengthB &&
-        isNumberCode(b.charCodeAt(numEndB))
-      ) {
+      while (numEndB < lengthB && isNumberCode(b.charCodeAt(numEndB))) {
         ++numEndB;
       }
 
-      let difference =
-        numEndA - numStartA - numEndB + numStartB; // numA length - numB length
+      let difference = numEndA - numStartA - numEndB + numStartB; // numA length - numB length
       if (difference !== 0) {
         return difference;
       }
 
       while (numStartA < numEndA) {
-        difference =
-          a.charCodeAt(numStartA++) -
-          b.charCodeAt(numStartB++);
+        difference = a.charCodeAt(numStartA++) - b.charCodeAt(numStartB++);
         if (difference !== 0) {
           return difference;
         }
@@ -149,10 +119,7 @@ export function naturalCompare(
         alphabetIndexMap[charCodeA] !== -1 &&
         alphabetIndexMap[charCodeB] !== -1
       ) {
-        return (
-          alphabetIndexMap[charCodeA] -
-          alphabetIndexMap[charCodeB]
-        );
+        return alphabetIndexMap[charCodeA] - alphabetIndexMap[charCodeB];
       }
 
       return charCodeA - charCodeB;

@@ -3,13 +3,7 @@ import { AnyFunction, AnyObject } from './types';
 const _toString = Object.prototype.toString;
 
 /** 基础类型 */
-export type BaseType =
-  | number
-  | string
-  | boolean
-  | symbol
-  | null
-  | undefined;
+export type BaseType = number | string | boolean | symbol | null | undefined;
 
 /** 非空基础类型 */
 export type Primitive = number | string | boolean | symbol;
@@ -107,9 +101,7 @@ export function isStrictObject(x: unknown): x is AnyObject {
  */
 export function isObject(x: unknown): x is AnyObject {
   const type = typeof x;
-  return (
-    (isDef(x) && type === 'object') || type === 'function'
-  );
+  return (isDef(x) && type === 'object') || type === 'function';
 }
 
 /**

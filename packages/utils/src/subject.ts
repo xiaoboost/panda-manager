@@ -2,16 +2,12 @@ import { isFunc } from './assert';
 import { AnyObject } from './types';
 
 type EventHandler<T = any> = (...payloads: T[]) => any;
-type ReadonlyObject<T> = T extends AnyObject
-  ? Readonly<T>
-  : T;
+type ReadonlyObject<T> = T extends AnyObject ? Readonly<T> : T;
 
-type GetWatcherType<W> = W extends Watcher<infer R>
-  ? R
-  : never;
-type GetWatcherListType<
-  W extends readonly Watcher<any>[]
-> = { [K in keyof W]: GetWatcherType<W[K]> };
+type GetWatcherType<W> = W extends Watcher<infer R> ? R : never;
+type GetWatcherListType<W extends readonly Watcher<any>[]> = {
+  [K in keyof W]: GetWatcherType<W[K]>;
+};
 type CreateWatcherList<V extends readonly any[]> = {
   [K in keyof V]: Watcher<V[K]>;
 };
@@ -46,10 +42,7 @@ export class ChannelSubject {
   /** 取消此类中的某个回调观测器 */
   unObserve(name: string, ev: EventHandler): void;
 
-  unObserve(
-    name?: string | EventHandler,
-    ev?: EventHandler,
-  ) {
+  unObserve(name?: string | EventHandler, ev?: EventHandler) {
     // 没有参数输入
     if (!name) {
       this._events = {};
@@ -62,9 +55,7 @@ export class ChannelSubject {
         }
       } else if (typeof name === 'function') {
         Object.keys(this._events).forEach((key) => {
-          this._events[key] = this._events[key].filter(
-            (cb) => cb !== ev,
-          );
+          this._events[key] = this._events[key].filter((cb) => cb !== ev);
         });
       }
     }
@@ -73,9 +64,7 @@ export class ChannelSubject {
       const key = name as string;
 
       if (this._events[key]) {
-        this._events[key] = this._events[key].filter(
-          (cb) => cb !== ev,
-        );
+        this._events[key] = this._events[key].filter((cb) => cb !== ev);
       }
     }
   }
@@ -134,27 +123,19 @@ export class Watcher<T> extends Subject<T> {
     watchers: Watchers,
     cb: (...args: Params) => Values,
   ): CreateWatcherList<Values> {
-    const initVal = cb(
-      ...(watchers.map(({ _data }) => _data) as any),
-    );
-    const newWatchers = initVal.map(
-      (init) => new Watcher(init),
-    );
+    const initVal = cb(...(watchers.map(({ _data }) => _data) as any));
+    const newWatchers = initVal.map((init) => new Watcher(init));
 
     // 更新所有观测器的回调
     const observeCb = () => {
-      const current: Params = watchers.map(
-        ({ _data }) => _data,
-      ) as any;
+      const current: Params = watchers.map(({ _data }) => _data) as any;
       cb(...current).forEach((val, i) => {
         newWatchers[i].data = val;
       });
     };
 
     // 绑定回调
-    watchers.forEach((watcher) =>
-      watcher.observe(observeCb),
-    );
+    watchers.forEach((watcher) => watcher.observe(observeCb));
 
     return newWatchers as any;
   }

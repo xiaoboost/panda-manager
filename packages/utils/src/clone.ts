@@ -16,13 +16,11 @@ export function checkCircularStructure(
   }
 
   // 队列添加当前节点
-  parents.push(data)
+  parents.push(data);
 
   // 检查每个子节点
   return Object.values(data).some((value) =>
-    isBaseType(value)
-      ? false
-      : checkCircularStructure(value, parents.slice()),
+    isBaseType(value) ? false : checkCircularStructure(value, parents.slice()),
   );
 }
 
@@ -60,17 +58,11 @@ export function clone<T>(data: T, check = true): T {
   else {
     const prototype = Object.getPrototypeOf(data);
 
-    if (
-      prototype &&
-      prototype.constructor &&
-      prototype.constructor.from
-    ) {
+    if (prototype && prototype.constructor && prototype.constructor.from) {
       return prototype.constructor.from(data);
     } else {
       return Object.keys(data).reduce(
-        (obj, key) => (
-          (obj[key] = clone(data[key], false)), obj
-        ),
+        (obj, key) => ((obj[key] = clone(data[key], false)), obj),
         {},
       ) as any;
     }
@@ -84,10 +76,10 @@ export function clone<T>(data: T, check = true): T {
  * @param {T} from 待复制的对象
  * @param {U[]} keys 属性集合
  */
-export function copyProperties<
-  T extends AnyObject,
-  U extends keyof T
->(from: T, keys: U[]): Pick<T, U> {
+export function copyProperties<T extends AnyObject, U extends keyof T>(
+  from: T,
+  keys: U[],
+): Pick<T, U> {
   const data: T = {} as any;
 
   for (let i = 0; i < keys.length; i++) {

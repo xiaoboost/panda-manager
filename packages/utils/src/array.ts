@@ -16,9 +16,7 @@ export function deleteVal<T>(
   predicate: T | ((value: T, index: number) => boolean),
   whole = true,
 ) {
-  const fn = isFunc(predicate)
-    ? predicate
-    : (item: T) => item === predicate;
+  const fn = isFunc(predicate) ? predicate : (item: T) => item === predicate;
   const newArr = arr.slice();
 
   let index = 0;
@@ -50,9 +48,7 @@ export function replace<T>(
   predicate: T | ((value: T, index: number) => boolean),
   whole = false,
 ) {
-  const fn = isFunc(predicate)
-    ? predicate
-    : (item: T) => item === predicate;
+  const fn = isFunc(predicate) ? predicate : (item: T) => item === predicate;
   const newArr = arr.slice();
 
   for (let i = 0; i < newArr.length; i++) {
@@ -95,15 +91,11 @@ export function unique<T>(
         value,
         key: label(value, index),
       }))
-      .filter(({ key }) =>
-        labelMap[key] ? false : (labelMap[key] = true),
-      )
+      .filter(({ key }) => (labelMap[key] ? false : (labelMap[key] = true)))
       .map(({ value }) => value);
   } else {
     return arr.filter((key) =>
-      labelMap[key as any]
-        ? false
-        : (labelMap[key as any] = true),
+      labelMap[key as any] ? false : (labelMap[key as any] = true),
     );
   }
 }
@@ -144,9 +136,7 @@ export function toMap<T extends AnyObject, U extends Index>(
 }
 
 /** 生成`hash`布尔查询表 */
-export function toBoolMap<T extends Index>(
-  arr: T[],
-): Record<T, boolean>;
+export function toBoolMap<T extends Index>(arr: T[]): Record<T, boolean>;
 export function toBoolMap<T, U extends Index>(
   arr: T[],
   cb: (val: T, index: number) => U,
@@ -167,10 +157,7 @@ export function toBoolMap<T, U extends Index>(
 }
 
 /** 在`rest`数组中，且不在`arr`数组中的 */
-export function exclude<T extends Index>(
-  arr: T[],
-  rest: T[],
-) {
+export function exclude<T extends Index>(arr: T[], rest: T[]) {
   const map = toBoolMap(arr);
   return rest.filter((key) => !map[key]);
 }
