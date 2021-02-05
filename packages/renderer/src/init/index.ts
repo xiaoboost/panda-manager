@@ -5,7 +5,4 @@ import { createElement } from 'react';
 
 import { App } from './app';
 
-render(
-    createElement(App),
-    document.getElementById('root')!,
-);
+render(createElement(App), document.getElementById('root')!);

@@ -9,20 +9,19 @@ import { stringifyClass } from '@panda/utils';
 import { useIsFocus } from '@panda/use';
 
 export function Layout({ children }: PropsWithChildren<{}>) {
-    const isFocus = useIsFocus();
+  const isFocus = useIsFocus();
 
-    return (
-        <div
-            className={stringifyClass(styles.app, {
-                [styles.appUnfocus]: !isFocus,
-            })}>
-            <Header />
-            <article className={styles.appBody}>
-                <Sidebar />
-                <div className={styles.appContentWrapper}>
-                    {children}
-                </div>
-            </article>
-        </div>
-    );
+  return (
+    <div
+      className={stringifyClass(styles.app, {
+        [styles.appUnfocus]: !isFocus,
+      })}
+    >
+      <Header />
+      <article className={styles.appBody}>
+        <Sidebar />
+        <div className={styles.appContentWrapper}>{children}</div>
+      </article>
+    </div>
+  );
 }

@@ -3,16 +3,17 @@
   "version": "1.0.0",
   "description": "panda-manager is a cross platform manga/doujinshi manager with tag",
   "main": "scripts/client.js",
+  "author": "xiaoboost",
+  "license": "MIT",
   "scripts": {
     "clear": "rimraf ./dist/generated",
     "test": "nyc ava --verbose --no-cache",
     "update": "ncu --packageFile ./packages/*/package.json -x ts-node,nyc -u",
+    "format": "prettier --write packages/*/src/**/*.{ts,tsx,json,less,css} --loglevel warn",
     "build": "npm run clear && ts-node-transpile-only --project tsconfig.compile.json ./build/webpack.ts --production",
     "package": "rimraf ./dist && npm run build && electron-packager ./dist/generated --out=dist/package --asar",
     "start": "electron --debug=5858 ./dist/generated"
   },
-  "author": "xiaoboost",
-  "license": "MIT",
   "ava": {
     "extensions": [
       "ts"
@@ -32,6 +33,7 @@
     "ava": "3.15.0",
     "electron-packager": "^15.2.0",
     "nyc": "14.1.1",
+    "prettier": "^2.2.1",
     "ts-node": "9.1.1"
   }
 }

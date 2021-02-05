@@ -5,15 +5,14 @@ let lastIndex = 0;
 
 /** 生成唯一编号 */
 export function uid() {
-    const now = new Date().getTime();
+  const now = new Date().getTime();
 
-    if (now === lastTime) {
-        lastIndex++;
-        return lastTime * 100 + lastIndex;
-    }
-    else {
-        lastIndex = 0;
-        lastTime = now;
-        return lastTime * 100;
-    }
+  if (now === lastTime) {
+    lastIndex++;
+    return lastTime * 100 + lastIndex;
+  } else {
+    lastIndex = 0;
+    lastTime = now;
+    return lastTime * 100;
+  }
 }

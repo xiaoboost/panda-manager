@@ -6,17 +6,17 @@ import { resolveTempDir } from '@panda/shared';
 
 // 完成初始化时启动主界面
 app.on('ready', () => {
-    install();
+  install();
 });
 
 // 所有窗口都被关闭
 app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-        app.quit();
-    }
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
 
-    // 清理临时文件夹
-    if (process.env.NODE_ENV === 'production') {
-        rmrf(resolveTempDir());
-    }
+  // 清理临时文件夹
+  if (process.env.NODE_ENV === 'production') {
+    rmrf(resolveTempDir());
+  }
 });

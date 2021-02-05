@@ -3,7 +3,14 @@ import { AnyFunction, AnyObject } from './types';
 const _toString = Object.prototype.toString;
 
 /** 基础类型 */
-export type BaseType = number | string | boolean | symbol | null | undefined;
+export type BaseType =
+  | number
+  | string
+  | boolean
+  | symbol
+  | null
+  | undefined;
+
 /** 非空基础类型 */
 export type Primitive = number | string | boolean | symbol;
 
@@ -14,7 +21,7 @@ export type Primitive = number | string | boolean | symbol;
  * @returns {x is number}
  */
 export function isNumber(x: unknown): x is number {
-    return (typeof x === 'number');
+  return typeof x === 'number';
 }
 
 /**
@@ -24,7 +31,7 @@ export function isNumber(x: unknown): x is number {
  * @returns {x is string}
  */
 export function isString(x: unknown): x is string {
-    return (typeof x === 'string');
+  return typeof x === 'string';
 }
 
 /**
@@ -34,7 +41,7 @@ export function isString(x: unknown): x is string {
  * @returns {x is boolean}
  */
 export function isBoolean(x: unknown): x is boolean {
-    return (typeof x === 'boolean');
+  return typeof x === 'boolean';
 }
 
 /**
@@ -44,7 +51,7 @@ export function isBoolean(x: unknown): x is boolean {
  * @returns {x is symbol}
  */
 export function isSymbol(x: unknown): x is symbol {
-    return (typeof x === 'symbol');
+  return typeof x === 'symbol';
 }
 
 /**
@@ -54,7 +61,7 @@ export function isSymbol(x: unknown): x is symbol {
  * @returns {(x is null | undefined)}
  */
 export function isUndef(x: unknown): x is null | undefined {
-    return x === undefined || x === null;
+  return x === undefined || x === null;
 }
 
 /**
@@ -64,7 +71,7 @@ export function isUndef(x: unknown): x is null | undefined {
  * @returns {(x is NonNullable<T>)}
  */
 export function isDef<T>(x: T): x is NonNullable<T> {
-    return x !== undefined && x !== null;
+  return x !== undefined && x !== null;
 }
 
 /**
@@ -75,7 +82,7 @@ export function isDef<T>(x: T): x is NonNullable<T> {
  */
 /* tslint:disable-next-line:ban-types  */
 export function isFunc(x: unknown): x is AnyFunction {
-    return (typeof x === 'function');
+  return typeof x === 'function';
 }
 
 /**
@@ -87,7 +94,7 @@ export function isFunc(x: unknown): x is AnyFunction {
  * @returns {x is object}
  */
 export function isStrictObject(x: unknown): x is AnyObject {
-    return _toString.call(x) === '[object Object]';
+  return _toString.call(x) === '[object Object]';
 }
 
 /**
@@ -99,12 +106,10 @@ export function isStrictObject(x: unknown): x is AnyObject {
  * @returns {x is object}
  */
 export function isObject(x: unknown): x is AnyObject {
-    const type = typeof x;
-    return (
-        isDef(x) &&
-        type === 'object' ||
-        type === 'function'
-    );
+  const type = typeof x;
+  return (
+    (isDef(x) && type === 'object') || type === 'function'
+  );
 }
 
 /**
@@ -114,7 +119,7 @@ export function isObject(x: unknown): x is AnyObject {
  * @returns {x is any[]}
  */
 export function isArray(x: unknown): x is any[] {
-    return Array.isArray(x);
+  return Array.isArray(x);
 }
 
 /**
@@ -124,7 +129,7 @@ export function isArray(x: unknown): x is any[] {
  * @returns {x is RegExp}
  */
 export function isRegExp(x: unknown): x is RegExp {
-    return _toString.call(x) === '[object RegExp]';
+  return _toString.call(x) === '[object RegExp]';
 }
 
 /**
@@ -134,7 +139,9 @@ export function isRegExp(x: unknown): x is RegExp {
  * @returns {x is HTMLElement}
  */
 export function isElement(x: unknown): x is HTMLElement {
-    return (/^\[object (HTML|SVG)([a-zA-Z]+)?Element\]$/.test(_toString.call(x) as string));
+  return /^\[object (HTML|SVG)([a-zA-Z]+)?Element\]$/.test(
+    _toString.call(x) as string,
+  );
 }
 
 /**
@@ -144,7 +151,7 @@ export function isElement(x: unknown): x is HTMLElement {
  * @returns {(x is BaseType)}
  */
 export function isBaseType(x: unknown): x is BaseType {
-    return (!isObject(x));
+  return !isObject(x);
 }
 
 /**
@@ -154,11 +161,11 @@ export function isBaseType(x: unknown): x is BaseType {
  * @returns {(x is Primitive)}
  */
 export function isPrimitive(x: unknown): x is Primitive {
-    const type = typeof x;
-    return (
-        type === 'string' ||
-        type === 'number' ||
-        type === 'symbol' ||
-        type === 'boolean'
-    );
+  const type = typeof x;
+  return (
+    type === 'string' ||
+    type === 'number' ||
+    type === 'symbol' ||
+    type === 'boolean'
+  );
 }

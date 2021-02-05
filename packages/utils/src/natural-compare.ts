@@ -1,143 +1,176 @@
 const defaultAlphabetIndexMap: number[] = [];
-const alphabetIndexMapCache: Record<string, number[] | undefined> = {};
+const alphabetIndexMapCache: Record<
+  string,
+  number[] | undefined
+> = {};
 
 function isNumberCode(code: number) {
-    return code >= 48/* '0' */ && code <= 57/* '9' */;
+  return code >= 48 /* '0' */ && code <= 57 /* '9' */;
 }
 
 function buildAlphabetIndexMap(alphabet: string) {
-    const existingMap = alphabetIndexMapCache[alphabet];
-    if (existingMap !== undefined) {
-        return existingMap;
-    }
+  const existingMap = alphabetIndexMapCache[alphabet];
+  if (existingMap !== undefined) {
+    return existingMap;
+  }
 
-    const indexMap = [];
-    const maxCharCode = alphabet.split('').reduce((maxCode, char) => {
-        return Math.max(maxCode, char.charCodeAt(0));
+  const indexMap = [];
+  const maxCharCode = alphabet
+    .split('')
+    .reduce((maxCode, char) => {
+      return Math.max(maxCode, char.charCodeAt(0));
     }, 0);
 
-    for (let i = 0; i <= maxCharCode; i++) {
-        indexMap.push(-1);
-    }
+  for (let i = 0; i <= maxCharCode; i++) {
+    indexMap.push(-1);
+  }
 
-    for (let i = 0; i < alphabet.length; i++) {
-        indexMap[alphabet.charCodeAt(i)] = i;
-    }
+  for (let i = 0; i < alphabet.length; i++) {
+    indexMap[alphabet.charCodeAt(i)] = i;
+  }
 
-    alphabetIndexMapCache[alphabet] = indexMap;
+  alphabetIndexMapCache[alphabet] = indexMap;
 
-    return indexMap;
+  return indexMap;
 }
 
 interface CompareOptions {
-    /**
-     * Set to true to compare strings case-insensitively.
-     * @default false
-     */
-    caseInsensitive?: boolean;
-    /**
-     * A string of characters that define a custom character ordering.
-     * @default undefined
-     */
-    alphabet?: string;
+  /**
+   * Set to true to compare strings case-insensitively.
+   * @default false
+   */
+  caseInsensitive?: boolean;
+  /**
+   * A string of characters that define a custom character ordering.
+   * @default undefined
+   */
+  alphabet?: string;
 }
 
-export function naturalCompare(a: string, b: string, opts?: CompareOptions) {
-    const lengthA = a.length;
-    const lengthB = b.length;
+export function naturalCompare(
+  a: string,
+  b: string,
+  opts?: CompareOptions,
+) {
+  const lengthA = a.length;
+  const lengthB = b.length;
 
-    let indexA = 0;
-    let indexB = 0;
-    let alphabetIndexMap = defaultAlphabetIndexMap;
-    let firstDifferenceInLeadingZeros = 0;
+  let indexA = 0;
+  let indexB = 0;
+  let alphabetIndexMap = defaultAlphabetIndexMap;
+  let firstDifferenceInLeadingZeros = 0;
 
-    if (opts) {
-        if (opts.caseInsensitive) {
-            a = a.toLowerCase();
-            b = b.toLowerCase();
-        }
-
-        if (opts.alphabet) {
-            alphabetIndexMap = buildAlphabetIndexMap(opts.alphabet);
-        }
+  if (opts) {
+    if (opts.caseInsensitive) {
+      a = a.toLowerCase();
+      b = b.toLowerCase();
     }
 
-    while (indexA < lengthA && indexB < lengthB) {
-        let charCodeA = a.charCodeAt(indexA);
-        let charCodeB = b.charCodeAt(indexB);
+    if (opts.alphabet) {
+      alphabetIndexMap = buildAlphabetIndexMap(
+        opts.alphabet,
+      );
+    }
+  }
 
-        if (isNumberCode(charCodeA)) {
-            if (!isNumberCode(charCodeB)) {
-                return charCodeA - charCodeB;
-            }
+  while (indexA < lengthA && indexB < lengthB) {
+    let charCodeA = a.charCodeAt(indexA);
+    let charCodeB = b.charCodeAt(indexB);
 
-            let numStartA = indexA;
-            let numStartB = indexB;
+    if (isNumberCode(charCodeA)) {
+      if (!isNumberCode(charCodeB)) {
+        return charCodeA - charCodeB;
+      }
 
-            while (charCodeA === 48/* '0' */ && ++numStartA < lengthA) {
-                charCodeA = a.charCodeAt(numStartA);
-            }
-            while (charCodeB === 48/* '0' */ && ++numStartB < lengthB) {
-                charCodeB = b.charCodeAt(numStartB);
-            }
+      let numStartA = indexA;
+      let numStartB = indexB;
 
-            if (numStartA !== numStartB && firstDifferenceInLeadingZeros === 0) {
-                firstDifferenceInLeadingZeros = numStartA - numStartB;
-            }
+      while (
+        charCodeA === 48 /* '0' */ &&
+        ++numStartA < lengthA
+      ) {
+        charCodeA = a.charCodeAt(numStartA);
+      }
+      while (
+        charCodeB === 48 /* '0' */ &&
+        ++numStartB < lengthB
+      ) {
+        charCodeB = b.charCodeAt(numStartB);
+      }
 
-            let numEndA = numStartA;
-            let numEndB = numStartB;
+      if (
+        numStartA !== numStartB &&
+        firstDifferenceInLeadingZeros === 0
+      ) {
+        firstDifferenceInLeadingZeros =
+          numStartA - numStartB;
+      }
 
-            while (numEndA < lengthA && isNumberCode(a.charCodeAt(numEndA))) {
-                ++numEndA;
-            }
-            while (numEndB < lengthB && isNumberCode(b.charCodeAt(numEndB))) {
-                ++numEndB;
-            }
+      let numEndA = numStartA;
+      let numEndB = numStartB;
 
-            let difference = numEndA - numStartA - numEndB + numStartB; // numA length - numB length
-            if (difference !== 0) {
-                return difference;
-            }
+      while (
+        numEndA < lengthA &&
+        isNumberCode(a.charCodeAt(numEndA))
+      ) {
+        ++numEndA;
+      }
+      while (
+        numEndB < lengthB &&
+        isNumberCode(b.charCodeAt(numEndB))
+      ) {
+        ++numEndB;
+      }
 
-            while (numStartA < numEndA) {
-                difference = a.charCodeAt(numStartA++) - b.charCodeAt(numStartB++);
-                if (difference !== 0) {
-                    return difference;
-                }
-            }
+      let difference =
+        numEndA - numStartA - numEndB + numStartB; // numA length - numB length
+      if (difference !== 0) {
+        return difference;
+      }
 
-            indexA = numEndA;
-            indexB = numEndB;
-            continue;
+      while (numStartA < numEndA) {
+        difference =
+          a.charCodeAt(numStartA++) -
+          b.charCodeAt(numStartB++);
+        if (difference !== 0) {
+          return difference;
         }
+      }
 
-        if (charCodeA !== charCodeB) {
-            if (
-                charCodeA < alphabetIndexMap.length &&
-                charCodeB < alphabetIndexMap.length &&
-                alphabetIndexMap[charCodeA] !== -1 &&
-                alphabetIndexMap[charCodeB] !== -1
-            ) {
-                return alphabetIndexMap[charCodeA] - alphabetIndexMap[charCodeB];
-            }
-
-            return charCodeA - charCodeB;
-        }
-
-        ++indexA;
-        ++indexB;
+      indexA = numEndA;
+      indexB = numEndB;
+      continue;
     }
 
-    // `b` is a substring of `a`
-    if (indexA < lengthA) {
-        return 1;
+    if (charCodeA !== charCodeB) {
+      if (
+        charCodeA < alphabetIndexMap.length &&
+        charCodeB < alphabetIndexMap.length &&
+        alphabetIndexMap[charCodeA] !== -1 &&
+        alphabetIndexMap[charCodeB] !== -1
+      ) {
+        return (
+          alphabetIndexMap[charCodeA] -
+          alphabetIndexMap[charCodeB]
+        );
+      }
+
+      return charCodeA - charCodeB;
     }
 
-    // `a` is a substring of `b`
-    if (indexB < lengthB) {
-        return -1;
-    }
+    ++indexA;
+    ++indexB;
+  }
 
-    return firstDifferenceInLeadingZeros;
+  // `b` is a substring of `a`
+  if (indexA < lengthA) {
+    return 1;
+  }
+
+  // `a` is a substring of `b`
+  if (indexB < lengthB) {
+    return -1;
+  }
+
+  return firstDifferenceInLeadingZeros;
 }

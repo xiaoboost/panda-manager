@@ -3,98 +3,96 @@ import { readFile, writeFile } from '@panda/fs';
 import { isObject, isUndef, isDef, debounce } from '@panda/utils';
 
 export class Model<T> {
-    /** 数据 */
-    private _val: T;
-    /** 代理数据 */
-    private _proxy!: T;
-    /** 数据在硬盘储存的路径 */
-    private _path: string;
-    /** 初始化完成 */
-    private _ready = Promise.resolve();
+  /** 数据 */
+  private _val: T;
+  /** 代理数据 */
+  private _proxy!: T;
+  /** 数据在硬盘储存的路径 */
+  private _path: string;
+  /** 初始化完成 */
+  private _ready = Promise.resolve();
 
-    get data() {
-        return this._proxy;
+  get data() {
+    return this._proxy;
+  }
+  set data(val) {
+    if (this._val !== val) {
+      this._val = val;
+      this.write();
+      this.proxy();
     }
-    set data(val) {
-        if (this._val !== val) {
-            this._val = val;
-            this.write();
-            this.proxy();
-        }
+  }
+
+  get ready() {
+    return this._ready;
+  }
+
+  get path() {
+    return process.env.NODE_ENV === 'development'
+      ? `${this._path}.json`
+      : this._path;
+  }
+
+  constructor(init: T, path: string) {
+    this._val = init;
+    this._path = path;
+    this.read();
+    this.proxy();
+  }
+
+  private proxy() {
+    if (isObject(this._val)) {
+      this._proxy = new Proxy(this._val, {
+        set: (target, key, val) => {
+          const result = Reflect.set(target, key, val);
+
+          this.write();
+
+          return result;
+        },
+      });
+    } else {
+      this._proxy = this._val;
+    }
+  }
+
+  private async _write() {
+    if (process.env.NODE_ENV === 'development') {
+      await writeFile(this.path, JSON.stringify(this._val, null, 2));
     }
 
-    get ready() {
-        return this._ready;
+    if (process.env.NODE_ENV === 'production') {
+      await writeFile(this.path, await gzip(JSON.stringify(this._val)));
     }
+  }
 
-    get path() {
-        return process.env.NODE_ENV === 'development'
-            ? `${this._path}.json`
-            : this._path;
-    }
-
-    constructor(init: T, path: string) {
-        this._val = init;
-        this._path = path;
-        this.read();
-        this.proxy();
-    }
-
-    private proxy() {
-        if (isObject(this._val)) {
-            this._proxy = new Proxy(this._val, {
-                set: (target, key, val) => {
-                    const result = Reflect.set(target, key, val);
-
-                    this.write();
-
-                    return result;
-                },
-            });
-        }
-        else {
-            this._proxy = this._val;
-        }
-    }
-
-    private async _write() {
-        if (process.env.NODE_ENV === 'development') {
-            await writeFile(this.path, JSON.stringify(this._val, null, 2));
-        }
+  read() {
+    this._ready = new Promise(async (resolve) => {
+      try {
+        let buf = await readFile(this.path);
 
         if (process.env.NODE_ENV === 'production') {
-            await writeFile(this.path, await gzip(JSON.stringify(this._val)));
+          buf = await gunzip(buf);
         }
-    }
 
-    read() {
-        this._ready = new Promise(async (resolve) => {
-            try {
-                let buf = await readFile(this.path);
+        this.data = JSON.parse(buf.toString());
+      } catch (err) {
+        this.write();
+      }
 
-                if (process.env.NODE_ENV === 'production') {
-                    buf = await gunzip(buf);
-                }
+      resolve();
+    });
+  }
 
-                this.data = JSON.parse(buf.toString());
-            }
-            catch (err) {
-                this.write();
-            }
+  write = debounce(200, () => this._write());
 
-            resolve();
-        });
-    }
+  fill(val: T) {
+    const { data } = this;
 
-    write = debounce(200, () => this._write());
-
-    fill(val: T) {
-        const { data } = this;
-
-        Object.entries(val).forEach(([key, val]) => {
-            if (isUndef(data[key]) && isDef(val)) {
-                data[key] = val;
-            }
-        });
-    }
+    Object.entries(val).forEach(([key, val]) => {
+      if (isUndef(data[key]) && isDef(val)) {
+        data[key] = val;
+      }
+    });
+  }
 }
