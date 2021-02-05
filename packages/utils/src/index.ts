@@ -7,3 +7,4 @@ export * from './subject';
 export * from './types';
 export * from './uid';
 export * from './natural-compare';
+export * from './string';

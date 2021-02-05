@@ -5,6 +5,7 @@
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/types/index.d.ts",
+  "license": "MIT",
   "files": [
     "dist",
     "README.md",
@@ -16,16 +17,27 @@
     "build:cjs": "tsc -p ./tsconfig.build.json --outDir ./dist/cjs -m CommonJS",
     "build:esm": "tsc -p ./tsconfig.build.json --outDir ./dist/esm -m ESNext",
     "build": "pnpm run clear && pnpm run build:cjs && pnpm run build:esm",
+    "test": "nyc ava --verbose --no-cache",
+    "test:report": "nyc --reporter=html ava",
     "prepare": "pnpm run build"
   },
-  "author": "xiaoboost",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/xiaoboost/panda-manager"
+  "ava": {
+    "serial": true,
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register/transpile-only"
+    ],
+    "files": [
+      "**/*.spec.ts"
+    ]
   },
   "devDependencies": {
+    "ava": "^3.13.0",
+    "nyc": "^15.1.0",
     "rimraf": "^3.0.2",
+    "ts-node": "8.10.2",
     "typescript": "^4.1.3"
   },
   "dependencies": {

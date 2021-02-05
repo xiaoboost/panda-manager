@@ -4,5 +4,6 @@ dist/
 doc/
 draft/
 node_modules/
+.nyc_output/
 
 *.log

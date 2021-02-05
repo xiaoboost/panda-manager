@@ -6,15 +6,15 @@ export function useIsFocus() {
     const [isFocus, setState] = useState(win.isFocused());
 
     useEffect(() => {
-        const setFocuse = () => setState(true);
-        const setUnFocuse = () => setState(false);
+        const setFocus = () => setState(true);
+        const setUnFocus = () => setState(false);
 
-        win.on('focus', setFocuse);
-        win.on('blur', setUnFocuse);
+        win.on('focus', setFocus);
+        win.on('blur', setUnFocus);
 
         return () => {
-            win.removeListener('maximize', setFocuse);
-            win.removeListener('blur', setUnFocuse);
+            win.removeListener('maximize', setFocus);
+            win.removeListener('blur', setUnFocus);
         };
     }, []);
 
