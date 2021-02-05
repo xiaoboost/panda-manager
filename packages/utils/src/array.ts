@@ -5,23 +5,6 @@ import { AnyObject } from './types';
 type Index = string | number;
 
 /**
- * 根据下标取出当前数组元素
- * @template T
- * @param {T[]} arr
- * @param {number} index
- * @returns {T}
- */
-export function get<T>(arr: T[], index: number): T {
-    const sub = (index >= 0) ? index : arr.length + index;
-
-    if (sub < 0 || sub >= arr.length) {
-        throw new Error('(array) index out of bounds.');
-    }
-
-    return arr[sub];
-}
-
-/**
  * 删除满足条件的元素
  *  - 原数组不变，返回新数组
  *  - predicate 为函数时，删除 predicate 返回 true 的元素
@@ -94,7 +77,7 @@ export function replace<T>(
 export function unique<T extends Index>(arr: T[]): T[];
 export function unique<T>(arr: T[], label: (value: T, index: number) => Index): T[];
 export function unique<T>(arr: T[], label?: (value: T, index: number) => Index): T[] {
-    let labelMap: Record<Index, boolean>;
+    let labelMap: Record<Index, boolean> = {};
 
     if (isDef(label)) {
         return arr
@@ -103,8 +86,7 @@ export function unique<T>(arr: T[], label?: (value: T, index: number) => Index):
             .map(({ value }) => value);
     }
     else {
-        labelMap = toBoolMap(arr as any);
-        return arr.filter((item) => !labelMap[item as any]);
+        return arr.filter((key) => (labelMap[key as any] ? false : (labelMap[key as any] = true)));
     }
 }
 

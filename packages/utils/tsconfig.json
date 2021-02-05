@@ -7,7 +7,7 @@
     "declarationDir": "./dist/types",
     "moduleResolution": "node",
     "target": "esnext",
-    "module": "esnext",
+    "module": "commonjs",
     "jsx": "react",
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
