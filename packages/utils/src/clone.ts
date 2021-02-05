@@ -16,7 +16,7 @@ export function checkCircularStructure(
   }
 
   // 队列添加当前节点
-  parents.push(data);
+  parents.push(data)
 
   // 检查每个子节点
   return Object.values(data).some((value) =>

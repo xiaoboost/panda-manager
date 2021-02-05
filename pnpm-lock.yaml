@@ -3,15 +3,17 @@ importers:
     devDependencies:
       ava: 3.15.0
       electron-packager: 15.2.0
+      husky: 4.3.8
       nyc: 14.1.1
       prettier: 2.2.1
       ts-node: 9.1.1
     specifiers:
-      ava: 3.15.0
+      ava: ^3.15.0
       electron-packager: ^15.2.0
+      husky: ^4.3.8
       nyc: 14.1.1
       prettier: ^2.2.1
-      ts-node: 9.1.1
+      ts-node: ^9.1.1
   packages/database:
     dependencies:
       '@panda/fs': link:../file-system
@@ -225,7 +227,7 @@ importers:
       ava: ^3.15.0
       nyc: 14.1.1
       rimraf: ^3.0.2
-      ts-node: 9.1.1
+      ts-node: ^9.1.1
       tslib: ^2.1.0
       typescript: ^4.1.3
   packages/zip:
@@ -992,6 +994,11 @@ packages:
     resolution:
       integrity: sha1-5IbQ2XOW15vu3QpuM/RTT/a0lz4=
       tarball: '@types/normalize-package-data/download/@types/normalize-package-data-2.4.0.tgz'
+  /@types/parse-json/4.0.0:
+    dev: true
+    resolution:
+      integrity: sha1-L4u0QUNNFjs1+4/9zNcTiSf/uMA=
+      tarball: '@types/parse-json/download/@types/parse-json-4.0.0.tgz'
   /@types/prop-types/15.7.3:
     dev: true
     resolution:
@@ -2151,6 +2158,11 @@ packages:
     resolution:
       integrity: sha1-AWLsLZNR9d3VmpICy6k1NmpyUIA=
       tarball: compare-version/download/compare-version-0.1.2.tgz
+  /compare-versions/3.6.0:
+    dev: true
+    resolution:
+      integrity: sha1-GlaJkTaF5ah2N7jT/8p1UU7EHWI=
+      tarball: compare-versions/download/compare-versions-3.6.0.tgz
   /compute-scroll-into-view/1.0.16:
     dev: false
     resolution:
@@ -2260,6 +2272,19 @@ packages:
     resolution:
       integrity: sha1-BA9yaAnFked6F8CjYmykW08Wixo=
       tarball: cosmiconfig/download/cosmiconfig-5.2.1.tgz
+  /cosmiconfig/7.0.0:
+    dependencies:
+      '@types/parse-json': 4.0.0
+      import-fresh: 3.3.0
+      parse-json: 5.2.0
+      path-type: 4.0.0
+      yaml: 1.10.0
+    dev: true
+    engines:
+      node: '>=10'
+    resolution:
+      integrity: sha1-75tE13OVnK5j3ezRIt4jhTtg+NM=
+      tarball: cosmiconfig/download/cosmiconfig-7.0.0.tgz
   /cp-file/6.2.0:
     dependencies:
       graceful-fs: 4.2.4
@@ -3312,6 +3337,25 @@ packages:
     resolution:
       integrity: sha1-l6/n1s3AvFkoWEt8jXsW6KmqXRk=
       tarball: find-up/download/find-up-4.1.0.tgz
+  /find-up/5.0.0:
+    dependencies:
+      locate-path: 6.0.0
+      path-exists: 4.0.0
+    dev: true
+    engines:
+      node: '>=10'
+    resolution:
+      integrity: sha1-TJKBnstwg1YeT0okCoa+UZj1Nvw=
+      tarball: find-up/download/find-up-5.0.0.tgz
+  /find-versions/4.0.0:
+    dependencies:
+      semver-regex: 3.1.2
+    dev: true
+    engines:
+      node: '>=10'
+    resolution:
+      integrity: sha1-PFflc7+XdpuMuN8Wk0tieRXaSWU=
+      tarball: find-versions/download/find-versions-4.0.0.tgz
   /flora-colossus/1.0.1:
     dependencies:
       debug: 4.3.1
@@ -3762,6 +3806,26 @@ packages:
     resolution:
       integrity: sha1-3JH8ukLk0G5Kuu0zs+ejwC9RTqA=
       tarball: human-signals/download/human-signals-2.1.0.tgz
+  /husky/4.3.8:
+    dependencies:
+      chalk: 4.1.0
+      ci-info: 2.0.0
+      compare-versions: 3.6.0
+      cosmiconfig: 7.0.0
+      find-versions: 4.0.0
+      opencollective-postinstall: 2.0.3
+      pkg-dir: 5.0.0
+      please-upgrade-node: 3.2.0
+      slash: 3.0.0
+      which-pm-runs: 1.0.0
+    dev: true
+    engines:
+      node: '>=10'
+    hasBin: true
+    requiresBuild: true
+    resolution:
+      integrity: sha1-MRRAYL6WP9aFDlzI8Bmh3+GUKW0=
+      tarball: husky/download/husky-4.3.8.tgz
   /iconv-lite/0.6.2:
     dependencies:
       safer-buffer: 2.1.2
@@ -3856,6 +3920,16 @@ packages:
     resolution:
       integrity: sha1-2BNVwVYS04bGH53dOSLUMEgipUY=
       tarball: import-fresh/download/import-fresh-2.0.0.tgz
+  /import-fresh/3.3.0:
+    dependencies:
+      parent-module: 1.0.1
+      resolve-from: 4.0.0
+    dev: true
+    engines:
+      node: '>=6'
+    resolution:
+      integrity: sha1-NxYsJfy566oublPVtNiM4X2eDCs=
+      tarball: import-fresh/download/import-fresh-3.3.0.tgz
   /import-from/2.1.0:
     dependencies:
       resolve-from: 3.0.0
@@ -4609,6 +4683,15 @@ packages:
     resolution:
       integrity: sha1-Gvujlq/WdqbUJQTQpno6frn2KqA=
       tarball: locate-path/download/locate-path-5.0.0.tgz
+  /locate-path/6.0.0:
+    dependencies:
+      p-locate: 5.0.0
+    dev: true
+    engines:
+      node: '>=10'
+    resolution:
+      integrity: sha1-VTIeswn+u8WcSAHZMackUqaB0oY=
+      tarball: locate-path/download/locate-path-6.0.0.tgz
   /lodash.camelcase/4.3.0:
     dev: true
     resolution:
@@ -5185,6 +5268,12 @@ packages:
     resolution:
       integrity: sha1-0Oluu1awdHbfHdnEgG5SN5hcpF4=
       tarball: onetime/download/onetime-5.1.2.tgz
+  /opencollective-postinstall/2.0.3:
+    dev: true
+    hasBin: true
+    resolution:
+      integrity: sha1-eg//l49tv6TQBiOPusmO1BmMMlk=
+      tarball: opencollective-postinstall/download/opencollective-postinstall-2.0.3.tgz
   /opener/1.5.2:
     dev: true
     hasBin: true
@@ -5297,6 +5386,15 @@ packages:
     resolution:
       integrity: sha1-o0KLtwiLOmApL2aRkni3wpetTwc=
       tarball: p-locate/download/p-locate-4.1.0.tgz
+  /p-locate/5.0.0:
+    dependencies:
+      p-limit: 3.1.0
+    dev: true
+    engines:
+      node: '>=10'
+    resolution:
+      integrity: sha1-g8gxXGeFAF470CGDlBHJ4RDm2DQ=
+      tarball: p-locate/download/p-locate-5.0.0.tgz
   /p-map/4.0.0:
     dependencies:
       aggregate-error: 3.1.0
@@ -5366,6 +5464,15 @@ packages:
     resolution:
       integrity: sha1-fRf+SqEr3jTUp32RrPtiGcqtAcU=
       tarball: param-case/download/param-case-3.0.4.tgz
+  /parent-module/1.0.1:
+    dependencies:
+      callsites: 3.1.0
+    dev: true
+    engines:
+      node: '>=6'
+    resolution:
+      integrity: sha1-aR0nCeeMefrjoVZiJFLQB2LKqqI=
+      tarball: parent-module/download/parent-module-1.0.1.tgz
   /parse-author/2.0.0:
     dependencies:
       author-regex: 1.0.0
@@ -5581,6 +5688,22 @@ packages:
     resolution:
       integrity: sha1-8JkTPfft5CLoHR2ESCcO6z5CYfM=
       tarball: pkg-dir/download/pkg-dir-4.2.0.tgz
+  /pkg-dir/5.0.0:
+    dependencies:
+      find-up: 5.0.0
+    dev: true
+    engines:
+      node: '>=10'
+    resolution:
+      integrity: sha1-oC1q6+a6EzqSj3Suwguv3+a452A=
+      tarball: pkg-dir/download/pkg-dir-5.0.0.tgz
+  /please-upgrade-node/3.2.0:
+    dependencies:
+      semver-compare: 1.0.0
+    dev: true
+    resolution:
+      integrity: sha1-rt3T+ZTJM+StmLmdmlVu+g4v6UI=
+      tarball: please-upgrade-node/download/please-upgrade-node-3.2.0.tgz
   /plist/3.0.1:
     dependencies:
       base64-js: 1.5.1
@@ -7148,7 +7271,6 @@ packages:
       integrity: sha1-5JF9oMggE1/2Wtb35LfXr1aMTxM=
       tarball: scroll-into-view-if-needed/download/scroll-into-view-if-needed-2.2.26.tgz
   /semver-compare/1.0.0:
-    optional: true
     resolution:
       integrity: sha1-De4hahyUGrN+nvsXiPavxf9VN/w=
       tarball: semver-compare/download/semver-compare-1.0.0.tgz
@@ -7161,6 +7283,13 @@ packages:
     resolution:
       integrity: sha1-Bfd85Z8yXgDicGr9Z7tQbdscoys=
       tarball: semver-diff/download/semver-diff-3.1.1.tgz
+  /semver-regex/3.1.2:
+    dev: true
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha1-NLTA02Hu8mLgcZnb7zFtDyqxGAc=
+      tarball: semver-regex/download/semver-regex-3.1.2.tgz
   /semver/5.7.1:
     dev: true
     hasBin: true
@@ -8290,6 +8419,11 @@ packages:
     resolution:
       integrity: sha1-2e8H3Od7mQK4o6j6SzHD4/fm6Ho=
       tarball: which-module/download/which-module-2.0.0.tgz
+  /which-pm-runs/1.0.0:
+    dev: true
+    resolution:
+      integrity: sha1-Zws6+8VS4LVd9rd4DKdGFfI60cs=
+      tarball: which-pm-runs/download/which-pm-runs-1.0.0.tgz
   /which/1.3.1:
     dependencies:
       isexe: 2.0.0
@@ -8463,6 +8597,13 @@ packages:
     resolution:
       integrity: sha1-m7knkNnA7/7GO+c1GeEaNQGaOnI=
       tarball: yallist/download/yallist-4.0.0.tgz
+  /yaml/1.10.0:
+    dev: true
+    engines:
+      node: '>= 6'
+    resolution:
+      integrity: sha1-O1k63ZRIdgd9TWg/7gEIG9n/8x4=
+      tarball: yaml/download/yaml-1.10.0.tgz?cache=0&sync_timestamp=1612175917850&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fyaml%2Fdownload%2Fyaml-1.10.0.tgz
   /yargs-parser/13.1.2:
     dependencies:
       camelcase: 5.3.1
