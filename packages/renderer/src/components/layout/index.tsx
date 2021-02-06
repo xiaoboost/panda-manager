@@ -6,9 +6,9 @@ import { Sidebar } from '../sidebar';
 
 import { PropsWithChildren } from 'react';
 import { useIsFocus } from '@panda/use';
-import { stringifyClass, EmptyObject } from '@panda/utils';
+import { stringifyClass, Empty } from '@panda/utils';
 
-export function Layout({ children }: PropsWithChildren<EmptyObject>) {
+export function Layout({ children }: PropsWithChildren<Empty>) {
   const isFocus = useIsFocus();
 
   return (

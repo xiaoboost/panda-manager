@@ -32,5 +32,6 @@ module.exports = {
     'brace-style': ['error', 'stroustrup', { allowSingleLine: true }],
 
     '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
   },
 };

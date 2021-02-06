@@ -13,7 +13,6 @@
     "format:fix": "pnpm run -r format:fix --parallel --filter {packages}",
     "lint": "pnpm run -r lint --parallel --filter {packages}",
     "lint:fix": "pnpm run -r lint:fix --parallel --filter {packages}",
-    "build:packages": "pnpm run -r build --parallel --filter {packages}",
     "package": "rimraf ./dist && npm run build && electron-packager ./dist/generated --out=dist/package --asar",
     "start": "electron --debug=5858 ./dist/generated"
   },
@@ -36,12 +35,6 @@
       "pre-commit": "pnpm run format && pnpm run lint"
     }
   },
-  "lint-staged": {
-    "packages/**/*": [
-      "pnpm run format",
-      "pnpm run lint"
-    ]
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/xiaoboost/panda-manager"
@@ -54,7 +47,6 @@
     "eslint": "^7.19.0",
     "eslint-plugin-react": "^7.22.0",
     "husky": "^4.3.8",
-    "lint-staged": "^10.5.4",
     "nyc": "14.1.1",
     "prettier": "^2.2.1",
     "ts-node": "^9.1.1"
