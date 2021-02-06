@@ -4,7 +4,7 @@ export type ClassObject = Record<string, boolean>;
 export type ClassInput = string | undefined | ClassObject;
 
 /** 解析对象 class */
-export function stringifyClass(...opt: ClassInput[]) {
+export function stringifyClass(...opt: ClassInput[]): string {
   /** 解析 class 对象 */
   function parseClassObject(classObject: ClassObject) {
     return Object.keys(classObject).filter((key) => classObject[key]);
@@ -17,7 +17,8 @@ export function stringifyClass(...opt: ClassInput[]) {
 
     if (isObject(item)) {
       className.push(...parseClassObject(item));
-    } else if (isString(item)) {
+    }
+    else if (isString(item)) {
       className.push(item.trim());
     }
   }

@@ -15,7 +15,7 @@ export function deleteVal<T>(
   arr: T[],
   predicate: T | ((value: T, index: number) => boolean),
   whole = true,
-) {
+): T[] {
   const fn = isFunc(predicate) ? predicate : (item: T) => item === predicate;
   const newArr = arr.slice();
 
@@ -47,7 +47,7 @@ export function replace<T>(
   newVal: T,
   predicate: T | ((value: T, index: number) => boolean),
   whole = false,
-) {
+): T[] {
   const fn = isFunc(predicate) ? predicate : (item: T) => item === predicate;
   const newArr = arr.slice();
 
@@ -83,7 +83,7 @@ export function unique<T>(
   arr: T[],
   label?: (value: T, index: number) => Index,
 ): T[] {
-  let labelMap: Record<Index, boolean> = {};
+  const labelMap: Record<Index, boolean> = {};
 
   if (isDef(label)) {
     return arr
@@ -93,7 +93,8 @@ export function unique<T>(
       }))
       .filter(({ key }) => (labelMap[key] ? false : (labelMap[key] = true)))
       .map(({ value }) => value);
-  } else {
+  }
+  else {
     return arr.filter((key) =>
       labelMap[key as any] ? false : (labelMap[key as any] = true),
     );
@@ -118,9 +119,11 @@ export function concat<T, U>(
 export function transArr<T>(item?: T | T[]): T[] {
   if (!item) {
     return [];
-  } else if (!Array.isArray(item)) {
+  }
+  else if (!Array.isArray(item)) {
     return [item];
-  } else {
+  }
+  else {
     return item;
   }
 }
@@ -139,17 +142,18 @@ export function toMap<T extends AnyObject, U extends Index>(
 export function toBoolMap<T extends Index>(arr: T[]): Record<T, boolean>;
 export function toBoolMap<T, U extends Index>(
   arr: T[],
-  cb: (val: T, index: number) => U,
+  cb: (val: T, index: number) => U
 ): Record<U, boolean>;
 export function toBoolMap<T, U extends Index>(
   arr: T[],
   cb?: (val: T, index: number) => U,
-) {
+): Record<U, boolean> {
   const map: Record<Index, boolean> = {};
 
   if (!cb) {
     arr.forEach((key) => (map[key as any] = true));
-  } else {
+  }
+  else {
     arr.forEach((key, i) => (map[cb(key, i)] = true));
   }
 
@@ -157,7 +161,7 @@ export function toBoolMap<T, U extends Index>(
 }
 
 /** 在`rest`数组中，且不在`arr`数组中的 */
-export function exclude<T extends Index>(arr: T[], rest: T[]) {
+export function exclude<T extends Index>(arr: T[], rest: T[]): T[] {
   const map = toBoolMap(arr);
   return rest.filter((key) => !map[key]);
 }

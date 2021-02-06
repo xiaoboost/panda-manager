@@ -63,7 +63,8 @@ export async function windowStateKeeper(
   // 最大化
   if (state.data.isMaximize) {
     options.center = true;
-  } else {
+  }
+  else {
     options.width = state.data.width;
     options.height = state.data.height;
     options.x = state.data.left;

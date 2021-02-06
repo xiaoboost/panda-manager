@@ -53,7 +53,8 @@ export class ChannelSubject {
         if (this._events[name]) {
           this._events[name] = [];
         }
-      } else if (typeof name === 'function') {
+      }
+      else if (typeof name === 'function') {
         Object.keys(this._events).forEach((key) => {
           this._events[key] = this._events[key].filter((cb) => cb !== ev);
         });
@@ -102,7 +103,8 @@ export class Subject<T> {
   unObserve(ev?: EventHandler<T>) {
     if (!ev) {
       this._events = [];
-    } else {
+    }
+    else {
       this._events = this._events.filter((cb) => cb !== ev);
     }
   }
@@ -182,8 +184,8 @@ export class Watcher<T> extends Subject<T> {
       arguments.length === 0
         ? () => true
         : isFunc(val)
-        ? val
-        : (item: T) => item === val;
+          ? val
+          : (item: T) => item === val;
 
     return new Promise<ReadonlyObject<T>>((resolve) => {
       const callback = (item: T) => {

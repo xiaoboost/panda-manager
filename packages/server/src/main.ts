@@ -26,5 +26,7 @@ async function service(event: IpcMainEvent, param: any) {
 
 /** 安装服务器 */
 export function install(ipcMain: IpcMain) {
-  ipcMain.on(MainEventName, (event, params) => {});
+  ipcMain.on(MainEventName, (event, params) => {
+    // ..
+  });
 }

@@ -91,12 +91,15 @@ function install() {
     try {
       if (name === 'compress') {
         data = await compress(...(params as [any, any]));
-      } else if (name === 'extend') {
+      }
+      else if (name === 'extend') {
         data = await extend(...(params as [any, any, any]));
-      } else {
+      }
+      else {
         error = `unknow method: ${name}.`;
       }
-    } catch (e) {
+    }
+    catch (e) {
       error = e.message;
     }
 

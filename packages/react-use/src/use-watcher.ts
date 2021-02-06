@@ -23,14 +23,14 @@ export function useWatcher<T>(watcher: Watcher<T>) {
   const setStatus =
     isBaseType(watcher.data) || isArray(watcher.data)
       ? (val: T) => {
-          watcher.data = val as any;
-        }
+        watcher.data = val as any;
+      }
       : (val: Partial<T>) => {
-          watcher.data = {
-            ...state.current,
-            ...val,
-          };
+        watcher.data = {
+          ...state.current,
+          ...val,
         };
+      };
 
   function handleChange(val: T) {
     state.current = val as any;

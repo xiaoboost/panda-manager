@@ -22,9 +22,11 @@ export function wait(fn: () => boolean, interval = 200, stopTimeout = 60000) {
     if (fn()) {
       clearTimeout(timer);
       return Promise.resolve();
-    } else if (!timeout) {
+    }
+    else if (!timeout) {
       return delay(interval).then(check);
-    } else {
+    }
+    else {
       return Promise.resolve();
     }
   })();
@@ -54,7 +56,8 @@ export function debounce<T extends AnyFunction>(
   if (typeof delay === 'function') {
     cbt = delay;
     time = 200;
-  } else {
+  }
+  else {
     cbt = cb as T;
     time = delay;
   }
@@ -77,10 +80,12 @@ export function debounce<T extends AnyFunction>(
 
         if (result && isFunc(result.then)) {
           result.then(_resolve);
-        } else {
+        }
+        else {
           _resolve(result);
         }
-      } catch (e) {
+      }
+      catch (e) {
         _reject(e);
       }
     }, time);

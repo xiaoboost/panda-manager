@@ -5,10 +5,10 @@ import { Header } from '../header';
 import { Sidebar } from '../sidebar';
 
 import { PropsWithChildren } from 'react';
-import { stringifyClass } from '@panda/utils';
 import { useIsFocus } from '@panda/use';
+import { stringifyClass, EmptyObject } from '@panda/utils';
 
-export function Layout({ children }: PropsWithChildren<{}>) {
+export function Layout({ children }: PropsWithChildren<EmptyObject>) {
   const isFocus = useIsFocus();
 
   return (

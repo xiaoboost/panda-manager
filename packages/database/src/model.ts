@@ -51,7 +51,8 @@ export class Model<T> {
           return result;
         },
       });
-    } else {
+    }
+    else {
       this._proxy = this._val;
     }
   }
@@ -76,7 +77,8 @@ export class Model<T> {
         }
 
         this.data = JSON.parse(buf.toString());
-      } catch (err) {
+      }
+      catch (err) {
         this.write();
       }
 

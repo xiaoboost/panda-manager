@@ -17,6 +17,7 @@
     "build:data": "webpack --config webpack.config.js --mode production --json ./dist/stats.json",
     "build:analyzer": "pnpm run clear && pnpm run build:data && pnpm run analyzer",
     "build": "pnpm run clear && webpack --config webpack.config.js --mode production",
+    "eslint": "eslint --fix --quiet --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
     "prepare": "pnpm run build"
   },
   "author": "xiaoboost",

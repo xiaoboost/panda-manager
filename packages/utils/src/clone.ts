@@ -60,7 +60,8 @@ export function clone<T>(data: T, check = true): T {
 
     if (prototype && prototype.constructor && prototype.constructor.from) {
       return prototype.constructor.from(data);
-    } else {
+    }
+    else {
       return Object.keys(data).reduce(
         (obj, key) => ((obj[key] = clone(data[key], false)), obj),
         {},

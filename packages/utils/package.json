@@ -17,6 +17,7 @@
     "build:cjs": "tsc -p ./tsconfig.build.json --outDir ./dist/cjs -m CommonJS",
     "build:esm": "tsc -p ./tsconfig.build.json --outDir ./dist/esm -m ESNext",
     "build": "pnpm run clear && pnpm run build:cjs && pnpm run build:esm",
+    "eslint": "eslint --fix --quiet --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
     "test": "nyc ava --verbose --no-cache",
     "prepare": "pnpm run build"
   },

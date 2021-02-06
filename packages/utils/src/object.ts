@@ -40,19 +40,22 @@ export function isEqual(from: any, to: any, deepCheck = false): boolean {
   if (isArray(from)) {
     if (!isArray(to) || from.length !== to.length) {
       return false;
-    } else {
+    }
+    else {
       return from.every((item, i) =>
         isBaseType(item) ? item === to[i] : isEqual(item, to[i]),
       );
     }
-  } else {
+  }
+  else {
     if (
       !isObject(to) ||
       !Object.keys(from).every((key) => to.hasOwnProperty(key)) ||
       !Object.keys(to).every((key) => from.hasOwnProperty(key))
     ) {
       return false;
-    } else {
+    }
+    else {
       return Object.entries(from).every(([key, value]) =>
         isBaseType(value) ? value === to[key] : isEqual(value, to[key]),
       );
@@ -82,10 +85,12 @@ export function parserBody<T = AnyObject>(body: T | string): T {
 
   if (!body) {
     data = {} as any;
-  } else if (typeof body === 'string') {
+  }
+  else if (typeof body === 'string') {
     try {
       data = JSON.parse(body);
-    } catch (e) {
+    }
+    catch (e) {
       data = {} as any;
       console.warn(`JSON 格式错误: ${body}`);
     }

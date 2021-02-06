@@ -9,8 +9,9 @@
     "clear": "rimraf ./dist/generated",
     "test": "nyc ava --verbose --no-cache",
     "update": "ncu --packageFile ./packages/*/package.json -x ts-node,nyc -u",
-    "format": "prettier --write packages/*/src/**/*.{ts,tsx,json,less,css} --loglevel warn",
-    "build": "npm run clear && ts-node-transpile-only --project tsconfig.compile.json ./build/webpack.ts --production",
+    "format": "prettier --write packages/*/src/**/*.{json,yaml,less,css} packages/*/*.{json,yaml} *.{json,yaml} --loglevel warn",
+    "eslint": "pnpm run -r eslint --parallel --filter {packages}",
+    "build": "pnpm run -r build --parallel --filter {packages}",
     "package": "rimraf ./dist && npm run build && electron-packager ./dist/generated --out=dist/package --asar",
     "start": "electron --debug=5858 ./dist/generated"
   },
@@ -21,23 +22,45 @@
     "require": [
       "ts-node/register/transpile-only"
     ],
+    "environmentVariables": {
+      "TS_NODE_PROJECT": "tsconfig.test.json"
+    },
     "files": [
       "packages/**/tests/*.spec.ts"
     ]
   },
   "husky": {
     "hooks": {
-      "pre-commit": "pnpm run format"
+      "pre-commit": "lint-staged"
     }
+  },
+  "lint-staged": {
+    "packages/*/src/**/*.{json,less,css}": [
+      "prettier --loglevel warn"
+    ],
+    "packages/*/*.{json,yaml}": [
+      "prettier --loglevel warn"
+    ],
+    "*.{json,yaml}": [
+      "prettier --loglevel warn"
+    ],
+    "packages/*/src/**/*.{ts,tsx,js,jsx}": [
+      "eslint --quiet"
+    ]
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/xiaoboost/panda-manager"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.14.2",
+    "@typescript-eslint/parser": "^4.14.2",
     "ava": "^3.15.0",
     "electron-packager": "^15.2.0",
+    "eslint": "^7.19.0",
+    "eslint-plugin-react": "^7.22.0",
     "husky": "^4.3.8",
+    "lint-staged": "^10.5.4",
     "nyc": "14.1.1",
     "prettier": "^2.2.1",
     "ts-node": "^9.1.1"

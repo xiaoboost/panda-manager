@@ -10,7 +10,8 @@ export function uid() {
   if (now === lastTime) {
     lastIndex++;
     return lastTime * 100 + lastIndex;
-  } else {
+  }
+  else {
     lastIndex = 0;
     lastTime = now;
     return lastTime * 100;

@@ -15,7 +15,8 @@ async function filesOperation(
 
     if (newStat.isDirectory()) {
       await filesOperation(newPath, opt);
-    } else {
+    }
+    else {
       await opt(newPath, newStat);
     }
   }
@@ -52,7 +53,8 @@ export async function readJSON<T extends Record<string, unknown>>(
 
   try {
     return JSON.parse(content) as T;
-  } catch (e) {
+  }
+  catch (e) {
     console.warn(e);
     return initVal;
   }
@@ -75,7 +77,8 @@ export async function fileSize(base: string) {
 
   if (fileStat.isDirectory()) {
     return await folderSize(base);
-  } else {
+  }
+  else {
     return fileStat.size;
   }
 }
@@ -86,7 +89,8 @@ export async function rmrf(base: string) {
 
   if (fileStat.isDirectory()) {
     await filesOperation(base, (file) => fs.rm(file));
-  } else {
+  }
+  else {
     await fs.rm(base);
   }
 }
