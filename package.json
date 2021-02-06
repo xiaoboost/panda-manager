@@ -9,9 +9,11 @@
     "clear": "rimraf ./dist/generated",
     "test": "nyc ava --verbose --no-cache",
     "update": "ncu --packageFile ./packages/*/package.json -x ts-node,nyc -u",
-    "format": "prettier --write packages/*/src/**/*.{json,yaml,less,css} packages/*/*.{json,yaml} *.{json,yaml} --loglevel warn",
-    "eslint": "pnpm run -r eslint --parallel --filter {packages}",
-    "build": "pnpm run -r build --parallel --filter {packages}",
+    "format": "pnpm run -r format --parallel --filter {packages}",
+    "format:fix": "pnpm run -r format:fix --parallel --filter {packages}",
+    "lint": "pnpm run -r lint --parallel --filter {packages}",
+    "lint:fix": "pnpm run -r lint:fix --parallel --filter {packages}",
+    "build:packages": "pnpm run -r build --parallel --filter {packages}",
     "package": "rimraf ./dist && npm run build && electron-packager ./dist/generated --out=dist/package --asar",
     "start": "electron --debug=5858 ./dist/generated"
   },
@@ -31,21 +33,13 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "pnpm run format && pnpm run lint"
     }
   },
   "lint-staged": {
-    "packages/*/src/**/*.{json,less,css}": [
-      "prettier --loglevel warn"
-    ],
-    "packages/*/*.{json,yaml}": [
-      "prettier --loglevel warn"
-    ],
-    "*.{json,yaml}": [
-      "prettier --loglevel warn"
-    ],
-    "packages/*/src/**/*.{ts,tsx,js,jsx}": [
-      "eslint --quiet"
+    "packages/**/*": [
+      "pnpm run format",
+      "pnpm run lint"
     ]
   },
   "repository": {
