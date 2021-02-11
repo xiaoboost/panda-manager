@@ -95,7 +95,8 @@ export function naturalCompare(a: string, b: string, opts?: CompareOptions) {
         ++numEndB;
       }
 
-      let difference = numEndA - numStartA - numEndB + numStartB; // numA length - numB length
+      // numA length - numB length
+      let difference = numEndA - numStartA - numEndB + numStartB;
       if (difference !== 0) {
         return difference;
       }

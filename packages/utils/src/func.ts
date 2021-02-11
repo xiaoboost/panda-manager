@@ -8,9 +8,9 @@ export function delay(time = 0) {
 
 /**
  * 轮询等待输入函数返回`true`
- * @param {() => boolean} fn
- * @param {number} [interval=200]
- * @param {number} [stopTimeout=60000]
+ * @param {() => boolean} fn 轮询函数
+ * @param {number} [interval=200] 轮询间隔
+ * @param {number} [stopTimeout=60000] 超时限制时间
  * @returns {Promise<void>}
  */
 export function wait(fn: () => boolean, interval = 200, stopTimeout = 60000) {
@@ -41,26 +41,9 @@ type ReturnPromiseType<T> = T extends (...args: any) => Promise<infer R>
 /** 防抖动函数包装 */
 export function debounce<T extends AnyFunction>(
   cb: T,
-): (...args: Parameters<T>) => Promise<ReturnPromiseType<T>>;
-export function debounce<T extends AnyFunction>(
-  delay: number,
-  cb: T,
-): (...args: Parameters<T>) => Promise<ReturnPromiseType<T>>;
-export function debounce<T extends AnyFunction>(
-  delay: number | T,
-  cb?: T,
+  delay = 200,
 ): (...args: Parameters<T>) => Promise<ReturnPromiseType<T>> {
   let timer: ReturnType<typeof setTimeout>;
-  let time: number, cbt: T;
-
-  if (typeof delay === 'function') {
-    cbt = delay;
-    time = 200;
-  }
-  else {
-    cbt = cb as T;
-    time = delay;
-  }
 
   let _resolve: (
     value: ReturnPromiseType<T> | PromiseLike<ReturnPromiseType<T>>,
@@ -76,7 +59,7 @@ export function debounce<T extends AnyFunction>(
     clearTimeout(timer);
     timer = setTimeout(() => {
       try {
-        const result = cbt(...args);
+        const result = cb(...args);
 
         if (result && isFunc(result.then)) {
           result.then(_resolve);
@@ -88,62 +71,8 @@ export function debounce<T extends AnyFunction>(
       catch (e) {
         _reject(e);
       }
-    }, time);
+    }, delay);
 
     return end;
   };
-}
-
-/** 限制异步函数并发数量 */
-export function concurrent(
-  fn: () => Promise<void>,
-  limit = 1,
-): () => Promise<void> {
-  let count = 0;
-
-  return function currentFunc() {
-    if (count >= limit) {
-      return Promise.resolve();
-    }
-
-    // 并发计数器 + 1
-    count++;
-
-    return fn().finally(() => count--);
-  };
-}
-
-interface RunLimit<T extends AnyFunction> {
-  /** 被包裹的函数本体 */
-  (...args: Parameters<T>): ReturnType<T>;
-  /** 重置运行次数计数器 */
-  reset(): void;
-}
-
-/** 限制函数运行次数 */
-export function runCountLimit<T extends AnyFunction>(
-  func: T,
-  limit = 1,
-): RunLimit<T> {
-  let count = 0;
-  let lastResult: ReturnType<T>;
-
-  const countFunc: RunLimit<T> = function countFunc(...args: Parameters<T>) {
-    if (count >= limit) {
-      return lastResult;
-    }
-
-    // 计数器 + 1
-    count++;
-
-    lastResult = func(...args);
-
-    return lastResult;
-  };
-
-  countFunc.reset = () => {
-    count = 0;
-  };
-
-  return countFunc;
 }

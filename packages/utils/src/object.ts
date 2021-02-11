@@ -50,8 +50,8 @@ export function isEqual(from: any, to: any, deepCheck = false): boolean {
   else {
     if (
       !isObject(to) ||
-      !Object.keys(from).every((key) => to.hasOwnProperty(key)) ||
-      !Object.keys(to).every((key) => from.hasOwnProperty(key))
+      !Object.keys(from).every((key) => hasOwn(to, key)) ||
+      !Object.keys(to).every((key) => hasOwn(from, key))
     ) {
       return false;
     }

@@ -14,6 +14,7 @@ module.exports = {
     },
   },
   extends: [
+    'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:react/recommended',
   ],
@@ -24,12 +25,20 @@ module.exports = {
     },
   },
   rules: {
+    'no-prototype-builtins': 'off',
+    'no-sparse-arrays': 'off',
+
     'max-len': ['warn', {
       code: 80,
     }],
     'indent': ['error', 2],
     'keyword-spacing': 'error',
     'brace-style': ['error', 'stroustrup', { allowSingleLine: true }],
+    'curly': 'error',
+    'eqeqeq': ['error', 'always'],
+    'no-extra-label': 'error',
+    'no-implicit-coercion': 'error',
+    'no-multi-spaces': 'error',
 
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',

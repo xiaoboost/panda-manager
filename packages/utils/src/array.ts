@@ -1,31 +1,32 @@
-import { isFunc, isDef } from './assert';
+import { isFunc, isUndef, isDef, isArray } from './assert';
 import { AnyObject } from './types';
 
 /** 索引类型 */
 type Index = string | number;
+/** 数组断言函数 */
+type Predicate<T> = (value: T, index: number) => boolean;
 
 /**
  * 删除满足条件的元素
- *  - 原数组不变，返回新数组
+ *  - 在原数组中操作
  *  - predicate 为函数时，删除 predicate 返回 true 的元素
  *  - predicate 为非函数时，删除与 predicate 严格相等的元素
  *  - 当 whole 为 false 时，只删除匹配到的第一个元素；为 true 时，删除所有匹配到的元素
  */
-export function deleteVal<T>(
+export function remove<T>(
   arr: T[],
-  predicate: T | ((value: T, index: number) => boolean),
+  predicate: T | Predicate<T>,
   whole = true,
 ): T[] {
   const fn = isFunc(predicate) ? predicate : (item: T) => item === predicate;
-  const newArr = arr.slice();
 
   let index = 0;
 
   while (index >= 0) {
-    index = newArr.findIndex(fn);
+    index = arr.findIndex(fn);
 
     if (index !== -1) {
-      newArr.splice(index, 1);
+      arr.splice(index, 1);
     }
 
     if (!whole) {
@@ -33,40 +34,33 @@ export function deleteVal<T>(
     }
   }
 
-  return newArr;
+  return arr;
 }
 
 /**
- * 删除满足条件的元素
- *  - 原数组不变，返回新数组
- *  - predicate 为函数时，删除 predicate 返回 true 的元素
- *  - predicate 为非函数时，删除与 predicate 严格相等的元素
+ * 替换满足条件的元素
+ *  - 在原数组中操作
+ *  - predicate 为函数时，替换 predicate 返回 true 的元素
+ *  - predicate 为非函数时，替换与 predicate 严格相等的元素
  */
 export function replace<T>(
   arr: T[],
   newVal: T,
-  predicate: T | ((value: T, index: number) => boolean),
-  whole = false,
+  predicate: T | Predicate<T>,
 ): T[] {
   const fn = isFunc(predicate) ? predicate : (item: T) => item === predicate;
-  const newArr = arr.slice();
 
-  for (let i = 0; i < newArr.length; i++) {
-    const item = newArr[i];
+  for (let i = 0; i < arr.length; i++) {
+    const item = arr[i];
     const compared = fn(item, i);
 
     if (compared) {
-      newArr.splice(i, 1, newVal);
-
-      if (!whole) {
-        break;
-      }
-
-      i++;
+      arr.splice(i, 1, newVal);
+      break;
     }
   }
 
-  return newArr;
+  return arr;
 }
 
 /**
@@ -104,19 +98,29 @@ export function unique<T>(
 /** 连接数组 */
 export function concat<T, U>(
   from: T[],
-  callback: (val: T) => U[] | undefined,
+  cb: (val: T) => (U | undefined)[] | U | undefined,
 ): U[] {
   let result: U[] = [];
 
   for (let i = 0; i < from.length; i++) {
-    result = result.concat(callback(from[i]) || []);
+    const item = cb(from[i]);
+
+    if (isUndef(item)) {
+      continue;
+    }
+    else if (isArray(item)) {
+      result = result.concat(item.filter(isDef));
+    }
+    else {
+      result.push(item);
+    }
   }
 
   return result;
 }
 
 /** 转换为数组 */
-export function transArr<T>(item?: T | T[]): T[] {
+export function toArray<T>(item?: T | T[]): T[] {
   if (!item) {
     return [];
   }
@@ -128,40 +132,13 @@ export function transArr<T>(item?: T | T[]): T[] {
   }
 }
 
-/** 生成`hash`查询表 */
-export function toMap<T extends AnyObject, U extends Index>(
-  arr: T[],
-  toKey: (val: T, index: number) => U,
-): Record<U, T | undefined> {
-  const map: Record<U, T> = {} as any;
-  arr.forEach((val, i) => (map[toKey(val, i)] = val));
-  return map;
-}
-
-/** 生成`hash`布尔查询表 */
-export function toBoolMap<T extends Index>(arr: T[]): Record<T, boolean>;
-export function toBoolMap<T, U extends Index>(
-  arr: T[],
-  cb: (val: T, index: number) => U
-): Record<U, boolean>;
-export function toBoolMap<T, U extends Index>(
-  arr: T[],
-  cb?: (val: T, index: number) => U,
-): Record<U, boolean> {
-  const map: Record<Index, boolean> = {};
-
-  if (!cb) {
-    arr.forEach((key) => (map[key as any] = true));
-  }
-  else {
-    arr.forEach((key, i) => (map[cb(key, i)] = true));
-  }
-
-  return map;
-}
-
 /** 在`rest`数组中，且不在`arr`数组中的 */
 export function exclude<T extends Index>(arr: T[], rest: T[]): T[] {
-  const map = toBoolMap(arr);
+  const map: Record<Index, boolean> = {};
+
+  for (let i = 0; i < arr.length; i++) {
+    map[arr[i]] = true;
+  }
+
   return rest.filter((key) => !map[key]);
 }
