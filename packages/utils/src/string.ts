@@ -19,9 +19,14 @@ export function stringifyClass(...opt: ClassInput[]): string {
       className.push(...parseClassObject(item));
     }
     else if (isString(item)) {
-      className.push(item.trim());
+      className.push(item);
     }
   }
 
-  return className.join(' ');
+  return className
+    .join(' ')
+    .split(/\s+/)
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .join(' ');
 }

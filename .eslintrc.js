@@ -31,9 +31,13 @@ module.exports = {
     'max-len': ['warn', {
       code: 80,
     }],
-    'indent': ['error', 2],
+    'indent': ['error', 2, {
+      SwitchCase: 1,
+    }],
     'keyword-spacing': 'error',
-    'brace-style': ['error', 'stroustrup', { allowSingleLine: true }],
+    'brace-style': ['error', 'stroustrup', {
+      allowSingleLine: true,
+    }],
     'curly': 'error',
     'eqeqeq': ['error', 'always'],
     'no-extra-label': 'error',

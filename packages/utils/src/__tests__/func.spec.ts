@@ -1,6 +1,6 @@
 import test from 'ava';
 
-import { delay, wait, debounce } from '../src';
+import { delay, wait, debounce } from '..';
 
 /** 记录时间差 */
 function diffTime() {

@@ -17,11 +17,9 @@
     "build:cjs": "tsc -p ./tsconfig.build.json --outDir ./dist/cjs -m CommonJS",
     "build:esm": "tsc -p ./tsconfig.build.json --outDir ./dist/esm -m ESNext",
     "build": "pnpm run clear && pnpm run build:cjs && pnpm run build:esm",
-    "format": "prettier --check *.{json,md} --loglevel warn",
-    "format:fix": "prettier --write *.{json,md} --loglevel warn",
     "lint": "eslint --quiet --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
     "lint:fix": "eslint --fix --quiet --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
-    "test": "nyc ava --verbose --no-cache",
+    "test": "nyc ava --no-cache",
     "prepare": "pnpm run build"
   },
   "ava": {
@@ -32,7 +30,7 @@
       "ts-node/register/transpile-only"
     ],
     "files": [
-      "tests/*.spec.ts"
+      "src/__tests__/*.spec.ts"
     ]
   },
   "devDependencies": {

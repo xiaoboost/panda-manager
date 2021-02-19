@@ -31,12 +31,12 @@ function buildAlphabetIndexMap(alphabet: string) {
 
 interface CompareOptions {
   /**
-   * Set to true to compare strings case-insensitively.
+   * 是否区分大小写字母
    * @default false
    */
   caseInsensitive?: boolean;
   /**
-   * A string of characters that define a custom character ordering.
+   * 自定义字符顺序
    * @default undefined
    */
   alphabet?: string;
@@ -48,6 +48,7 @@ export function naturalCompare(a: string, b: string, opts?: CompareOptions) {
 
   let indexA = 0;
   let indexB = 0;
+
   let alphabetIndexMap = defaultAlphabetIndexMap;
   let firstDifferenceInLeadingZeros = 0;
 
