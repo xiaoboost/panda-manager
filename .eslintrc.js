@@ -1,14 +1,27 @@
 const path = require('path');
 const fs = require('fs');
-const isRoot = fs.existsSync(path.join(__dirname, 'pnpm-lock.yaml'));
-const workspace = isRoot ? __dirname : path.join(__dirname, '../../');
-const project = path.join(workspace, 'tsconfig.test.json');
+const workspace = process.cwd();
+const isRoot = fs.existsSync(path.join(workspace, 'pnpm-lock.yaml'));
+const rootWorkspace = isRoot ? workspace : path.join(workspace, '../../');
+const projectConfig = path.join(rootWorkspace, 'tsconfig.test.json');
+const relativeRoot = path.relative(rootWorkspace, workspace);
+
+const ignorePaths = [
+  'dev/*',
+  'dist/*',
+  'draft/*',
+  'coverage/*',
+  '.vscode/*',
+  '.eslintrc.js',
+  '**/*.js',
+].map((name) => path.join(relativeRoot, name).replace(/\\+/g, '/'));
 
 module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint', 'react'],
+  ignorePatterns: ignorePaths,
   parserOptions: {
-    project,
+    project: projectConfig,
     ecmaFeatures: {
       jsx: true,
     },
@@ -27,17 +40,13 @@ module.exports = {
   rules: {
     'no-prototype-builtins': 'off',
     'no-sparse-arrays': 'off',
+    'indent': 'off',
+    'brace-style': 'off',
 
     'max-len': ['warn', {
-      code: 80,
-    }],
-    'indent': ['error', 2, {
-      SwitchCase: 1,
+      code: 90,
     }],
     'keyword-spacing': 'error',
-    'brace-style': ['error', 'stroustrup', {
-      allowSingleLine: true,
-    }],
     'curly': 'error',
     'eqeqeq': ['error', 'always'],
     'no-extra-label': 'error',
@@ -46,5 +55,11 @@ module.exports = {
 
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
+    '@typescript-eslint/indent':  ['error', 2, {
+      SwitchCase: 1,
+    }],
+    '@typescript-eslint/brace-style': ['error', 'stroustrup', {
+      allowSingleLine: true,
+    }],
   },
 };
