@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
-  "include": ["src"],
-  "exclude": ["node_modules", "dist", "tests"],
+  "include": ["src", "typings"],
+  "exclude": ["node_modules", "dist"],
   "compilerOptions": {
     "declarationDir": "./dev",
     "outDir": "./dev",

@@ -7,7 +7,7 @@
     "declarationDir": "./dist/types",
     "moduleResolution": "node",
     "target": "esnext",
-    "module": "esnext",
+    "module": "commonjs",
     "jsx": "react",
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
@@ -27,6 +27,6 @@
     "allowJs": true,
     "lib": ["ESNext"]
   },
-  "include": ["src", "tests"],
+  "include": ["src", "tests", "typings"],
   "exclude": ["node_modules", "dist"]
 }

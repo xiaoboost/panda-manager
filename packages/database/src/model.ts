@@ -1,5 +1,4 @@
-import { gzip, gunzip } from './utils';
-import { readFile, writeFile } from '@panda/fs';
+import { gzip, gunzip, readFile, writeFile } from './utils';
 import { isObject, isUndef, isDef, debounce } from '@panda/utils';
 
 export class Model<T> {
@@ -61,14 +60,13 @@ export class Model<T> {
     if (process.env.NODE_ENV === 'development') {
       await writeFile(this.path, JSON.stringify(this._val, null, 2));
     }
-
-    if (process.env.NODE_ENV === 'production') {
+    else if (process.env.NODE_ENV === 'production') {
       await writeFile(this.path, await gzip(JSON.stringify(this._val)));
     }
   }
 
   read() {
-    this._ready = new Promise(async (resolve) => {
+    this._ready = (async () => {
       try {
         let buf = await readFile(this.path);
 
@@ -81,12 +79,10 @@ export class Model<T> {
       catch (err) {
         this.write();
       }
-
-      resolve();
-    });
+    })();
   }
 
-  write = debounce(200, () => this._write());
+  write = debounce(() => this._write(), 200);
 
   fill(val: T) {
     const { data } = this;
