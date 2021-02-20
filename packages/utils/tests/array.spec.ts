@@ -1,6 +1,6 @@
 import test from 'ava';
 
-import { unique, remove, replace, toArray, concat, exclude } from '..';
+import { unique, remove, replace, toArray, concat, exclude } from '../src';
 
 test('unique', ({ deepEqual }) => {
   deepEqual(unique([1, 1, 2, 2]), [1, 2]);

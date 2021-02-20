@@ -1,6 +1,6 @@
 import test from 'ava';
 
-import { stringifyClass } from '..';
+import { stringifyClass } from '../src';
 
 test('stringifyClass', ({ is }) => {
   is(stringifyClass('a', 'b', 'c\n\nd'), 'a b c d');

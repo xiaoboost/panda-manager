@@ -27,6 +27,6 @@
     "allowJs": true,
     "lib": ["ESNext"]
   },
-  "include": ["src"],
+  "include": ["src", "tests"],
   "exclude": ["node_modules", "dist"]
 }

@@ -6,7 +6,7 @@ import {
   clone,
   checkCircularStructure,
   shadowCopy,
-} from '..';
+} from '../src';
 
 test('isEmpty', ({ true: isTrue, false: isFalse }) => {
   isTrue(isEmpty({}));
