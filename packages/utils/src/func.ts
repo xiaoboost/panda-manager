@@ -35,8 +35,8 @@ export function wait(fn: () => boolean, interval = 200, stopTimeout = 60000) {
 type ReturnPromiseType<T> = T extends (...args: any) => Promise<infer R>
   ? R
   : T extends (...args: any) => infer R
-  ? R
-  : any;
+    ? R
+    : any;
 
 /** 防抖动函数包装 */
 export function debounce<T extends AnyFunction>(

@@ -9,8 +9,6 @@
     "clear": "rimraf ./dist/generated",
     "test": "nyc ava --verbose --no-cache",
     "update": "ncu --packageFile ./packages/*/package.json -x ts-node,nyc -u",
-    "format": "pnpm run -r format --parallel --filter {packages}",
-    "format:fix": "pnpm run -r format:fix --parallel --filter {packages}",
     "lint": "pnpm run -r lint --parallel --filter {packages}",
     "lint:fix": "pnpm run -r lint:fix --parallel --filter {packages}",
     "package": "rimraf ./dist && npm run build && electron-packager ./dist/generated --out=dist/package --asar",
@@ -27,12 +25,12 @@
       "TS_NODE_PROJECT": "tsconfig.test.json"
     },
     "files": [
-      "packages/**/tests/*.spec.ts"
+      "packages/**/*.spec.ts"
     ]
   },
   "husky": {
     "hooks": {
-      "pre-commit": "pnpm run format && pnpm run lint"
+      "pre-commit": "pnpm run lint"
     }
   },
   "repository": {
@@ -48,7 +46,6 @@
     "eslint-plugin-react": "^7.22.0",
     "husky": "^4.3.8",
     "nyc": "14.1.1",
-    "prettier": "^2.2.1",
     "ts-node": "^9.1.1"
   }
 }
