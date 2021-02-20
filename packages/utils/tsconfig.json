@@ -1,8 +1,5 @@
 {
   "extends": "@panda/tsconfig",
-  "compilerOptions": {
-    "declarationDir": "dist/types",
-  },
   "include": ["src", "tests"],
   "exclude": ["node_modules", "dist"]
 }
