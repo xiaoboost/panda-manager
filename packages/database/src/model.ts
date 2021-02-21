@@ -1,71 +1,50 @@
 import { gzip, gunzip, readFile, writeFile } from './utils';
-import { isObject, isUndef, isDef, debounce } from '@panda/utils';
+import { debounce, DeepReadonly } from '@panda/utils';
 
+/** 数据储存 */
 export class Model<T> {
   /** 数据 */
   private _val: T;
-  /** 代理数据 */
-  private _proxy!: T;
-  /** 数据在硬盘储存的路径 */
-  private _path: string;
   /** 初始化完成 */
   private _ready = Promise.resolve();
-
-  get data() {
-    return this._proxy;
-  }
-  set data(val) {
-    if (this._val !== val) {
-      this._val = val;
-      this.write();
-      this.proxy();
-    }
-  }
-
-  get ready() {
-    return this._ready;
-  }
-
-  get path() {
-    return process.env.NODE_ENV === 'development'
-      ? `${this._path}.json`
-      : this._path;
-  }
+  /** 数据在硬盘储存的路径 */
+  private readonly _path: string;
 
   constructor(init: T, path: string) {
     this._val = init;
     this._path = path;
-    this.read();
-    this.proxy();
+    this.init();
+  }
+  
+  /** 储存数据 */
+  get data(): DeepReadonly<T> {
+    return this._val as any;
   }
 
-  private proxy() {
-    if (isObject(this._val)) {
-      this._proxy = new Proxy(this._val, {
-        set: (target, key, val) => {
-          const result = Reflect.set(target, key, val);
-
-          this.write();
-
-          return result;
-        },
-      });
-    }
-    else {
-      this._proxy = this._val;
-    }
+  /** 初始化完成 */
+  get ready() {
+    return this._ready;
   }
 
+  /** 数据储存路径 */
+  private get path() {
+    return process.env.NODE_ENV === 'development' ? `${this._path}.json` : this._path;
+  }
+
+  /** 写入硬盘 */
   private async _write() {
-    if (process.env.NODE_ENV === 'development') {
-      await writeFile(this.path, JSON.stringify(this._val, null, 2));
-    }
-    else if (process.env.NODE_ENV === 'production') {
+    await this._ready;
+
+    if (process.env.NODE_ENV === 'production') {
       await writeFile(this.path, await gzip(JSON.stringify(this._val)));
     }
+    else {
+      await writeFile(this.path, JSON.stringify(this._val, null, 2));
+    }
   }
 
-  read() {
+  /** 初始化 */
+  private init() {
     this._ready = (async () => {
       try {
         let buf = await readFile(this.path);
@@ -74,7 +53,7 @@ export class Model<T> {
           buf = await gunzip(buf);
         }
 
-        this.data = JSON.parse(buf.toString());
+        this.set(JSON.parse(buf.toString()));
       }
       catch (err) {
         this.write();
@@ -82,15 +61,19 @@ export class Model<T> {
     })();
   }
 
-  write = debounce(() => this._write(), 200);
+  /** 设置数据 */
+  set(data: Partial<T>) {
+    this._val = {
+      ...this._val,
+      ...data,
+    };
 
-  fill(val: T) {
-    const { data } = this;
-
-    Object.entries(val).forEach(([key, val]) => {
-      if (isUndef(data[key]) && isDef(val)) {
-        data[key] = val;
-      }
-    });
+    this.write();
   }
+
+  /**
+   * 写入硬盘
+   *  - 延迟 200 ms
+   */
+  write = debounce(() => this._write(), 200);
 }
