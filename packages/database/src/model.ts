@@ -13,9 +13,9 @@ export class Model<T> {
   constructor(init: T, path: string) {
     this._val = init;
     this._path = path;
-    this.init();
+    this._ready = this.init();
   }
-  
+
   /** 储存数据 */
   get data(): DeepReadonly<T> {
     return this._val as any;
@@ -44,21 +44,19 @@ export class Model<T> {
   }
 
   /** 初始化 */
-  private init() {
-    this._ready = (async () => {
-      try {
-        let buf = await readFile(this.path);
+  private async init() {
+    try {
+      let buf = await readFile(this.path);
 
-        if (process.env.NODE_ENV === 'production') {
-          buf = await gunzip(buf);
-        }
+      if (process.env.NODE_ENV === 'production') {
+        buf = await gunzip(buf);
+      }
 
-        this.set(JSON.parse(buf.toString()));
-      }
-      catch (err) {
-        this.write();
-      }
-    })();
+      this.set(JSON.parse(buf.toString()));
+    }
+    catch (err) {
+      this.write();
+    }
   }
 
   /** 设置数据 */

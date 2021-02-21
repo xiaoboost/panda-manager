@@ -1,278 +1,284 @@
 import { gzip, gunzip, readFile, writeFile } from './utils';
-import { debounce, AnyObject } from '@panda/utils';
+import { debounce, AnyObject, DeepReadonly } from '@panda/utils';
 
-/** 基础数据行 */
-type TableRowData<T extends AnyObject> = T & { id: number };
 /** 数据库文件在文件系统中的储存结构 */
 type DatabaseInFile = Record<string, AnyObject[]>;
+/** 基础数据行 */
+type TableRowData<T extends AnyObject> = T & { id: number };
+/** 行数据 */
+type RowData<Data extends AnyObject> = DeepReadonly<TableRowData<Data>>;
 
-/** 数据行类 */
+/** 数据行 */
 class TableRow<Data extends AnyObject> {
+  /** 原始数据 */
+  private _data: TableRowData<Data>;
+
   constructor(id: number, data: Data) {
-    this.id = id;
-    this.origin = data;
+    this._data = {
+      id,
+      ...data,
+    };
   }
 
-  /** 数据行编号 */
-  private readonly id: number;
-  /** 原始数据 */
-  private readonly origin: Data;
+  /** 编号 */
+  get id() {
+    return this._data.id;
+  }
 
   /** 数据 */
-  get data(): TableRowData<Data> {
-    return {
-      id: this.id,
-      ...this.origin,
-    };
+  get data(): DeepReadonly<TableRowData<Data>> {
+    return this._data as any;
   }
 
   /** 设置数据 */
   set(data: Partial<Data>) {
-    const lastData = this.data;
-
-    // this.origin = {
-    //   ...this.origin,
-    //   ...data,
-    // };
+    this._data = {
+      ...this._data,
+      ...data,
+    };
   }
 }
 
-/** 数据表类 */
-// class Table<Map extends AnyObject = AnyObject> extends Watcher<TableRow<Map>[]> {
-class Table<Map extends AnyObject = AnyObject> {
-  // /** 按照哪列排序 */
-  // private _orderBy: keyof TableRowData<Map> = 'id';
-  // /** 查询条件回调 */
-  // private _whereCb: Array<(data: Readonly<TableRowData<Map>>) => boolean> = [];
-  // /** 是否是升序排列 */
-  // private _isAsc = true;
-  // /** 设置查询的数量 */
-  // private _limit = Infinity;
+/** 数据表 */
+class Table<Row extends AnyObject = AnyObject> {
+  /** 按照哪列排序 */
+  private _orderBy: keyof RowData<Row> = 'id';
+  /** 查询条件回调 */
+  private _whereCb: Array<(data: RowData<Row>) => boolean> = [];
+  /** 是否是升序排列 */
+  private _isAsc = true;
+  /** 设置查询的数量 */
+  private _limit = Infinity;
+  /** 数据表 */
+  private _data: TableRow<Row>[] = [];
+  /** 当前最大编号 */
+  private _maxId = 1;
 
-  // /** 数据库 */
-  // private readonly _database: Database;
+  /** 数据库 */
+  private readonly _database: Database;
 
-  // /** 复制当前的数据表类 */
-  // private _shadowTable() {
-  //   // 新数据表
-  //   const table = new Table<Map>(this._database);
+  constructor(database: Database) {
+    this._database = database;
+  }
 
-  //   // 直接引用原数据表数据
-  //   table['_data'] = this._data;
+  /** 是否准备好 */
+  get ready() {
+    return this._database.ready;
+  }
 
-  //   // 复制内部查询条件
-  //   table._limit = this._limit;
-  //   table._isAsc = this._isAsc;
-  //   table._orderBy = this._orderBy;
-  //   table._whereCb = this._whereCb.slice();
+  /** 复制当前的数据表类 */
+  private _shadowTable() {
+    // 新数据表
+    const table = new Table<Row>(this._database);
 
-  //   return table;
-  // }
-  // /** 生成排序回调 */
-  // private _sort() {
-  //   const large = this._isAsc ? 1 : -1,
-  //     small = -large,
-  //     key = this._orderBy;
+    // 直接引用原数据表数据
+    table['_data'] = this._data;
 
-  //   return (pre: TableRow<Map>, next: TableRow<Map>) => {
-  //     return pre.data[key] > next.data[key] ? large : small;
-  //   };
-  // }
+    // 复制内部查询条件
+    table._limit = this._limit;
+    table._isAsc = this._isAsc;
+    table._orderBy = this._orderBy;
+    table._whereCb = this._whereCb.slice();
 
-  // /** 隶属的数据库 */
-  // constructor(database: Database) {
-  //   super([]);
-  //   this._database = database;
-  // }
+    return table;
+  }
+  /** 生成排序回调 */
+  private _createSort() {
+    const large = this._isAsc ? 1 : -1;
+    const small = -large;
+    const key = this._orderBy;
 
-  // get ready() {
-  //   return this._database.ready;
-  // }
+    return (pre: TableRow<Row>, next: TableRow<Row>) => {
+      return pre.data[key] > next.data[key] ? large : small;
+    };
+  }
 
-  // /** 添加条目 */
-  // insert(...data: Map[]) {
-  //   const last = this._data.slice();
+  /** 添加条目 */
+  insert(...list: Row[]) {
+    const noIdList = list.filter((data) => !data.id);
+    const idList = list.filter((data) => data.id).sort((pre, next) => {
+      return (pre.id as number) > (next.id as number) ? 1 : -1;
+    });
 
-  //   this._data.push(...data.map((item) => new TableRow(item)));
-  //   this._database.write();
+    for (const data of idList) {
+      const id = data.id as number;
 
-  //   this.notify(this._data, last);
-  // }
-  // /** 删除条目 */
-  // remove() {
-  //   const { _data: table, _limit: limit, _whereCb: assert } = this;
+      // id 重复则跳过
+      if (id === data.id) {
+        continue;
+      }
 
-  //   const last = this._data.slice();
+      this._maxId = id;
+      this._data.push(new TableRow(id, data));
+    }
 
-  //   let count = 0;
+    for (const data of noIdList) {
+      this._data.push(new TableRow(this._maxId++, data));
+    }
 
-  //   for (let index = 0; index < table.length; index++) {
-  //     // 表中的原数据
-  //     const row = table[index];
+    this._database.write();
+  }
+  /** 删除条目 */
+  remove() {
+    const { _data: table, _limit: limit, _whereCb: assert } = this;
 
-  //     // 删除之后的下表指针对应的元素赋值
-  //     table[index - count] = row;
+    let count = 0;
 
-  //     // 删除计数还未到限制
-  //     if (count < limit) {
-  //       if (assert.every((cb) => cb(row.data))) {
-  //         count++;
-  //       }
-  //     }
-  //   }
+    for (let index = 0; index < table.length; index++) {
+      // 表中的原数据
+      const row = table[index];
 
-  //   // 表长度重新赋值
-  //   table.length -= count;
+      // 删除之后的下表指针对应的元素赋值
+      table[index - count] = row;
 
-  //   this._database.write();
-  //   this.notify(this._data, last);
-  // }
-  // /** 修改条目 */
-  // update(id: number, data: Partial<Map>) {
-  //   const row = this._data.find((item) => item.data.id === id);
+      // 删除计数还未到限制
+      if (count < limit) {
+        if (assert.every((cb) => cb(row.data))) {
+          count++;
+        }
+      }
+    }
 
-  //   if (!row) {
-  //     return false;
-  //   }
+    // 表长度重新赋值
+    table.length -= count;
 
-  //   row.set(data);
+    this._database.write();
+  }
+  /** 修改条目 */
+  update(id: number, data: Partial<Row>) {
+    const row = this._data.find((item) => item.id === id);
 
-  //   this._database.write();
+    if (row) {
+      row.set(data);
+      this._database.write();
+    }
+  }
+  /** 查询数据 */
+  toQuery() {
+    let selected: TableRow<Row>[] = [];
 
-  //   return true;
-  // }
-  // /** 查询数据 */
-  // toQuery() {
-  //   let selected: TableRow<Map>[] = [];
+    // 没有查询条件，则返回全部数据
+    if (this._whereCb.length === 0) {
+      selected = this._data.slice();
+    }
+    // 有查询条件则搜索
+    else {
+      for (let i = 0; i < this._data.length; i++) {
+        const row = this._data[i];
 
-  //   // 没有查询条件，则返回全部数据
-  //   if (this._whereCb.length === 0) {
-  //     selected = this._data.slice();
-  //   }
-  //   // 有查询条件则搜索
-  //   else {
-  //     for (let i = 0; i < this._data.length; i++) {
-  //       const item = this._data[i];
+        if (this._whereCb.every((cb) => cb(row.data))) {
+          selected.push(row);
 
-  //       if (this._whereCb.every((cb) => cb(item.data))) {
-  //         selected.push(item);
+          if (selected.length >= this._limit) {
+            break;
+          }
+        }
+      }
+    }
 
-  //         if (selected.length >= this._limit) {
-  //           break;
-  //         }
-  //       }
-  //     }
-  //   }
+    return selected.sort(this._createSort());
+  }
 
-  //   return selected.sort(this._sort());
-  // }
+  // 查询条件
+  /** 设置查询条件 */
+  where(assert: (data: RowData<Row>) => boolean) {
+    const table = this._shadowTable();
 
-  // // 查询条件
-  // /** 设置查询条件 */
-  // where(assert: (data: Readonly<TableRowData<Map>>) => boolean) {
-  //   const table = this._shadowTable();
+    if (table._whereCb.indexOf(assert) < 0) {
+      table._whereCb.push(assert);
+    }
 
-  //   if (table._whereCb.indexOf(assert) < 0) {
-  //     table._whereCb.push(assert);
-  //   }
+    return table;
+  }
+  /** 设置排序 */
+  orderBy(key: keyof RowData<Row>, direction: 'desc' | 'asc' = 'asc') {
+    const table = this._shadowTable();
 
-  //   return table;
-  // }
-  // /** 设置排序 */
-  // orderBy(key: keyof TableRowData<Map>, direction: 'desc' | 'asc' = 'asc') {
-  //   const table = this._shadowTable();
+    table._orderBy = key;
+    table._isAsc = direction === 'asc';
 
-  //   table._orderBy = key;
-  //   table._isAsc = direction === 'asc';
-
-  //   return table;
-  // }
-  // /** 设置查询数量 */
-  // limit(num: number) {
-  //   const table = this._shadowTable();
-
-  //   table._limit = num;
-
-  //   return table;
-  // }
+    return table;
+  }
+  /** 设置查询数量 */
+  limit(num: number) {
+    const table = this._shadowTable();
+    table._limit = num;
+    return table;
+  }
 }
 
-/** 数据库类 */
+/** 数据库 */
 export class Database {
-  // /** 数据库储存的路径 */
-  // private _path: string;
-  // /** 当前异步进程 */
-  // private _progress = Promise.resolve();
-  // /** 数据库数据 */
-  // private _data: Record<string, Table> = {};
-  // /** 初始化准备就绪 */
-  // private _ready: Promise<void>;
+  /** 数据库储存的路径 */
+  private _path: string;
+  /** 数据库数据 */
+  private _data: Record<string, Table> = {};
+  /** 初始化准备就绪 */
+  private _ready: Promise<void>;
 
-  // constructor(path: string) {
-  //   this._path = path;
-  //   this._ready = this.read();
-  // }
+  constructor(path: string) {
+    this._path = path;
+    this._ready = this.init();
+  }
 
-  // private get path() {
-  //   return process.env.NODE_ENV === 'development'
-  //     ? `${this._path}.json`
-  //     : this._path;
-  // }
+  /** 储存路径 */
+  private get path() {
+    return process.env.NODE_ENV === 'development' ? `${this._path}.json` : this._path;
+  }
 
-  // get ready() {
-  //   return this._ready;
-  // }
+  get ready() {
+    return this._ready;
+  }
 
-  // /** 数据写入硬盘 */
-  // private _write() {
-  //   this._progress = this._progress.then(async () => {
-  //     const data: DatabaseInFile = {};
+  /** 写入硬盘 */
+  private async _write() {
+    const data: DatabaseInFile = {};
 
-  //     Object.entries(this._data).forEach(([name, table]) => {
-  //       data[name] = table['_data'].map((row) => row['_data']);
-  //     });
+    Object.entries(this._data).forEach(([name, table]) => {
+      data[name] = table['_data'].map((row) => row.data);
+    });
 
-  //     if (process.env.NODE_ENV === 'development') {
-  //       await writeFile(this.path, JSON.stringify(data, null, 2));
-  //     }
-  //     else if (process.env.NODE_ENV === 'production') {
-  //       await writeFile(this.path, await gzip(JSON.stringify(data)));
-  //     }
-  //   });
+    if (process.env.NODE_ENV === 'production') {
+      await writeFile(this.path, await gzip(JSON.stringify(data)));
+    }
+    else {
+      await writeFile(this.path, JSON.stringify(data, null, 2));
+    }
+  }
+  /** 初始化 */
+  async init(): Promise<void> {
+    let data: DatabaseInFile = {};
 
-  //   return this._progress;
-  // }
-  // /** 从硬盘读取数据 */
-  // async read(): Promise<void> {
-  //   let data: DatabaseInFile = {};
+    try {
+      let buf = await readFile(this.path);
 
-  //   try {
-  //     let buf = await readFile(this.path);
+      if (process.env.NODE_ENV === 'production') {
+        buf = await gunzip(buf);
+      }
 
-  //     if (process.env.NODE_ENV === 'production') {
-  //       buf = await gunzip(buf);
-  //     }
+      data = JSON.parse(buf.toString());
+    }
+    catch (err) {
+      this.write();
+    }
 
-  //     data = JSON.parse(buf.toString());
-  //   }
-  //   catch (err) {
-  //     this.write();
-  //   }
+    Object.entries(data).forEach(([name, tableData]) => {
+      this.use(name).insert(...tableData);
+    });
+  }
 
-  //   Object.entries(data).forEach(([name, tableData]) => {
-  //     this.use(name).insert(...tableData);
-  //   });
-  // }
+  /**
+   * 写入硬盘
+   *  - 延迟 200 ms
+   */
+  write = debounce(() => this._write(), 200);
 
-  // /** 将数据库写入硬盘 */
-  // write = debounce(() => this._write(), 200);
+  /** 使用某个表 */
+  use<Row extends AnyObject = AnyObject>(name: string): Table<Row> {
+    if (!this._data[name]) {
+      this._data[name] = new Table(this);
+    }
 
-  // /** 使用某个表 */
-  // use<Map extends AnyObject = AnyObject>(name: string): Table<Map> {
-  //   if (!this._data[name]) {
-  //     this._data[name] = new Table(this);
-  //   }
-
-  //   return this._data[name] as any;
-  // }
+    return this._data[name] as any;
+  }
 }
