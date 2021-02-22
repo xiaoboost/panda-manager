@@ -2,9 +2,8 @@
   "name": "@panda/use",
   "version": "1.0.0",
   "description": "panda-manager react use utils",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
-  "types": "dist/types/index.d.ts",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
     "dist",
     "README.md",
@@ -13,22 +12,17 @@
   "scripts": {
     "clear": "rimraf ./dist",
     "dev": "tsc -w -p ./tsconfig.dev.json",
-    "build:cjs": "tsc -p ./tsconfig.build.json --outDir ./dist/cjs -m CommonJS",
-    "build:esm": "tsc -p ./tsconfig.build.json --outDir ./dist/esm -m ESNext",
-    "build": "pnpm run clear && pnpm run build:cjs && pnpm run build:esm",
-    "eslint": "eslint --fix --quiet --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
+    "build:esm": "tsc -p ./tsconfig.build.json",
+    "build": "pnpm run clear && pnpm run build:esm",
+    "lint": "eslint --quiet --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
+    "lint:fix": "eslint --fix --quiet --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
     "prepare": "pnpm run build"
-  },
-  "author": "xiaoboost",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/xiaoboost/panda-manager"
   },
   "dependencies": {
     "@panda/utils": "workspace:*"
   },
   "devDependencies": {
+    "@panda/tsconfig": "workspace:*",
     "electron": "11.3.0",
     "react": "^17.0.1",
     "rimraf": "^3.0.2",

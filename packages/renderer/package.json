@@ -2,9 +2,8 @@
   "name": "@panda/renderer",
   "version": "1.0.0",
   "description": "panda-manager renderer",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
-  "types": "dist/types/index.d.ts",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
     "dist",
     "README.md",
@@ -40,6 +39,7 @@
     "react-router-dom": "^5.2.0"
   },
   "devDependencies": {
+    "@panda/tsconfig": "workspace:*",
     "@types/node": "^14.14.31",
     "@types/react": "^17.0.2",
     "@types/react-dom": "^17.0.1",

@@ -1,32 +1,8 @@
 {
-  "compilerOptions": {
-    "outDir": "dist",
-    "sourceMap": false,
-    "strict": true,
-    "declaration": true,
-    "declarationDir": "./dist/types",
-    "moduleResolution": "node",
-    "target": "es2018",
-    "module": "esnext",
-    "jsx": "react",
-    "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "isolatedModules": false,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "noImplicitAny": true,
-    "noImplicitThis": true,
-    "noImplicitReturns": false,
-    "strictNullChecks": true,
-    "importHelpers": true,
-    "listFiles": false,
-    "removeComments": false,
-    "skipLibCheck": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "allowJs": true,
-    "lib": ["ESNext"]
-  },
+  "extends": "@panda/tsconfig",
   "include": ["src", "tests"],
-  "exclude": ["node_modules", "dist"]
+  "exclude": ["node_modules", "dist"],
+  "compilerOptions": {
+    "outDir": "dist"
+  }
 }

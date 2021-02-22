@@ -28,6 +28,7 @@
     "electron": "11.3.0"
   },
   "devDependencies": {
+    "@panda/tsconfig": "workspace:*",
     "esbuild": "^0.8.50",
     "rimraf": "^3.0.2",
     "typescript": "^4.1.5"

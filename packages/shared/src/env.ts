@@ -16,7 +16,7 @@ const tempDir = join(app.getPath('temp'), appName);
 /** 缓存文件夹路径 */
 const userDir =
   process.env.NODE_ENV === 'development'
-    ? join(app.getPath('temp'), `${appName}-dev-userdir`)
+    ? join(app.getPath('temp'), `${appName}-dev-user-dir`)
     : app.getPath('userData');
 
 /** 由软件根目录的相对路径转变为绝对路径 */
