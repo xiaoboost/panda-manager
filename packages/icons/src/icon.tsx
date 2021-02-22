@@ -7,7 +7,7 @@ interface IconProps {
   onClick?(event: React.MouseEvent): any;
 }
 
-export function createIcon(name: string, data: icons.Data) {
+export function createIcon(name: string, data: icons.Icon) {
   return function Icon({ className, onClick, style }: IconProps) {
     let customClass = `panda-icon panda-icon-${name}`;
 

@@ -19,13 +19,8 @@
     "eslint": "eslint --fix --quiet --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
     "prepare": "pnpm run build"
   },
-  "author": "xiaoboost",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/xiaoboost/panda-manager"
-  },
   "devDependencies": {
+    "@panda/tsconfig": "workspace:*",
     "react": "^17.0.1",
     "rimraf": "^3.0.2",
     "typescript": "^4.1.5"
