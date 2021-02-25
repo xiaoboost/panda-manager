@@ -30,8 +30,8 @@
   },
   "devDependencies": {
     "@panda/tsconfig": "workspace:*",
-    "esbuild": "^0.8.51",
+    "esbuild": "^0.8.52",
     "rimraf": "^3.0.2",
-    "typescript": "^4.1.5"
+    "typescript": "^4.2.2"
   }
 }
