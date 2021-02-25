@@ -7,10 +7,9 @@
   "license": "MIT",
   "scripts": {
     "clear": "rimraf ./dist/generated",
-    "test": "nyc ava --verbose --no-cache",
-    "update": "ncu --packageFile ./packages/*/package.json -x ts-node,nyc -u",
-    "lint": "pnpm run -r lint --parallel --filter {packages}",
-    "lint:fix": "pnpm run -r lint:fix --parallel --filter {packages}",
+    "test": "nyc ava --no-cache",
+    "lint": "pnpm run -r lint --parallel --filter {main,renderer,utils}",
+    "lint:fix": "pnpm run -r lint:fix --parallel --filter {main,renderer,utils}",
     "package": "rimraf ./dist && npm run build && electron-packager ./dist/generated --out=dist/package --asar",
     "start": "electron --debug=5858 ./dist/generated"
   },
@@ -25,7 +24,9 @@
       "TS_NODE_PROJECT": "tsconfig.test.json"
     },
     "files": [
-      "packages/**/*.spec.ts"
+      "main/**/*.spec.ts",
+      "renderer/**/*.spec.ts",
+      "utils/**/*.spec.ts"
     ]
   },
   "husky": {
@@ -38,11 +39,11 @@
     "url": "https://github.com/xiaoboost/panda-manager"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.14.2",
-    "@typescript-eslint/parser": "^4.14.2",
+    "@typescript-eslint/eslint-plugin": "^4.15.2",
+    "@typescript-eslint/parser": "^4.15.2",
     "ava": "^3.15.0",
     "electron-packager": "^15.2.0",
-    "eslint": "^7.19.0",
+    "eslint": "^7.20.0",
     "eslint-plugin-react": "^7.22.0",
     "husky": "^4.3.8",
     "nyc": "14.1.1",

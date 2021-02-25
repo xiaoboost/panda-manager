@@ -10,7 +10,8 @@
   ],
   "scripts": {
     "clear": "rimraf ./dist",
-    "eslint": "eslint --fix --quiet --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
+    "lint": "eslint --quiet --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
+    "lint:fix": "eslint --fix --quiet --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
     "dev": "esbuild src/index.ts --bundle --watch --outfile=./dist/index.js --format=iife --define:process.env.NODE_ENV=\\\"development\\\" --main-fields=module,main --platform=node --target=es6",
     "build": "esbuild src/index.ts --bundle --outfile=./dist/index.js --format=iife --define:process.env.NODE_ENV=\\\"production\\\" --main-fields=module,main --platform=node --target=es6 --minify"
   },
@@ -29,7 +30,7 @@
   },
   "devDependencies": {
     "@panda/tsconfig": "workspace:*",
-    "esbuild": "^0.8.50",
+    "esbuild": "^0.8.51",
     "rimraf": "^3.0.2",
     "typescript": "^4.1.5"
   }

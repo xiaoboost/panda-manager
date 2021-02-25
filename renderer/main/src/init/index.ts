@@ -1,4 +1,4 @@
-import './style';
+// import './style';
 
 import { render } from 'react-dom';
 import { createElement } from 'react';
