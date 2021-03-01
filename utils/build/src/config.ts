@@ -3,8 +3,17 @@ import path from "path";
 import * as ts from "typescript";
 import { promises as fs } from "fs";
 import { BuildOptions } from "esbuild";
+import { isFunc } from '@panda/utils';
 
 import { isDevelopment, isProduction } from "./env";
+
+export type ConfigFile = BuildOptions | ((arg: ConfigContext) => BuildOptions);
+export type ConfigContext = {
+  env: {
+    isDevelopment: boolean;
+    isProduction: boolean;
+  };
+};
 
 async function readConfigFile(dir: string) {
   const configFile = (ext: string) => path.join(dir, `build.config${ext}`);
@@ -18,33 +27,16 @@ async function readConfigFile(dir: string) {
   return result;
 }
 
-function mergeConfig(opt: BuildOptions = {}) {
-  if (!("bundle" in opt)) {
-    opt.bundle = true;
-  }
+export function mergeConfig(opt: BuildOptions = {}) {
+  opt.bundle = opt.bundle ?? true;
+  opt.format = opt.format ?? 'iife';
+  opt.target = opt.target ?? 'es6';
+  opt.outfile = opt.outfile ?? 'dist/index.js';
+  opt.entryPoints = opt.entryPoints ?? ['src/index.ts'];
+  opt.platform = opt.platform ?? 'browser';
 
-  if (!("format" in opt)) {
-    opt.format = "iife";
-  }
-
-  if (!("target" in opt)) {
-    opt.target = "es6";
-  }
-
-  if (!('entryPoints' in opt)) {
-    opt.entryPoints = ['src/index.ts'];
-  }
-
-  if (!('outfile' in opt)) {
-    opt.outfile = 'dist/index.js';
-  }
-
-  if (!('platform' in opt)) {
-    opt.platform = 'browser';
-  }
-
-  if (isProduction && !("minify" in opt)) {
-    opt.minify = true;
+  if (isProduction) {
+    opt.minify = opt.minify ?? true;
   }
 
   if (!opt.define) {
@@ -70,16 +62,15 @@ function getScriptExport(origin: string): BuildOptions {
     target: ts.ScriptTarget.ES2015,
     module: ts.ModuleKind.CommonJS,
   });
-  const code = `
-      const module = {
-        exports: {},
-      };
-  
-      ((module, exports) => {
-        ${jsScript}
-        return module;
-      })(module, module.exports);
-    `;
+  const code = (
+    'const module = {' +
+      'exports: {},' +
+    '};' +
+    '((module, exports) => {' +
+      jsScript +
+      'return module;' +
+    '})(module, module.exports);'
+  );
 
   const output = globalThis.eval(code);
   const module = output.exports;
@@ -88,14 +79,21 @@ function getScriptExport(origin: string): BuildOptions {
     return mergeConfig();
   }
 
-  const exports = module.default ? module.default : module;
+  const exports: ConfigFile = module.default ? module.default : module;
 
-  return mergeConfig(
-    exports({
-      isDevelopment,
-      isProduction,
-    })
-  );
+  if (isFunc(exports)) {
+    const context: ConfigContext = {
+      env: {
+        isDevelopment,
+        isProduction,
+      },
+    };
+
+    return mergeConfig(exports(context));
+  }
+  else {
+    return mergeConfig(exports);
+  }
 }
 
 export async function readConfig(dir: string): Promise<BuildOptions> {

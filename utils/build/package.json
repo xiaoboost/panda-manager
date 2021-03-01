@@ -2,6 +2,8 @@
   "name": "@panda/build",
   "version": "1.0.0",
   "description": "panda-manager build",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "bin": {
     "build": "dist/cli.js"
   },
@@ -12,9 +14,10 @@
   ],
   "scripts": {
     "clear": "rimraf ./dist",
-    "dev": "esbuild src/index.ts --watch --bundle --sourcemap --outfile=dist/cli.js --platform=node --external:typescript --external:esbuild",
-    "bundle": "esbuild src/index.ts --bundle --minify --outfile=dist/cli.js --platform=node --external:typescript --external:esbuild --summary",
-    "build": "pnpm run clear && pnpm run bundle",
+    "types": "tsc -p . --emitDeclarationOnly",
+    "dev": "tsc -w -p .",
+    "bundle": "esbuild src/index.ts src/cli.ts --bundle --minify --outdir=dist --platform=node --external:esbuild",
+    "build": "pnpm run clear && pnpm run bundle && pnpm run types",
     "lint": "eslint --quiet --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
     "lint:fix": "eslint --fix --quiet --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
     "prepare": "pnpm run build"
@@ -26,6 +29,7 @@
     "url": "https://github.com/xiaoboost/panda-manager"
   },
   "dependencies": {
+    "@panda/utils": "workspace:*",
     "esbuild": "^0.8.54"
   },
   "devDependencies": {
