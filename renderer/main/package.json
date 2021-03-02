@@ -32,7 +32,7 @@
     "@panda/shared": "workspace:*",
     "@panda/use": "workspace:*",
     "@panda/utils": "workspace:*",
-    "antd": "^4.12.3",
+    "antd": "^4.13.0",
     "electron": "^11.3.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
@@ -47,7 +47,7 @@
     "@types/react-dom": "^17.0.1",
     "@types/react-router-dom": "^5.1.7",
     "cpy-cli": "^3.1.1",
-    "esbuild": "^0.8.53",
+    "esbuild": "^0.8.54",
     "esbuild-plugin-less": "^1.0.1",
     "rimraf": "^3.0.2",
     "typescript": "^4.2.2"
