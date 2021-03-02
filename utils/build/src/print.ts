@@ -1,5 +1,5 @@
-import chalk from 'chalk';
-import path from 'path';
+import chalk from "chalk";
+import path from "path";
 import { BuildResult } from "esbuild";
 
 export function summary(start: number, dir: string, result: BuildResult) {
@@ -16,19 +16,22 @@ export function summary(start: number, dir: string, result: BuildResult) {
   console.log();
 
   fileInfos.forEach((info) => {
-    const dirname = path.join(path.dirname(info.path), '/');
+    const dirname = path.join(path.dirname(info.path), "/");
     const basename = path.basename(info.path);
-    const pathStr = ''.padEnd(maxLen - info.path.length, ' ');
+    const pathStr = "".padEnd(maxLen - info.path.length, " ");
     const sizeStr = size(info.size);
 
-    console.log(`   ${chalk.white(dirname)}${chalk.bold(basename)}${pathStr}`, sizeStr);
+    console.log(
+      `   ${chalk.white(dirname)}${chalk.bold(basename)}${pathStr}`,
+      sizeStr
+    );
   });
 
-  console.log(chalk.green('\n⚡ Done in', end - start, 'ms'));
+  console.log(chalk.green("\n⚡ Done in", end - start, "ms\n"));
 }
 
 export function size(size: number) {
-  const unit = ['b', 'kb', 'mb', 'gb'];
+  const unit = ["b", "kb", "mb", "gb"];
 
   let number = size;
   let unitIndex = 0;

@@ -4,14 +4,14 @@ import * as ts from "typescript";
 import { promises as fs } from "fs";
 import { BuildOptions } from "esbuild";
 import { isFunc } from '@panda/utils';
-
-import { isDevelopment, isProduction } from "./env";
+import { isDevelopment, isProduction, isWatch } from "./env";
 
 export type ConfigFile = BuildOptions | ((arg: ConfigContext) => BuildOptions);
 export type ConfigContext = {
   env: {
     isDevelopment: boolean;
     isProduction: boolean;
+    isWatch: boolean;
   };
 };
 
@@ -34,6 +34,14 @@ export function mergeConfig(opt: BuildOptions = {}) {
   opt.outfile = opt.outfile ?? 'dist/index.js';
   opt.entryPoints = opt.entryPoints ?? ['src/index.ts'];
   opt.platform = opt.platform ?? 'browser';
+  opt.external = (opt.external ?? []).concat(["electron"]);
+  opt.mainFields = (opt.mainFields ?? []).concat(["module", "main"]);
+
+  opt.write = false;
+
+  if (isWatch) {
+    opt.watch = true;
+  }
 
   if (isProduction) {
     opt.minify = opt.minify ?? true;
@@ -50,10 +58,6 @@ export function mergeConfig(opt: BuildOptions = {}) {
     opt.define["process.env.NODE_ENV"] = '"production"';
   }
 
-  opt.mainFields = (opt.mainFields ?? []).concat(["module", "main"]);
-  opt.external = (opt.external ?? []).concat(["electron"]);
-  opt.write = false;
-
   return opt;
 }
 
@@ -62,15 +66,15 @@ function getScriptExport(origin: string): BuildOptions {
     target: ts.ScriptTarget.ES2015,
     module: ts.ModuleKind.CommonJS,
   });
-  const code = (
-    'const module = {' +
-      'exports: {},' +
-    '};' +
-    '((module, exports) => {' +
-      jsScript +
-      'return module;' +
-    '})(module, module.exports);'
-  );
+  const code = `
+    const module = {
+      exports: {},
+    };
+    ((module, exports) => {
+      ${jsScript}
+      return module;
+    })(module, module.exports);
+  `;
 
   const output = globalThis.eval(code);
   const module = output.exports;
@@ -86,6 +90,7 @@ function getScriptExport(origin: string): BuildOptions {
       env: {
         isDevelopment,
         isProduction,
+        isWatch,
       },
     };
 

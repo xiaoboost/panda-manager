@@ -12,8 +12,8 @@
     "clear": "rimraf ./dist",
     "lint": "eslint --quiet --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
     "lint:fix": "eslint --fix --quiet --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
-    "dev": "esbuild src/index.ts --bundle --watch --outfile=./dist/index.js --format=iife --define:process.env.NODE_ENV=\\\"development\\\" --main-fields=module,main --platform=node --target=es6 --sourcemap",
-    "build": "esbuild src/index.ts --bundle --outfile=./dist/index.js --format=iife --define:process.env.NODE_ENV=\\\"production\\\" --main-fields=module,main --platform=node --target=es6 --minify --summary"
+    "dev": "build --development --watch",
+    "build": "build --production"
   },
   "author": "xiaoboost",
   "license": "MIT",
@@ -31,7 +31,6 @@
   "devDependencies": {
     "@panda/build": "workspace:*",
     "@panda/tsconfig": "workspace:*",
-    "esbuild": "^0.8.53",
     "rimraf": "^3.0.2",
     "typescript": "^4.2.2"
   }
