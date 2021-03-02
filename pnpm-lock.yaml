@@ -174,6 +174,7 @@ importers:
       react-router: 5.2.0_react@17.0.1
       react-router-dom: 5.2.0_react@17.0.1
     devDependencies:
+      '@panda/build': link:../../utils/build
       '@panda/tsconfig': link:../../utils/tsconfig
       '@types/node': 14.14.31
       '@types/panda': link:../../utils/typings
@@ -181,12 +182,12 @@ importers:
       '@types/react-dom': 17.0.1
       '@types/react-router-dom': 5.1.7
       cpy-cli: 3.1.1
-      esbuild: 0.8.54
       esbuild-plugin-less: 1.0.1
       rimraf: 3.0.2
       typescript: 4.2.2
     specifiers:
       '@ant-design/icons': ^4.5.0
+      '@panda/build': workspace:*
       '@panda/icons': workspace:*
       '@panda/shared': workspace:*
       '@panda/tsconfig': workspace:*
@@ -200,7 +201,6 @@ importers:
       antd: ^4.13.0
       cpy-cli: ^3.1.1
       electron: ^11.3.0
-      esbuild: ^0.8.54
       esbuild-plugin-less: ^1.0.1
       react: ^17.0.1
       react-dom: ^17.0.1
@@ -226,16 +226,18 @@ importers:
       typescript: ^4.2.2
   utils/build:
     dependencies:
-      '@panda/utils': link:../utils
       esbuild: 0.8.54
     devDependencies:
+      '@panda/fs': link:../../main/file-system
       '@panda/tsconfig': link:../tsconfig
+      '@panda/utils': link:../utils
       '@types/panda': link:../typings
       chalk: 4.1.0
       rimraf: 3.0.2
       tslib: 2.1.0
       typescript: 4.2.2
     specifiers:
+      '@panda/fs': workspace:*
       '@panda/tsconfig': workspace:*
       '@panda/utils': workspace:*
       '@types/panda': workspace:*
@@ -1056,6 +1058,10 @@ packages:
     peerDependencies:
       '@typescript-eslint/parser': ^4.0.0
       eslint: ^5.0.0 || ^6.0.0 || ^7.0.0
+      typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
     resolution:
       integrity: sha1-LK9qed0Zw4U7jTl2mif8yyTk5lE=
       tarball: '@typescript-eslint/eslint-plugin/download/@typescript-eslint/eslint-plugin-4.16.1.tgz'
@@ -1088,6 +1094,10 @@ packages:
       node: ^10.12.0 || >=12.0.0
     peerDependencies:
       eslint: ^5.0.0 || ^6.0.0 || ^7.0.0
+      typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
     resolution:
       integrity: sha1-O70yNN08W4grK82Ymbww4eFYbSo=
       tarball: '@typescript-eslint/parser/download/@typescript-eslint/parser-4.16.1.tgz'
@@ -1120,6 +1130,11 @@ packages:
     dev: true
     engines:
       node: ^10.12.0 || >=12.0.0
+    peerDependencies:
+      typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
     resolution:
       integrity: sha1-wvxGsFpI+/i76LZqY/CpugSzVvE=
       tarball: '@typescript-eslint/typescript-estree/download/@typescript-eslint/typescript-estree-4.16.1.tgz'
@@ -2292,6 +2307,11 @@ packages:
       ms: 2.1.2
     engines:
       node: '>=6.0'
+    peerDependencies:
+      supports-color: '*'
+    peerDependenciesMeta:
+      supports-color:
+        optional: true
     resolution:
       integrity: sha1-8NIpxQXgxtjEmsVT0bE9wYP2su4=
       tarball: debug/download/debug-4.3.1.tgz?cache=0&sync_timestamp=1607567078964&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fdebug%2Fdownload%2Fdebug-4.3.1.tgz
@@ -2661,6 +2681,7 @@ packages:
       integrity: sha1-oMuJPSdDHVwIed5HqyiDK775uRU=
       tarball: esbuild-plugin-less/download/esbuild-plugin-less-1.0.1.tgz
   /esbuild/0.8.54:
+    dev: false
     hasBin: true
     requiresBuild: true
     resolution:

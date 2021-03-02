@@ -1,6 +1,5 @@
-import '../styles';
+import '../styles/index.less';
 
-import 'antd/es/style/index.css';
 import 'antd/es/modal/style/index.css';
 import 'antd/es/switch/style/index.css';
 import 'antd/es/select/style/index.css';
