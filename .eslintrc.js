@@ -53,6 +53,7 @@ module.exports = {
     'no-implicit-coercion': 'error',
     'no-multi-spaces': 'error',
 
+    '@typescript-eslint/no-non-null-assertion': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/indent':  ['error', 2, {

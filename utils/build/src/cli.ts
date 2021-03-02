@@ -1,3 +1,3 @@
-import { build } from "./index";
+import { build } from "./process";
 
 build();

@@ -24,6 +24,6 @@
     "skipLibCheck": true,
     "suppressImplicitAnyIndexErrors": true,
     "allowJs": true,
-    "lib": ["ESNext"]
+    "lib": ["ESNext", "DOM"]
   }
 }

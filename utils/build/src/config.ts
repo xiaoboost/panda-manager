@@ -1,7 +1,7 @@
 import path from "path";
 
 import * as ts from "typescript";
-import { promises as fs } from "fs";
+import { readFile } from "@panda/fs";
 import { BuildOptions } from "esbuild";
 import { isFunc } from '@panda/utils';
 import { isDevelopment, isProduction, isWatch } from "./env";
@@ -18,10 +18,10 @@ export type ConfigContext = {
 async function readConfigFile(dir: string) {
   const configFile = (ext: string) => path.join(dir, `build.config${ext}`);
 
-  let result = await fs.readFile(configFile(".ts"), "utf-8").catch(() => "");
+  let result = await readFile(configFile(".ts"), "utf-8").catch(() => "");
 
   if (!result) {
-    result = await fs.readFile(configFile(".js"), "utf-8").catch(() => "");
+    result = await readFile(configFile(".js"), "utf-8").catch(() => "");
   }
 
   return result;
@@ -31,13 +31,16 @@ export function mergeConfig(opt: BuildOptions = {}) {
   opt.bundle = opt.bundle ?? true;
   opt.format = opt.format ?? 'iife';
   opt.target = opt.target ?? 'es6';
-  opt.outfile = opt.outfile ?? 'dist/index.js';
   opt.entryPoints = opt.entryPoints ?? ['src/index.ts'];
   opt.platform = opt.platform ?? 'browser';
   opt.external = (opt.external ?? []).concat(["electron"]);
   opt.mainFields = (opt.mainFields ?? []).concat(["module", "main"]);
 
   opt.write = false;
+
+  if (!opt.outdir && !opt.outfile) {
+    opt.outfile = 'dist/index.js';
+  }
 
   if (isWatch) {
     opt.watch = true;
@@ -61,23 +64,39 @@ export function mergeConfig(opt: BuildOptions = {}) {
   return opt;
 }
 
+function runScript(script: string) {
+  interface FakeModule {
+    exports: {
+      default: any;
+      [key: string]: any;
+    }
+  }
+
+  const fake: FakeModule = {
+    exports: {},
+  } as any;
+
+  try {
+    (new Function(`
+      return function box(module, exports, require) {
+        ${script}
+      }
+    `))()(fake, fake.exports, require);
+  }
+  catch (e) {
+    return {
+      default: {},
+    };
+  }
+
+  return fake.exports;
+}
+
 function getScriptExport(origin: string): BuildOptions {
-  const jsScript = ts.transpile(origin, {
+  const module = runScript(ts.transpile(origin, {
     target: ts.ScriptTarget.ES2015,
     module: ts.ModuleKind.CommonJS,
-  });
-  const code = `
-    const module = {
-      exports: {},
-    };
-    ((module, exports) => {
-      ${jsScript}
-      return module;
-    })(module, module.exports);
-  `;
-
-  const output = globalThis.eval(code);
-  const module = output.exports;
+  }));
 
   if (!module) {
     return mergeConfig();

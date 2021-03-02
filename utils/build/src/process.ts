@@ -1,16 +1,25 @@
-import type { BuildResult } from 'esbuild';
-
 import * as print from './print';
-import { promises as fs } from "fs";
+import * as path from 'path';
+
 import { isWatch } from './env';
 import { readConfig } from './config';
-import { build as esbuild } from 'esbuild';
+
+import { writeFile, mkdirp } from "@panda/fs";
+import { build as esbuild, BuildResult } from 'esbuild';
 
 async function writeOutputs(result: BuildResult) {
   const files = result.outputFiles ?? [];
+  const pathMap: Record<string, boolean> = {};
 
   for (const file of files) {
-    await fs.writeFile(file.path, file.contents);
+    const dirname = path.dirname(file.path);
+
+    if (!pathMap[dirname]) {
+      await mkdirp(dirname);
+      pathMap[dirname] = true;
+    }
+
+    await writeFile(file.path, file.contents);
   }
 }
 

@@ -15,7 +15,7 @@
   "scripts": {
     "clear": "rimraf ./dist",
     "types": "tsc -p . --emitDeclarationOnly",
-    "dev": "tsc -w -p .",
+    "dev": "esbuild src/index.ts src/cli.ts --bundle --watch --target=es6 --outdir=dist --platform=node --external:typescript --external:esbuild --define:process.env.NODE_ENV=\\\"development\\\"",
     "bundle": "esbuild src/index.ts src/cli.ts --bundle --minify --target=es6 --outdir=dist --platform=node --external:esbuild --define:process.env.NODE_ENV=\\\"production\\\"",
     "build": "pnpm run clear && pnpm run bundle && pnpm run types",
     "lint": "eslint --quiet --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
@@ -29,11 +29,12 @@
     "url": "https://github.com/xiaoboost/panda-manager"
   },
   "dependencies": {
-    "@panda/utils": "workspace:*",
     "esbuild": "^0.8.54"
   },
   "devDependencies": {
+    "@panda/fs": "workspace:*",
     "@panda/tsconfig": "workspace:*",
+    "@panda/utils": "workspace:*",
     "@types/panda": "workspace:*",
     "chalk": "^4.1.0",
     "rimraf": "^3.0.2",

@@ -42,7 +42,7 @@ export function size(size: number) {
   }
 
   if (unitIndex < 2) {
-    return chalk.blue(`${number}${unit[unitIndex]}`);
+    return chalk.blueBright(`${number}${unit[unitIndex]}`);
   }
   else {
     return chalk.yellow(`${number}${unit[unitIndex]} ⚠️`);
