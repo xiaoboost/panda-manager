@@ -20,6 +20,28 @@ importers:
       husky: ^4.3.8
       nyc: 14.1.1
       ts-node: ^9.1.1
+  build/builder:
+    dependencies:
+      esbuild: 0.8.54
+    devDependencies:
+      '@panda/fs': link:../../main/file-system
+      '@panda/tsconfig': link:../../utils/tsconfig
+      '@panda/utils': link:../../utils/utils
+      '@types/panda': link:../../utils/typings
+      chalk: 4.1.0
+      rimraf: 3.0.2
+      tslib: 2.1.0
+      typescript: 4.2.2
+    specifiers:
+      '@panda/fs': workspace:*
+      '@panda/tsconfig': workspace:*
+      '@panda/utils': workspace:*
+      '@types/panda': workspace:*
+      chalk: ^4.1.0
+      esbuild: ^0.8.54
+      rimraf: ^3.0.2
+      tslib: ^2.1.0
+      typescript: ^4.2.2
   main/database:
     dependencies:
       '@panda/utils': link:../../utils/utils
@@ -92,12 +114,12 @@ importers:
       '@panda/utils': link:../../utils/utils
       electron: 11.3.0
     devDependencies:
-      '@panda/build': link:../../utils/build
+      '@panda/builder': link:../../build/builder
       '@panda/tsconfig': link:../../utils/tsconfig
       rimraf: 3.0.2
       typescript: 4.2.2
     specifiers:
-      '@panda/build': workspace:*
+      '@panda/builder': workspace:*
       '@panda/db': workspace:*
       '@panda/fs': workspace:*
       '@panda/shared': workspace:*
@@ -174,7 +196,7 @@ importers:
       react-router: 5.2.0_react@17.0.1
       react-router-dom: 5.2.0_react@17.0.1
     devDependencies:
-      '@panda/build': link:../../utils/build
+      '@panda/builder': link:../../build/builder
       '@panda/tsconfig': link:../../utils/tsconfig
       '@types/node': 14.14.31
       '@types/panda': link:../../utils/typings
@@ -187,7 +209,7 @@ importers:
       typescript: 4.2.2
     specifiers:
       '@ant-design/icons': ^4.5.0
-      '@panda/build': workspace:*
+      '@panda/builder': workspace:*
       '@panda/icons': workspace:*
       '@panda/shared': workspace:*
       '@panda/tsconfig': workspace:*
@@ -223,28 +245,6 @@ importers:
       electron: ^11.3.0
       react: ^17.0.1
       rimraf: ^3.0.2
-      typescript: ^4.2.2
-  utils/build:
-    dependencies:
-      esbuild: 0.8.54
-    devDependencies:
-      '@panda/fs': link:../../main/file-system
-      '@panda/tsconfig': link:../tsconfig
-      '@panda/utils': link:../utils
-      '@types/panda': link:../typings
-      chalk: 4.1.0
-      rimraf: 3.0.2
-      tslib: 2.1.0
-      typescript: 4.2.2
-    specifiers:
-      '@panda/fs': workspace:*
-      '@panda/tsconfig': workspace:*
-      '@panda/utils': workspace:*
-      '@types/panda': workspace:*
-      chalk: ^4.1.0
-      esbuild: ^0.8.54
-      rimraf: ^3.0.2
-      tslib: ^2.1.0
       typescript: ^4.2.2
   utils/shared:
     dependencies:
@@ -2686,7 +2686,7 @@ packages:
     requiresBuild: true
     resolution:
       integrity: sha1-LzL/gOlcaaDyW3mddqJ8BeKFfN8=
-      tarball: esbuild/download/esbuild-0.8.54.tgz?cache=0&sync_timestamp=1614593172936&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fesbuild%2Fdownload%2Fesbuild-0.8.54.tgz
+      tarball: esbuild/download/esbuild-0.8.54.tgz
   /escalade/3.1.1:
     dev: true
     engines:
@@ -7163,7 +7163,7 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha1-G33NyzK4E4gBs+R4umpRyqiWSNo=
-      tarball: supports-color/download/supports-color-7.2.0.tgz?cache=0&sync_timestamp=1611394710446&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fsupports-color%2Fdownload%2Fsupports-color-7.2.0.tgz
+      tarball: supports-color/download/supports-color-7.2.0.tgz
   /table/6.0.7:
     dependencies:
       ajv: 7.1.1

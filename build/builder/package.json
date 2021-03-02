@@ -1,5 +1,5 @@
 {
-  "name": "@panda/build",
+  "name": "@panda/builder",
   "version": "1.0.0",
   "description": "panda-manager build",
   "main": "dist/index.js",

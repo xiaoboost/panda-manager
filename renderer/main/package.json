@@ -40,7 +40,7 @@
     "react-router-dom": "^5.2.0"
   },
   "devDependencies": {
-    "@panda/build": "workspace:*",
+    "@panda/builder": "workspace:*",
     "@panda/tsconfig": "workspace:*",
     "@types/node": "^14.14.31",
     "@types/panda": "workspace:*",

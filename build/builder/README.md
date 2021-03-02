@@ -1,10 +1,10 @@
-# panda/build
+# panda/builder
 
 代码打包工具
 
 ## 安装
 ```shell
-pnpm install @panda/build -D
+pnpm install @panda/builder -D
 ```
 
 ## 使用

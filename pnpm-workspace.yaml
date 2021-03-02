@@ -2,3 +2,4 @@ packages:
   - main/*
   - renderer/*
   - utils/*
+  - build/*

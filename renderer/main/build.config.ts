@@ -1,4 +1,4 @@
-import { BuildOptions, ConfigContext } from '@panda/build';
+import { BuildOptions, ConfigContext } from '@panda/builder';
 import { lessLoader } from 'esbuild-plugin-less';
 
 export default ({ env }: ConfigContext): BuildOptions => {
