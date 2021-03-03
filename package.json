@@ -11,7 +11,8 @@
     "lint": "pnpm run -r lint --parallel --filter {main,renderer,utils}",
     "lint:fix": "pnpm run -r lint:fix --parallel --filter {main,renderer,utils}",
     "package": "rimraf ./dist && npm run build && electron-packager ./dist/generated --out=dist/package --asar",
-    "start": "electron --debug=5858 ./dist/generated"
+    "start": "electron --debug=5858 ./dist/generated",
+    "preinstall": "cd build/builder && pnpm run build"
   },
   "ava": {
     "extensions": [

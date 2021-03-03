@@ -19,8 +19,7 @@
     "bundle": "esbuild src/index.ts src/cli.ts --bundle --minify --target=es6 --outdir=dist --platform=node --external:esbuild --define:process.env.NODE_ENV=\\\"production\\\"",
     "build": "pnpm run clear && pnpm run bundle && pnpm run types",
     "lint": "eslint --quiet --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
-    "lint:fix": "eslint --fix --quiet --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
-    "prepare": "pnpm run build"
+    "lint:fix": "eslint --fix --quiet --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}"
   },
   "author": "xiaoboost",
   "license": "MIT",

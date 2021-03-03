@@ -16,8 +16,7 @@
     "build": "pnpm run clear && pnpm run build:esm",
     "lint": "eslint --quiet --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
     "lint:fix": "eslint --fix --quiet --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
-    "test": "nyc ava --no-cache",
-    "prepare": "pnpm run build"
+    "test": "nyc ava --no-cache"
   },
   "ava": {
     "extensions": [
