@@ -11,6 +11,9 @@ export async function route(request: EventData): Promise<EventData> {
 
   try {
     switch (request.name) {
+      case 'ready': {
+        break;
+      }
       case 'get-config': {
         result = await Config.get();
         break;

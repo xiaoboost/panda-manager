@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types,@typescript-eslint/no-empty-interface */
 
-export type AnyObject<T = unknown> = Record<string, T>;
+export type AnyObject<T = any> = Record<string, T>;
 export type AnyFunction = (...args: any[]) => any;
 export type EmptyObject = Record<string, never>;
 export type Empty = {};
