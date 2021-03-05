@@ -2,6 +2,7 @@
   "name": "@panda/renderer",
   "version": "1.0.0",
   "description": "panda-manager renderer",
+  "source": "src/index.ts",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -16,8 +17,8 @@
     "bundle:build": "build --production",
     "dev": "pnpm run clear && pnpm run bundle:html && pnpm run bundle:dev",
     "build": "pnpm run clear && pnpm run bundle:html && pnpm run bundle:build",
-    "lint": "eslint --quiet --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
-    "lint:fix": "eslint --fix --quiet --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}"
+    "lint": "eslint --quiet --no-error-on-unmatched-pattern --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
+    "lint:fix": "eslint --fix --quiet --no-error-on-unmatched-pattern --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}"
   },
   "author": "xiaoboost",
   "license": "MIT",
@@ -47,8 +48,8 @@
     "@types/react-dom": "^17.0.1",
     "@types/react-router-dom": "^5.1.7",
     "cpy-cli": "^3.1.1",
-    "esbuild-plugin-less": "^1.0.1",
+    "esbuild-plugin-less": "^1.0.2",
     "rimraf": "^3.0.2",
-    "typescript": "^4.2.2"
+    "typescript": "^4.2.3"
   }
 }

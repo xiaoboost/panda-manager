@@ -34,7 +34,7 @@ export function mergeConfig(opt: BuildOptions = {}) {
   opt.entryPoints = opt.entryPoints ?? ['src/index.ts'];
   opt.platform = opt.platform ?? 'browser';
   opt.external = (opt.external ?? []).concat(["electron"]);
-  opt.mainFields = (opt.mainFields ?? []).concat(["module", "main"]);
+  opt.mainFields = (opt.mainFields ?? []).concat(["source", "module", "main"]);
 
   opt.write = false;
 

@@ -10,8 +10,8 @@
   ],
   "scripts": {
     "clear": "rimraf ./dist",
-    "lint": "eslint --quiet --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
-    "lint:fix": "eslint --fix --quiet --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
+    "lint": "eslint --quiet --no-error-on-unmatched-pattern --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
+    "lint:fix": "eslint --fix --quiet --no-error-on-unmatched-pattern --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
     "dev": "build --development --watch",
     "build": "build --production"
   },
@@ -32,6 +32,6 @@
     "@panda/builder": "workspace:*",
     "@panda/tsconfig": "workspace:*",
     "rimraf": "^3.0.2",
-    "typescript": "^4.2.2"
+    "typescript": "^4.2.3"
   }
 }
