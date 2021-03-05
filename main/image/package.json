@@ -2,6 +2,7 @@
   "name": "@panda/image",
   "version": "1.0.0",
   "description": "panda-manager image",
+  "source": "src/index.ts",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -14,8 +15,8 @@
     "dev": "tsc -w -p ./tsconfig.dev.json",
     "build:esm": "tsc -p ./tsconfig.build.json",
     "build": "pnpm run clear && pnpm run build:esm",
-    "lint": "eslint --quiet --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
-    "lint:fix": "eslint --fix --quiet --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}"
+    "lint": "eslint --quiet --no-error-on-unmatched-pattern --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
+    "lint:fix": "eslint --fix --quiet --no-error-on-unmatched-pattern --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}"
   },
   "author": "xiaoboost",
   "license": "MIT",
@@ -37,6 +38,6 @@
   "devDependencies": {
     "@panda/tsconfig": "workspace:*",
     "rimraf": "^3.0.2",
-    "typescript": "^4.2.2"
+    "typescript": "^4.2.3"
   }
 }

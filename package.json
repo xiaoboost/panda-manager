@@ -8,11 +8,10 @@
   "scripts": {
     "clear": "rimraf ./dist/generated",
     "test": "nyc ava --no-cache",
-    "lint": "pnpm run -r lint --parallel --filter {main,renderer,utils}",
-    "lint:fix": "pnpm run -r lint:fix --parallel --filter {main,renderer,utils}",
+    "lint": "pnpm run -r lint --parallel --filter .",
+    "lint:fix": "pnpm run -r lint:fix --parallel --filter .",
     "package": "rimraf ./dist && npm run build && electron-packager ./dist/generated --out=dist/package --asar",
-    "start": "electron --debug=5858 ./dist/generated",
-    "preinstall": "cd build/builder && pnpm run build"
+    "start": "electron --debug=5858 ./dist/generated"
   },
   "ava": {
     "extensions": [
@@ -25,6 +24,7 @@
       "TS_NODE_PROJECT": "tsconfig.test.json"
     },
     "files": [
+      "build/**/*.spec.ts",
       "main/**/*.spec.ts",
       "renderer/**/*.spec.ts",
       "utils/**/*.spec.ts"
