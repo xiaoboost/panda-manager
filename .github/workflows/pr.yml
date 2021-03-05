@@ -26,6 +26,8 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node }}
+      - name: Remove npmrc
+        run: node ./scripts/rm-npmrc.js
       - name: Install pnpm
         run: |
           npm install --g pnpm
