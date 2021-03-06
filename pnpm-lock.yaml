@@ -108,6 +108,7 @@ importers:
     dependencies:
       '@panda/db': link:../database
       '@panda/fs': link:../file-system
+      '@panda/server': link:../server
       '@panda/shared': link:../../utils/shared
       '@panda/utils': link:../../utils/utils
       electron: 11.3.0
@@ -120,6 +121,7 @@ importers:
       '@panda/builder': workspace:*
       '@panda/db': workspace:*
       '@panda/fs': workspace:*
+      '@panda/server': workspace:^1.0.0
       '@panda/shared': workspace:*
       '@panda/tsconfig': workspace:*
       '@panda/utils': workspace:*

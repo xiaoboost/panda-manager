@@ -3,6 +3,8 @@ import * as Sort from '../service/sort';
 
 import { EventData, ConfigData, SortOption } from '@panda/shared';
 
+export const ready = Promise.resolve();
+
 export async function get(): Promise<ConfigData> {
   return {
     directories: await Dir.get(),

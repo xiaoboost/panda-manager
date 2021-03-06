@@ -79,32 +79,30 @@ export async function windowStateKeeper(
 
   win.on('close', () => state.write());
 
-  win.on('maximize', () => (state.data.isMaximize = true));
-  win.on('unmaximize', () => (state.data.isMaximize = false));
+  win.on('maximize', () => state.set({ isMaximize: true }));
+  win.on('unmaximize', () => state.set({ isMaximize: false }));
 
-  win.on(
-    'resize',
-    debounce(() => {
-      if (!win.isMaximized()) {
-        const [width, height] = win.getSize();
+  win.on('resize', debounce(() => {
+    if (!win.isMaximized()) {
+      const [width, height] = win.getSize();
 
-        state.data.width = width;
-        state.data.height = height;
-      }
-    }),
-  );
+      state.set({
+        width,
+        height,
+      });
+    }
+  }));
 
-  win.on(
-    'move',
-    debounce(() => {
-      if (!win.isMaximized()) {
-        const [left, top] = win.getPosition();
+  win.on('move', debounce(() => {
+    if (!win.isMaximized()) {
+      const [left, top] = win.getPosition();
 
-        state.data.left = left;
-        state.data.top = top;
-      }
-    }),
-  );
+      state.set({
+        left,
+        top,
+      });
+    }
+  }));
 
   return win;
 }

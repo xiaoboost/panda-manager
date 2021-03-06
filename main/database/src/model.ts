@@ -1,5 +1,5 @@
 import { gzip, gunzip, readFile, writeFile } from './utils';
-import { debounce, DeepReadonly } from '@panda/utils';
+import { debounce, DeepReadonly, isUndef, isDef } from '@panda/utils';
 
 /** 数据储存 */
 export class Model<T> {
@@ -67,6 +67,19 @@ export class Model<T> {
     };
 
     this.write();
+  }
+
+  /** 填充数值 */
+  fill(val: Partial<T>) {
+    const data: Partial<T> = {};
+
+    Object.entries(val).forEach(([key, val]) => {
+      if (isUndef(data[key]) && isDef(val)) {
+        data[key] = val;
+      }
+    });
+
+    this.set(data)
   }
 
   /**

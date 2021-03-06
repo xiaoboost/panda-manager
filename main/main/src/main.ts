@@ -1,6 +1,8 @@
 import { URL } from 'url';
 import { app, BrowserWindow } from 'electron';
 
+import { ipcMain } from 'electron'
+import { install as serve } from '@panda/server';
 import { resolveRoot } from '@panda/shared';
 import { windowStateKeeper } from './window-state';
 
@@ -28,6 +30,8 @@ export async function install() {
   if (process.env.NODE_ENV === 'development') {
     win.webContents.openDevTools();
   }
+
+  serve(ipcMain);
 
   // 主界面被关闭时，退出软件
   win.on('closed', () => {

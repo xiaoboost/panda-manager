@@ -1,13 +1,17 @@
 import { Config } from '../model';
-import { SortOption } from 'src/utils/typings';
+import { SortOption } from '@panda/shared';
+
+export const ready = Promise.resolve();
 
 export async function patch(sort: Partial<SortOption>): Promise<void> {
   await Config.ready;
 
-  Config.data.sort = {
-    ...Config.data.sort,
-    ...sort,
-  };
+  Config.set({
+    sort: {
+      ...Config.data.sort,
+      ...sort,
+    },
+  });
 }
 
 export async function get(): Promise<SortOption> {

@@ -2,18 +2,16 @@ import * as Files from '../service/files';
 
 import { EventData } from '@panda/shared';
 
-export async function search({ data }: EventData) {
-  return (await Files.search()).map(({ data }) => ({ ...data }));
-}
+export const ready = Promise.resolve();
 
 export async function remove() {
   // ..
 }
 
-export async function get() {
+export async function get({ data }: EventData) {
   // ..
 }
 
 export async function open({ data }: EventData<{ id: number }>) {
-  await Files.open(data.id);
+  // ..
 }

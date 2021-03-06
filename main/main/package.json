@@ -24,6 +24,7 @@
   "dependencies": {
     "@panda/db": "workspace:*",
     "@panda/fs": "workspace:*",
+    "@panda/server": "workspace:^1.0.0",
     "@panda/shared": "workspace:*",
     "@panda/utils": "workspace:*",
     "electron": "^11.3.0"

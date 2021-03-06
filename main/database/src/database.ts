@@ -9,7 +9,7 @@ type TableRowData<T extends AnyObject> = T & { id: number };
 type RowData<Data extends AnyObject> = DeepReadonly<TableRowData<Data>>;
 
 /** 数据行 */
-class TableRow<Data extends AnyObject> {
+export class TableRow<Data extends AnyObject> {
   /** 原始数据 */
   private _data: TableRowData<Data>;
 
@@ -40,7 +40,7 @@ class TableRow<Data extends AnyObject> {
 }
 
 /** 数据表 */
-class Table<Row extends AnyObject = AnyObject> {
+export class Table<Row extends AnyObject = AnyObject> {
   /** 按照哪列排序 */
   private _orderBy: keyof RowData<Row> = 'id';
   /** 查询条件回调 */

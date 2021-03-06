@@ -4,7 +4,7 @@ import * as Files from './files';
 import { EventData, EventStatus } from '@panda/shared';
 
 export async function route(request: EventData): Promise<EventData> {
-  let result: EventData = {
+  const result: EventData = {
     ...request,
     status: EventStatus.Ok,
   };
@@ -12,26 +12,27 @@ export async function route(request: EventData): Promise<EventData> {
   try {
     switch (request.name) {
       case 'ready': {
+        result.data = await Config.get();
         break;
       }
       case 'get-config': {
-        result = await Config.get();
+        result.data = await Config.get();
         break;
       }
       case 'update-config': {
-        result = await Config.patchConfig(request);
+        result.data = await Config.patchConfig(request);
         break;
       }
       case 'update-sort': {
-        result = await Config.patchSort(request);
+        result.data = await Config.patchSort(request);
         break;
       }
       case 'get-files-list': {
-        result = await Files.search(request);
+        result.data = await Files.get(request);
         break;
       }
       case 'open-file': {
-        result = await Files.open(request);
+        result.data = await Files.open(request);
         break;
       }
       default: {
