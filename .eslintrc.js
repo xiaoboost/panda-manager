@@ -42,6 +42,7 @@ module.exports = {
     'no-sparse-arrays': 'off',
     'indent': 'off',
     'brace-style': 'off',
+    'no-debugger': 'off',
 
     'max-len': ['warn', {
       code: 90,

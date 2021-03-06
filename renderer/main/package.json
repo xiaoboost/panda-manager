@@ -32,7 +32,7 @@
     "@panda/shared": "workspace:*",
     "@panda/use": "workspace:*",
     "@panda/utils": "workspace:*",
-    "antd": "^4.13.0",
+    "antd": "^4.13.1",
     "electron": "^11.3.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",

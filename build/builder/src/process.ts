@@ -28,6 +28,17 @@ export async function build() {
   const start = Date.now();
   const cwd = process.cwd();
   const config = await readConfig(cwd);
+
+  if (isWatch) {
+    config.watch = {
+      onRebuild(error, result) {
+        if (result) {
+          writeOutputs(result);
+        }
+      },
+    };
+  }
+  
   const result = await esbuild(config);
 
   await writeOutputs(result);

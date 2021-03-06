@@ -30,12 +30,14 @@ async function readConfigFile(dir: string) {
 export function mergeConfig(opt: BuildOptions = {}) {
   opt.format = opt.format ?? 'iife';
   opt.target = opt.target ?? 'es6';
+  opt.color = opt.color ?? true;
   opt.entryPoints = opt.entryPoints ?? ['src/index.ts'];
   opt.platform = opt.platform ?? 'browser';
   opt.external = (opt.external ?? []).concat(["electron"]);
   opt.mainFields = (opt.mainFields ?? []).concat(["source", "module", "main"]);
 
   opt.write = false;
+  opt.bundle = true;
 
   if (!opt.outdir && !opt.outfile) {
     opt.outfile = 'dist/index.js';
@@ -55,8 +57,7 @@ export function mergeConfig(opt: BuildOptions = {}) {
       ["process.env.NODE_ENV"]: '"development"',
     };
 
-    opt.bundle = opt.bundle ?? false;
-    opt.sourcemap = opt.sourcemap ?? true;
+    opt.sourcemap = opt.sourcemap ?? 'external';
   }
   else if (isProduction) {
     opt.define = {
@@ -64,7 +65,6 @@ export function mergeConfig(opt: BuildOptions = {}) {
       ["process.env.NODE_ENV"]: '"production"',
     };
 
-    opt.bundle = opt.bundle ?? true;
     opt.sourcemap = opt.sourcemap ?? false;
   }
 
