@@ -1,6 +1,6 @@
 # panda/builder
 
-代码打包工具
+代码编译工具
 
 ## 安装
 ```shell
@@ -30,6 +30,6 @@ build --production
 # 调试模式
 build --development
 
-# 监听
-build --watch
+# 调试监听模式
+build --development --watch
 ```

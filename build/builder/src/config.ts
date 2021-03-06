@@ -28,7 +28,6 @@ async function readConfigFile(dir: string) {
 }
 
 export function mergeConfig(opt: BuildOptions = {}) {
-  opt.bundle = opt.bundle ?? true;
   opt.format = opt.format ?? 'iife';
   opt.target = opt.target ?? 'es6';
   opt.entryPoints = opt.entryPoints ?? ['src/index.ts'];
@@ -50,15 +49,23 @@ export function mergeConfig(opt: BuildOptions = {}) {
     opt.minify = opt.minify ?? true;
   }
 
-  if (!opt.define) {
-    opt.define = {};
-  }
-
   if (isDevelopment) {
-    opt.define["process.env.NODE_ENV"] = '"development"';
+    opt.define = {
+      ...(opt.define ?? {}),
+      ["process.env.NODE_ENV"]: '"development"',
+    };
+
+    opt.bundle = opt.bundle ?? false;
+    opt.sourcemap = opt.sourcemap ?? true;
   }
   else if (isProduction) {
-    opt.define["process.env.NODE_ENV"] = '"production"';
+    opt.define = {
+      ...(opt.define ?? {}),
+      ["process.env.NODE_ENV"]: '"production"',
+    };
+
+    opt.bundle = opt.bundle ?? true;
+    opt.sourcemap = opt.sourcemap ?? false;
   }
 
   return opt;
