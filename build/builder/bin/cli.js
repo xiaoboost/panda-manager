@@ -1,3 +1,1 @@
-const { build } = require('../dist');
-
-build();
+require('../dist').cli();

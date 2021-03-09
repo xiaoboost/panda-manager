@@ -57,7 +57,7 @@ export function mergeConfig(opt: BuildOptions = {}) {
       ["process.env.NODE_ENV"]: '"development"',
     };
 
-    opt.sourcemap = opt.sourcemap ?? 'external';
+    opt.sourcemap = opt.sourcemap ?? true;
   }
   else if (isProduction) {
     opt.define = {

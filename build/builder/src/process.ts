@@ -2,10 +2,10 @@ import * as print from './print';
 import * as path from 'path';
 
 import { isWatch } from './env';
-import { readConfig } from './config';
+import { readConfig, mergeConfig } from './config';
 
 import { writeFile, mkdirp } from "@panda/fs";
-import { build as esbuild, BuildResult } from 'esbuild';
+import { build as esbuild, BuildResult, BuildOptions } from 'esbuild';
 
 async function writeOutputs(result: BuildResult) {
   const files = result.outputFiles ?? [];
@@ -23,8 +23,8 @@ async function writeOutputs(result: BuildResult) {
   }
 }
 
-/** 编译 */
-export async function build() {
+/** 命令行编译 */
+export async function cli() {
   const start = Date.now();
   const cwd = process.cwd();
   const config = await readConfig(cwd);
@@ -46,4 +46,14 @@ export async function build() {
   if (!isWatch) {
     print.summary(start, cwd, result);
   }
+}
+
+/** 编译 */
+export async function build(opt?: BuildOptions) {
+  const start = Date.now();
+  const result = await esbuild(mergeConfig(opt));
+
+  await writeOutputs(result);
+
+  print.summary(start, process.cwd(), result);
 }
