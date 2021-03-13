@@ -33,7 +33,7 @@
     "@panda/use": "workspace:*",
     "@panda/utils": "workspace:*",
     "antd": "^4.13.1",
-    "electron": "^11.3.0",
+    "electron": "^12.0.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-router": "^5.2.0",

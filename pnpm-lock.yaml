@@ -5,6 +5,7 @@ importers:
       '@typescript-eslint/eslint-plugin': 4.17.0_ef87dd493a4c70338d836ff0ca8437ec
       '@typescript-eslint/parser': 4.17.0_eslint@7.21.0
       ava: 3.15.0
+      electron: 12.0.1
       electron-packager: 15.2.0
       eslint: 7.21.0
       eslint-plugin-react: 7.22.0_eslint@7.21.0
@@ -15,6 +16,7 @@ importers:
       '@typescript-eslint/eslint-plugin': ^4.17.0
       '@typescript-eslint/parser': ^4.17.0
       ava: ^3.15.0
+      electron: ^12.0.1
       electron-packager: ^15.2.0
       eslint: ^7.21.0
       eslint-plugin-react: ^7.22.0
@@ -139,7 +141,7 @@ importers:
       '@panda/server': link:../server
       '@panda/shared': link:../../utils/shared
       '@panda/utils': link:../../utils/utils
-      electron: 11.3.0
+      electron: 12.0.1
     devDependencies:
       '@panda/builder': link:../../build/builder
       '@panda/tsconfig': link:../../utils/tsconfig
@@ -153,7 +155,7 @@ importers:
       '@panda/shared': workspace:*
       '@panda/tsconfig': workspace:*
       '@panda/utils': workspace:*
-      electron: ^11.3.0
+      electron: ^12.0.1
       rimraf: ^3.0.2
       typescript: ^4.2.3
   main/server:
@@ -164,7 +166,7 @@ importers:
       '@panda/utils': link:../../utils/utils
     devDependencies:
       '@panda/tsconfig': link:../../utils/tsconfig
-      electron: 11.3.0
+      electron: 12.0.1
       rimraf: 3.0.2
       typescript: 4.2.3
     specifiers:
@@ -173,7 +175,7 @@ importers:
       '@panda/shared': workspace:*
       '@panda/tsconfig': workspace:*
       '@panda/utils': workspace:*
-      electron: ^11.3.0
+      electron: ^12.0.1
       rimraf: ^3.0.2
       typescript: ^4.2.3
   main/zip:
@@ -218,7 +220,7 @@ importers:
       '@panda/use': link:../react-use
       '@panda/utils': link:../../utils/utils
       antd: 4.13.1_react-dom@17.0.1+react@17.0.1
-      electron: 11.3.0
+      electron: 12.0.1
       react: 17.0.1
       react-dom: 17.0.1_react@17.0.1
       react-router: 5.2.0_react@17.0.1
@@ -250,7 +252,7 @@ importers:
       '@types/react-router-dom': ^5.1.7
       antd: ^4.13.1
       cpy-cli: ^3.1.1
-      electron: ^11.3.0
+      electron: ^12.0.1
       esbuild-plugin-less: ^1.0.2
       react: ^17.0.1
       react-dom: ^17.0.1
@@ -263,20 +265,20 @@ importers:
       '@panda/utils': link:../../utils/utils
     devDependencies:
       '@panda/tsconfig': link:../../utils/tsconfig
-      electron: 11.3.0
+      electron: 12.0.1
       react: 17.0.1
       rimraf: 3.0.2
       typescript: 4.2.3
     specifiers:
       '@panda/tsconfig': workspace:*
       '@panda/utils': workspace:*
-      electron: ^11.3.0
+      electron: ^12.0.1
       react: ^17.0.1
       rimraf: ^3.0.2
       typescript: ^4.2.3
   utils/shared:
     dependencies:
-      electron: 11.3.0
+      electron: 12.0.1
       tslib: 2.1.0
     devDependencies:
       '@panda/tsconfig': link:../tsconfig
@@ -286,7 +288,7 @@ importers:
     specifiers:
       '@panda/tsconfig': workspace:*
       '@types/panda': workspace:*
-      electron: ^11.3.0
+      electron: ^12.0.1
       rimraf: ^3.0.2
       tslib: ^2.1.0
       typescript: ^4.2.3
@@ -1000,12 +1002,7 @@ packages:
     resolution:
       integrity: sha1-KD9mn/dte4Jg34q3pCYsyD2YglY=
       tarball: '@types/minimist/download/@types/minimist-1.2.1.tgz'
-  /@types/node/12.20.5:
-    resolution:
-      integrity: sha1-TKgqdm8Fw1n9bHdQUAflonL0u5s=
-      tarball: '@types/node/download/@types/node-12.20.5.tgz?cache=0&sync_timestamp=1615552048482&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Fnode%2Fdownload%2F%40types%2Fnode-12.20.5.tgz'
   /@types/node/14.14.34:
-    dev: true
     resolution:
       integrity: sha1-B5NRlPwEkGmhxWwMJ0Jlq+3fiNo=
       tarball: '@types/node/download/@types/node-14.14.34.tgz?cache=0&sync_timestamp=1615552048482&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Fnode%2Fdownload%2F%40types%2Fnode-14.14.34.tgz'
@@ -2307,11 +2304,6 @@ packages:
       ms: 2.1.2
     engines:
       node: '>=6.0'
-    peerDependencies:
-      supports-color: '*'
-    peerDependenciesMeta:
-      supports-color:
-        optional: true
     resolution:
       integrity: sha1-8NIpxQXgxtjEmsVT0bE9wYP2su4=
       tarball: debug/download/debug-4.3.1.tgz
@@ -2553,18 +2545,18 @@ packages:
     resolution:
       integrity: sha1-yT3hnXXnwD0VmlYpU4TTcctiWtQ=
       tarball: electron-packager/download/electron-packager-15.2.0.tgz
-  /electron/11.3.0:
+  /electron/12.0.1:
     dependencies:
       '@electron/get': 1.12.4
-      '@types/node': 12.20.5
+      '@types/node': 14.14.34
       extract-zip: 1.7.0
     engines:
       node: '>= 8.6'
     hasBin: true
     requiresBuild: true
     resolution:
-      integrity: sha1-h+hSj9I65TsO6zpzjx/go60nwts=
-      tarball: electron/download/electron-11.3.0.tgz
+      integrity: sha1-Ea+oHa6FjMfNeRB8L3iein+Toxs=
+      tarball: electron/download/electron-12.0.1.tgz
   /emittery/0.8.1:
     dev: true
     engines:
@@ -4833,11 +4825,11 @@ packages:
   /ms/2.0.0:
     resolution:
       integrity: sha1-VgiurfwAvmwpAd9fmGF4jeDVl8g=
-      tarball: ms/download/ms-2.0.0.tgz?cache=0&sync_timestamp=1607436580765&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fms%2Fdownload%2Fms-2.0.0.tgz
+      tarball: ms/download/ms-2.0.0.tgz
   /ms/2.1.2:
     resolution:
       integrity: sha1-0J0fNXtEP0kzgqjrPM0YOHKuYAk=
-      tarball: ms/download/ms-2.1.2.tgz?cache=0&sync_timestamp=1607436580765&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fms%2Fdownload%2Fms-2.1.2.tgz
+      tarball: ms/download/ms-2.1.2.tgz
   /ms/2.1.3:
     resolution:
       integrity: sha1-V0yBOM4dK1hh8LRFedut1gxmFbI=

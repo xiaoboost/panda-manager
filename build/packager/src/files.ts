@@ -5,7 +5,7 @@ import * as utils from './utils';
 
 export interface FileData {
   path: string;
-  contents: Uint8Array;
+  contents: Uint8Array | string;
 }
 
 const data: FileData[] = [];

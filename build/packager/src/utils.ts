@@ -11,8 +11,8 @@ export function resolve(...paths: string[]) {
 }
 
 const mappings = [
-  ['renderer/main/src/init', 'view/renderer'],
-  ['renderer/main/src', 'view/renderer'],
+  ['renderer/main/src/init', 'views/renderer'],
+  ['renderer/main/src', 'views/renderer'],
   ['main/main/src', 'main'],
 ].map(([key, value]) => ([
   path.normalize(key),

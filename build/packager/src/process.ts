@@ -39,6 +39,26 @@ async function copyFiles() {
   }
 }
 
+async function copyPackage() {
+  const packageName = 'package.json';
+  const packageData = await fs.readJSON<Record<string, any>>(utils.resolve(packageName));
+
+  if (!packageData) {
+    return;
+  }
+
+  files.push({
+    path: path.join(utils.outputDir, packageName),
+    contents: JSON.stringify({
+      name: packageData.name,
+      version: packageData.version,
+      description: packageData.description,
+      main: packageData.main,
+      author: packageData.author,
+    }),
+  });
+}
+
 async function bundle() {
   const result = await esbuild({
     entryPoints: [
@@ -81,5 +101,6 @@ async function bundle() {
 export async function cli() {
   await bundle();
   await copyFiles();
+  await copyPackage();
   await files.write();
 }

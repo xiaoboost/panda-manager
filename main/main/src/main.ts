@@ -25,7 +25,7 @@ export async function install() {
     },
   });
 
-  win.loadURL(new URL('file:' + resolveRoot('pages/renderer.html')).toString());
+  win.loadURL(new URL('file:' + resolveRoot('views/renderer/index.html')).toString());
 
   if (process.env.NODE_ENV === 'development') {
     win.webContents.openDevTools();
