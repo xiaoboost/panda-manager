@@ -36,15 +36,13 @@ export function mergeConfig(opt: BuildOptions = {}) {
   opt.external = (opt.external ?? []).concat(["electron"]);
   opt.mainFields = (opt.mainFields ?? []).concat(["source", "module", "main"]);
 
-  opt.write = false;
+  opt.watch = isWatch;
   opt.bundle = true;
+  opt.logLevel = 'info';
+  opt.treeShaking = true;
 
   if (!opt.outdir && !opt.outfile) {
     opt.outfile = 'dist/index.js';
-  }
-
-  if (isWatch) {
-    opt.watch = true;
   }
 
   if (isProduction) {

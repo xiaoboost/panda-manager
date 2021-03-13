@@ -1,59 +1,12 @@
-import * as print from './print';
-import * as path from 'path';
-
-import { isWatch } from './env';
 import { readConfig, mergeConfig } from './config';
-
-import { writeFile, mkdirp } from "@panda/fs";
-import { build as esbuild, BuildResult, BuildOptions } from 'esbuild';
-
-async function writeOutputs(result: BuildResult) {
-  const files = result.outputFiles ?? [];
-  const pathMap: Record<string, boolean> = {};
-
-  for (const file of files) {
-    const dirname = path.dirname(file.path);
-
-    if (!pathMap[dirname]) {
-      await mkdirp(dirname);
-      pathMap[dirname] = true;
-    }
-
-    await writeFile(file.path, file.contents);
-  }
-}
+import { build as esbuild, BuildOptions } from 'esbuild';
 
 /** 命令行编译 */
 export async function cli() {
-  const start = Date.now();
-  const cwd = process.cwd();
-  const config = await readConfig(cwd);
-
-  if (isWatch) {
-    config.watch = {
-      onRebuild(error, result) {
-        if (result) {
-          writeOutputs(result);
-        }
-      },
-    };
-  }
-  
-  const result = await esbuild(config);
-
-  await writeOutputs(result);
-
-  if (!isWatch) {
-    print.summary(start, cwd, result);
-  }
+  await esbuild(await readConfig(process.cwd()));
 }
 
 /** 编译 */
-export async function build(opt?: BuildOptions) {
-  const start = Date.now();
-  const result = await esbuild(mergeConfig(opt));
-
-  await writeOutputs(result);
-
-  print.summary(start, process.cwd(), result);
+export function build(opt?: BuildOptions) {
+  return esbuild(mergeConfig(opt));
 }

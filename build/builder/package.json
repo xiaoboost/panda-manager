@@ -18,7 +18,7 @@
     "types": "tsc -p . --emitDeclarationOnly",
     "dev": "esbuild src/index.ts --bundle --watch --sourcemap --target=es6 --outdir=dist --platform=node --external:typescript --external:esbuild --define:process.env.NODE_ENV=\\\"development\\\"",
     "bundle": "esbuild src/index.ts --bundle --minify --target=es6 --outdir=dist --platform=node --external:esbuild --define:process.env.NODE_ENV=\\\"production\\\"",
-    "build": "pnpm run clear && pnpm run bundle && pnpm run types",
+    "build": "pnpm run clear && pnpm run types && pnpm run bundle",
     "lint": "eslint --quiet --no-error-on-unmatched-pattern --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
     "lint:fix": "eslint --fix --quiet --no-error-on-unmatched-pattern --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}"
   },
@@ -29,7 +29,7 @@
     "url": "https://github.com/xiaoboost/panda-manager"
   },
   "dependencies": {
-    "esbuild": "^0.8.56"
+    "esbuild": "^0.9.2"
   },
   "devDependencies": {
     "@panda/fs": "workspace:*",
