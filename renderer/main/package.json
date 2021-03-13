@@ -42,10 +42,10 @@
   "devDependencies": {
     "@panda/builder": "workspace:*",
     "@panda/tsconfig": "workspace:*",
-    "@types/node": "^14.14.31",
+    "@types/node": "^14.14.34",
     "@types/panda": "workspace:*",
-    "@types/react": "^17.0.2",
-    "@types/react-dom": "^17.0.1",
+    "@types/react": "^17.0.3",
+    "@types/react-dom": "^17.0.2",
     "@types/react-router-dom": "^5.1.7",
     "cpy-cli": "^3.1.1",
     "esbuild-plugin-less": "^1.0.2",

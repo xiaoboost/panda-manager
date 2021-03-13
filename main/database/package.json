@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@panda/tsconfig": "workspace:*",
-    "@types/node": "^14.14.31",
+    "@types/node": "^14.14.34",
     "@types/panda": "workspace:*",
     "memfs": "^3.2.0",
     "rimraf": "^3.0.2",
