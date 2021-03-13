@@ -15,17 +15,21 @@ export function summary(dir: string, files: FileData[]) {
 
   console.log(chalk.cyan('Compile info: \n'));
 
-  fileInfos.forEach((info) => {
-    const dirname = path.join(path.dirname(info.path), "/");
-    const basename = path.basename(info.path);
-    const pathStr = "".padEnd(maxLen - info.path.length, " ");
-    const sizeStr = size(info.size);
+  fileInfos
+    .sort((pre, next) => {
+      return pre.path > next.path ? 1 : -1;
+    })
+    .forEach((info) => {
+      const dirname = path.join(path.dirname(info.path), "/");
+      const basename = path.basename(info.path);
+      const pathStr = "".padEnd(maxLen - info.path.length, " ");
+      const sizeStr = size(info.size);
 
-    console.log(
-      `   ${chalk.white(dirname)}${chalk.bold(basename)}${pathStr}`,
-      sizeStr
-    );
-  });
+      console.log(
+        `   ${chalk.white(dirname)}${chalk.bold(basename)}${pathStr}`,
+        sizeStr
+      );
+    });
 
   console.log(chalk.green("\n⚡ Done.\n"));
 }

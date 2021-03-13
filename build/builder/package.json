@@ -17,10 +17,11 @@
     "clear": "rimraf ./dist",
     "types": "tsc -p . --emitDeclarationOnly",
     "dev": "esbuild src/index.ts --bundle --watch --sourcemap --target=es6 --outdir=dist --platform=node --external:typescript --external:esbuild --define:process.env.NODE_ENV=\\\"development\\\"",
-    "bundle": "esbuild src/index.ts --bundle --minify --target=es6 --outdir=dist --platform=node --external:esbuild --define:process.env.NODE_ENV=\\\"production\\\"",
+    "bundle": "esbuild src/index.ts --bundle --minify --target=es6 --outdir=dist --platform=node --external:typescript --external:esbuild --define:process.env.NODE_ENV=\\\"production\\\"",
     "build": "pnpm run clear && pnpm run types && pnpm run bundle",
     "lint": "eslint --quiet --no-error-on-unmatched-pattern --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
-    "lint:fix": "eslint --fix --quiet --no-error-on-unmatched-pattern --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}"
+    "lint:fix": "eslint --fix --quiet --no-error-on-unmatched-pattern --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
+    "prepare": "pnpm run build"
   },
   "author": "xiaoboost",
   "license": "MIT",
