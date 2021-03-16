@@ -1,21 +1,17 @@
 {
-  "name": "@panda/packager",
+  "name": "@panda/esbuild-plugin-stylus",
   "version": "1.0.0",
   "description": "panda-manager packager",
   "source": "src/index.ts",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "bin": {
-    "package": "bin/cli.js"
-  },
   "scripts": {
     "clear": "rimraf ./dist",
     "types": "tsc -p . --emitDeclarationOnly",
     "dev": "build --development --watch",
     "build": "pnpm run clear && pnpm run types && build --production",
     "lint": "eslint --quiet --no-error-on-unmatched-pattern --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
-    "lint:fix": "eslint --fix --quiet --no-error-on-unmatched-pattern --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
-    "prepare": "pnpm run build"
+    "lint:fix": "eslint --fix --quiet --no-error-on-unmatched-pattern --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}"
   },
   "author": "xiaoboost",
   "license": "MIT",
@@ -24,11 +20,10 @@
     "url": "https://github.com/xiaoboost/panda-manager/build/packager"
   },
   "dependencies": {
-    "@panda/esbuild-plugin-stylus": "workspace:*",
     "@panda/fs": "workspace:*",
-    "chalk": "^4.1.0",
+    "@types/stylus": "^0.48.33",
     "esbuild": "^0.9.2",
-    "fast-glob": "^3.2.5"
+    "stylus": "^0.54.8"
   },
   "devDependencies": {
     "@panda/builder": "workspace:*",

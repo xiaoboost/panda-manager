@@ -1,5 +1,5 @@
 import { build as esbuild, BuildResult } from 'esbuild';
-import { lessLoader } from 'esbuild-plugin-less';
+import { stylusLoader } from '@panda/esbuild-plugin-stylus';
 
 import * as fs from '@panda/fs';
 import * as path from 'path';
@@ -92,7 +92,7 @@ async function bundle() {
         : '"development"',
     },
     plugins: [
-      lessLoader(),
+      stylusLoader(),
     ],
   });
 

@@ -5,5 +5,5 @@ export default (): BuildOptions => ({
   outfile: 'dist/index.js',
   platform: 'node',
   format: 'cjs',
-  external: ['esbuild', '@panda/esbuild-plugin-stylus']
+  external: ['stylus'],
 });
