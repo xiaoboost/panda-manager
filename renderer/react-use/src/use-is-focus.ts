@@ -1,7 +1,12 @@
-import { remote } from 'electron';
+import { ipcRenderer } from 'electron/renderer';
 import { useState, useEffect } from 'react';
 
 export function useIsFocus() {
+  debugger;
+  // console.log(electron);
+  // ipcRenderer.
+
+  // ipcRenderer.
   const win = remote.getCurrentWindow();
   const [isFocus, setState] = useState(win.isFocused());
 

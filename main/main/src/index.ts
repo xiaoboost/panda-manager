@@ -1,8 +1,8 @@
-import { app } from 'electron';
+import { app } from 'electron/main';
 import { install } from './main';
 
 import { rmrf } from '@panda/fs';
-import { resolveTempDir } from '@panda/shared';
+import { resolveTempDir } from './path';
 
 // 完成初始化时启动主界面
 app.on('ready', () => {

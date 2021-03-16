@@ -1,9 +1,9 @@
 import { URL } from 'url';
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow } from 'electron/main';
 
-import { ipcMain } from 'electron'
+import { ipcMain } from 'electron';
+import { resolveRoot } from './path';
 import { install as serve } from '@panda/server';
-import { resolveRoot } from '@panda/shared';
 import { windowStateKeeper } from './window-state';
 
 /** 主窗口 */
@@ -21,6 +21,7 @@ export async function install() {
     minWidth: 800,
     webPreferences: {
       nodeIntegration: false,
+      contextIsolation: false,
       webSecurity: process.env.NODE_ENV !== 'development',
     },
   });

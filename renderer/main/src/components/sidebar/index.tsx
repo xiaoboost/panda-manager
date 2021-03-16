@@ -1,4 +1,4 @@
-import styles from './index.styl';
+import './index.less';
 
 import React from 'react';
 
@@ -13,17 +13,17 @@ export function Sidebar() {
   const highlight = getRouteNameByPath(pathname);
 
   return (
-    <aside className={styles.appSidebar}>
-      <ul className={styles.appMenuList}>
+    <aside className='app-sidebar'>
+      <ul className='app-menu-list'>
         {MenuList.map((item) => (
           <li
             key={item.name}
-            className={stringifyClass(styles.appMenuItem, {
-              [styles.appMenuItemHighlight]: highlight === item.name,
+            className={stringifyClass('app-menu-item', {
+              'app-menu-item__highlight': highlight === item.name,
             })}
           >
-            <item.Icon className={styles.appMenuItemIcon} />
-            <Link to={item.path} className={styles.appMenuItemLink}>
+            <item.Icon className='app-menu-item__icon' />
+            <Link to={item.path} className='app-menu-item__link'>
               {item.label}
             </Link>
           </li>

@@ -1,5 +1,6 @@
+import './index.less';
+
 import React from 'react';
-import styles from './index.styl';
 
 import { remote } from 'electron';
 import { stringifyClass } from '@panda/utils';

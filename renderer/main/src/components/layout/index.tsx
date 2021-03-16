@@ -1,8 +1,9 @@
-import React from 'react';
-import styles from './index.styl';
+import './index.less';
 
-import { Header } from '../header';
-import { Sidebar } from '../sidebar';
+import React from 'react';
+
+// import { Header } from '../header';
+// import { Sidebar } from '../sidebar';
 
 import { PropsWithChildren } from 'react';
 import { useIsFocus } from '@panda/use';
@@ -13,14 +14,14 @@ export function Layout({ children }: PropsWithChildren<Empty>) {
 
   return (
     <div
-      className={stringifyClass(styles.app, {
-        [styles.appUnfocus]: !isFocus,
+      className={stringifyClass('app', {
+        '.app-unFocus': !isFocus,
       })}
     >
-      <Header />
-      <article className={styles.appBody}>
-        <Sidebar />
-        <div className={styles.appContentWrapper}>{children}</div>
+      {/* <Header /> */}
+      <article className='app-body'>
+        {/* <Sidebar /> */}
+        <div className='app-content__wrapper'>{children}</div>
       </article>
     </div>
   );

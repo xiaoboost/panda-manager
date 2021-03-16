@@ -63,6 +63,7 @@ async function bundle() {
   const result = await esbuild({
     entryPoints: [
       './main/main/src/index.ts',
+      './main/main/src/preload.ts',
       './renderer/main/src/init/index.ts',
     ],
     outdir: utils.outputDir,
