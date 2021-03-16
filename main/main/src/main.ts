@@ -2,7 +2,7 @@ import { URL } from 'url';
 import { app, BrowserWindow } from 'electron/main';
 
 import { ipcMain } from 'electron';
-import { resolveRoot } from './path';
+import { resolveRoot } from '@panda/shared';
 import { install as serve } from '@panda/server';
 import { windowStateKeeper } from './window-state';
 
@@ -21,7 +21,7 @@ export async function install() {
     minWidth: 800,
     webPreferences: {
       nodeIntegration: false,
-      contextIsolation: false,
+      preload: resolveRoot('main/preload.js'),
       webSecurity: process.env.NODE_ENV !== 'development',
     },
   });

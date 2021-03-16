@@ -1,16 +1,15 @@
 import electron from 'electron';
 import path from 'path';
 
-(global as any).require = (name: string) => {
-  switch (name) {
-    case 'electron': {
-      return electron;
-    }
-    case 'path': {
-      return path;
-    }
-    default: {
-      return {};
-    }
+electron.contextBridge.exposeInMainWorld('require', (name: string) => {
+  const moduleMap = {
+    electron,
+    path,
+  };
+
+  if (!moduleMap[name]) {
+    throw new Error(`Module ${name} is not exist.`);
   }
-};
+
+  return moduleMap[name];
+});
