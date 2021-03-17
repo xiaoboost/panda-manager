@@ -13,6 +13,7 @@ export function resolve(...paths: string[]) {
 const mappings = [
   ['renderer/main/src/init', 'views/renderer'],
   ['renderer/main/src', 'views/renderer'],
+  ['renderer/preload/src', 'views/preload'],
   ['main/main/src', 'main'],
 ].map(([key, value]) => ([
   path.normalize(key),
@@ -23,9 +24,8 @@ export function pathMapping(origin: string) {
   const fsOrigin = path.normalize(origin);
 
   for (const [map, mapped] of mappings) {
-    const [before, after] = fsOrigin.split(map);
-
-    if (after) {
+    if (fsOrigin.includes(map)) {
+      const [before, after] = fsOrigin.split(map);
       return path.join(before, mapped, after);
     }
   }

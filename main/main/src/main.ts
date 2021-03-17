@@ -21,7 +21,7 @@ export async function install() {
     minWidth: 800,
     webPreferences: {
       nodeIntegration: false,
-      preload: resolveRoot('main/preload.js'),
+      preload: resolveRoot('views/preload/index.js'),
       webSecurity: process.env.NODE_ENV !== 'development',
     },
   });

@@ -3,8 +3,10 @@ import path from 'path';
 
 electron.contextBridge.exposeInMainWorld('require', (name: string) => {
   const moduleMap = {
-    electron,
     path,
+    electron,
+    'electron/common': electron,
+    'electron/renderer': electron,
   };
 
   if (!moduleMap[name]) {

@@ -284,6 +284,20 @@ importers:
       react-router-dom: ^5.2.0
       rimraf: ^3.0.2
       typescript: ^4.2.3
+  renderer/preload:
+    dependencies:
+      '@types/node': 14.14.35
+      electron: 12.0.1
+    devDependencies:
+      '@panda/tsconfig': link:../../utils/tsconfig
+      rimraf: 3.0.2
+      typescript: 4.2.3
+    specifiers:
+      '@panda/tsconfig': workspace:*
+      '@types/node': ^14.14.35
+      electron: ^12.0.1
+      rimraf: ^3.0.2
+      typescript: ^4.2.3
   renderer/react-use:
     dependencies:
       '@panda/utils': link:../../utils/utils
@@ -1028,11 +1042,11 @@ packages:
       integrity: sha1-KD9mn/dte4Jg34q3pCYsyD2YglY=
       tarball: '@types/minimist/download/@types/minimist-1.2.1.tgz'
   /@types/node/14.14.34:
+    dev: true
     resolution:
       integrity: sha1-B5NRlPwEkGmhxWwMJ0Jlq+3fiNo=
       tarball: '@types/node/download/@types/node-14.14.34.tgz?cache=0&sync_timestamp=1615552048482&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Fnode%2Fdownload%2F%40types%2Fnode-14.14.34.tgz'
   /@types/node/14.14.35:
-    dev: false
     resolution:
       integrity: sha1-QslTpOKxirkx9yR35wEhcvT/oxM=
       tarball: '@types/node/download/@types/node-14.14.35.tgz'
@@ -2486,11 +2500,11 @@ packages:
     resolution:
       integrity: sha1-C0DQMyzqdD8WFPgYvk/rcXcUyVI=
       tarball: del/download/del-6.0.0.tgz
-  /detect-node/2.0.4:
+  /detect-node/2.0.5:
     optional: true
     resolution:
-      integrity: sha1-AU7o+PZpxcWAI9pkuBecCDooxGw=
-      tarball: detect-node/download/detect-node-2.0.4.tgz
+      integrity: sha1-nScKp+qlrwtyxMnZuBTn9M5zi3k=
+      tarball: detect-node/download/detect-node-2.0.5.tgz
   /diff/4.0.2:
     dev: true
     engines:
@@ -2611,7 +2625,7 @@ packages:
   /electron/12.0.1:
     dependencies:
       '@electron/get': 1.12.4
-      '@types/node': 14.14.34
+      '@types/node': 14.14.35
       extract-zip: 1.7.0
     engines:
       node: '>= 8.6'
@@ -3255,7 +3269,7 @@ packages:
       node: '>=6 <7 || >=8'
     resolution:
       integrity: sha1-SdQ8RaiM2Wd2aMt74bRu/bjS4cA=
-      tarball: fs-extra/download/fs-extra-8.1.0.tgz?cache=0&sync_timestamp=1611110039897&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Ffs-extra%2Fdownload%2Ffs-extra-8.1.0.tgz
+      tarball: fs-extra/download/fs-extra-8.1.0.tgz
   /fs-extra/9.1.0:
     dependencies:
       at-least-node: 1.0.0
@@ -3513,7 +3527,7 @@ packages:
       node: '>=8.6'
     resolution:
       integrity: sha1-7fRefWf5lUVwXeH3u+7rEhdl7YU=
-      tarball: got/download/got-9.6.0.tgz
+      tarball: got/download/got-9.6.0.tgz?cache=0&sync_timestamp=1614340753353&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fgot%2Fdownload%2Fgot-9.6.0.tgz
   /graceful-fs/4.2.6:
     resolution:
       integrity: sha1-/wQLKwhTsjw9MQJ1I3BvGIXXa+4=
@@ -3773,7 +3787,7 @@ packages:
   /inherits/2.0.4:
     resolution:
       integrity: sha1-D6LGT5MpF8NDOg3tVTY6rjdBa3w=
-      tarball: inherits/download/inherits-2.0.4.tgz
+      tarball: inherits/download/inherits-2.0.4.tgz?cache=0&sync_timestamp=1610086112340&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Finherits%2Fdownload%2Finherits-2.0.4.tgz
   /ini/1.3.8:
     resolution:
       integrity: sha1-op2kJbSIBvNHZ6Tvzjlyaa8oQyw=
@@ -6600,7 +6614,7 @@ packages:
   /roarr/2.15.4:
     dependencies:
       boolean: 3.0.2
-      detect-node: 2.0.4
+      detect-node: 2.0.5
       globalthis: 1.0.2
       json-stringify-safe: 5.0.1
       semver-compare: 1.0.0
@@ -6680,7 +6694,7 @@ packages:
     hasBin: true
     resolution:
       integrity: sha1-7gpkyK9ejO6mdoexM3YeG+y9HT0=
-      tarball: semver/download/semver-6.3.0.tgz?cache=0&sync_timestamp=1606876743583&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fsemver%2Fdownload%2Fsemver-6.3.0.tgz
+      tarball: semver/download/semver-6.3.0.tgz
   /semver/7.3.4:
     dependencies:
       lru-cache: 6.0.0
@@ -6689,7 +6703,7 @@ packages:
     hasBin: true
     resolution:
       integrity: sha1-J6qn0uTKdkUvmNOt0JOnLJQ+3Jc=
-      tarball: semver/download/semver-7.3.4.tgz?cache=0&sync_timestamp=1606876743583&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fsemver%2Fdownload%2Fsemver-7.3.4.tgz
+      tarball: semver/download/semver-7.3.4.tgz
   /serialize-error/7.0.1:
     dependencies:
       type-fest: 0.13.1
@@ -7401,7 +7415,7 @@ packages:
     hasBin: true
     resolution:
       integrity: sha1-OQYtgBmRLUNyYpjwlJPVmASMHOM=
-      tarball: typescript/download/typescript-4.2.3.tgz
+      tarball: typescript/download/typescript-4.2.3.tgz?cache=0&sync_timestamp=1615967349559&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Ftypescript%2Fdownload%2Ftypescript-4.2.3.tgz
   /unbox-primitive/1.0.0:
     dependencies:
       function-bind: 1.1.1

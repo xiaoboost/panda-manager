@@ -1,4 +1,4 @@
-@import './variable.less';
+@import './variable.styl';
 
 * {
   margin: 0;
@@ -20,30 +20,30 @@ html, body, #root {
   color: Black;
   font-family: FontDefault;
   font-size: FontDefaultSize;
-  .font-smoothing();
+  font-smoothing();
 }
 
 input, textarea {
   cursor: text;
 }
 
-@ScrollWidth: 4px;
+ScrollWidth = 4px;
 
 ::-webkit-scrollbar {
-  width: @ScrollWidth;
-  height: @ScrollWidth;
+  width: ScrollWidth;
+  height: ScrollWidth;
   background-color: #F5F5F5;
 }
 
 ::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 (@ScrollWidth / 2) rgba(0, 0, 0, 0.3);
-  box-shadow: inset 0 0 (@ScrollWidth / 2) rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: inset 0 0 (ScrollWidth / 2) rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 (ScrollWidth / 2) rgba(0, 0, 0, 0.3);
   background-color: #F5F5F5;
 }
 
 ::-webkit-scrollbar-thumb {
-  -webkit-box-shadow: inset 0 0 (@ScrollWidth / 2) rgba(0, 0, 0, .3);
-  box-shadow: inset 0 0 (@ScrollWidth / 2) rgba(0, 0, 0, .3);
+  -webkit-box-shadow: inset 0 0 (ScrollWidth / 2) rgba(0, 0, 0, .3);
+  box-shadow: inset 0 0 (ScrollWidth / 2) rgba(0, 0, 0, .3);
   background-color: #666;
   opacity: .7;
   transition: opacity ease-in-out 200ms;
