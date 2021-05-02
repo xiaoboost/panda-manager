@@ -1,0 +1,54 @@
+{
+  "name": "@panda/renderer",
+  "version": "1.0.0",
+  "description": "panda-manager renderer",
+  "source": "src/index.ts",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "package.json"
+  ],
+  "scripts": {
+    "clear": "rimraf ./dist",
+    "bundle:html": "cpy ./src/index.html ./dist",
+    "bundle:dev": "build --development --watch",
+    "bundle:build": "build --production",
+    "dev": "pnpm run clear && pnpm run bundle:html && pnpm run bundle:dev",
+    "build": "pnpm run clear && pnpm run bundle:html && pnpm run bundle:build",
+    "lint": "eslint --quiet --no-error-on-unmatched-pattern --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
+    "lint:fix": "eslint --fix --quiet --no-error-on-unmatched-pattern --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}"
+  },
+  "author": "xiaoboost",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xiaoboost/panda-manager"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^4.6.4",
+    "@panda/icons": "workspace:*",
+    "@panda/shared": "workspace:*",
+    "@panda/use": "workspace:*",
+    "@panda/utils": "workspace:*",
+    "antd": "^4.16.13",
+    "electron": "^14.0.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router": "^5.2.1",
+    "react-router-dom": "^5.3.0"
+  },
+  "devDependencies": {
+    "@panda/tsconfig": "workspace:*",
+    "@types/node": "^16.7.13",
+    "@types/panda": "workspace:*",
+    "@types/react": "^17.0.20",
+    "@types/react-dom": "^17.0.9",
+    "@types/react-router-dom": "^5.1.8",
+    "cpy-cli": "^3.1.1",
+    "esbuild-plugin-less": "^1.1.0",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.4.2"
+  }
+}

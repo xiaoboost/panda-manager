@@ -1,0 +1,9 @@
+{
+  "extends": "@panda/tsconfig",
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"],
+  "compilerOptions": {
+    "module": "ESNext",
+    "outDir": "dist"
+  }
+}

@@ -1,5 +1,5 @@
 packages:
-  - main/*
-  - renderer/*
-  - utils/*
-  - build/*
+  - packages/*
+  - packages/client/*
+  - packages/renderer/*
+  - packages/builder/*

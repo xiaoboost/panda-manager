@@ -1,8 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const workspace = process.cwd();
-const isRoot = fs.existsSync(path.join(workspace, 'pnpm-lock.yaml'));
-const rootWorkspace = isRoot ? workspace : path.join(workspace, '../../');
+const rootWorkspace = findRootWorkspace(workspace);
 const projectConfig = path.join(rootWorkspace, 'tsconfig.test.json');
 const relativeRoot = path.relative(rootWorkspace, workspace);
 
@@ -15,6 +14,19 @@ const ignorePaths = [
   '.eslintrc.js',
   '**/*.js',
 ].map((name) => path.join(relativeRoot, name).replace(/\\+/g, '/'));
+
+function findRootWorkspace(fsPath) {
+  const isRoot = (fsPath) => fs.existsSync(path.join(fsPath, 'pnpm-lock.yaml'));
+
+  let current = fsPath;
+  let last;
+
+  while(!isRoot(current) && last !== current) {
+    current = path.dirname(current);
+  }
+
+  return current;
+}
 
 module.exports = {
   parser: '@typescript-eslint/parser',
@@ -45,7 +57,7 @@ module.exports = {
     'no-debugger': 'off',
 
     'max-len': ['warn', {
-      code: 90,
+      code: 100,
     }],
     'keyword-spacing': 'error',
     'curly': 'error',
@@ -54,6 +66,11 @@ module.exports = {
     'no-implicit-coercion': 'error',
     'no-multi-spaces': 'error',
 
+    'react/prop-types': 'off',
+
+    '@typescript-eslint/no-var-requires': 'off',
+    '@typescript-eslint/no-empty-interface': 'off',
+    '@typescript-eslint/no-this-alias': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',

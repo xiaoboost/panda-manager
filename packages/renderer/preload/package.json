@@ -1,0 +1,28 @@
+{
+  "name": "@panda/preload",
+  "version": "1.0.0",
+  "description": "panda-manager renderer common preload script.",
+  "source": "src/index.ts",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "package.json"
+  ],
+  "scripts": {
+    "clear": "rimraf ./dist",
+    "build": "pnpm run clear && tsc -p .",
+    "lint": "eslint --quiet --no-error-on-unmatched-pattern --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
+    "lint:fix": "eslint --fix --quiet --no-error-on-unmatched-pattern --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}"
+  },
+  "dependencies": {
+    "@types/node": "^16.7.13",
+    "electron": "^14.0.0"
+  },
+  "devDependencies": {
+    "@panda/tsconfig": "workspace:*",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.4.2"
+  }
+}
