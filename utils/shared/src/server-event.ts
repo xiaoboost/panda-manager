@@ -1,3 +1,5 @@
+export const name = '_server_event';
+
 /** 事件状态 */
 export enum EventStatus {
   /** 创建请求 */

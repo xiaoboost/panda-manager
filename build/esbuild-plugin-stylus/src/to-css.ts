@@ -38,12 +38,5 @@ export function toCss(fileName: string, content: string, options: Options) {
       });
     }
 
-    styl.render((err, css) => {
-      if (err) {
-        return reject(err);
-      }
-
-      resolve(css);
-    });
   });
 }
