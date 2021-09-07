@@ -1,6 +1,6 @@
 {
   "extends": "@panda/tsconfig",
-  "include": ["src", "tests"],
+  "include": ["src"],
   "exclude": ["node_modules", "dist"],
   "compilerOptions": {
     "outDir": "dist"

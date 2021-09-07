@@ -3,16 +3,14 @@
   "version": "1.0.0",
   "description": "panda-manager shared",
   "source": "src/index.ts",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "module": "src/index.ts",
+  "types": "src/index.ts",
   "files": [
     "dist",
     "README.md",
     "package.json"
   ],
   "scripts": {
-    "clear": "rimraf ./dist",
-    "build": "pnpm run clear && tsc -p .",
     "lint": "eslint --quiet --no-error-on-unmatched-pattern --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
     "lint:fix": "eslint --fix --quiet --no-error-on-unmatched-pattern --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}"
   },
@@ -22,14 +20,10 @@
     "type": "git",
     "url": "https://github.com/xiaoboost/panda-manager"
   },
-  "dependencies": {
-    "electron": "^14.0.0",
-    "tslib": "^2.3.1"
-  },
   "devDependencies": {
     "@panda/tsconfig": "workspace:*",
     "@types/panda": "workspace:*",
-    "rimraf": "^3.0.2",
-    "typescript": "^4.4.2"
+    "typescript": "^4.4.2",
+    "tslib": "^2.3.1"
   }
 }

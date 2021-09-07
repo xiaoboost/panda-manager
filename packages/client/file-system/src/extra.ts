@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as Stream from 'stream';
-import * as fs from './node';
+import * as fs from 'fs-extra';
 
 /** 遍历文件夹下的所有文件 */
 async function filesOperation(
@@ -33,33 +33,6 @@ async function folderSize(base: string) {
   return result;
 }
 
-/** 读取 json 文件 */
-export async function readJSON<T extends Record<string, unknown>>(
-  path: string,
-): Promise<T | undefined>;
-export async function readJSON<T extends Record<string, unknown>>(
-  path: string,
-  initVal: T,
-): Promise<T>;
-export async function readJSON<T extends Record<string, unknown>>(
-  path: string,
-  initVal?: T,
-) {
-  const content = (await fs.readFile(path).catch(() => '')).toString();
-
-  if (!content) {
-    return initVal;
-  }
-
-  try {
-    return JSON.parse(content) as T;
-  }
-  catch (e) {
-    console.warn(e);
-    return initVal;
-  }
-}
-
 /** 获取文件夹内所有文件路径 */
 export async function readDirDeep(base: string) {
   const result: string[] = [];
@@ -80,35 +53,6 @@ export async function fileSize(base: string) {
   }
   else {
     return fileStat.size;
-  }
-}
-
-/** 删除文件或文件夹 */
-export async function rmrf(base: string) {
-  const fileStat = await fs.stat(base);
-
-  if (fileStat.isDirectory()) {
-    await filesOperation(base, (file) => fs.rm(file));
-  }
-  else {
-    await fs.rm(base);
-  }
-}
-
-/** 依照路径创建文件夹 */
-export async function mkdirp(target: string) {
-  // 待创建的路径
-  const dirs: string[] = [];
-
-  let dir = target;
-
-  while (!fs.exists(dir)) {
-    dirs.push(dir);
-    dir = path.dirname(dir);
-  }
-
-  while (dirs.length > 0) {
-    await fs.mkdir(dirs.pop()!);
   }
 }
 
@@ -156,9 +100,4 @@ export async function readFileAsShared(path: string) {
         resolve(writeStream._buffer);
       });
   });
-}
-
-export async function writeFilep(fsPath: string, content: string | Buffer) {
-  await mkdirp(path.dirname(fsPath));
-  await fs.writeFile(fsPath, content);
 }

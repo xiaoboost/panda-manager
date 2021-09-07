@@ -3,21 +3,17 @@
   "version": "1.0.0",
   "description": "panda-manager utils",
   "source": "src/index.ts",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "module": "src/index.ts",
+  "types": "src/index.ts",
   "files": [
     "dist",
     "README.md",
     "package.json"
   ],
   "scripts": {
-    "clear": "rimraf ./dist",
-    "dev": "tsc -w -p ./tsconfig.dev.json",
-    "build:esm": "tsc -p ./tsconfig.build.json",
-    "build": "pnpm run clear && pnpm run build:esm",
+    "watch": "tsc -w -p .",
     "lint": "eslint --quiet --no-error-on-unmatched-pattern --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
-    "lint:fix": "eslint --fix --quiet --no-error-on-unmatched-pattern --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
-    "test": "ava --no-cache"
+    "lint:fix": "eslint --fix --quiet --no-error-on-unmatched-pattern --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}"
   },
   "ava": {
     "extensions": [
@@ -32,12 +28,7 @@
   },
   "devDependencies": {
     "@panda/tsconfig": "workspace:*",
-    "ava": "^3.15.0",
-    "rimraf": "^3.0.2",
-    "ts-node": "^10.2.1",
-    "typescript": "^4.4.2"
-  },
-  "dependencies": {
+    "typescript": "^4.4.2",
     "tslib": "^2.3.1"
   }
 }

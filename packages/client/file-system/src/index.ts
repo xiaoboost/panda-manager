@@ -1,2 +1,2 @@
-export * from './node';
+export * from 'fs-extra';
 export * from './extra';
