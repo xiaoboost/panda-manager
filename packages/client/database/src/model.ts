@@ -1,5 +1,5 @@
 import { gzip, gunzip, readFile, writeFile } from './utils';
-import { debounce, DeepReadonly, isUndef, isDef } from '@panda/utils';
+import { debounce, DeepReadonly, isUndef, isDef } from '@xiao-ai/utils';
 
 /** 数据储存 */
 export class Model<T> {

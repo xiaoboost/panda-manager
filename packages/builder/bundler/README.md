@@ -1,4 +1,4 @@
-# panda/bundler
+# @panda/bundler
 
 代码打包工具
 
@@ -10,7 +10,7 @@ pnpm install @panda/bundler -D
 
 ## 使用
 
-在项目根目录放置名为`build.config.(t|j)s`文件，默认导出配置。样例：  
+在项目根目录放置名为`build.config.(t|j)s`文件，默认导出配置。样例：
 ```typescript
 import { BuildOptions, ConfigContext } from '@panda/bundler';
 

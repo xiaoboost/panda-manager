@@ -1,4 +1,4 @@
-# panda/packager
+# @panda/packager
 
 项目打包工具
 

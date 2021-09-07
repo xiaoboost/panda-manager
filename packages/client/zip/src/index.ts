@@ -4,7 +4,8 @@ import IconvLite from 'iconv-lite';
 
 import * as fs from '@panda/fs';
 
-import { isString, naturalCompare } from '@panda/utils';
+import { isString } from '@xiao-ai/utils';
+import { naturalCompare } from '@panda/utils';
 
 /** 读取压缩包 */
 async function readZip(file: string | Buffer) {
@@ -96,7 +97,7 @@ export async function packageDir(dir: string, targetDir = path.dirname(dir)) {
 }
 
 /** 解包文件夹 */
-export async function unpackZip(
+export async function unPackZip(
   file: string,
   targetDir = path.dirname(file),
   onProgress?: (progress: number) => any,

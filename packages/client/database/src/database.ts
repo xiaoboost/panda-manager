@@ -1,5 +1,5 @@
 import { gzip, gunzip, readFile, writeFile } from './utils';
-import { debounce, AnyObject, DeepReadonly } from '@panda/utils';
+import { debounce, AnyObject, DeepReadonly } from '@xiao-ai/utils';
 
 /** 数据库文件在文件系统中的储存结构 */
 type DatabaseInFile = Record<string, AnyObject[]>;

@@ -11,18 +11,13 @@
     "package.json"
   ],
   "scripts": {
-    "clear": "rimraf ./dist",
-    "build": "pnpm run clear && tsc -p .",
     "lint": "eslint --quiet --no-error-on-unmatched-pattern --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
     "lint:fix": "eslint --fix --quiet --no-error-on-unmatched-pattern --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}"
   },
-  "dependencies": {
-    "@types/node": "^16.7.13",
-    "electron": "^14.0.0"
-  },
   "devDependencies": {
     "@panda/tsconfig": "workspace:*",
-    "rimraf": "^3.0.2",
+    "@types/node": "^16.7.13",
+    "electron": "^14.0.0",
     "typescript": "^4.4.2"
   }
 }

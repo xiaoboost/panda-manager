@@ -1,4 +1,5 @@
 import Jimp from 'jimp';
+
 import { isMainThread, parentPort } from 'worker_threads';
 
 interface CompressOption {
@@ -99,7 +100,7 @@ function install() {
         error = `unknow method: ${name}.`;
       }
     }
-    catch (e) {
+    catch (e: any) {
       error = e.message;
     }
 

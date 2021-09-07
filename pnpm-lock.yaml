@@ -82,19 +82,19 @@ importers:
       '@panda/utils': workspace:*
       '@types/node': ^16.7.13
       '@types/panda': workspace:*
+      '@xiao-ai/utils': ^1.4.3
       memfs: ^3.2.4
-      rimraf: ^3.0.2
       tslib: ^2.3.1
       typescript: ^4.4.2
     dependencies:
       '@panda/utils': link:../../utils
-      tslib: registry.nlark.com/tslib/2.3.1
+      '@xiao-ai/utils': registry.nlark.com/@xiao-ai/utils/1.4.3
     devDependencies:
       '@panda/tsconfig': link:../../tsconfig
       '@types/node': registry.nlark.com/@types/node/16.7.13
       '@types/panda': link:../../typings
       memfs: registry.nlark.com/memfs/3.2.4
-      rimraf: 3.0.2
+      tslib: registry.nlark.com/tslib/2.3.1
       typescript: registry.nlark.com/typescript/4.4.2
 
   packages/client/file-system:
@@ -126,8 +126,8 @@ importers:
       '@jimp/plugin-scale': ^0.16.1
       '@jimp/png': ^0.16.1
       '@panda/tsconfig': workspace:*
+      '@types/panda': workspace:*
       jimp: ^0.16.1
-      rimraf: ^3.0.2
       tslib: ^2.3.1
       typescript: ^4.4.2
     dependencies:
@@ -139,17 +139,17 @@ importers:
       '@jimp/plugin-scale': registry.nlark.com/@jimp/plugin-scale/0.16.1_c382371bb4f60ea2fd211a04ed8ab1e2
       '@jimp/png': registry.nlark.com/@jimp/png/0.16.1_@jimp+custom@0.16.1
       jimp: registry.nlark.com/jimp/0.16.1
-      tslib: registry.nlark.com/tslib/2.3.1
     devDependencies:
       '@panda/tsconfig': link:../../tsconfig
-      rimraf: 3.0.2
+      '@types/panda': link:../../typings
+      tslib: registry.nlark.com/tslib/2.3.1
       typescript: registry.nlark.com/typescript/4.4.2
 
   packages/client/main:
     specifiers:
       '@panda/db': workspace:*
       '@panda/fs': workspace:*
-      '@panda/server': workspace:^1.0.0
+      '@panda/server': workspace:*
       '@panda/shared': workspace:*
       '@panda/tsconfig': workspace:*
       '@panda/utils': workspace:*
@@ -178,7 +178,6 @@ importers:
       '@panda/tsconfig': workspace:*
       '@panda/utils': workspace:*
       electron: ^14.0.0
-      rimraf: ^3.0.2
       typescript: ^4.4.2
     dependencies:
       '@panda/db': link:../database
@@ -188,7 +187,6 @@ importers:
     devDependencies:
       '@panda/tsconfig': link:../../tsconfig
       electron: registry.nlark.com/electron/14.0.0
-      rimraf: 3.0.2
       typescript: registry.nlark.com/typescript/4.4.2
 
   packages/client/zip:
@@ -196,20 +194,20 @@ importers:
       '@panda/fs': workspace:*
       '@panda/tsconfig': workspace:*
       '@panda/utils': workspace:*
+      '@xiao-ai/utils': ^1.4.3
       iconv-lite: ^0.6.3
       jszip: ^3.7.1
-      rimraf: ^3.0.2
       tslib: ^2.3.1
       typescript: ^4.4.2
     dependencies:
       '@panda/fs': link:../file-system
       '@panda/utils': link:../../utils
+      '@xiao-ai/utils': registry.nlark.com/@xiao-ai/utils/1.4.3
       iconv-lite: registry.nlark.com/iconv-lite/0.6.3
       jszip: registry.nlark.com/jszip/3.7.1
-      tslib: registry.nlark.com/tslib/2.3.1
     devDependencies:
       '@panda/tsconfig': link:../../tsconfig
-      rimraf: 3.0.2
+      tslib: registry.nlark.com/tslib/2.3.1
       typescript: registry.nlark.com/typescript/4.4.2
 
   packages/renderer/icons:
@@ -248,7 +246,6 @@ importers:
       '@panda/icons': workspace:*
       '@panda/shared': workspace:*
       '@panda/tsconfig': workspace:*
-      '@panda/use': workspace:*
       '@panda/utils': workspace:*
       '@types/node': ^16.7.13
       '@types/panda': workspace:*
@@ -269,7 +266,6 @@ importers:
       '@ant-design/icons': registry.nlark.com/@ant-design/icons/4.6.4_react-dom@17.0.2+react@17.0.2
       '@panda/icons': link:../icons
       '@panda/shared': link:../../shared
-      '@panda/use': link:../react-use
       '@panda/utils': link:../../utils
       antd: registry.nlark.com/antd/4.16.13_react-dom@17.0.2+react@17.0.2
       electron: registry.nlark.com/electron/14.0.0
@@ -294,31 +290,11 @@ importers:
       '@panda/tsconfig': workspace:*
       '@types/node': ^16.7.13
       electron: ^14.0.0
-      rimraf: ^3.0.2
       typescript: ^4.4.2
-    dependencies:
+    devDependencies:
+      '@panda/tsconfig': link:../../tsconfig
       '@types/node': registry.nlark.com/@types/node/16.7.13
       electron: registry.nlark.com/electron/14.0.0
-    devDependencies:
-      '@panda/tsconfig': link:../../tsconfig
-      rimraf: 3.0.2
-      typescript: registry.nlark.com/typescript/4.4.2
-
-  packages/renderer/react-use:
-    specifiers:
-      '@panda/tsconfig': workspace:*
-      '@panda/utils': workspace:*
-      electron: ^14.0.0
-      react: ^17.0.2
-      rimraf: ^3.0.2
-      typescript: ^4.4.2
-    dependencies:
-      '@panda/utils': link:../../utils
-    devDependencies:
-      '@panda/tsconfig': link:../../tsconfig
-      electron: registry.nlark.com/electron/14.0.0
-      react: registry.nlark.com/react/17.0.2
-      rimraf: 3.0.2
       typescript: registry.nlark.com/typescript/4.4.2
 
   packages/shared:
@@ -3753,6 +3729,12 @@ packages:
       '@typescript-eslint/types': registry.nlark.com/@typescript-eslint/types/4.31.0
       eslint-visitor-keys: registry.nlark.com/eslint-visitor-keys/2.1.0
     dev: true
+
+  registry.nlark.com/@xiao-ai/utils/1.4.3:
+    resolution: {integrity: sha1-gpXU0OTPPZLuCd02ECxq/YeJH60=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@xiao-ai/utils/download/@xiao-ai/utils-1.4.3.tgz}
+    name: '@xiao-ai/utils'
+    version: 1.4.3
+    dev: false
 
   registry.nlark.com/acorn-jsx/5.3.2_acorn@7.4.1:
     resolution: {integrity: sha1-ftW7VZCLOy8bxVxq8WU7rafweTc=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/acorn-jsx/download/acorn-jsx-5.3.2.tgz}

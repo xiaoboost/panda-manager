@@ -1,3 +1,3 @@
-# panda/main
+# @panda/server
 
-主进程
+通信模块

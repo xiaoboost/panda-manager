@@ -1,10 +1,10 @@
 {
-  "name": "@panda/ipc-renderer",
+  "name": "@panda/renderer-ipc",
   "version": "1.0.0",
   "description": "panda-manager renderer ipc tools",
   "source": "src/index.ts",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "module": "src/index.ts",
+  "types": "src/index.ts",
   "files": [
     "dist",
     "README.md",

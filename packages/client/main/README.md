@@ -1,3 +1,3 @@
-# panda/main
+# @panda/main
 
 主进程

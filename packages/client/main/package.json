@@ -1,7 +1,7 @@
 {
-  "name": "@panda/shared",
+  "name": "@panda/client",
   "version": "1.0.0",
-  "description": "panda-manager shared",
+  "description": "panda-manager client main code",
   "main": "dist/index.js",
   "files": [
     "dist",
@@ -22,7 +22,7 @@
   "dependencies": {
     "@panda/db": "workspace:*",
     "@panda/fs": "workspace:*",
-    "@panda/server": "workspace:^1.0.0",
+    "@panda/server": "workspace:*",
     "@panda/shared": "workspace:*",
     "@panda/utils": "workspace:*",
     "electron": "^14.0.0"

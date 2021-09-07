@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "clear": "rimraf ./dist",
-    "dev": "tsc -w -p ./tsconfig.dev.json",
+    "watch": "tsc -w -p .",
     "build:esm": "tsc -p ./tsconfig.build.json",
     "build": "pnpm run clear && pnpm run build:esm",
     "lint": "eslint --quiet --no-error-on-unmatched-pattern --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",

@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "panda-manager renderer",
   "source": "src/index.ts",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "module": "src/index.ts",
+  "types": "src/index.ts",
   "files": [
     "dist",
     "README.md",
@@ -30,7 +30,6 @@
     "@ant-design/icons": "^4.6.4",
     "@panda/icons": "workspace:*",
     "@panda/shared": "workspace:*",
-    "@panda/use": "workspace:*",
     "@panda/utils": "workspace:*",
     "antd": "^4.16.13",
     "electron": "^14.0.0",
