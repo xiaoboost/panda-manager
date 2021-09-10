@@ -1,8 +1,8 @@
 import { app } from 'electron/main';
 import { install } from './main';
 
-import { rmrf } from '@panda/fs';
-import { resolveTempDir } from '@panda/shared';
+import { remove } from '@panda/fs';
+import { resolveTempDir } from '@panda/path';
 
 // 完成初始化时启动主界面
 app.on('ready', () => {
@@ -17,6 +17,6 @@ app.on('window-all-closed', () => {
 
   // 清理临时文件夹
   if (process.env.NODE_ENV === 'production') {
-    rmrf(resolveTempDir());
+    remove(resolveTempDir());
   }
 });

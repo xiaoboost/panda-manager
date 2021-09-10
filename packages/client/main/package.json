@@ -22,9 +22,12 @@
   "dependencies": {
     "@panda/db": "workspace:*",
     "@panda/fs": "workspace:*",
+    "@panda/path": "workspace:*",
     "@panda/server": "workspace:*",
     "@panda/shared": "workspace:*",
     "@panda/utils": "workspace:*",
+    "@panda/window-manager": "workspace:*",
+    "@xiao-ai/utils": "^1.4.3",
     "electron": "^14.0.0"
   },
   "devDependencies": {

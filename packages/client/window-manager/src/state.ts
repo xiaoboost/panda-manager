@@ -1,9 +1,9 @@
 import { BrowserWindow, BrowserWindowConstructorOptions } from 'electron';
 
 import { Model } from '@panda/db';
-import { debounce } from '@panda/utils';
-import { exists, mkdirp } from '@panda/fs';
-import { resolveUserDir, resolveTempDir } from '@panda/shared';
+import { debounce } from '@xiao-ai/utils';
+import { stat, mkdirp } from '@panda/fs';
+import { resolveUserDir, resolveTempDir } from '@panda/path';
 
 /** 全局配置文件基础接口 */
 interface WindowState {
@@ -34,7 +34,7 @@ const state = new Model<WindowState>(initState, resolveUserDir('window-state'));
 /** 初始化配置文件夹 */
 async function initDir() {
   const checkDir = async (dir: string) => {
-    if (!(await exists(dir))) {
+    if (!(await stat(dir))) {
       await mkdirp(dir);
     }
   };
@@ -78,7 +78,6 @@ export async function windowStateKeeper(
   }
 
   win.on('close', () => state.write());
-
   win.on('maximize', () => state.set({ isMaximize: true }));
   win.on('unmaximize', () => state.set({ isMaximize: false }));
 

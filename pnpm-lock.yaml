@@ -149,25 +149,46 @@ importers:
     specifiers:
       '@panda/db': workspace:*
       '@panda/fs': workspace:*
+      '@panda/path': workspace:*
       '@panda/server': workspace:*
       '@panda/shared': workspace:*
       '@panda/tsconfig': workspace:*
       '@panda/utils': workspace:*
+      '@panda/window-manager': workspace:*
       '@types/panda': workspace:*
+      '@xiao-ai/utils': ^1.4.3
       electron: ^14.0.0
       rimraf: ^3.0.2
       typescript: ^4.4.2
     dependencies:
       '@panda/db': link:../database
       '@panda/fs': link:../file-system
+      '@panda/path': link:../path
       '@panda/server': link:../server
       '@panda/shared': link:../../shared
       '@panda/utils': link:../../utils
+      '@panda/window-manager': link:../window-manager
+      '@xiao-ai/utils': registry.nlark.com/@xiao-ai/utils/1.4.3
       electron: registry.nlark.com/electron/14.0.0
     devDependencies:
       '@panda/tsconfig': link:../../tsconfig
       '@types/panda': link:../../typings
       rimraf: 3.0.2
+      typescript: registry.nlark.com/typescript/4.4.2
+
+  packages/client/path:
+    specifiers:
+      '@panda/tsconfig': workspace:*
+      '@types/node': ^16.7.13
+      electron: ^14.0.0
+      tslib: ^2.3.1
+      typescript: ^4.4.2
+    dependencies:
+      electron: registry.nlark.com/electron/14.0.0
+    devDependencies:
+      '@panda/tsconfig': link:../../tsconfig
+      '@types/node': registry.nlark.com/@types/node/16.7.13
+      tslib: registry.nlark.com/tslib/2.3.1
       typescript: registry.nlark.com/typescript/4.4.2
 
   packages/client/server:
@@ -187,6 +208,35 @@ importers:
     devDependencies:
       '@panda/tsconfig': link:../../tsconfig
       electron: registry.nlark.com/electron/14.0.0
+      typescript: registry.nlark.com/typescript/4.4.2
+
+  packages/client/window-manager:
+    specifiers:
+      '@panda/db': workspace:*
+      '@panda/fs': workspace:*
+      '@panda/path': workspace:*
+      '@panda/tsconfig': workspace:*
+      '@panda/utils': workspace:*
+      '@types/fs-extra': ^9.0.12
+      '@types/node': ^16.7.13
+      '@xiao-ai/utils': ^1.4.3
+      electron: ^14.0.0
+      fs-extra: ^10.0.0
+      tslib: ^2.3.1
+      typescript: ^4.4.2
+    dependencies:
+      '@panda/db': link:../database
+      '@panda/fs': link:../file-system
+      '@panda/path': link:../path
+      '@panda/utils': link:../../utils
+      '@xiao-ai/utils': registry.nlark.com/@xiao-ai/utils/1.4.3
+      electron: registry.nlark.com/electron/14.0.0
+      fs-extra: registry.nlark.com/fs-extra/10.0.0
+    devDependencies:
+      '@panda/tsconfig': link:../../tsconfig
+      '@types/fs-extra': registry.nlark.com/@types/fs-extra/9.0.12
+      '@types/node': registry.nlark.com/@types/node/16.7.13
+      tslib: registry.nlark.com/tslib/2.3.1
       typescript: registry.nlark.com/typescript/4.4.2
 
   packages/client/zip:
@@ -3532,7 +3582,7 @@ packages:
     version: 14.17.15
 
   registry.nlark.com/@types/node/16.7.13:
-    resolution: {integrity: sha1-hvrjVrA7WhLyUGxs9s2Sh7IFlz8=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@types/node/download/@types/node-16.7.13.tgz?cache=0&sync_timestamp=1631007490181&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Fnode%2Fdownload%2F%40types%2Fnode-16.7.13.tgz}
+    resolution: {integrity: sha1-hvrjVrA7WhLyUGxs9s2Sh7IFlz8=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@types/node/download/@types/node-16.7.13.tgz}
     name: '@types/node'
     version: 16.7.13
 

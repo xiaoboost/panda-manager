@@ -2,9 +2,9 @@ import { URL } from 'url';
 import { app, BrowserWindow } from 'electron/main';
 
 import { ipcMain } from 'electron';
-import { resolveRoot } from '@panda/shared';
+import { resolveRoot } from '@panda/path';
 import { install as serve } from '@panda/server';
-import { windowStateKeeper } from './window-state';
+import { windowStateKeeper } from '@panda/window-manager';
 
 /** 主窗口 */
 export let win: BrowserWindow | null;
