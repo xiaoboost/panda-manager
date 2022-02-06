@@ -2,5 +2,8 @@
   "name": "@panda/tsconfig",
   "description": "panda's TypeScript configuration",
   "version": "1.0.0",
-  "main": "tsconfig.json"
+  "main": "tsconfig.json",
+  "devDependencies": {
+    "@xiao-ai/utils": "^1.5.1"
+  }
 }
