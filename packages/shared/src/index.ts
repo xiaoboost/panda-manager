@@ -1,3 +1,4 @@
-export * as Store from './store';
-export * as Event from './server-event';
-export * as Status from './window-status';
+export * as RPC from './rpc';
+
+export * from './type';
+export * from './natural-compare';

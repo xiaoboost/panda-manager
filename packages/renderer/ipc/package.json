@@ -17,12 +17,12 @@
     "lint:fix": "eslint --fix --quiet --no-error-on-unmatched-pattern --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}"
   },
   "dependencies": {
-    "@types/node": "^16.7.13",
-    "electron": "^14.0.0"
+    "@types/node": "^17.0.15",
+    "electron": "^17.0.0"
   },
   "devDependencies": {
     "@panda/tsconfig": "workspace:*",
     "rimraf": "^3.0.2",
-    "typescript": "^4.4.2"
+    "typescript": "^4.5.5"
   }
 }

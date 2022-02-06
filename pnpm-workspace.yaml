@@ -2,4 +2,4 @@ packages:
   - packages/*
   - packages/client/*
   - packages/renderer/*
-  - packages/builder/*
+  - packages/utils/*

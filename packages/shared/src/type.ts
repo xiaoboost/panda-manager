@@ -48,17 +48,20 @@ export interface BaseFileData {
   kind: FileKind;
   /** 项目名称 */
   name: string;
-
-  /** 实际文件路径 */
-  filePath: string;
-  /**
-   * 文件大小
-   *   - 单位 `kb`
-   */
-  fileSize: number;
-  /** 文件最后修改的时间 */
-  lastModified: number;
-
   /** 标签数据 */
   tags: number[];
+  /** 原始文件 */
+  file: {
+    /** 文件路径 */
+    path: string;
+    /** 是否是压缩包 */
+    isZip: boolean;
+    /**
+     * 文件大小
+     *   - 单位 `kb`
+     */
+    size: number;
+    /** 文件最后修改的时间 */
+    lastModified: number;
+  };
 }

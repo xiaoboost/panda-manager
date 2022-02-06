@@ -27,27 +27,26 @@
     "url": "https://github.com/xiaoboost/panda-manager"
   },
   "dependencies": {
-    "@ant-design/icons": "^4.6.4",
+    "@ant-design/icons": "^4.7.0",
     "@panda/icons": "workspace:*",
     "@panda/shared": "workspace:*",
-    "@panda/utils": "workspace:*",
-    "antd": "^4.16.13",
-    "electron": "^14.0.0",
+    "antd": "^4.18.5",
+    "electron": "^17.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-router": "^5.2.1",
-    "react-router-dom": "^5.3.0"
+    "react-router": "^6.2.1",
+    "react-router-dom": "^6.2.1"
   },
   "devDependencies": {
     "@panda/tsconfig": "workspace:*",
-    "@types/node": "^16.7.13",
+    "@types/node": "^17.0.15",
     "@types/panda": "workspace:*",
-    "@types/react": "^17.0.20",
-    "@types/react-dom": "^17.0.9",
-    "@types/react-router-dom": "^5.1.8",
+    "@types/react": "^17.0.39",
+    "@types/react-dom": "^17.0.11",
+    "@types/react-router-dom": "^5.3.3",
     "cpy-cli": "^3.1.1",
-    "esbuild-plugin-less": "^1.1.0",
+    "esbuild-plugin-less": "^1.1.6",
     "rimraf": "^3.0.2",
-    "typescript": "^4.4.2"
+    "typescript": "^4.5.5"
   }
 }
