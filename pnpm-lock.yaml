@@ -184,6 +184,7 @@ importers:
   packages/client/zip:
     specifiers:
       '@panda/fs': workspace:*
+      '@panda/shared': workspace:*
       '@panda/tsconfig': workspace:*
       '@xiao-ai/utils': ^1.5.1
       iconv-lite: ^0.6.3
@@ -192,6 +193,7 @@ importers:
       typescript: ^4.5.5
     dependencies:
       '@panda/fs': link:../file-system
+      '@panda/shared': link:../../shared
       '@xiao-ai/utils': registry.npmmirror.com/@xiao-ai/utils/1.5.1
       iconv-lite: registry.npmmirror.com/iconv-lite/0.6.3
       jszip: registry.npmmirror.com/jszip/3.7.1

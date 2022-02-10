@@ -5,7 +5,7 @@ import IconvLite from 'iconv-lite';
 import * as fs from '@panda/fs';
 
 import { isString } from '@xiao-ai/utils';
-import { naturalCompare } from '@panda/utils';
+import { naturalCompare } from '@panda/shared';
 
 /** 读取压缩包 */
 async function readZip(file: string | Buffer) {

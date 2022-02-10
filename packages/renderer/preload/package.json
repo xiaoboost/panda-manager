@@ -3,13 +3,8 @@
   "version": "1.0.0",
   "description": "panda-manager renderer common preload script.",
   "source": "src/index.ts",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist",
-    "README.md",
-    "package.json"
-  ],
+  "module": "src/index.js",
+  "types": "src/index.d.ts",
   "scripts": {
     "lint": "eslint --quiet --no-error-on-unmatched-pattern --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
     "lint:fix": "eslint --fix --quiet --no-error-on-unmatched-pattern --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}"

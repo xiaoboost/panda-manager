@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@panda/fs": "workspace:*",
+    "@panda/shared": "workspace:*",
     "@xiao-ai/utils": "^1.5.1",
     "iconv-lite": "^0.6.3",
     "jszip": "^3.7.1"

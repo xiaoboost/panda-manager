@@ -9,12 +9,14 @@ import { service as get } from './get-config';
 export const service: ServiceData = {
   name: RPC.Name.PatchConfig,
   async service(request): Promise<SettingData> {
-    if (request.data.directories) {
-      await Dir.update(request.data.directories);
+    const { data } = request;
+
+    if (data.directories) {
+      await Dir.update(data.directories);
     }
 
-    if (request.data.sort) {
-      await Sort.patch(request.data.sort);
+    if (data.sort) {
+      await Sort.patch(data.sort);
     }
 
     return await get.service(request);
