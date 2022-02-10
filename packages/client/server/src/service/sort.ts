@@ -1,7 +1,7 @@
 import { Config } from '../model';
 import { SortOption } from '@panda/shared';
 
-export const ready = Promise.resolve();
+export const ready = Config.ready;
 
 export async function patch(sort: Partial<SortOption>): Promise<void> {
   await Config.ready;

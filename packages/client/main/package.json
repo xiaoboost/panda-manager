@@ -22,9 +22,9 @@
     "url": "https://github.com/xiaoboost/panda-manager"
   },
   "dependencies": {
+    "@panda/client-utils": "workspace:*",
     "@panda/db": "workspace:*",
     "@panda/fs": "workspace:*",
-    "@panda/path": "workspace:*",
     "@panda/server": "workspace:*",
     "@panda/shared": "workspace:*",
     "@panda/window-manager": "workspace:*",

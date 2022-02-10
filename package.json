@@ -7,8 +7,6 @@
   "license": "MIT",
   "scripts": {
     "clear": "rimraf ./dist/generated",
-    "update": "pnpm update -r",
-    "update:last": "pnpm update -r -L",
     "test": "pnpm run -r test --parallel --filter .",
     "test:update": "pnpm run -r test:update --parallel --filter .",
     "lint": "pnpm run -r lint --parallel --filter .",

@@ -17,7 +17,7 @@ export interface SortOption {
 }
 
 /** 参数选项 */
-export interface ConfigData {
+export interface SettingData {
   directories: string[];
   sort: SortOption;
 }

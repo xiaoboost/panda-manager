@@ -87,9 +87,9 @@ importers:
 
   packages/client/main:
     specifiers:
+      '@panda/client-utils': workspace:*
       '@panda/db': workspace:*
       '@panda/fs': workspace:*
-      '@panda/path': workspace:*
       '@panda/server': workspace:*
       '@panda/shared': workspace:*
       '@panda/tsconfig': workspace:*
@@ -102,9 +102,9 @@ importers:
       rimraf: ^3.0.2
       typescript: ^4.5.5
     dependencies:
+      '@panda/client-utils': link:../utils
       '@panda/db': link:../database
       '@panda/fs': link:../file-system
-      '@panda/path': link:../path
       '@panda/server': link:../server
       '@panda/shared': link:../../shared
       '@panda/window-manager': link:../window-manager
@@ -118,7 +118,28 @@ importers:
       rimraf: registry.npmmirror.com/rimraf/3.0.2
       typescript: registry.npmmirror.com/typescript/4.5.5
 
-  packages/client/path:
+  packages/client/server:
+    specifiers:
+      '@panda/client-utils': workspace:*
+      '@panda/db': workspace:*
+      '@panda/fs': workspace:*
+      '@panda/shared': workspace:*
+      '@panda/tsconfig': workspace:*
+      electron: ^17.0.0
+      tslib: ^2.3.1
+      typescript: ^4.5.5
+    dependencies:
+      '@panda/client-utils': link:../utils
+      '@panda/db': link:../database
+      '@panda/fs': link:../file-system
+      '@panda/shared': link:../../shared
+    devDependencies:
+      '@panda/tsconfig': link:../../utils/tsconfig
+      electron: registry.npmmirror.com/electron/17.0.0
+      tslib: registry.npmmirror.com/tslib/2.3.1
+      typescript: registry.npmmirror.com/typescript/4.5.5
+
+  packages/client/utils:
     specifiers:
       '@panda/tsconfig': workspace:*
       '@types/node': ^17.0.15
@@ -133,28 +154,11 @@ importers:
       tslib: registry.npmmirror.com/tslib/2.3.1
       typescript: registry.npmmirror.com/typescript/4.5.5
 
-  packages/client/server:
-    specifiers:
-      '@panda/db': workspace:*
-      '@panda/fs': workspace:*
-      '@panda/shared': workspace:*
-      '@panda/tsconfig': workspace:*
-      electron: ^17.0.0
-      typescript: ^4.5.5
-    dependencies:
-      '@panda/db': link:../database
-      '@panda/fs': link:../file-system
-      '@panda/shared': link:../../shared
-    devDependencies:
-      '@panda/tsconfig': link:../../utils/tsconfig
-      electron: registry.npmmirror.com/electron/17.0.0
-      typescript: registry.npmmirror.com/typescript/4.5.5
-
   packages/client/window-manager:
     specifiers:
+      '@panda/client-utils': workspace:*
       '@panda/db': workspace:*
       '@panda/fs': workspace:*
-      '@panda/path': workspace:*
       '@panda/tsconfig': workspace:*
       '@types/fs-extra': ^9.0.13
       '@types/node': ^17.0.15
@@ -164,9 +168,9 @@ importers:
       tslib: ^2.3.1
       typescript: ^4.5.5
     dependencies:
+      '@panda/client-utils': link:../utils
       '@panda/db': link:../database
       '@panda/fs': link:../file-system
-      '@panda/path': link:../path
       '@xiao-ai/utils': registry.npmmirror.com/@xiao-ai/utils/1.5.1
       electron: registry.npmmirror.com/electron/17.0.0
       fs-extra: registry.npmmirror.com/fs-extra/10.0.0

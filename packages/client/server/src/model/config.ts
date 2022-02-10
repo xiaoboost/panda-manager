@@ -1,8 +1,9 @@
 import { Model } from '@panda/db';
-import { resolveUserDir, SortBy, ConfigData } from '@panda/shared';
+import { resolveUserDir } from '@panda/client-utils';
+import { SortBy, SettingData } from '@panda/shared';
 
 /** 初始化默认值 */
-const initVal: ConfigData = {
+const initVal: SettingData = {
   directories: [],
   sort: {
     by: SortBy.name,

@@ -1,3 +1,3 @@
 # @panda/window-manager
 
-窗口操作
+窗口控制器

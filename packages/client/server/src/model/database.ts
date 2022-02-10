@@ -1,5 +1,6 @@
 import { Database as DB } from '@panda/db';
-import { resolveUserDir, TagData, TagGroupData, BaseFileData } from '@panda/shared';
+import { resolveUserDir } from '@panda/client-utils';
+import { TagData, TagGroupData, BaseFileData } from '@panda/shared';
 
 /** 数据库 */
 export const Database = new DB(resolveUserDir('database'));

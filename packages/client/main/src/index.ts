@@ -2,7 +2,7 @@ import { app } from 'electron/main';
 import { install } from './main';
 
 import { remove } from '@panda/fs';
-import { resolveTempDir } from '@panda/path';
+import { resolveTempDir } from '@panda/client-utils';
 
 // 完成初始化时启动主界面
 app.on('ready', () => {
