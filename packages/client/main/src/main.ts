@@ -1,7 +1,5 @@
 import { URL } from 'url';
-import { app, BrowserWindow } from 'electron/main';
-
-import { ipcMain } from 'electron';
+import { ipcMain, app, BrowserWindow } from 'electron';
 import { resolveRoot } from '@panda/client-utils';
 import { install as serve } from '@panda/server';
 import { windowStateKeeper } from '@panda/window-manager';

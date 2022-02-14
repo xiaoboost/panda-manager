@@ -1,33 +1,39 @@
 import webpack from 'webpack';
+import rm from 'rimraf';
 
 import { getBaseConfig } from './webpack';
-import { CommandOptions, buildConfigs } from './utils';
+import { CommandOptions, buildConfigs, resolveCWD } from './utils';
 
 export function build(opt: CommandOptions) {
-  const compilerConfigs = buildConfigs.map((item) => getBaseConfig({
-    ...opt,
-    ...item,
-  }));
+  return new Promise<void>((resolve) => {
+    const compilerConfigs = buildConfigs.map((item) => getBaseConfig({
+      ...opt,
+      ...item,
+    }));
 
-  debugger;
-  webpack(compilerConfigs, (err, stats) => {
-    console.log('\x1Bc');
+    rm.sync(resolveCWD(opt.outDir));
 
-    if (err) {
-      throw err;
-    }
+    webpack(compilerConfigs, (err, stats) => {
+      console.log('\x1Bc');
 
-    if (stats) {
-      console.log(stats.toString({
-        chunks: false,
-        chunkModules: false,
-        chunkOrigins: false,
-        colors: true,
-        modules: false,
-        children: false,
-      }));
+      if (err) {
+        throw err;
+      }
 
-      console.log('\n  ⚡ Build complete.\n');
-    }
+      if (stats) {
+        console.log(stats.toString({
+          chunks: false,
+          chunkModules: false,
+          chunkOrigins: false,
+          colors: true,
+          modules: false,
+          children: false,
+        }));
+
+        console.log('\n  ⚡ Build complete.\n');
+      }
+
+      resolve();
+    });
   });
 }

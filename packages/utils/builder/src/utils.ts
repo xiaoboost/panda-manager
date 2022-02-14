@@ -20,10 +20,10 @@ export const buildConfigs: WebpackOptions[] = [
     name: '@panda/client',
     process: 'main',
   },
-  {
-    name: '@panda/renderer',
-    process: 'renderer',
-  },
+  // {
+  //   name: '@panda/renderer',
+  //   process: 'renderer',
+  // },
   {
     name: '@panda/preload',
     process: 'preload',

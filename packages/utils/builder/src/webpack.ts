@@ -115,6 +115,7 @@ export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Con
     baseConfig.devtool = 'source-map';
   }
   else {
+    baseConfig.devtool = false;
     if (!baseConfig.optimization) {
       baseConfig.optimization = {
         minimize: true,

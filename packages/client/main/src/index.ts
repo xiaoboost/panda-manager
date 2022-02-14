@@ -1,4 +1,4 @@
-import { app } from 'electron/main';
+import { app } from 'electron';
 import { install } from './main';
 
 import { remove } from '@panda/fs';
