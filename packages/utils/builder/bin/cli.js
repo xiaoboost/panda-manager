@@ -1,1 +1,1 @@
-require('../dist').cli();
+require('../dist').run();

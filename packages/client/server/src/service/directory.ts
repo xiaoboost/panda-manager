@@ -3,7 +3,7 @@ import { Config } from '../model';
 // import { remove, search } from './files';
 
 import { readDirDeep } from '@panda/fs';
-import { exclude } from '@panda/utils';
+// import { exclude } from '@panda/client-utils';
 
 async function _update(paths: string[]) {
   // 更新配置
@@ -30,14 +30,14 @@ export const ready = (async function init() {
   await _update(Config.data.directories as string[]);
 })();
 
+/** 更新文件夹列表 */
 export async function update(paths: string[]) {
-  // 等待初始化完成
   await ready;
-  // 更新路径
   await _update(paths);
 }
 
+/** 获取文件夹列表 */
 export async function get() {
-  await Config.ready;
+  await ready;
   return [...Config.data.directories];
 }

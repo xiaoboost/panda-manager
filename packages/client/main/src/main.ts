@@ -32,7 +32,7 @@ export async function install() {
     win.webContents.openDevTools();
   }
 
-  serve(ipcMain);
+  serve(win, ipcMain);
 
   // 主界面被关闭时，退出软件
   win.on('closed', () => {

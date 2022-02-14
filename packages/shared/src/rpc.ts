@@ -1,11 +1,11 @@
 /** 事件描述 */
 export enum Description {
   /** 渲染进程到主进程 */
-  Main = '_to_main_event',
+  ToMain = '_event_to_main',
   /** 主进程回复渲染进程通信 */
-  ReplyRenderer = '_to_renderer_event',
+  ReplyRenderer = '_event_reply_renderer',
   /** 主进程向渲染进程广播事件 */
-  broadcastRenderer = '_to_renderer_event',
+  BroadcastRenderer = '_event_broadcast_renderer',
 }
 
 /** 事件名称 */
@@ -38,9 +38,16 @@ export enum Status {
 
 /** 事件交换数据格式 */
 export interface Data<T = any> {
-  id: number;
-  data: T;
+  /** 事件编号 */
+  eventId: number;
+  /** 渲染进程编号 */
+  rendererId: number;
+  /** 事件名称 */
   name: Name;
+  /** 请求状态 */
   status: Status;
+  /** 请求/返回数据 */
+  data: T;
+  /** 错误信息 */
   error?: string;
 }

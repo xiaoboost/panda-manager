@@ -12,8 +12,8 @@
   ],
   "scripts": {
     "watch": "tsc -w -p .",
-    "lint": "eslint --quiet --no-error-on-unmatched-pattern --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
-    "lint:fix": "eslint --fix --quiet --no-error-on-unmatched-pattern --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}"
+    "lint": "eslint --quiet --no-error-on-unmatched-pattern --config ../../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
+    "lint:fix": "eslint --fix --quiet --no-error-on-unmatched-pattern --config ../../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}"
   },
   "ava": {
     "extensions": [
@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@panda/tsconfig": "workspace:*",
-    "@types/node": "^17.0.15",
+    "@types/node": "^17.0.17",
     "@types/panda": "workspace:*",
     "memfs": "^3.4.1",
     "tslib": "^2.3.1",

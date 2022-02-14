@@ -12,8 +12,8 @@
     "clear": "rimraf ./dist",
     "build": "node build/build.js --input=src/index.ts --outDir=dist",
     "watch": "pnpm run build -- --development",
-    "lint": "eslint --quiet --no-error-on-unmatched-pattern --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
-    "lint:fix": "eslint --fix --quiet --no-error-on-unmatched-pattern --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}"
+    "lint": "eslint --quiet --no-error-on-unmatched-pattern --config ../../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
+    "lint:fix": "eslint --fix --quiet --no-error-on-unmatched-pattern --config ../../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}"
   },
   "author": "xiaoboost",
   "license": "MIT",
@@ -30,7 +30,7 @@
     "@panda/window-manager": "workspace:*",
     "@xiao-ai/utils": "^1.5.1",
     "electron": "^17.0.0",
-    "esbuild": "^0.14.18"
+    "esbuild": "^0.14.21"
   },
   "devDependencies": {
     "@panda/tsconfig": "workspace:*",

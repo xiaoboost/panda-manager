@@ -8,7 +8,7 @@ import { service as get } from './get-config';
 
 export const service: ServiceData = {
   name: RPC.Name.PatchConfig,
-  async service(request): Promise<SettingData> {
+  async service(win, request): Promise<SettingData> {
     const { data } = request;
 
     if (data.directories) {
@@ -19,6 +19,6 @@ export const service: ServiceData = {
       await Sort.patch(data.sort);
     }
 
-    return await get.service(request);
+    return await get.service(win, request);
   },
 };

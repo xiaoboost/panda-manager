@@ -1,6 +1,7 @@
+import type { BrowserWindow } from 'electron';
 import { RPC } from '@panda/shared';
 
 export interface ServiceData {
   name: RPC.Name;
-  service(request: RPC.Data): any;
+  service(win: BrowserWindow, request: RPC.Data): any;
 }

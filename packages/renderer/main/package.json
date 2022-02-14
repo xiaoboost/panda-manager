@@ -17,8 +17,8 @@
     "bundle:build": "build --production",
     "dev": "pnpm run clear && pnpm run bundle:html && pnpm run bundle:dev",
     "build": "pnpm run clear && pnpm run bundle:html && pnpm run bundle:build",
-    "lint": "eslint --quiet --no-error-on-unmatched-pattern --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
-    "lint:fix": "eslint --fix --quiet --no-error-on-unmatched-pattern --config ../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}"
+    "lint": "eslint --quiet --no-error-on-unmatched-pattern --config ../../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
+    "lint:fix": "eslint --fix --quiet --no-error-on-unmatched-pattern --config ../../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}"
   },
   "author": "xiaoboost",
   "license": "MIT",
@@ -30,7 +30,7 @@
     "@ant-design/icons": "^4.7.0",
     "@panda/icons": "workspace:*",
     "@panda/shared": "workspace:*",
-    "antd": "^4.18.5",
+    "antd": "^4.18.7",
     "electron": "^17.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -39,13 +39,10 @@
   },
   "devDependencies": {
     "@panda/tsconfig": "workspace:*",
-    "@types/node": "^17.0.15",
     "@types/panda": "workspace:*",
     "@types/react": "^17.0.39",
     "@types/react-dom": "^17.0.11",
     "@types/react-router-dom": "^5.3.3",
-    "cpy-cli": "^3.1.1",
-    "esbuild-plugin-less": "^1.1.6",
     "rimraf": "^3.0.2",
     "typescript": "^4.5.5"
   }

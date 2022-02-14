@@ -1,3 +1,4 @@
+import type { BrowserWindow } from 'electron';
 import { RPC } from '@panda/shared';
 
 import { service as ready } from './ready';
@@ -10,7 +11,7 @@ const services = [
   patchConfig,
 ];
 
-export async function route(request: RPC.Data): Promise<RPC.Data> {
+export async function route(win: BrowserWindow, request: RPC.Data): Promise<RPC.Data> {
   const result: RPC.Data = {
     ...request,
     status: RPC.Status.Ok,
@@ -20,7 +21,7 @@ export async function route(request: RPC.Data): Promise<RPC.Data> {
     const service = services.find((item) => item.name === request.name);
 
     if (service) {
-      result.data = await service.service(request);
+      result.data = await service.service(win, request);
     }
     else {
       result.error = `Unknown Method: ${request.name}`;
