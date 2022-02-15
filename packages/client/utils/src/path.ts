@@ -1,6 +1,7 @@
 import { join } from 'path';
 import { app } from 'electron';
 import { existsSync, mkdirSync } from 'fs';
+import { log } from '@panda/shared';
 
 /** 软件名称 */
 export const appName = 'panda-manager';
@@ -19,12 +20,12 @@ const userDir =
 function initDir(dir: string) {
   if (existsSync(dir)) {
     if (process.env.NODE_ENV === 'development') {
-      console.log(`Folder: '${dir}' is already exists.`);
+      log(`Folder: '${dir}' is already exists.`);
     }
   }
   else {
     if (process.env.NODE_ENV === 'development') {
-      console.log(`Folder: '${dir}' is not exists，create it.`);
+      log(`Folder: '${dir}' is not exists，create it.`);
     }
 
     mkdirSync(dir, { recursive: true });

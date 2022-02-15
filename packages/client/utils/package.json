@@ -16,6 +16,7 @@
     "lint:fix": "eslint --fix --quiet --no-error-on-unmatched-pattern --config ../../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}"
   },
   "dependencies": {
+    "@panda/shared": "workspace:*",
     "electron": "^17.0.0"
   },
   "devDependencies": {

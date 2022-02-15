@@ -6,12 +6,13 @@ import { HashRouter, Routes } from 'react-router-dom';
 // import { RouterViewer } from '../router';
 
 export const App = () => (
-  <HashRouter>
-    <Routes>
-      <div>123</div>
-      {/* <Layout>
-        <RouterViewer />
-      </Layout> */}
-    </Routes>
-  </HashRouter>
+  <div>123</div>
+  // <HashRouter>
+  //   <Routes>
+  //     <div>123</div>
+  //     {/* <Layout>
+  //       <RouterViewer />
+  //     </Layout> */}
+  //   </Routes>
+  // </HashRouter>
 );
