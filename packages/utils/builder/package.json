@@ -22,11 +22,9 @@
   },
   "dependencies": {
     "@panda/client": "workspace:*",
-    "@panda/fs": "workspace:*",
     "@panda/preload": "workspace:*",
     "@panda/renderer": "workspace:*",
-    "electron-packager": "^15.4.0",
-    "rimraf": "^3.0.2"
+    "electron-packager": "^15.4.0"
   },
   "devDependencies": {
     "@panda/tsconfig": "workspace:*",
@@ -39,6 +37,7 @@
     "css-minimizer-webpack-plugin": "^3.4.1",
     "esbuild-loader": "^2.18.0",
     "file-loader": "^6.2.0",
+    "fs-extra": "^10.0.0",
     "html-webpack-plugin": "^5.5.0",
     "mini-css-extract-plugin": "^2.5.3",
     "terser-webpack-plugin": "^5.3.1",

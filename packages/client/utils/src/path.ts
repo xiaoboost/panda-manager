@@ -1,5 +1,6 @@
 import { join } from 'path';
 import { app } from 'electron';
+import { existsSync, mkdirSync } from 'fs';
 
 /** 软件名称 */
 export const appName = 'panda-manager';
@@ -13,6 +14,25 @@ const userDir =
   process.env.NODE_ENV === 'development'
     ? join(app.getPath('temp'), `${appName}-dev-user-dir`)
     : app.getPath('userData');
+
+/** 初始化路径 */
+function initDir(dir: string) {
+  if (existsSync(dir)) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`Folder: '${dir}' is already exists.`);
+    }
+  }
+  else {
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`Folder: '${dir}' is not exists，create it.`);
+    }
+
+    mkdirSync(dir, { recursive: true });
+  }
+}
+
+initDir(tempDir);
+initDir(userDir);
 
 /** 由软件根目录的相对路径转变为绝对路径 */
 export function resolveRoot(...paths: (string | number)[]) {

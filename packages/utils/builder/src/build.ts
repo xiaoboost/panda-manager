@@ -1,17 +1,15 @@
 import webpack from 'webpack';
-import rm from 'rimraf';
+import fs from 'fs-extra';
 
 import { getBaseConfig } from './webpack';
-import { CommandOptions, buildConfigs, resolveCWD } from './utils';
+import { CommandOptions, buildConfigs, resolveCWD, buildPackage } from './utils';
 
-export function build(opt: CommandOptions) {
+function buildWebpack(opt: CommandOptions) {
   return new Promise<void>((resolve) => {
     const compilerConfigs = buildConfigs.map((item) => getBaseConfig({
       ...opt,
       ...item,
     }));
-
-    rm.sync(resolveCWD(opt.outDir));
 
     webpack(compilerConfigs, (err, stats) => {
       console.log('\x1Bc');
@@ -36,4 +34,12 @@ export function build(opt: CommandOptions) {
       resolve();
     });
   });
+}
+
+export async function build(opt: CommandOptions) {
+  const outDir = resolveCWD(opt.outDir);
+
+  await fs.remove(outDir);
+  await buildPackage(resolveCWD(), outDir);
+  await buildWebpack(opt);
 }

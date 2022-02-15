@@ -296,7 +296,6 @@ importers:
   packages/utils/builder:
     specifiers:
       '@panda/client': workspace:*
-      '@panda/fs': workspace:*
       '@panda/preload': workspace:*
       '@panda/renderer': workspace:*
       '@panda/tsconfig': workspace:*
@@ -310,9 +309,9 @@ importers:
       electron-packager: ^15.4.0
       esbuild-loader: ^2.18.0
       file-loader: ^6.2.0
+      fs-extra: ^10.0.0
       html-webpack-plugin: ^5.5.0
       mini-css-extract-plugin: ^2.5.3
-      rimraf: ^3.0.2
       terser-webpack-plugin: ^5.3.1
       ts-loader: ^9.2.6
       tslib: ^2.3.1
@@ -324,11 +323,9 @@ importers:
       yargs: ^17.3.1
     dependencies:
       '@panda/client': link:../../client/main
-      '@panda/fs': link:../../client/file-system
       '@panda/preload': link:../../renderer/preload
       '@panda/renderer': link:../../renderer/main
       electron-packager: registry.npmmirror.com/electron-packager/15.4.0
-      rimraf: registry.npmmirror.com/rimraf/3.0.2
     devDependencies:
       '@panda/tsconfig': link:../tsconfig
       '@types/html-webpack-plugin': registry.npmmirror.com/@types/html-webpack-plugin/3.2.6
@@ -340,6 +337,7 @@ importers:
       css-minimizer-webpack-plugin: registry.npmmirror.com/css-minimizer-webpack-plugin/3.4.1_webpack@5.68.0
       esbuild-loader: registry.npmmirror.com/esbuild-loader/2.18.0_webpack@5.68.0
       file-loader: registry.npmmirror.com/file-loader/6.2.0_webpack@5.68.0
+      fs-extra: registry.npmmirror.com/fs-extra/10.0.0
       html-webpack-plugin: registry.npmmirror.com/html-webpack-plugin/5.5.0_webpack@5.68.0
       mini-css-extract-plugin: registry.npmmirror.com/mini-css-extract-plugin/2.5.3_webpack@5.68.0
       terser-webpack-plugin: registry.npmmirror.com/terser-webpack-plugin/5.3.1_webpack@5.68.0
@@ -3342,7 +3340,6 @@ packages:
       graceful-fs: registry.npmmirror.com/graceful-fs/4.2.9
       jsonfile: registry.npmmirror.com/jsonfile/6.1.0
       universalify: registry.npmmirror.com/universalify/2.0.0
-    dev: false
 
   registry.npmmirror.com/fs-extra/4.0.3:
     resolution: {integrity: sha512-q6rbdDd1o2mAnQreO7YADIxf/Whx4AHBiRf6d+/cVT8h44ss+lHgxf1FemcqDnQt9X3ct4McHr+JMGlYSsK7Cg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/fs-extra/-/fs-extra-4.0.3.tgz}
@@ -4114,7 +4111,6 @@ packages:
       universalify: registry.npmmirror.com/universalify/2.0.0
     optionalDependencies:
       graceful-fs: registry.npmmirror.com/graceful-fs/4.2.9
-    dev: false
 
   registry.npmmirror.com/jsx-ast-utils/3.2.1:
     resolution: {integrity: sha512-uP5vu8xfy2F9A6LGC22KO7e2/vGTS1MhP+18f++ZNlf0Ohaxbc9nIEwHAsejlJKyzfZzU5UIhe5ItYkitcZnZA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/jsx-ast-utils/-/jsx-ast-utils-3.2.1.tgz}
@@ -6119,6 +6115,7 @@ packages:
     hasBin: true
     dependencies:
       glob: registry.npmmirror.com/glob/7.2.0
+    dev: true
 
   registry.npmmirror.com/roarr/2.15.4:
     resolution: {integrity: sha512-CHhPh+UNHD2GTXNYhPWLnU8ONHdI+5DI+4EYIAOaiD63rHeYlZvyh8P+in5999TTSFgUYuKUAjzRI4mdh/p+2A==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/roarr/-/roarr-2.15.4.tgz}
@@ -6814,7 +6811,6 @@ packages:
     name: universalify
     version: 2.0.0
     engines: {node: '>= 10.0.0'}
-    dev: false
 
   registry.npmmirror.com/uri-js/4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/uri-js/-/uri-js-4.4.1.tgz}

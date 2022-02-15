@@ -15,9 +15,9 @@ import {
 let port = 6060;
 
 export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Configuration {
-  const outDir = resolveCWD(opt.outDir);
+  const outDir = resolveCWD(opt.outDir, opt.output ?? opt.process);
   const resolvePackage = getPackageResolve(opt.name);
-  const tsLoaderConfig = opt.mode === 'production'
+  const tsLoaderConfig = opt.mode === 'development'
     ? {
       loader: 'ts-loader',
       options: {
@@ -40,10 +40,12 @@ export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Con
   const baseConfig: webpack.Configuration = {
     mode: opt.mode as webpack.Configuration['mode'],
     entry: {
-      main: resolvePackage('src/index.ts'),
+      index: resolvePackage(opt.entry ?? 'src/index.ts'),
     },
     output: {
       path: outDir,
+      filename: '[name].js',
+      chunkFilename: '[name].js',
       publicPath: './',
     },
     resolveLoader: {
@@ -81,7 +83,6 @@ export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Con
         },
       ],
     },
-    externals: ['electron'],
     optimization: {
       concatenateModules: true,
       moduleIds: 'deterministic',
@@ -116,6 +117,7 @@ export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Con
   }
   else {
     baseConfig.devtool = false;
+
     if (!baseConfig.optimization) {
       baseConfig.optimization = {
         minimize: true,
@@ -167,8 +169,6 @@ export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Con
   }
 
   baseConfig.target = `electron-${opt.process}`;
-  baseConfig.output!.filename = `${opt.process}/[name].js`;
-  baseConfig.output!.chunkFilename = `${opt.process}/[name].js`;
 
   return baseConfig;
 }

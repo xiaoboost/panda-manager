@@ -1,4 +1,5 @@
 import path from 'path';
+import fs from 'fs-extra';
 import webpack from 'webpack';
 
 /** 编译选项 */
@@ -12,6 +13,8 @@ export interface CommandOptions {
 /** webpack 配置选项 */
 export interface WebpackOptions {
   name: string;
+  entry?: string;
+  output?: string;
   process: 'main' | 'renderer' | 'preload';
 }
 
@@ -20,13 +23,15 @@ export const buildConfigs: WebpackOptions[] = [
     name: '@panda/client',
     process: 'main',
   },
-  // {
-  //   name: '@panda/renderer',
-  //   process: 'renderer',
-  // },
   {
     name: '@panda/preload',
     process: 'preload',
+  },
+  {
+    name: '@panda/renderer',
+    process: 'renderer',
+    output: 'views/main',
+    entry: 'src/init/index.ts',
   },
 ];
 
@@ -80,4 +85,20 @@ export function printWebpackResult(stats: webpack.Stats) {
   );
 
   console.log('\n  ⚡ Build complete.\n');
+}
+
+export async function buildPackage(input: string, output: string) {
+  const packageFileName = 'package.json';
+  const jsonString = await fs.readFile(path.join(input, packageFileName), 'utf-8');
+  const json = JSON.parse(jsonString);
+
+  await fs.mkdirp(output);
+  await fs.writeFile(path.join(output, packageFileName), JSON.stringify({
+    name: json.name,
+    version: json.version,
+    description: json.description,
+    main: json.main,
+    author: json.author,
+    license: json.license,
+  }));
 }
