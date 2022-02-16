@@ -20,16 +20,17 @@
     "url": "https://github.com/xiaoboost/panda-manager"
   },
   "dependencies": {
-    "@electron/remote": "^2.0.4",
     "color": "^4.2.1",
     "electron": "^17.0.1",
     "jss": "^10.9.0",
-    "jss-preset-default": "^10.9.0"
+    "jss-preset-default": "^10.9.0",
+    "react": "^17.0.2"
   },
   "devDependencies": {
     "@panda/tsconfig": "workspace:*",
     "@types/color": "^3.0.3",
     "@types/panda": "workspace:*",
+    "@types/react": "^17.0.39",
     "tslib": "^2.3.1",
     "typescript": "^4.5.5"
   }

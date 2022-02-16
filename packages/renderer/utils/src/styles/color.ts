@@ -2,6 +2,21 @@ import Color from 'color';
 
 export { Color };
 
+// //主要颜色定义
+// Shadow = #CCC;
+// Gray = #DDD;
+// Blue = #1890FF;
+
+// WhiteMask = #F3F3F3;
+
+// Red = #D41324;
+// RedLight = #FF6969;
+
+// Black = #303133;
+// BlackLight = #606266;
+// BlackLighter = #909399;
+// BlackExtraLight = #C0C4CC;
+
 // 主要颜色定义
 export const Shadow = /* @__PURE__ */ Color(0xCCCCCC);
 export const Blue = /* @__PURE__ */ Color(0x1890FF);

@@ -2,7 +2,6 @@ import jss from 'jss';
 import preset from 'jss-preset-default';
 
 import { Styles, StyleSheet } from 'jss';
-import { mediaPhone, mediaPc } from './constant';
 
 export { jss };
 
@@ -16,10 +15,15 @@ export function createStyles<C extends string = string>(styles: Styles<C>): JssS
     jss.setup(preset());
   }
 
-  return jss.createStyleSheet(styles, {
+  const css = jss.createStyleSheet(styles, {
     link: false,
     index: 0,
+    element: document.createElement('style'),
   });
+
+  css.attach();
+
+  return css;
 }
 
 export function createScrollbarWidth(width: number, prefix = ''): Styles {
@@ -63,16 +67,16 @@ export function mergeStyles(...styles: JssStyle[]): JssStyle {
   return style;
 }
 
-export function createMediaStyles<T>(
-  pcParam: T,
-  phoneParam: T,
-  template: (param: T) => Styles,
-) {
-  return {
-    [mediaPc]: template(pcParam),
-    [mediaPhone]: template(phoneParam),
-  };
-}
+// export function createMediaStyles<T>(
+//   pcParam: T,
+//   phoneParam: T,
+//   template: (param: T) => Styles,
+// ) {
+//   return {
+//     [mediaPc]: template(pcParam),
+//     [mediaPhone]: template(phoneParam),
+//   };
+// }
 
 /** 迭代标题元素 */
 export function createHeadStyles(pre = '', cb: (level: number) => Styles) {

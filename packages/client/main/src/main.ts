@@ -18,8 +18,12 @@ export async function install() {
     minHeight: 600,
     minWidth: 800,
     webPreferences: {
+      webgl: false,
+      enableWebSQL: false,
       nodeIntegration: false,
+      contextIsolation: true,
       preload: resolveRoot('preload/index.js'),
+      devTools: process.env.NODE_ENV === 'development',
       webSecurity: process.env.NODE_ENV !== 'development',
     },
   });

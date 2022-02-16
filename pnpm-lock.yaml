@@ -70,7 +70,6 @@ importers:
 
   packages/client/main:
     specifiers:
-      '@electron/remote': ^2.0.4
       '@panda/client-utils': workspace:*
       '@panda/db': workspace:*
       '@panda/server': workspace:*
@@ -85,7 +84,6 @@ importers:
       rimraf: ^3.0.2
       typescript: ^4.5.5
     dependencies:
-      '@electron/remote': registry.npmmirror.com/@electron/remote/2.0.4_electron@17.0.1
       '@panda/client-utils': link:../utils
       '@panda/db': link:../database
       '@panda/server': link:../server
@@ -277,26 +275,28 @@ importers:
 
   packages/renderer/utils:
     specifiers:
-      '@electron/remote': ^2.0.4
       '@panda/tsconfig': workspace:*
       '@types/color': ^3.0.3
       '@types/panda': workspace:*
+      '@types/react': ^17.0.39
       color: ^4.2.1
       electron: ^17.0.1
       jss: ^10.9.0
       jss-preset-default: ^10.9.0
+      react: ^17.0.2
       tslib: ^2.3.1
       typescript: ^4.5.5
     dependencies:
-      '@electron/remote': registry.npmmirror.com/@electron/remote/2.0.4_electron@17.0.1
       color: registry.npmmirror.com/color/4.2.1
       electron: registry.npmmirror.com/electron/17.0.1
       jss: registry.npmmirror.com/jss/10.9.0
       jss-preset-default: registry.npmmirror.com/jss-preset-default/10.9.0
+      react: registry.npmmirror.com/react/17.0.2
     devDependencies:
       '@panda/tsconfig': link:../../utils/tsconfig
       '@types/color': registry.npmmirror.com/@types/color/3.0.3
       '@types/panda': link:../../utils/typings
+      '@types/react': registry.npmmirror.com/@types/react/17.0.39
       tslib: registry.npmmirror.com/tslib/2.3.1
       typescript: registry.npmmirror.com/typescript/4.5.5
 
@@ -647,17 +647,6 @@ packages:
       global-tunnel-ng: registry.npmmirror.com/global-tunnel-ng/2.7.1
     transitivePeerDependencies:
       - supports-color
-
-  registry.npmmirror.com/@electron/remote/2.0.4_electron@17.0.1:
-    resolution: {integrity: sha512-8m2P/d2RH986PmMW5lKygbPEjEYJ7RgCe37Y8DQ1wujKMH6VjmLIB+Y+DP2SA611svCZc58TRSd8FraGvcfGZw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@electron/remote/-/remote-2.0.4.tgz}
-    id: registry.npmmirror.com/@electron/remote/2.0.4
-    name: '@electron/remote'
-    version: 2.0.4
-    peerDependencies:
-      electron: '>= 13.0.0'
-    dependencies:
-      electron: registry.npmmirror.com/electron/17.0.1
-    dev: false
 
   registry.npmmirror.com/@eslint/eslintrc/1.1.0:
     resolution: {integrity: sha512-C1DfL7XX4nPqGd6jcP01W9pVM1HYCuUkFk1432D7F0v3JSlUIeOYn9oCoi3eoLZ+iwBSb29BMFxxny0YrrEZqg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@eslint/eslintrc/-/eslintrc-1.1.0.tgz}
