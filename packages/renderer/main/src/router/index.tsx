@@ -12,6 +12,10 @@ const routers = [
     component: FilesList.Render,
   },
   {
+    path: '/start',
+    component: FilesList.Render,
+  },
+  {
     path: '/tags',
     component: Tags.Render,
   },

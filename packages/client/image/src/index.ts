@@ -1,6 +1,6 @@
 import Jimp from 'jimp';
 
-import { isMainThread, parentPort } from 'worker_threads';
+// import { isMainThread, parentPort } from 'worker_threads';
 
 interface CompressOption {
   type?: 'jpg' | 'png';
@@ -78,40 +78,40 @@ export async function extend(
   return result;
 }
 
-function install() {
-  interface EventData {
-    name: string;
-    params: any[];
-    meta: any;
-  }
+// function install() {
+//   interface EventData {
+//     name: string;
+//     params: any[];
+//     meta: any;
+//   }
 
-  parentPort!.on('message', async ({ meta = {}, name, params }: EventData) => {
-    let data,
-      error = '';
+//   parentPort!.on('message', async ({ meta = {}, name, params }: EventData) => {
+//     let data,
+//       error = '';
 
-    try {
-      if (name === 'compress') {
-        data = await compress(...(params as [any, any]));
-      }
-      else if (name === 'extend') {
-        data = await extend(...(params as [any, any, any]));
-      }
-      else {
-        error = `unknow method: ${name}.`;
-      }
-    }
-    catch (e: any) {
-      error = e.message;
-    }
+//     try {
+//       if (name === 'compress') {
+//         data = await compress(...(params as [any, any]));
+//       }
+//       else if (name === 'extend') {
+//         data = await extend(...(params as [any, any, any]));
+//       }
+//       else {
+//         error = `unknow method: ${name}.`;
+//       }
+//     }
+//     catch (e: any) {
+//       error = e.message;
+//     }
 
-    if (Buffer.isBuffer(data)) {
-      meta.isBuffer = true;
-    }
+//     if (Buffer.isBuffer(data)) {
+//       meta.isBuffer = true;
+//     }
 
-    parentPort!.postMessage({ meta, name, data, error });
-  });
-}
+//     parentPort!.postMessage({ meta, name, data, error });
+//   });
+// }
 
-if (!isMainThread) {
-  install();
-}
+// if (!isMainThread) {
+//   install();
+// }

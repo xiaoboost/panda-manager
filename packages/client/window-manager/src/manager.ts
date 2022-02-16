@@ -1,8 +1,6 @@
-import { BrowserWindow, BrowserWindowConstructorOptions } from 'electron';
-
 import { debounce } from '@xiao-ai/utils';
-import { stat, mkdirp } from '@panda/fs';
-import { resolveUserDir, resolveTempDir } from '@panda/client-utils';
+import { BrowserWindow, BrowserWindowConstructorOptions } from 'electron';
+import { resolveTempDir, resolveUserDir, stat, mkdirp } from '@panda/client-utils';
 
 import { state } from './constant';
 

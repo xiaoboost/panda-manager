@@ -10,6 +10,12 @@ export interface CommandOptions {
   bundleAnalyze: boolean;
 }
 
+/** 打包选项 */
+export interface PackageOptions {
+  input: string;
+  output: string;
+}
+
 /** webpack 配置选项 */
 export interface WebpackOptions {
   name: string;

@@ -17,11 +17,12 @@ let port = 6060;
 export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Configuration {
   const outDir = resolveCWD(opt.outDir, opt.output ?? opt.process);
   const resolvePackage = getPackageResolve(opt.name);
+  const tsConfigFile = resolve('src/tsconfig.json');
   const tsLoaderConfig = opt.mode === 'development'
     ? {
       loader: 'ts-loader',
       options: {
-        configFile: resolve('src/tsconfig.json'),
+        configFile: tsConfigFile,
         compilerOptions: {
           module: 'ESNext',
           target: 'ESNext',
@@ -32,8 +33,8 @@ export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Con
       loader: 'esbuild-loader',
       options: {
         loader: 'tsx',
-        target: 'es2015',
-        tsconfigRaw: require(resolve('src/tsconfig.json')),
+        target: 'esnext',
+        tsconfigRaw: require(tsConfigFile),
       },
     };
 

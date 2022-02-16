@@ -44,23 +44,23 @@ export function run() {
       yargs => setYargsCommand(yargs),
       argv => watch(argv),
     )
-    // .command(
-    //   ['package'],
-    //   'package',
-    //   yargs => yargs.options({
-    //     output: {
-    //       type: 'string',
-    //       describe: '输出路径',
-    //       require: true,
-    //     },
-    //     input: {
-    //       type: 'string',
-    //       describe: '打包路径',
-    //       require: true,
-    //     },
-    //   }),
-    //   argv => buildExtension(argv),
-    // )
+    .command(
+      ['package'],
+      'package',
+      yargs => yargs.options({
+        output: {
+          type: 'string',
+          describe: '输出路径',
+          require: true,
+        },
+        input: {
+          type: 'string',
+          describe: '打包路径',
+          require: true,
+        },
+      }),
+      argv => generate(argv),
+    )
     .strict()
     .showHelpOnFail(false).argv;
 }

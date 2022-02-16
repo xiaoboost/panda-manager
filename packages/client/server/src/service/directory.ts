@@ -2,7 +2,7 @@ import { Config } from '../model';
 // import { filesQueue } from './files-queue';
 // import { remove, search } from './files';
 
-import { readDirDeep } from '@panda/fs';
+// import { readDirDeep } from '@panda/fs';
 // import { exclude } from '@panda/client-utils';
 
 async function _update(paths: string[]) {

@@ -1,6 +1,5 @@
-import { CommandOptions } from './utils';
+import { PackageOptions } from './utils';
 
-export function generate(opt: CommandOptions) {
-  debugger;
+export function generate(opt: PackageOptions) {
   console.log(opt);
 }

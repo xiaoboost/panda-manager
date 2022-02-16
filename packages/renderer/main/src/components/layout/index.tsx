@@ -1,4 +1,4 @@
-import './index.less';
+// import './index.less';
 
 import React from 'react';
 
@@ -6,10 +6,10 @@ import React from 'react';
 // import { Sidebar } from '../sidebar';
 
 import { PropsWithChildren } from 'react';
-import { useIsFocus } from '@panda/use';
-import { stringifyClass, Empty } from '@panda/utils';
+import { useIsFocus } from '@panda/renderer-utils';
+import { stringifyClass, EmptyObjectStrict } from '@xiao-ai/utils';
 
-export function Layout({ children }: PropsWithChildren<Empty>) {
+export function Layout({ children }: PropsWithChildren<EmptyObjectStrict>) {
   const isFocus = useIsFocus();
 
   return (
@@ -18,9 +18,7 @@ export function Layout({ children }: PropsWithChildren<Empty>) {
         '.app-unFocus': !isFocus,
       })}
     >
-      {/* <Header /> */}
       <article className='app-body'>
-        {/* <Sidebar /> */}
         <div className='app-content__wrapper'>{children}</div>
       </article>
     </div>

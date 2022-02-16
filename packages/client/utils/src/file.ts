@@ -2,6 +2,8 @@ import * as path from 'path';
 import * as Stream from 'stream';
 import * as fs from 'fs-extra';
 
+export * from 'fs-extra';
+
 /** 遍历文件夹下的所有文件 */
 async function filesOperation(
   base: string,
@@ -45,7 +47,7 @@ export async function readDirDeep(base: string) {
 }
 
 /** 获取文件（夹）大小 */
-export async function fileSize(base: string) {
+export async function readFileSize(base: string) {
   const fileStat = await fs.stat(base);
 
   if (fileStat.isDirectory()) {

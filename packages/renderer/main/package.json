@@ -11,12 +11,6 @@
     "package.json"
   ],
   "scripts": {
-    "clear": "rimraf ./dist",
-    "bundle:html": "cpy ./src/index.html ./dist",
-    "bundle:dev": "build --development --watch",
-    "bundle:build": "build --production",
-    "dev": "pnpm run clear && pnpm run bundle:html && pnpm run bundle:dev",
-    "build": "pnpm run clear && pnpm run bundle:html && pnpm run bundle:build",
     "lint": "eslint --quiet --no-error-on-unmatched-pattern --config ../../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
     "lint:fix": "eslint --fix --quiet --no-error-on-unmatched-pattern --config ../../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}"
   },
@@ -28,10 +22,11 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
-    "@panda/icons": "workspace:*",
+    "@panda/components": "workspace:*",
+    "@panda/renderer-utils": "workspace:*",
     "@panda/shared": "workspace:*",
+    "@xiao-ai/utils": "^1.5.1",
     "antd": "^4.18.7",
-    "electron": "^17.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router": "^6.2.1",
@@ -43,7 +38,6 @@
     "@types/react": "^17.0.39",
     "@types/react-dom": "^17.0.11",
     "@types/react-router-dom": "^5.3.3",
-    "rimraf": "^3.0.2",
     "typescript": "^4.5.5"
   }
 }

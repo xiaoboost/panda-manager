@@ -1,7 +1,7 @@
 import { join } from 'path';
 import { app } from 'electron';
-import { existsSync, mkdirSync } from 'fs';
 import { log } from '@panda/shared';
+import { existsSync, mkdirSync } from 'fs';
 
 /** 软件名称 */
 export const appName = 'panda-manager';

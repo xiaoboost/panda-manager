@@ -1,11 +1,12 @@
 import { app } from 'electron';
 import { install } from './main';
 
-import { remove } from '@panda/fs';
-import { resolveTempDir } from '@panda/client-utils';
+import { initialize } from '@electron/remote/main';
+import { resolveTempDir, remove } from '@panda/client-utils';
 
 // 完成初始化时启动主界面
 app.on('ready', () => {
+  initialize();
   install();
 });
 

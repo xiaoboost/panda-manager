@@ -22,14 +22,14 @@
     "url": "https://github.com/xiaoboost/panda-manager"
   },
   "dependencies": {
+    "@electron/remote": "^2.0.4",
     "@panda/client-utils": "workspace:*",
     "@panda/db": "workspace:*",
-    "@panda/fs": "workspace:*",
     "@panda/server": "workspace:*",
     "@panda/shared": "workspace:*",
     "@panda/window-manager": "workspace:*",
     "@xiao-ai/utils": "^1.5.1",
-    "electron": "^17.0.0",
+    "electron": "^17.0.1",
     "esbuild": "^0.14.21"
   },
   "devDependencies": {
