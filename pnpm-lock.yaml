@@ -80,8 +80,6 @@ importers:
       '@xiao-ai/utils': ^1.5.1
       electron: ^17.0.1
       esbuild: ^0.14.21
-      minimist: ^1.2.5
-      rimraf: ^3.0.2
       typescript: ^4.5.5
     dependencies:
       '@panda/client-utils': link:../utils
@@ -95,8 +93,6 @@ importers:
     devDependencies:
       '@panda/tsconfig': link:../../utils/tsconfig
       '@types/panda': link:../../utils/typings
-      minimist: registry.npmmirror.com/minimist/1.2.5
-      rimraf: registry.npmmirror.com/rimraf/3.0.2
       typescript: registry.npmmirror.com/typescript/4.5.5
 
   packages/client/server:
@@ -194,32 +190,32 @@ importers:
       '@panda/tsconfig': workspace:*
       '@types/panda': workspace:*
       react: ^17.0.2
-      rimraf: ^3.0.2
       tslib: ^2.3.1
       typescript: ^4.5.5
     devDependencies:
       '@panda/tsconfig': link:../../utils/tsconfig
       '@types/panda': link:../../utils/typings
       react: registry.npmmirror.com/react/17.0.2
-      rimraf: registry.npmmirror.com/rimraf/3.0.2
       tslib: registry.npmmirror.com/tslib/2.3.1
       typescript: registry.npmmirror.com/typescript/4.5.5
 
-  packages/renderer/ipc:
+  packages/renderer/fetch:
     specifiers:
+      '@panda/shared': workspace:*
       '@panda/tsconfig': workspace:*
       '@types/node': ^17.0.18
       '@types/panda': workspace:*
       electron: ^17.0.1
-      rimraf: ^3.0.2
+      tslib: ^2.3.1
       typescript: ^4.5.5
     dependencies:
+      '@panda/shared': link:../../shared
       electron: registry.npmmirror.com/electron/17.0.1
     devDependencies:
       '@panda/tsconfig': link:../../utils/tsconfig
       '@types/node': registry.npmmirror.com/@types/node/17.0.18
       '@types/panda': link:../../utils/typings
-      rimraf: registry.npmmirror.com/rimraf/3.0.2
+      tslib: registry.npmmirror.com/tslib/2.3.1
       typescript: registry.npmmirror.com/typescript/4.5.5
 
   packages/renderer/main:

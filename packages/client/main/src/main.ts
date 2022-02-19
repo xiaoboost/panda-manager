@@ -1,7 +1,7 @@
 import { URL } from 'url';
 import { ipcMain, app, BrowserWindow } from 'electron';
 import { resolveRoot } from '@panda/client-utils';
-import { install as serve } from '@panda/server';
+import { addFetchListener } from '@panda/server';
 import { windowStateKeeper } from '@panda/window-manager';
 
 /** 主窗口 */
@@ -34,7 +34,7 @@ export async function install() {
     win.webContents.openDevTools();
   }
 
-  serve(win, ipcMain);
+  addFetchListener(win, ipcMain);
 
   // 主界面被关闭时，退出软件
   win.on('closed', () => {

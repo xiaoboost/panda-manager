@@ -7,7 +7,7 @@ import { ready as sort } from '../service/sort';
 import { ready as tag } from '../service/tag';
 
 export const service: ServiceData = {
-  name: RPC.Name.Ready,
+  name: RPC.FetchName.Ready,
   service() {
     return Promise.all([
       directory,

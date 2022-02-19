@@ -9,9 +9,6 @@
     "package.json"
   ],
   "scripts": {
-    "clear": "rimraf ./dist",
-    "build": "node build/build.js --input=src/index.ts --outDir=dist",
-    "watch": "pnpm run build -- --development",
     "lint": "eslint --quiet --no-error-on-unmatched-pattern --config ../../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
     "lint:fix": "eslint --fix --quiet --no-error-on-unmatched-pattern --config ../../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}"
   },
@@ -34,8 +31,6 @@
   "devDependencies": {
     "@panda/tsconfig": "workspace:*",
     "@types/panda": "workspace:*",
-    "minimist": "^1.2.5",
-    "rimraf": "^3.0.2",
     "typescript": "^4.5.5"
   }
 }

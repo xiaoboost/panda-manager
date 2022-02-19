@@ -7,7 +7,7 @@ import * as Sort from '../service/sort';
 import { service as get } from './get-config';
 
 export const service: ServiceData = {
-  name: RPC.Name.PatchConfig,
+  name: RPC.FetchName.PatchConfig,
   async service(win, request): Promise<SettingData> {
     const { data } = request;
 
