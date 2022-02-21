@@ -74,7 +74,7 @@ export class Model<T> {
     const data: Partial<T> = {};
 
     Object.entries(val).forEach(([key, val]) => {
-      if (isUndef(data[key]) && isDef(val)) {
+      if (isUndef(this.data[key]) && isDef(val)) {
         data[key] = val;
       }
     });

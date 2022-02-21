@@ -5,6 +5,7 @@ import { style } from './style';
 import { Bamboo, Recover } from '@panda/components';
 import { useIsFocus, useIsMaximize } from '@panda/renderer-utils';
 import { stringifyClass } from '@xiao-ai/utils';
+import { getRemoteWindow } from '@panda/remote/renderer';
 
 import { useCallback } from 'react';
 // import { useLocation, useHistory } from 'react-router';
@@ -24,25 +25,26 @@ export function Header() {
   // const location = useLocation();
   // const history = useHistory();
 
-  // const win = remote.getCurrentWindow();
-
-  // const maximize = useCallback(() => win.maximize(), [win]);
-  // const unMaximize = useCallback(() => win.unmaximize(), [win]);
-  // const minimize = useCallback(() => win.minimize(), [win]);
-  // const close = useCallback(() => win.close(), [win]);
+  const maximize = useCallback(() => getRemoteWindow().maximize(), []);
+  const unMaximize = useCallback(() => getRemoteWindow().unmaximize(), []);
+  const minimize = useCallback(() => getRemoteWindow().minimize(), []);
+  const close = useCallback(() => getRemoteWindow().close(), []);
 
   const logoDbClickStop = useCallback(
     (ev: React.MouseEvent) => ev.stopPropagation(),
     [],
   );
-  // const headerDbClick = useCallback(
-  //   () => (isMaximize ? win.unmaximize() : win.maximize()),
-  //   [win, isMaximize],
-  // );
+  const headerDbClick = useCallback(
+    () => {
+      const win = getRemoteWindow();
+      isMaximize ? win.unmaximize() : win.maximize();
+    },
+    [isMaximize],
+  );
 
   return (
     <header
-      // onDoubleClick={headerDbClick}
+      onDoubleClick={headerDbClick}
       className={stringifyClass(style.classes.header, {
         [style.classes.headerUnFocus]: !isFocus,
       })}
@@ -62,17 +64,15 @@ export function Header() {
       </span>
       <span>
         {/* 最小化 */}
-        {/* onClick={minimize} */}
-        <MinusOutlined className={style.classes.icon} />
+        <MinusOutlined className={style.classes.icon} onClick={minimize} />
         {isMaximize ? (
           /* 还原 */
-          // onClick={unmaximize}
-          <Recover className={style.classes.icon} />
+          <Recover className={style.classes.icon} onClick={unMaximize} />
         ) : (
           /* 最大化 */
           <BorderOutlined
             className={style.classes.icon}
-            // onClick={maximize}
+            onClick={maximize}
           />
         )}
         {/* 关闭 */}

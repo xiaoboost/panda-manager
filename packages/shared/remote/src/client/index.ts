@@ -38,6 +38,13 @@ export function initialize(win: BrowserWindow) {
           subject[params.key](params.params?.[0] ?? '');
         }
         else {
+          if (process.env.NODE_ENV === 'development') {
+            log(
+              `Call remote window method: ${params.key}, ` +
+              `params: ${JSON.stringify(params.params ?? [], null, 2)}`
+            );
+          }
+
           result.returnValue = win[params.key](...(params.params ?? []));
         }
       }

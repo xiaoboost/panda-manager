@@ -1,4 +1,4 @@
-import { BrowserWindow } from 'electron';
+import { BrowserWindow, Event } from 'electron';
 import { ListenerEventName, ListenerEvent } from '../shared';
 import { log } from '@panda/shared';
 
@@ -8,11 +8,15 @@ interface EventCache {
 }
 
 const createCb = (name: string, win: BrowserWindow) => {
-  return (...params: any[]) => {
+  return (_: Event, ...params: any[]) => {
     const data: ListenerEvent = {
       name,
       params,
     };
+
+    if (process.env.NODE_ENV === 'development') {
+      log(`Send listener event data: ${JSON.stringify(data, null, 2)}`);
+    }
 
     win.webContents.send(ListenerEventName, data);
   };
@@ -42,11 +46,11 @@ export class WindowEvent {
       win.on(name as any, map[name]!.cb);
     }
 
-    if (process.env.NODE_ENV === 'development') {
-      log(`add listener event, name: ${name}, count: ${map[name]!.count}`);
-    }
-
     map[name]!.count++;
+
+    if (process.env.NODE_ENV === 'development') {
+      log(`Add listener event, name: ${name}, count: ${map[name]!.count}`);
+    }
   }
 
   off(name?: string) {
@@ -67,7 +71,7 @@ export class WindowEvent {
     data.count--;
 
     if (process.env.NODE_ENV === 'development') {
-      log(`remove listener event, name: ${name}, count: ${map[name]!.count}`);
+      log(`Remove listener event, name: ${name}, count: ${map[name]!.count}`);
     }
 
     if (data.count <= 0) {

@@ -59,5 +59,5 @@ export const EventMethodKey = [
 export type RemoteWindow =
   | Omit<BrowserWindow, 'webContents' | EventMethodKey>
   & {
-    [Key in EventMethodKey]: (...params: Parameters<BrowserWindow[Key]>) => void;
+    [Key in EventMethodKey]: (name: string, ...params: any[]) => void;
   };

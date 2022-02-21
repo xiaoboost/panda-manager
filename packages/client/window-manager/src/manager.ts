@@ -1,26 +1,12 @@
 import { debounce } from '@xiao-ai/utils';
+import { log } from '@panda/shared';
 import { BrowserWindow, BrowserWindowConstructorOptions } from 'electron';
-import { resolveTempDir, resolveUserDir, stat, mkdirp } from '@panda/client-utils';
 
 import { state } from './constant';
-
-/** 初始化配置文件夹 */
-async function initDir() {
-  const checkDir = async (dir: string) => {
-    if (!(await stat(dir))) {
-      await mkdirp(dir);
-    }
-  };
-
-  return Promise.all([checkDir(resolveTempDir()), checkDir(resolveUserDir())]);
-}
 
 export async function windowStateKeeper(
   options: BrowserWindowConstructorOptions = {},
 ) {
-  // 等待配置文件夹初始化
-  await initDir();
-
   // 配置初始化
   await state.ready;
 
@@ -32,6 +18,10 @@ export async function windowStateKeeper(
     top: options.y,
     left: options.x,
   });
+
+  if (process.env.NODE_ENV === 'development') {
+    log(`Window Manager init data: ${JSON.stringify(state.data)}`);
+  }
 
   // 最大化
   if (state.data.isMaximize) {
