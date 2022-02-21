@@ -1,0 +1,31 @@
+{
+  "name": "@panda/fetch",
+  "version": "1.0.0",
+  "description": "panda-manager fetch tools",
+  "exports": {
+    "./*": {
+      "import": "./src/*/index.ts",
+      "types": "./src/*/index.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "package.json"
+  ],
+  "scripts": {
+    "lint": "eslint --quiet --no-error-on-unmatched-pattern --config ../../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
+    "lint:fix": "eslint --fix --quiet --no-error-on-unmatched-pattern --config ../../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}"
+  },
+  "dependencies": {
+    "@panda/shared": "workspace:*",
+    "electron": "^17.0.1"
+  },
+  "devDependencies": {
+    "@panda/tsconfig": "workspace:*",
+    "@types/panda": "workspace:*",
+    "@types/node": "^17.0.18",
+    "tslib": "^2.3.1",
+    "typescript": "^4.5.5"
+  }
+}

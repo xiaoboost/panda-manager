@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "main": "tsconfig.json",
   "devDependencies": {
-    "@xiao-ai/utils": "^1.5.1"
+    "@xiao-ai/utils": "^1.5.1",
+    "@panda/remote": "workspace:*"
   }
 }

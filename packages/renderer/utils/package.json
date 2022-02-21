@@ -20,6 +20,9 @@
     "url": "https://github.com/xiaoboost/panda-manager"
   },
   "dependencies": {
+    "@panda/fetch": "workspace:*",
+    "@panda/remote": "workspace:*",
+    "@panda/shared": "workspace:*",
     "color": "^4.2.1",
     "electron": "^17.0.1",
     "jss": "^10.9.0",

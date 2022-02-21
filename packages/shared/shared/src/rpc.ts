@@ -1,7 +1,9 @@
 /** 事件描述 */
-export enum Description {
+export enum EventName {
   /** 渲染进程到主进程 */
-  ToMain = '_event_to_main',
+  Fetch = '_event_fetch_data_from_main',
+  /** 渲染进程请求进程编号 */
+  GetRendererId = '_event_get_renderer_id',
   /** 主进程回复渲染进程通信 */
   ReplyRenderer = '_event_reply_renderer',
   /** 主进程向渲染进程广播事件 */
@@ -17,8 +19,14 @@ export enum FetchName {
   IsMaximized,
   /** 窗口是否最小化 */
   IsMinimized,
-  /** 获取窗口编号 */
-  GetWindowId,
+
+  // 控制窗口
+  /** 窗口最大化 */
+  Maximize,
+  /** 窗口取消最大化 */
+  UnMaximize,
+  /** 窗口最小化 */
+  Minimize,
 
   // 后台服务
   /** 数据是否准备好 */
@@ -43,8 +51,12 @@ export enum BroadcastName {
   Blur,
   /** 窗口最大化 */
   Maximize,
+  /** 窗口取消最大化 */
+  UnMaximize,
   /** 窗口最小化 */
-  Unmaximize,
+  Minimize,
+  /** 窗口取消最小化 */
+  UnMinimize,
 }
 
 /** 事件状态 */

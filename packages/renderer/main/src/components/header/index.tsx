@@ -1,15 +1,13 @@
-import './index.less';
-
 import React from 'react';
 
-import { remote } from 'electron';
-import { stringifyClass } from '@panda/utils';
+import { style } from './style';
 
-import { Bamboo, Recover } from '@panda/icons';
-import { useIsFocus, useIsMaximize } from '@panda/use';
+import { Bamboo, Recover } from '@panda/components';
+import { useIsFocus, useIsMaximize } from '@panda/renderer-utils';
+import { stringifyClass } from '@xiao-ai/utils';
 
 import { useCallback } from 'react';
-import { useLocation, useHistory } from 'react-router';
+// import { useLocation, useHistory } from 'react-router';
 
 import {
   ArrowLeftOutlined,
@@ -23,61 +21,63 @@ import {
 export function Header() {
   const isFocus = useIsFocus();
   const isMaximize = useIsMaximize();
-  const location = useLocation();
-  const history = useHistory();
+  // const location = useLocation();
+  // const history = useHistory();
 
-  const win = remote.getCurrentWindow();
+  // const win = remote.getCurrentWindow();
 
-  const maximize = useCallback(() => win.maximize(), [win]);
-  const unmaximize = useCallback(() => win.unmaximize(), [win]);
-  const minimize = useCallback(() => win.minimize(), [win]);
-  const close = useCallback(() => win.close(), [win]);
+  // const maximize = useCallback(() => win.maximize(), [win]);
+  // const unMaximize = useCallback(() => win.unmaximize(), [win]);
+  // const minimize = useCallback(() => win.minimize(), [win]);
+  // const close = useCallback(() => win.close(), [win]);
 
   const logoDbClickStop = useCallback(
     (ev: React.MouseEvent) => ev.stopPropagation(),
     [],
   );
-  const headerDbClick = useCallback(
-    () => (isMaximize ? win.unmaximize() : win.maximize()),
-    [win, isMaximize],
-  );
+  // const headerDbClick = useCallback(
+  //   () => (isMaximize ? win.unmaximize() : win.maximize()),
+  //   [win, isMaximize],
+  // );
 
   return (
     <header
-      onDoubleClick={headerDbClick}
-      className={stringifyClass(styles.appHeader, {
-        [styles.appHeaderUnfocus]: !isFocus,
+      // onDoubleClick={headerDbClick}
+      className={stringifyClass(style.classes.header, {
+        [style.classes.headerUnFocus]: !isFocus,
       })}
     >
       <span>
         <span onDoubleClick={logoDbClickStop}>
           {location.pathname === '/' ? (
-            <Bamboo className={styles.appTitleBarLogo} />
+            <Bamboo className={style.classes.logo} />
           ) : (
             <ArrowLeftOutlined
-              className={styles.appTitleBarIcon}
-              onClick={() => history.goBack()}
+              className={style.classes.icon}
+              // onClick={() => history.goBack()}
             />
           )}
         </span>
-        <span className={styles.appTitleBarTitle}>Panda Manager</span>
+        <span className={style.classes.title}>Panda Manager</span>
       </span>
       <span>
         {/* 最小化 */}
-        <MinusOutlined className={styles.appTitleBarIcon} onClick={minimize} />
+        {/* onClick={minimize} */}
+        <MinusOutlined className={style.classes.icon} />
         {isMaximize ? (
           /* 还原 */
-          <Recover className={styles.appTitleBarIcon} onClick={unmaximize} />
+          // onClick={unmaximize}
+          <Recover className={style.classes.icon} />
         ) : (
           /* 最大化 */
           <BorderOutlined
-            className={styles.appTitleBarIcon}
-            onClick={maximize}
+            className={style.classes.icon}
+            // onClick={maximize}
           />
         )}
         {/* 关闭 */}
         <CloseOutlined
-          className={`${styles.appTitleBarIcon} ${styles.iconClose}`}
+          className={stringifyClass(style.classes.icon, style.classes.iconClose)}
           onClick={close}
         />
       </span>

@@ -1,10 +1,20 @@
-import electron from 'electron';
+import { contextBridge, ipcRenderer } from 'electron';
+
 import path from 'path';
 
-electron.contextBridge.exposeInMainWorld('require', (name: string) => {
+contextBridge.exposeInMainWorld('require', (name: string) => {
   const moduleMap = {
     path,
-    electron,
+    electron: {
+      ipcRenderer: {
+        ...ipcRenderer,
+        on: ipcRenderer.on.bind(ipcRenderer),
+        once: ipcRenderer.once.bind(ipcRenderer),
+        addListener: ipcRenderer.addListener.bind(ipcRenderer),
+        removeListener: ipcRenderer.removeListener.bind(ipcRenderer),
+        removeAllListeners: ipcRenderer.removeAllListeners.bind(ipcRenderer),
+      },
+    },
   };
 
   if (!moduleMap[name]) {

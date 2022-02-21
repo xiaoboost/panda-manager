@@ -23,6 +23,7 @@
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@panda/components": "workspace:*",
+    "@panda/fetch": "workspace:*",
     "@panda/renderer-utils": "workspace:*",
     "@panda/shared": "workspace:*",
     "@xiao-ai/utils": "^1.5.1",

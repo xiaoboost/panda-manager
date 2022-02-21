@@ -6,7 +6,7 @@ let eventId = 0;
 
 /** 向前端广播事件 */
 export function broadcast(win: BrowserWindow, name: RPC.BroadcastName, data: any) {
-  win.webContents.send(`${RPC.Description}_${name}`, {
+  win.webContents.send(`${RPC.EventName.BroadcastRenderer}_${name}`, {
     name,
     data,
     eventId: eventId++,

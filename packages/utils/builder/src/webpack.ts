@@ -58,8 +58,10 @@ export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Con
       mainFields: ['source', 'module', 'main'],
       alias: {
         src: resolvePackage('src'),
-        '@xiao-ai/utils/web': resolvePackage('node_modules/@xiao-ai/utils/dist/esm/web/index.js'),
-        '@xiao-ai/utils/use': resolvePackage('node_modules/@xiao-ai/utils/dist/esm/use/index.js'),
+        '@xiao-ai/utils/web': resolvePackage('node_modules/@xiao-ai/utils/dist/esm/web'),
+        '@xiao-ai/utils/use': resolvePackage('node_modules/@xiao-ai/utils/dist/esm/use'),
+        '@panda/remote': resolvePackage('node_modules/@panda/remote/src'),
+        '@panda/fetch': resolvePackage('node_modules/@panda/fetch/src'),
       },
     },
     module: {

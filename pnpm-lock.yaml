@@ -72,6 +72,7 @@ importers:
     specifiers:
       '@panda/client-utils': workspace:*
       '@panda/db': workspace:*
+      '@panda/remote': workspace:*
       '@panda/server': workspace:*
       '@panda/shared': workspace:*
       '@panda/tsconfig': workspace:*
@@ -84,8 +85,9 @@ importers:
     dependencies:
       '@panda/client-utils': link:../utils
       '@panda/db': link:../database
+      '@panda/remote': link:../../shared/remote
       '@panda/server': link:../server
-      '@panda/shared': link:../../shared
+      '@panda/shared': link:../../shared/shared
       '@panda/window-manager': link:../window-manager
       '@xiao-ai/utils': registry.npmmirror.com/@xiao-ai/utils/1.5.1
       electron: registry.npmmirror.com/electron/17.0.1
@@ -108,7 +110,7 @@ importers:
     dependencies:
       '@panda/client-utils': link:../utils
       '@panda/db': link:../database
-      '@panda/shared': link:../../shared
+      '@panda/shared': link:../../shared/shared
     devDependencies:
       '@panda/tsconfig': link:../../utils/tsconfig
       '@types/panda': link:../../utils/typings
@@ -128,7 +130,7 @@ importers:
       tslib: ^2.3.1
       typescript: ^4.5.5
     dependencies:
-      '@panda/shared': link:../../shared
+      '@panda/shared': link:../../shared/shared
       electron: registry.npmmirror.com/electron/17.0.1
       fs-extra: registry.npmmirror.com/fs-extra/10.0.0
     devDependencies:
@@ -175,7 +177,7 @@ importers:
       typescript: ^4.5.5
     dependencies:
       '@panda/client-utils': link:../utils
-      '@panda/shared': link:../../shared
+      '@panda/shared': link:../../shared/shared
       '@xiao-ai/utils': registry.npmmirror.com/@xiao-ai/utils/1.5.1
       iconv-lite: registry.npmmirror.com/iconv-lite/0.6.3
       jszip: registry.npmmirror.com/jszip/3.7.1
@@ -209,7 +211,7 @@ importers:
       tslib: ^2.3.1
       typescript: ^4.5.5
     dependencies:
-      '@panda/shared': link:../../shared
+      '@panda/shared': link:../../shared/shared
       electron: registry.npmmirror.com/electron/17.0.1
     devDependencies:
       '@panda/tsconfig': link:../../utils/tsconfig
@@ -222,6 +224,7 @@ importers:
     specifiers:
       '@ant-design/icons': ^4.7.0
       '@panda/components': workspace:*
+      '@panda/fetch': workspace:*
       '@panda/renderer-utils': workspace:*
       '@panda/shared': workspace:*
       '@panda/tsconfig': workspace:*
@@ -239,8 +242,9 @@ importers:
     dependencies:
       '@ant-design/icons': registry.npmmirror.com/@ant-design/icons/4.7.0_react-dom@17.0.2+react@17.0.2
       '@panda/components': link:../components
+      '@panda/fetch': link:../fetch
       '@panda/renderer-utils': link:../utils
-      '@panda/shared': link:../../shared
+      '@panda/shared': link:../../shared/shared
       '@xiao-ai/utils': registry.npmmirror.com/@xiao-ai/utils/1.5.1
       antd: registry.npmmirror.com/antd/4.18.7_react-dom@17.0.2+react@17.0.2
       react: registry.npmmirror.com/react/17.0.2
@@ -271,6 +275,9 @@ importers:
 
   packages/renderer/utils:
     specifiers:
+      '@panda/fetch': workspace:*
+      '@panda/remote': workspace:*
+      '@panda/shared': workspace:*
       '@panda/tsconfig': workspace:*
       '@types/color': ^3.0.3
       '@types/panda': workspace:*
@@ -283,6 +290,9 @@ importers:
       tslib: ^2.3.1
       typescript: ^4.5.5
     dependencies:
+      '@panda/fetch': link:../fetch
+      '@panda/remote': link:../../shared/remote
+      '@panda/shared': link:../../shared/shared
       color: registry.npmmirror.com/color/4.2.1
       electron: registry.npmmirror.com/electron/17.0.1
       jss: registry.npmmirror.com/jss/10.9.0
@@ -296,15 +306,34 @@ importers:
       tslib: registry.npmmirror.com/tslib/2.3.1
       typescript: registry.npmmirror.com/typescript/4.5.5
 
-  packages/shared:
+  packages/shared/remote:
+    specifiers:
+      '@panda/shared': workspace:*
+      '@panda/tsconfig': workspace:*
+      '@types/panda': workspace:*
+      '@xiao-ai/utils': ^1.5.1
+      electron: ^17.0.1
+      tslib: ^2.3.1
+      typescript: ^4.5.5
+    dependencies:
+      '@panda/shared': link:../shared
+      '@xiao-ai/utils': registry.npmmirror.com/@xiao-ai/utils/1.5.1
+      electron: registry.npmmirror.com/electron/17.0.1
+    devDependencies:
+      '@panda/tsconfig': link:../../utils/tsconfig
+      '@types/panda': link:../../utils/typings
+      tslib: registry.npmmirror.com/tslib/2.3.1
+      typescript: registry.npmmirror.com/typescript/4.5.5
+
+  packages/shared/shared:
     specifiers:
       '@panda/tsconfig': workspace:*
       '@types/panda': workspace:*
       tslib: ^2.3.1
       typescript: ^4.5.5
     devDependencies:
-      '@panda/tsconfig': link:../utils/tsconfig
-      '@types/panda': link:../utils/typings
+      '@panda/tsconfig': link:../../utils/tsconfig
+      '@types/panda': link:../../utils/typings
       tslib: registry.npmmirror.com/tslib/2.3.1
       typescript: registry.npmmirror.com/typescript/4.5.5
 
@@ -369,7 +398,10 @@ importers:
 
   packages/utils/tsconfig:
     specifiers:
+      '@panda/remote': workspace:^1.0.0
       '@xiao-ai/utils': ^1.5.1
+    dependencies:
+      '@panda/remote': link:../../shared/remote
     devDependencies:
       '@xiao-ai/utils': registry.npmmirror.com/@xiao-ai/utils/1.5.1
 

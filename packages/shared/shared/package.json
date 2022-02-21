@@ -1,7 +1,7 @@
 {
-  "name": "@panda/renderer-fetch",
+  "name": "@panda/shared",
   "version": "1.0.0",
-  "description": "panda-manager renderer fetch tools",
+  "description": "panda-manager shared",
   "source": "src/index.ts",
   "module": "src/index.ts",
   "types": "src/index.ts",
@@ -11,18 +11,18 @@
     "package.json"
   ],
   "scripts": {
-    "build": "pnpm run clear && tsc -p .",
     "lint": "eslint --quiet --no-error-on-unmatched-pattern --config ../../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
     "lint:fix": "eslint --fix --quiet --no-error-on-unmatched-pattern --config ../../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}"
   },
-  "dependencies": {
-    "@panda/shared": "workspace:*",
-    "electron": "^17.0.1"
+  "author": "xiaoboost",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xiaoboost/panda-manager"
   },
   "devDependencies": {
     "@panda/tsconfig": "workspace:*",
     "@types/panda": "workspace:*",
-    "@types/node": "^17.0.18",
     "tslib": "^2.3.1",
     "typescript": "^4.5.5"
   }

@@ -7,7 +7,6 @@ import { service as patchConfig } from './patch-config';
 import { service as isFocused } from './is-focused';
 import { service as isMaximized } from './is-maximized';
 import { service as isMinimized } from './is-minimized';
-import { service as getWindowId } from './get-window-id';
 
 import { ServiceData } from './types';
 
@@ -15,7 +14,6 @@ const serviceMap: Record<RPC.FetchName, ServiceData | undefined> = {
   [RPC.FetchName.IsFocused]: isFocused,
   [RPC.FetchName.IsMaximized]: isMaximized,
   [RPC.FetchName.IsMinimized]: isMinimized,
-  [RPC.FetchName.GetWindowId]: getWindowId,
 
   [RPC.FetchName.Ready]: ready,
   [RPC.FetchName.GetConfig]: getConfig,
