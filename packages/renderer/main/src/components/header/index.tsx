@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { style } from './style';
-
 import { Bamboo, Recover } from '@panda/components';
 import { useIsFocus, useIsMaximize } from '@panda/renderer-utils';
 import { stringifyClass } from '@xiao-ai/utils';

@@ -33,7 +33,7 @@ export const style = createStyles({
       alignItems: 'center',
     },
 
-    '&#headerUnFocus': {
+    '&$headerUnFocus': {
       backgroundColor: BlackLight.toString(),
 
       '& #icon': {
@@ -51,7 +51,7 @@ export const style = createStyles({
       backgroundColor: BlackLight.toString(),
     },
 
-    '&#iconClose:hover': {
+    '&$iconClose:hover': {
       backgroundColor: `${Red.toString()} !important`,
     },
   },
