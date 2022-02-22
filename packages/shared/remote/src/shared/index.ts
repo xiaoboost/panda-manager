@@ -1,7 +1,7 @@
 import { BrowserWindow } from 'electron';
 
 export const RemoteEventName = '_remote_event';
-export const ListenerEventName = '_listener_event';
+export const ListenerEventName = '_remote_listener_event';
 
 /** 远程返回事件 */
 export interface RemoteReplyEvent {

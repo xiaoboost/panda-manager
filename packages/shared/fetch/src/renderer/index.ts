@@ -1,2 +1,6 @@
 export * from './fetch';
-export * from './listener';
+
+export {
+  FetchData,
+  Status,
+} from '../shared';

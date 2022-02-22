@@ -21,6 +21,7 @@
   "dependencies": {
     "@panda/client-utils": "workspace:*",
     "@panda/db": "workspace:*",
+    "@panda/fetch": "workspace:*",
     "@panda/remote": "workspace:*",
     "@panda/server": "workspace:*",
     "@panda/shared": "workspace:*",

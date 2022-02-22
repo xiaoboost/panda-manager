@@ -72,6 +72,7 @@ importers:
     specifiers:
       '@panda/client-utils': workspace:*
       '@panda/db': workspace:*
+      '@panda/fetch': workspace:*
       '@panda/remote': workspace:*
       '@panda/server': workspace:*
       '@panda/shared': workspace:*
@@ -85,6 +86,7 @@ importers:
     dependencies:
       '@panda/client-utils': link:../utils
       '@panda/db': link:../database
+      '@panda/fetch': link:../../shared/fetch
       '@panda/remote': link:../../shared/remote
       '@panda/server': link:../server
       '@panda/shared': link:../../shared/shared
@@ -298,12 +300,14 @@ importers:
       '@panda/tsconfig': workspace:*
       '@types/node': ^17.0.18
       '@types/panda': workspace:*
+      '@xiao-ai/utils': ^1.5.1
       electron: ^17.0.1
       tslib: ^2.3.1
       typescript: ^4.5.5
     dependencies:
       '@panda/remote': link:../remote
       '@panda/shared': link:../shared
+      '@xiao-ai/utils': registry.npmmirror.com/@xiao-ai/utils/1.5.1
       electron: registry.npmmirror.com/electron/17.0.1
     devDependencies:
       '@panda/tsconfig': link:../../utils/tsconfig

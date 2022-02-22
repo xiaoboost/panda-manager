@@ -20,6 +20,7 @@
   "dependencies": {
     "@panda/remote": "workspace:*",
     "@panda/shared": "workspace:*",
+    "@xiao-ai/utils": "^1.5.1",
     "electron": "^17.0.1"
   },
   "devDependencies": {

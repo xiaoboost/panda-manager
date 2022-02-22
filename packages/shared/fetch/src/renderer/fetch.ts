@@ -1,57 +1,89 @@
 import { ipcRenderer } from 'electron';
-import { RPC, log } from '@panda/shared';
-import { processId } from './utils';
+import { log } from '@panda/shared';
+import { isNumber } from '@xiao-ai/utils';
+import { FetchParam, FetchStore } from './types';
+import { ServiceName } from '@panda/shared';
 
-export interface FetchParam {
-  /** 事件名称 */
-  name: RPC.FetchName;
-  /**
-   * 进度回调
-   *   - `progress`为 0 ~ 100
-   */
-  onProgress?(progress: number): void;
-  /** 参数 */
-  params?: any;
-}
-
-/** fetch 函数初始化 */
-export function fetchInit() {
-  ipcRenderer.on(RPC.EventName.ReplyRenderer, (event, params: RPC.FetchData) => {
-    debugger;
-
-    // 不是从主进程发送的事件，或者返回数据不是当前进程所有
-    if (event.senderId !== 0 || params.rendererId !== processId) {
-      return;
-    }
-  });
-
-  if (process.env.NODE_ENV === 'development') {
-    log('fetch 模块初始化');
-  }
-}
+import {
+  FetchEventName,
+  ProgressData,
+  ReplyEventName,
+  ProgressEventName,
+  FetchData,
+  Status,
+} from '../shared';
 
 let eventId = 0;
 
-export function fetch<T = any>(param: FetchParam): Promise<RPC.FetchData<T>>;
-export function fetch<T = any>(name: RPC.FetchName): Promise<RPC.FetchData<T>>;
-export function fetch<T = any>(name: RPC.FetchName, params?: any): Promise<RPC.FetchData<T>>;
-export function fetch<T = any>(
-  name: RPC.FetchName | FetchParam,
-  data?: any,
-): Promise<RPC.FetchData<T>> {
+const fetchStore: FetchStore[] = [];
 
+// 返回事件
+ipcRenderer.on(ReplyEventName, (_, params: FetchData) => {
+  if (process.env.NODE_ENV === 'development') {
+    log(`后端返回数据: ${JSON.stringify(params, null, 2)}`);
+  }
 
-  return new Promise<RPC.FetchData<T>>((resolve) => {
-    const data: RPC.FetchData = {
-      eventId: eventId++,
-      rendererId: processId,
-      name: name as any,
-      data: undefined,
-      status: RPC.Status.Created,
+  debugger;
+  const dataIndex = fetchStore.findIndex((ev) => {
+    return ev.eventId === params.eventId && ev.name === params.name;
+  });
+
+  if (dataIndex >= 0) {
+    const data = fetchStore[dataIndex];
+    fetchStore.splice(dataIndex, 1);
+    data.resolve(params);
+  }
+});
+
+// 进度事件
+ipcRenderer.on(ProgressEventName, (_, params: ProgressData) => {
+  if (process.env.NODE_ENV === 'development') {
+    log(`后端返回进度数据: ${JSON.stringify(params, null, 2)}`);
+  }
+
+  debugger;
+  const data = fetchStore.find((ev) => {
+    return ev.eventId === params.eventId && ev.name === params.name;
+  });
+
+  if (data) {
+    data.onProgress?.(params.progress);
+  }
+});
+
+if (process.env.NODE_ENV === 'development') {
+  log('Fetch 模块初始化');
+}
+
+export function fetch<T = any>(param: FetchParam): Promise<FetchData<T>>;
+export function fetch<T = any>(name: ServiceName): Promise<FetchData<T>>;
+export function fetch<T = any>(name: ServiceName, params?: any): Promise<FetchData<T>>;
+export function fetch<T = any>(name: ServiceName | FetchParam, params?: any): Promise<FetchData<T>> {
+  return new Promise<FetchData<T>>((resolve) => {
+    const currentId = eventId++;
+    const data: FetchData = isNumber(name)
+      ? {
+        name,
+        data: params,
+        eventId: currentId,
+        status: Status.Created,
+      }
+      : {
+        name: name.name,
+        data: name.params,
+        eventId: currentId,
+        status: Status.Created,
+      };
+    const store: FetchStore = {
+      resolve,
+      eventId: currentId,
+      params: data.data,
+      name: data.name,
+      onProgress: !isNumber(name) ? name.onProgress : undefined,
     };
 
-    debugger;
-    // ipcRenderer.send;
-    resolve(data as RPC.FetchData<T>);
+    ipcRenderer.send(FetchEventName, data);
+
+    fetchStore.push(store);
   });
 }

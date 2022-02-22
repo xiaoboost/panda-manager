@@ -1,9 +1,9 @@
 import { URL } from 'url';
-import { ipcMain, app, BrowserWindow } from 'electron';
+import { app, BrowserWindow } from 'electron';
 import { resolveRoot } from '@panda/client-utils';
-// import { addFetchListener } from '@panda/server';
-import { initialize } from '@panda/remote/client';
 import { windowStateKeeper } from '@panda/window-manager';
+import { initialize as initializeFetch } from '@panda/fetch/client';
+import { initialize as initializeRemote } from '@panda/remote/client';
 
 /** 主窗口 */
 export let win: BrowserWindow | null;
@@ -35,8 +35,8 @@ export async function install() {
     win.webContents.openDevTools();
   }
 
-  // addFetchListener(win, ipcMain);
-  initialize(win);
+  initializeRemote(win);
+  initializeFetch(win, () => void 0);
 
   // 主界面被关闭时，退出软件
   win.on('closed', () => {
