@@ -27,7 +27,8 @@
     "lib": ["ESNext", "DOM"],
     "paths": {
       "@xiao-ai/utils/*": ["./node_modules/@xiao-ai/utils/dist/types/*"],
-      "@panda/remote/*": ["./node_modules/@panda/remote/src/*"]
+      "@panda/remote/*": ["./node_modules/@panda/remote/src/*"],
+      "@panda/fetch/*": ["./node_modules/@panda/remote/src/*"]
     }
   }
 }

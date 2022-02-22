@@ -407,12 +407,7 @@ importers:
       yargs: registry.npmmirror.com/yargs/17.3.1
 
   packages/utils/tsconfig:
-    specifiers:
-      '@panda/remote': workspace:*
-      '@xiao-ai/utils': ^1.5.1
-    devDependencies:
-      '@panda/remote': link:../../shared/remote
-      '@xiao-ai/utils': registry.npmmirror.com/@xiao-ai/utils/1.5.1
+    specifiers: {}
 
   packages/utils/typings:
     specifiers: {}
@@ -1655,6 +1650,7 @@ packages:
     resolution: {integrity: sha512-KLZloYbeIe6+W7cxlW9oX/gOL+StiABFYMclId4/1X0dtnSYqYL3zotV5dkZ5hRjeKPxyFveRLGK5IQRD3fIIQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@xiao-ai/utils/-/utils-1.5.1.tgz}
     name: '@xiao-ai/utils'
     version: 1.5.1
+    dev: false
 
   registry.npmmirror.com/@xtuc/ieee754/1.2.0:
     resolution: {integrity: sha512-DX8nKgqcGwsc0eJSqYt5lwP4DH5FlHnmuWWBRy7X0NcaGR0ZtuyeESgMwTYVEtxmsNGY+qit4QYT/MIYTOTPeA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@xtuc/ieee754/-/ieee754-1.2.0.tgz}
