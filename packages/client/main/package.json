@@ -23,7 +23,7 @@
     "@panda/db": "workspace:*",
     "@panda/fetch": "workspace:*",
     "@panda/remote": "workspace:*",
-    "@panda/server": "workspace:*",
+    "@panda/service": "workspace:*",
     "@panda/shared": "workspace:*",
     "@panda/window-manager": "workspace:*",
     "@xiao-ai/utils": "^1.5.1",

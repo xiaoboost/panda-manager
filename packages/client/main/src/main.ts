@@ -2,6 +2,8 @@ import { URL } from 'url';
 import { app, BrowserWindow } from 'electron';
 import { resolveRoot } from '@panda/client-utils';
 import { windowStateKeeper } from '@panda/window-manager';
+
+import { service } from '@panda/service';
 import { initialize as initializeFetch } from '@panda/fetch/client';
 import { initialize as initializeRemote } from '@panda/remote/client';
 
@@ -36,7 +38,7 @@ export async function install() {
   }
 
   initializeRemote(win);
-  initializeFetch(win, () => void 0);
+  initializeFetch(win, service);
 
   // 主界面被关闭时，退出软件
   win.on('closed', () => {

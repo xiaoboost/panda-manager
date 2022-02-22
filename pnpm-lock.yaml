@@ -74,7 +74,7 @@ importers:
       '@panda/db': workspace:*
       '@panda/fetch': workspace:*
       '@panda/remote': workspace:*
-      '@panda/server': workspace:*
+      '@panda/service': workspace:*
       '@panda/shared': workspace:*
       '@panda/tsconfig': workspace:*
       '@panda/window-manager': workspace:*
@@ -88,7 +88,7 @@ importers:
       '@panda/db': link:../database
       '@panda/fetch': link:../../shared/fetch
       '@panda/remote': link:../../shared/remote
-      '@panda/server': link:../server
+      '@panda/service': link:../service
       '@panda/shared': link:../../shared/shared
       '@panda/window-manager': link:../window-manager
       '@xiao-ai/utils': registry.npmmirror.com/@xiao-ai/utils/1.5.1
@@ -99,10 +99,11 @@ importers:
       '@types/panda': link:../../utils/typings
       typescript: registry.npmmirror.com/typescript/4.5.5
 
-  packages/client/server:
+  packages/client/service:
     specifiers:
       '@panda/client-utils': workspace:*
       '@panda/db': workspace:*
+      '@panda/fetch': workspace:*
       '@panda/shared': workspace:*
       '@panda/tsconfig': workspace:*
       '@types/panda': workspace:*
@@ -112,6 +113,7 @@ importers:
     dependencies:
       '@panda/client-utils': link:../utils
       '@panda/db': link:../database
+      '@panda/fetch': link:../../shared/fetch
       '@panda/shared': link:../../shared/shared
     devDependencies:
       '@panda/tsconfig': link:../../utils/tsconfig

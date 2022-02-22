@@ -15,17 +15,17 @@ export {
   Status,
 } from '../shared';
 
-/** 服务上下文 */
-export interface ServiceContext {
+/** 监听服务上下文 */
+export interface ListenerContext {
   window: BrowserWindow;
   requestData: FetchData;
   sendProgress(progress: number): void;
 }
 
-/** 后端服务 */
-export type Service = (context: ServiceContext) => any;
+/** 监听服务 */
+export type Listener = (context: ListenerContext) => any;
 
-export function initialize(win: BrowserWindow, service: Service) {
+export function initialize(win: BrowserWindow, listener: Listener) {
   ipcMain.on(FetchEventName, async (event, param) => {
     const result: FetchData = {
       ...param,
@@ -40,7 +40,7 @@ export function initialize(win: BrowserWindow, service: Service) {
     event.stopImmediatePropagation();
 
     try {
-      result.data = await service({
+      result.data = await listener({
         window: win,
         requestData: result,
         sendProgress: (progress: number) => {
