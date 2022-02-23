@@ -26,6 +26,7 @@ export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Con
         compilerOptions: {
           module: 'ESNext',
           target: 'ESNext',
+          baseUrl: resolvePackage(),
         },
       },
     }

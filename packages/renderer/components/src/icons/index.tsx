@@ -5,10 +5,11 @@ interface IconProps {
   className?: string;
   style?: React.CSSProperties;
   onClick?(event: React.MouseEvent): any;
+  onDoubleClick?(event: React.MouseEvent): any;
 }
 
 function createIcon(name: string, data: icons.Icon) {
-  return function Icon({ className, onClick, style }: IconProps) {
+  return function Icon({ className, onClick, onDoubleClick, style }: IconProps) {
     let customClass = `panda-icon panda-icon-${name}`;
 
     if (className) {
@@ -16,7 +17,12 @@ function createIcon(name: string, data: icons.Icon) {
     }
 
     return (
-      <i className={customClass} onClick={onClick} style={style}>
+      <i
+        className={customClass}
+        style={style}
+        onClick={onClick}
+        onDoubleClick={onDoubleClick}
+      >
         <svg
           viewBox={data.viewBox}
           version="1.1"

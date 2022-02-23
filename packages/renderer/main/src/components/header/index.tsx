@@ -10,13 +10,10 @@ import { useCallback } from 'react';
 // import { useLocation, useHistory } from 'react-router';
 
 import {
-  ArrowLeftOutlined,
   MinusOutlined,
   CloseOutlined,
   BorderOutlined,
 } from '@ant-design/icons';
-
-// TODO: 按键按下也应该有效果
 
 export function Header() {
   const isFocus = useIsFocus();
@@ -49,31 +46,27 @@ export function Header() {
       })}
     >
       <span>
-        <span onDoubleClick={logoDbClickStop}>
-          {location.pathname === '/' ? (
-            <Bamboo className={style.classes.logo} />
-          ) : (
-            <ArrowLeftOutlined
-              className={style.classes.icon}
-              // onClick={() => history.goBack()}
-            />
-          )}
-        </span>
-        <span className={style.classes.title}>Panda Manager</span>
+        <Bamboo
+          className={style.classes.logo}
+          onDoubleClick={logoDbClickStop}
+        />
+        <span className={style.classes.tabItem}>列表</span>
+        <span className={style.classes.tabItem}>设置</span>
+        <span className={style.classes.tabItem}>帮助</span>
       </span>
+      <span className={style.classes.title}>Panda Manager</span>
       <span>
         {/* 最小化 */}
         <MinusOutlined className={style.classes.icon} onClick={minimize} />
-        {isMaximize ? (
+        {isMaximize
           /* 还原 */
-          <Recover className={style.classes.icon} onClick={unMaximize} />
-        ) : (
+          ? <Recover className={style.classes.icon} onClick={unMaximize} />
           /* 最大化 */
-          <BorderOutlined
+          : <BorderOutlined
             className={style.classes.icon}
             onClick={maximize}
           />
-        )}
+        }
         {/* 关闭 */}
         <CloseOutlined
           className={stringifyClass(style.classes.icon, style.classes.iconClose)}

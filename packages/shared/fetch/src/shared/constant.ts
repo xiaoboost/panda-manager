@@ -3,9 +3,7 @@ export const FetchEventName = '_event_fetch_event';
 /** 主进程回复渲染进程通信 */
 export const ReplyEventName = '_event_fetch_reply_renderer';
 /** 主进程回复渲染进程进度事件通信 */
-export const ProgressEventName = '_event_fetch_reply_renderer';
-/** 主进程向渲染进程广播事件 */
-export const BroadcastEventName = '_event_fetch_broadcast_renderer';
+export const ProgressEventName = '_event_fetch_progress_renderer';
 
 /** 事件状态 */
 export enum Status {
