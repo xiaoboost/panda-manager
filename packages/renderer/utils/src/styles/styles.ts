@@ -67,17 +67,6 @@ export function mergeStyles(...styles: JssStyle[]): JssStyle {
   return style;
 }
 
-// export function createMediaStyles<T>(
-//   pcParam: T,
-//   phoneParam: T,
-//   template: (param: T) => Styles,
-// ) {
-//   return {
-//     [mediaPc]: template(pcParam),
-//     [mediaPhone]: template(phoneParam),
-//   };
-// }
-
 /** 迭代标题元素 */
 export function createHeadStyles(pre = '', cb: (level: number) => Styles) {
   const styles: Styles = {};

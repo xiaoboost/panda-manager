@@ -17,7 +17,7 @@ export const FontDefault = /* @__PURE__ */ getFontFamily([
 
 /** 衬线字体 */
 export const FontSerif = /* @__PURE__ */ getFontFamily([
-  '思源宋体',
+  'Georgia',
   'STSong',
   '宋体',
   'serif',

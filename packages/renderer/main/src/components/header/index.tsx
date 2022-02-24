@@ -6,8 +6,10 @@ import { useIsFocus, useIsMaximize } from '@panda/renderer-utils';
 import { stringifyClass } from '@xiao-ai/utils';
 import { getRemoteWindow } from '@panda/remote/renderer';
 
+import { MenuNav, PanelItem, PanelSplit } from './menu';
+
 import { useCallback } from 'react';
-// import { useLocation, useHistory } from 'react-router';
+import { useLocation } from 'react-router';
 
 import {
   MinusOutlined,
@@ -18,7 +20,7 @@ import {
 export function Header() {
   const isFocus = useIsFocus();
   const isMaximize = useIsMaximize();
-  // const location = useLocation();
+  const location = useLocation();
   // const history = useHistory();
 
   const maximize = useCallback(() => getRemoteWindow().maximize(), []);
@@ -50,9 +52,30 @@ export function Header() {
           className={style.classes.logo}
           onDoubleClick={logoDbClickStop}
         />
-        <span className={style.classes.tabItem}>列表</span>
-        <span className={style.classes.tabItem}>设置</span>
-        <span className={style.classes.tabItem}>帮助</span>
+        <span
+          className={stringifyClass(style.classes.tabItem, {
+            [style.classes.highlightTabItem]: location.pathname === '/',
+          })}
+        >
+          列表
+        </span>
+        <span
+          className={stringifyClass(style.classes.tabItem, {
+            [style.classes.highlightTabItem]: location.pathname === '/setting',
+          })}
+        >
+          设置
+        </span>
+        <MenuNav
+          title='帮助'
+          className={style.classes.tabItem}
+          highlightClassName={style.classes.highlightTabItem}
+        >
+          <PanelItem disabled>发行说明</PanelItem>
+          <PanelItem disabled>检查更新</PanelItem>
+          <PanelSplit />
+          <PanelItem>关于</PanelItem>
+        </MenuNav>
       </span>
       <span className={style.classes.title}>Panda Manager</span>
       <span>

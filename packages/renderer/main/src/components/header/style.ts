@@ -1,15 +1,14 @@
 import {
   createStyles,
   Black,
-  Color,
   White,
+  Black3,
   BlackLight,
   BlackLighter,
   Red,
 } from '@panda/renderer-utils';
 
 const height = 32;
-const highlightBgColor = Color(Black.rgbNumber() + 0x242424).toString();
 
 export const style = createStyles({
   iconClose: {},
@@ -52,7 +51,7 @@ export const style = createStyles({
     '-webkit-app-region': 'no-drag',
 
     '&:hover': {
-      backgroundColor: highlightBgColor,
+      backgroundColor: Black3.toString(),
     },
 
     '&$iconClose:hover': {
@@ -61,8 +60,9 @@ export const style = createStyles({
     },
   },
   logo: {
-    padding: [6, 12],
+    padding: [2, 12],
     fontSize: 20,
+    transform: 'translateY(2px)',
   },
   title: {
     fontSize: 13,
@@ -73,7 +73,7 @@ export const style = createStyles({
     '-webkit-app-region': 'no-drag',
 
     '&:hover, &$highlightTabItem': {
-      backgroundColor: highlightBgColor,
+      backgroundColor: Black3.toString(),
     },
   },
 });
