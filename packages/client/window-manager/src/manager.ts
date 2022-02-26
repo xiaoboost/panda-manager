@@ -20,7 +20,7 @@ export async function windowStateKeeper(
   });
 
   if (process.env.NODE_ENV === 'development') {
-    log(`Window Manager init data: ${JSON.stringify(state.data)}`);
+    log(`Window Manager 初始化数据: ${JSON.stringify(state.data)}`);
   }
 
   // 最大化

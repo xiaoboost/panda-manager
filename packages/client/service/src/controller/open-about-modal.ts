@@ -1,5 +1,6 @@
-import { dialog } from 'electron';
+import { dialog, clipboard } from 'electron';
 import { ServiceData } from './types';
+import { log } from '@panda/shared';
 
 import os from 'os';
 
@@ -13,11 +14,27 @@ function getVersion() {
   ].join('\n');
 }
 
-export const service: ServiceData<void> = (context) => {
-  dialog.showMessageBox(context.window, {
+export const service: ServiceData<void> = async (context) => {
+  if (process.env.NODE_ENV === 'development') {
+    log('打开“关于”对话框');
+  }
+
+  const buttons = ['确定', '复制'];
+  const info = getVersion();
+  const result = await dialog.showMessageBox(context.window, {
     title: 'Panda Manager',
-    message: getVersion(),
+    message: info,
     type: 'info',
-    buttons: ['确定'],
+    buttons,
+    cancelId: 0,
+    noLink: true,
   });
+
+  if (process.env.NODE_ENV === 'development') {
+    log(`用户点击按钮：${buttons[result.response]}`);
+  }
+
+  if (result.response === 1) {
+    clipboard.writeText(info);
+  }
 };

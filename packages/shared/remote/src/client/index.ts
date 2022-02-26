@@ -25,7 +25,7 @@ export function initialize(win: BrowserWindow) {
     };
 
     if (process.env.NODE_ENV === 'development') {
-      log(`Get remote window property: ${JSON.stringify(params, null, 2)}`);
+      log(`获取远程窗口属性: ${JSON.stringify(params, null, 2)}`);
     }
 
     if (isFunc(win[params.key])) {
@@ -40,8 +40,8 @@ export function initialize(win: BrowserWindow) {
         else {
           if (process.env.NODE_ENV === 'development') {
             log(
-              `Call remote window method: ${params.key}, ` +
-              `params: ${JSON.stringify(params.params ?? [], null, 2)}`
+              `获取远程窗口方法: ${params.key}, ` +
+              `参数为: ${JSON.stringify(params.params ?? [], null, 2)}`
             );
           }
 

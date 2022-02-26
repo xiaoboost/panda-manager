@@ -33,7 +33,7 @@ export function initialize(win: BrowserWindow, listener: Listener) {
     };
 
     if (process.env.NODE_ENV === 'development') {
-      log(`Service receive data: ${JSON.stringify(requestData, null, 2)}`);
+      log(`服务器接收前端数据为: ${JSON.stringify(requestData, null, 2)}`);
     }
 
     let result: FetchData;
@@ -62,13 +62,13 @@ export function initialize(win: BrowserWindow, listener: Listener) {
     }
 
     if (process.env.NODE_ENV === 'development') {
-      log(`Service reply data: ${JSON.stringify(result, null, 2)}`);
+      log(`服务器返回前端数据: ${JSON.stringify(result, null, 2)}`);
     }
 
     win.webContents.send(ReplyEventName, result);
   });
 
   if (process.env.NODE_ENV === 'development') {
-    log('Initialize Server');
+    log('服务器初始化完成');
   }
 }

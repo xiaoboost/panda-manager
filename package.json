@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "clear": "rimraf ./dist/generated",
-    "dev": "electron --debug=5858 ./dist/generated",
+    "dev": "chcp 65001 && electron --debug=5858 ./dist/generated",
     "test": "pnpm run -r test --parallel --filter .",
     "lint": "pnpm run -r lint --parallel --filter .",
     "lint:fix": "pnpm run -r lint:fix --parallel --filter .",
