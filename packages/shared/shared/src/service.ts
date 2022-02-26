@@ -16,4 +16,6 @@ export enum ServiceName {
   OpenPathDefaultManner,
   /** 打开选择文件（夹）对话框 */
   OpenSelectDialog,
+  /** 打开消息对话框 */
+  OpenMessageDialog,
 }

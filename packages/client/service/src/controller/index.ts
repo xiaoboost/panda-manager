@@ -4,6 +4,7 @@ import { service as patchConfig } from './patch-config';
 import { service as openAboutModal } from './open-about-modal';
 import { service as openSelectDialog } from './open-select-dialog';
 import { service as openPathDefaultManner } from './open-path-default-manner';
+import { service as openMessageDialog } from './open-message-dialog';
 
 import { ServiceData } from './types';
 import { ServiceName } from '@panda/shared';
@@ -18,6 +19,7 @@ const serviceMap: Record<ServiceName, ServiceData | undefined> = {
   [ServiceName.OpenPathDefaultManner]: openPathDefaultManner,
   [ServiceName.OpenAboutModal]: openAboutModal,
   [ServiceName.OpenSelectDialog]: openSelectDialog,
+  [ServiceName.OpenMessageDialog]: openMessageDialog,
 };
 
 export async function service(context: ListenerContext): Promise<FetchData> {

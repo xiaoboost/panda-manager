@@ -10,7 +10,7 @@ import { style } from './style';
 import { unique } from '@xiao-ai/utils';
 
 import { Card, CardLine, CardBox } from '../card';
-import { selectDirectories, openPath } from '../utils/dialog';
+import { selectDirectories, deleteDirectory, openPath } from '../utils/dialog';
 
 interface DirProps {
   path: string;
@@ -59,19 +59,10 @@ interface Props {
 export function Directories({ data, patch }: Props) {
   const add = (paths: string[]) => patch(unique(data.concat(paths)));
   const remove = async (path: string) => {
-    patch(data.filter((item) => item !== path));
-
-    // await warn({
-    //   title: '删除',
-    //   content: `确定删除该路径吗？该操作是不可逆的。\n${path}`,
-    //   okText: '删除',
-    //   cancelText: '取消',
-    // });
-
-    // const directories = deleteVal(dirs, path, false);
-
-    // setDirs(directories);
-    // patch({ directories });
+    const result = await deleteDirectory(path);
+    if (result) {
+      patch(data.filter((item) => item !== path));
+    }
   };
 
   return (
