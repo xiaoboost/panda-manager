@@ -1,0 +1,36 @@
+{
+  "name": "@panda/zip",
+  "version": "1.0.0",
+  "description": "panda-manager zip",
+  "source": "src/index.ts",
+  "types": "src/index.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "package.json"
+  ],
+  "scripts": {
+    "watch": "tsc -w -p .",
+    "lint": "eslint --quiet --no-error-on-unmatched-pattern --config ../../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
+    "lint:fix": "eslint --fix --quiet --no-error-on-unmatched-pattern --config ../../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}"
+  },
+  "author": "xiaoboost",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xiaoboost/panda-manager"
+  },
+  "dependencies": {
+    "@panda/shared": "workspace:*",
+    "@panda/client-utils": "workspace:*",
+    "@xiao-ai/utils": "^1.5.1",
+    "iconv-lite": "^0.6.3",
+    "jszip": "^3.7.1"
+  },
+  "devDependencies": {
+    "@panda/tsconfig": "workspace:*",
+    "@types/panda": "workspace:*",
+    "tslib": "^2.3.1",
+    "typescript": "^4.5.5"
+  }
+}

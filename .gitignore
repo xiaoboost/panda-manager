@@ -1,8 +1,10 @@
 .vscode/
 _temp/
 dist/
-doc/
+dev/
 draft/
 node_modules/
+.nyc_output/
+coverage/
 
 *.log

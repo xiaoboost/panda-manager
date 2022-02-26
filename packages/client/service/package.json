@@ -1,0 +1,37 @@
+{
+  "name": "@panda/service",
+  "version": "1.0.0",
+  "description": "panda-manager service lib",
+  "source": "src/index.ts",
+  "module": "src/index.ts",
+  "types": "src/index.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "package.json"
+  ],
+  "scripts": {
+    "watch": "tsc -w -p .",
+    "lint": "eslint --quiet --no-error-on-unmatched-pattern --config ../../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
+    "lint:fix": "eslint --fix --quiet --no-error-on-unmatched-pattern --config ../../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}"
+  },
+  "author": "xiaoboost",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xiaoboost/panda-manager"
+  },
+  "dependencies": {
+    "@panda/client-utils": "workspace:*",
+    "@panda/db": "workspace:*",
+    "@panda/fetch": "workspace:*",
+    "@panda/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "@panda/tsconfig": "workspace:*",
+    "@types/panda": "workspace:*",
+    "electron": "^17.0.1",
+    "tslib": "^2.3.1",
+    "typescript": "^4.5.5"
+  }
+}

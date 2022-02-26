@@ -1,0 +1,40 @@
+{
+  "name": "@panda/renderer-utils",
+  "version": "1.0.0",
+  "description": "panda-manager renderer utils lib",
+  "source": "src/index.ts",
+  "types": "src/index.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "package.json"
+  ],
+  "scripts": {
+    "lint": "eslint --quiet --no-error-on-unmatched-pattern --config ../../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
+    "lint:fix": "eslint --fix --quiet --no-error-on-unmatched-pattern --config ../../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}"
+  },
+  "author": "xiaoboost",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xiaoboost/panda-manager"
+  },
+  "dependencies": {
+    "@panda/fetch": "workspace:*",
+    "@panda/remote": "workspace:*",
+    "@panda/shared": "workspace:*",
+    "color": "^4.2.1",
+    "electron": "^17.0.1",
+    "jss": "^10.9.0",
+    "jss-preset-default": "^10.9.0",
+    "react": "^17.0.2"
+  },
+  "devDependencies": {
+    "@panda/tsconfig": "workspace:*",
+    "@types/color": "^3.0.3",
+    "@types/panda": "workspace:*",
+    "@types/react": "^17.0.39",
+    "tslib": "^2.3.1",
+    "typescript": "^4.5.5"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "@panda/client-utils",
+  "version": "1.0.0",
+  "description": "panda-manager client utils",
+  "source": "src/index.ts",
+  "module": "src/index.ts",
+  "types": "src/index.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "package.json"
+  ],
+  "scripts": {
+    "watch": "tsc -w -p .",
+    "lint": "eslint --quiet --no-error-on-unmatched-pattern --config ../../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
+    "lint:fix": "eslint --fix --quiet --no-error-on-unmatched-pattern --config ../../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}"
+  },
+  "dependencies": {
+    "@panda/shared": "workspace:*",
+    "electron": "^17.0.1",
+    "fs-extra": "^10.0.0"
+  },
+  "devDependencies": {
+    "@panda/tsconfig": "workspace:*",
+    "@types/fs-extra": "^9.0.13",
+    "@types/node": "^17.0.18",
+    "@types/panda": "workspace:*",
+    "tslib": "^2.3.1",
+    "typescript": "^4.5.5"
+  }
+}
