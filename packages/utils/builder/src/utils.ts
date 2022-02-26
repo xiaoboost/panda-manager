@@ -51,6 +51,8 @@ export const resolveCWD = createResolve(process.cwd());
 
 export const resolve = createResolve(path.join(__dirname, '..'));
 
+export const appPackageData = fs.readJSONSync(resolveCWD('package.json'));
+
 export function getPackageResolve(name: string) {
   return createResolve(path.join(__dirname, '../node_modules', name));
 }

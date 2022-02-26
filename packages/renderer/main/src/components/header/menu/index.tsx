@@ -42,11 +42,16 @@ export function MenuNav(props: PropsWithChildren<MenuProps>) {
 
     const offset = getOffset(el);
 
-    setShow(true);
-    setPosition([
-      offset[0],
-      offset[1] + el.offsetHeight,
-    ]);
+    if (show) {
+      setShow(false);
+    }
+    else {
+      setShow(true);
+      setPosition([
+        offset[0],
+        offset[1] + el.offsetHeight,
+      ]);
+    }
   };
 
   useClickOutside(ref.current, () => setShow(false));

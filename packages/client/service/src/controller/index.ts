@@ -1,6 +1,7 @@
 import { service as ready } from './ready';
 import { service as getConfig } from './get-config';
 import { service as patchConfig } from './patch-config';
+import { service as openAboutModal } from './open-about-modal';
 
 import { ServiceData } from './types';
 import { ServiceName } from '@panda/shared';
@@ -13,6 +14,7 @@ const serviceMap: Record<ServiceName, ServiceData | undefined> = {
   [ServiceName.GetFilesList]: undefined,
   [ServiceName.GetFileDetail]: undefined,
   [ServiceName.OpenFileInShell]: undefined,
+  [ServiceName.OpenAboutModal]: openAboutModal,
 };
 
 export async function service(context: ListenerContext): Promise<FetchData> {

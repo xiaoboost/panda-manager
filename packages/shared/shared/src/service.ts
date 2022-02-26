@@ -10,6 +10,8 @@ export enum ServiceName {
   GetFilesList,
   /** 获取文件详情 */
   GetFileDetail,
+  /** 打开“关于”对话框 */
+  OpenAboutModal,
   /** 在资源浏览器中打开文件 */
   OpenFileInShell,
 }

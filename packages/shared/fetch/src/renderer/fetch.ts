@@ -23,7 +23,6 @@ ipcRenderer.on(ReplyEventName, (_, params: FetchData) => {
     log(`后端返回数据: ${JSON.stringify(params, null, 2)}`);
   }
 
-  debugger;
   const dataIndex = fetchStore.findIndex((ev) => {
     return ev.eventId === params.eventId && ev.name === params.name;
   });
@@ -81,6 +80,10 @@ export function fetch<T = any>(name: ServiceName | FetchParam, params?: any): Pr
       name: data.name,
       onProgress: !isNumber(name) ? name.onProgress : undefined,
     };
+
+    if (process.env.NODE_ENV === 'development') {
+      log(`前端请求事件 data: ${JSON.stringify(data)}`);
+    }
 
     ipcRenderer.send(FetchEventName, data);
 

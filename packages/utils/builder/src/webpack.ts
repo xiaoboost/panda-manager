@@ -8,6 +8,7 @@ import {
   resolve,
   resolveCWD,
   getPackageResolve,
+  appPackageData,
   CommandOptions,
   WebpackOptions,
 } from './utils';
@@ -112,6 +113,7 @@ export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Con
     plugins: [
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(opt.mode),
+        'process.env.VERSION': JSON.stringify(appPackageData.version),
       }),
     ],
   };

@@ -27,22 +27,21 @@ export type Listener = (context: ListenerContext) => any;
 
 export function initialize(win: BrowserWindow, listener: Listener) {
   ipcMain.on(FetchEventName, async (event, param) => {
-    const result: FetchData = {
+    const requestData: FetchData = {
       ...param,
       status: Status.Ok,
     };
 
     if (process.env.NODE_ENV === 'development') {
-      log(`Service receive data: ${JSON.stringify(result, null, 2)}`);
+      log(`Service receive data: ${JSON.stringify(requestData, null, 2)}`);
     }
 
-    event.stopPropagation();
-    event.stopImmediatePropagation();
+    let result: FetchData;
 
     try {
-      result.data = await listener({
+      result = await listener({
         window: win,
-        requestData: result,
+        requestData,
         sendProgress: (progress: number) => {
           const progressEvent: ProgressData = {
             name: result.name,
@@ -55,8 +54,11 @@ export function initialize(win: BrowserWindow, listener: Listener) {
       });
     }
     catch (e: any) {
-      result.error = e.message;
-      result.status = Status.ServerError;
+      result = {
+        ...requestData,
+        error: e.message,
+        status: Status.ServerError,
+      };
     }
 
     if (process.env.NODE_ENV === 'development') {

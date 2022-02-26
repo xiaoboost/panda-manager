@@ -4,12 +4,14 @@ import { style } from './style';
 import { Bamboo, Recover } from '@panda/components';
 import { useIsFocus, useIsMaximize } from '@panda/renderer-utils';
 import { stringifyClass } from '@xiao-ai/utils';
+import { fetch } from '@panda/fetch/renderer';
+import { ServiceName } from '@panda/shared';
 import { getRemoteWindow } from '@panda/remote/renderer';
 
 import { MenuNav, PanelItem, PanelSplit } from './menu';
 
 import { useCallback } from 'react';
-import { useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 
 import {
   MinusOutlined,
@@ -17,21 +19,18 @@ import {
   BorderOutlined,
 } from '@ant-design/icons';
 
+const stopEvent = (ev: React.MouseEvent) => ev.stopPropagation();
+
 export function Header() {
   const isFocus = useIsFocus();
   const isMaximize = useIsMaximize();
   const location = useLocation();
-  // const history = useHistory();
+  const navigate = useNavigate();
 
   const maximize = useCallback(() => getRemoteWindow().maximize(), []);
   const unMaximize = useCallback(() => getRemoteWindow().unmaximize(), []);
   const minimize = useCallback(() => getRemoteWindow().minimize(), []);
   const close = useCallback(() => getRemoteWindow().close(), []);
-
-  const logoDbClickStop = useCallback(
-    (ev: React.MouseEvent) => ev.stopPropagation(),
-    [],
-  );
   const headerDbClick = useCallback(
     () => {
       const win = getRemoteWindow();
@@ -50,12 +49,13 @@ export function Header() {
       <span>
         <Bamboo
           className={style.classes.logo}
-          onDoubleClick={logoDbClickStop}
+          onDoubleClick={stopEvent}
         />
         <span
           className={stringifyClass(style.classes.tabItem, {
             [style.classes.highlightTabItem]: location.pathname === '/',
           })}
+          onClick={() => navigate('/')}
         >
           列表
         </span>
@@ -63,18 +63,19 @@ export function Header() {
           className={stringifyClass(style.classes.tabItem, {
             [style.classes.highlightTabItem]: location.pathname === '/setting',
           })}
+          onClick={() => navigate('/setting')}
         >
           设置
         </span>
         <MenuNav
-          title='帮助'
+          title={<span onDoubleClick={stopEvent}>帮助</span>}
           className={style.classes.tabItem}
           highlightClassName={style.classes.highlightTabItem}
         >
           <PanelItem disabled>发行说明</PanelItem>
           <PanelItem disabled>检查更新</PanelItem>
           <PanelSplit />
-          <PanelItem>关于</PanelItem>
+          <PanelItem onClick={() => fetch(ServiceName.OpenAboutModal)}>关于</PanelItem>
         </MenuNav>
       </span>
       <span className={style.classes.title}>Panda Manager</span>
