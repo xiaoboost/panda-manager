@@ -30,7 +30,13 @@ ipcRenderer.on(ReplyEventName, (_, params: FetchData) => {
   if (dataIndex >= 0) {
     const data = fetchStore[dataIndex];
     fetchStore.splice(dataIndex, 1);
-    data.resolve(params);
+
+    if (params.error) {
+      data.reject(new Error(params.error));
+    }
+    else {
+      data.resolve(params);
+    }
   }
 });
 
@@ -56,14 +62,14 @@ if (process.env.NODE_ENV === 'development') {
 
 export function fetch<T = any>(param: FetchParam): Promise<FetchData<T>>;
 export function fetch<T = any>(name: ServiceName): Promise<FetchData<T>>;
-export function fetch<T = any>(name: ServiceName, params?: any): Promise<FetchData<T>>;
-export function fetch<T = any>(name: ServiceName | FetchParam, params?: any): Promise<FetchData<T>> {
-  return new Promise<FetchData<T>>((resolve) => {
+export function fetch<T = any>(name: ServiceName, param?: any): Promise<FetchData<T>>;
+export function fetch<T = any>(name: ServiceName | FetchParam, param?: any): Promise<FetchData<T>> {
+  return new Promise<FetchData<T>>((resolve, reject) => {
     const currentId = eventId++;
     const data: FetchData = isNumber(name)
       ? {
         name,
-        data: params,
+        data: param,
         eventId: currentId,
         status: Status.Created,
       }
@@ -75,6 +81,7 @@ export function fetch<T = any>(name: ServiceName | FetchParam, params?: any): Pr
       };
     const store: FetchStore = {
       resolve,
+      reject,
       eventId: currentId,
       params: data.data,
       name: data.name,

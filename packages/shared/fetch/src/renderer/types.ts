@@ -18,4 +18,6 @@ export interface FetchStore extends FetchParam {
   eventId: number;
   /** 异步事件触发器 */
   resolve(data: FetchData): void;
+  /** 异步事件错误触发器 */
+  reject(data: Error): void;
 }

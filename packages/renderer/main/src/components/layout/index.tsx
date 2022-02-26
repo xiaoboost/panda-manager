@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { Header } from '../header';
-// import { Sidebar } from '../sidebar';
 
 import { style } from './style';
 import { PropsWithChildren } from 'react';
@@ -19,7 +18,6 @@ export function Layout({ children }: PropsWithChildren<EmptyObject>) {
     >
       <Header />
       <article className={style.classes.appBody}>
-        {/* <Sidebar />  */}
         <div className={style.classes.appContent}>{children}</div>
       </article>
     </div>

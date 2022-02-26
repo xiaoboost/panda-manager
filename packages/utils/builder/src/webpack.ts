@@ -2,6 +2,8 @@ import webpack from 'webpack';
 
 import TerserPlugin from 'terser-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 
 import {
@@ -80,6 +82,10 @@ export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Con
           ...tsLoaderConfig,
         },
         {
+          test: /\.css$/i,
+          use: [MiniCssExtractPlugin.loader, 'css-loader'],
+        },
+        {
           test: /\.(png|jpg|webp|svg)$/i,
           loader: 'url-loader',
           options: {
@@ -115,6 +121,9 @@ export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Con
         'process.env.NODE_ENV': JSON.stringify(opt.mode),
         'process.env.VERSION': JSON.stringify(appPackageData.version),
       }),
+      new MiniCssExtractPlugin({
+        filename: 'styles.css',
+      }),
     ],
   };
 
@@ -135,6 +144,7 @@ export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Con
     }
 
     baseConfig.optimization.minimizer = baseConfig.optimization.minimizer.concat([
+      new CssMinimizerPlugin(),
       new TerserPlugin({
         extractComments: false,
         terserOptions: {

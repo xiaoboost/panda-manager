@@ -1,21 +1,22 @@
 import React from 'react';
 
-import { HashRouter, Routes } from 'react-router-dom';
+import {
+  HashRouter,
+  Routes,
+  Route,
+} from 'react-router-dom';
 
 import { Layout } from '../components/layout';
+import { MainList } from 'src/views/main-list';
+import { Setting } from 'src/views/setting';
 
 export const App = () => (
   <HashRouter>
     <Layout>
-      <div>123</div>
+      <Routes>
+        <Route path="/setting" element={<Setting />} />
+        <Route path="/" element={<MainList />} />
+      </Routes>
     </Layout>
   </HashRouter>
-  // <HashRouter>
-  //   <Routes>
-  //     <div>123</div>
-  //     {/* <Layout>
-  //       <RouterViewer />
-  //     </Layout> */}
-  //   </Routes>
-  // </HashRouter>
 );

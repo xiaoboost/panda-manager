@@ -25,9 +25,12 @@ export async function install() {
       enableWebSQL: false,
       nodeIntegration: false,
       contextIsolation: true,
+      webSecurity: true,
+      safeDialogs: true,
+      sandbox: false,
+      allowRunningInsecureContent: false,
       preload: resolveRoot('preload/index.js'),
       devTools: process.env.NODE_ENV === 'development',
-      webSecurity: process.env.NODE_ENV !== 'development',
     },
   });
 

@@ -12,6 +12,8 @@ export enum ServiceName {
   GetFileDetail,
   /** 打开“关于”对话框 */
   OpenAboutModal,
-  /** 在资源浏览器中打开文件 */
-  OpenFileInShell,
+  /** 以桌面的默认方式打开文件 */
+  OpenPathDefaultManner,
+  /** 打开选择文件（夹）对话框 */
+  OpenSelectDialog,
 }

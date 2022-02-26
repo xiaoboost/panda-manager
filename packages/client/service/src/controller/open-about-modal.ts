@@ -1,6 +1,5 @@
 import { dialog } from 'electron';
 import { ServiceData } from './types';
-import { ServiceName } from '@panda/shared';
 
 import os from 'os';
 
@@ -14,14 +13,11 @@ function getVersion() {
   ].join('\n');
 }
 
-export const service: ServiceData = {
-  name: ServiceName.OpenAboutModal,
-  async service(context) {
-    dialog.showMessageBox(context.window, {
-      title: 'Panda Manager',
-      message: getVersion(),
-      type: 'info',
-      buttons: ['确定'],
-    });
-  },
+export const service: ServiceData<void> = (context) => {
+  dialog.showMessageBox(context.window, {
+    title: 'Panda Manager',
+    message: getVersion(),
+    type: 'info',
+    buttons: ['确定'],
+  });
 };
