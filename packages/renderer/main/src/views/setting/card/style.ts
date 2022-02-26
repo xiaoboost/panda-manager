@@ -50,15 +50,15 @@ export const style = createStyles({
     padding: [8, 20],
   },
   subLine: {
-    padding: [10, 20, 10, 30],
     fontSize: 12,
     minHeight: 38,
+    padding: [10, 20, 10, 30],
   },
   lineName: {
-    lineHeight: '140%',
+    fontSize: '100%',
   },
   lineSubName: {
-    lineHeight: '140%',
+    fontSize: '80%',
     color: BlackLighter.toString(),
   },
 });

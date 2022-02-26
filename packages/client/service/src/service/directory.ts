@@ -31,7 +31,7 @@ export const ready = (async function init() {
 })();
 
 /** 更新文件夹列表 */
-export async function update(paths: string[]) {
+export async function patch(paths: string[]) {
   await ready;
   await _update(paths);
 }
