@@ -50,6 +50,7 @@ importers:
       '@jimp/png': ^0.16.1
       '@panda/tsconfig': workspace:*
       '@types/panda': workspace:*
+      image-size: ^1.0.1
       jimp: ^0.16.1
       tslib: ^2.3.1
       typescript: ^4.5.5
@@ -61,6 +62,7 @@ importers:
       '@jimp/plugin-resize': registry.npmmirror.com/@jimp/plugin-resize/0.16.1_@jimp+custom@0.16.1
       '@jimp/plugin-scale': registry.npmmirror.com/@jimp/plugin-scale/0.16.1_c382371bb4f60ea2fd211a04ed8ab1e2
       '@jimp/png': registry.npmmirror.com/@jimp/png/0.16.1_@jimp+custom@0.16.1
+      image-size: registry.npmmirror.com/image-size/1.0.1
       jimp: registry.npmmirror.com/jimp/0.16.1
     devDependencies:
       '@panda/tsconfig': link:../../utils/tsconfig
@@ -107,6 +109,7 @@ importers:
       '@panda/shared': workspace:*
       '@panda/tsconfig': workspace:*
       '@types/panda': workspace:*
+      '@xiao-ai/utils': ^1.5.1
       electron: ^17.0.1
       tslib: ^2.3.1
       typescript: ^4.5.5
@@ -115,6 +118,7 @@ importers:
       '@panda/db': link:../database
       '@panda/fetch': link:../../shared/fetch
       '@panda/shared': link:../../shared/shared
+      '@xiao-ai/utils': registry.npmmirror.com/@xiao-ai/utils/1.5.1
     devDependencies:
       '@panda/tsconfig': link:../../utils/tsconfig
       '@types/panda': link:../../utils/typings
@@ -190,6 +194,37 @@ importers:
     devDependencies:
       '@panda/tsconfig': link:../../utils/tsconfig
       '@types/panda': link:../../utils/typings
+      tslib: registry.npmmirror.com/tslib/2.3.1
+      typescript: registry.npmmirror.com/typescript/4.5.5
+
+  packages/plugins/manga:
+    specifiers:
+      '@panda/client-utils': workspace:*
+      '@panda/image': workspace:*
+      '@panda/shared': workspace:*
+      '@panda/tsconfig': workspace:*
+      '@panda/zip': workspace:*
+      '@types/node': ^17.0.18
+      '@types/panda': workspace:*
+      '@types/react': ^17.0.39
+      '@xiao-ai/utils': ^1.5.1
+      electron: ^17.0.1
+      react: ^17.0.2
+      tslib: ^2.3.1
+      typescript: ^4.5.5
+    dependencies:
+      '@panda/client-utils': link:../../client/utils
+      '@panda/image': link:../../client/image
+      '@panda/shared': link:../../shared/shared
+      '@panda/zip': link:../../client/zip
+      '@xiao-ai/utils': registry.npmmirror.com/@xiao-ai/utils/1.5.1
+      electron: registry.npmmirror.com/electron/17.0.1
+      react: registry.npmmirror.com/react/17.0.2
+    devDependencies:
+      '@panda/tsconfig': link:../../utils/tsconfig
+      '@types/node': registry.npmmirror.com/@types/node/17.0.18
+      '@types/panda': link:../../utils/typings
+      '@types/react': registry.npmmirror.com/@types/react/17.0.39
       tslib: registry.npmmirror.com/tslib/2.3.1
       typescript: registry.npmmirror.com/typescript/4.5.5
 
@@ -3965,6 +4000,16 @@ packages:
     engines: {node: '>=0.9.0'}
     dev: false
 
+  registry.npmmirror.com/image-size/1.0.1:
+    resolution: {integrity: sha512-VAwkvNSNGClRw9mDHhc5Efax8PLlsOGcUTh0T/LIriC8vPA3U5PdqXWqkz406MoYHMKW8Uf9gWr05T/rYB44kQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/image-size/-/image-size-1.0.1.tgz}
+    name: image-size
+    version: 1.0.1
+    engines: {node: '>=12.0.0'}
+    hasBin: true
+    dependencies:
+      queue: registry.npmmirror.com/queue/6.0.2
+    dev: false
+
   registry.npmmirror.com/immediate/3.0.6:
     resolution: {integrity: sha512-XXOFtyqDjNDAQxVfYxuF7g9Il/IbWmmlQg2MYKOH8ExIT1qg6xc4zyS3HaEEATgs1btfzxq15ciUiY7gjSXRGQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/immediate/-/immediate-3.0.6.tgz}
     name: immediate
@@ -5753,6 +5798,14 @@ packages:
     name: queue-microtask
     version: 1.2.3
     dev: true
+
+  registry.npmmirror.com/queue/6.0.2:
+    resolution: {integrity: sha512-iHZWu+q3IdFZFX36ro/lKBkSvfkztY5Y7HMiPlOUjhupPcG2JMfst2KKEpu5XndviX/3UhFbRngUPNKtgvtZiA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/queue/-/queue-6.0.2.tgz}
+    name: queue
+    version: 6.0.2
+    dependencies:
+      inherits: registry.npmmirror.com/inherits/2.0.4
+    dev: false
 
   registry.npmmirror.com/randombytes/2.1.0:
     resolution: {integrity: sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/randombytes/-/randombytes-2.1.0.tgz}

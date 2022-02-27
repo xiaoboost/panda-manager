@@ -1,5 +1,5 @@
 /** 文件类型 */
-export enum FileKind {
+export enum ItemKind {
   Manga,
 }
 
@@ -40,28 +40,23 @@ export interface TagGroupData extends TagData {
   tags: number[];
 }
 
-/** 文件数据储存数据 */
-export interface BaseFileData {
+/** 项目数据储存数据 */
+export interface ItemData {
   /** 项目编号 */
   id: number;
   /** 项目类型 */
-  kind: FileKind;
+  kind: ItemKind;
   /** 项目名称 */
   name: string;
   /** 标签数据 */
   tags: number[];
-  /** 原始文件 */
-  file: {
-    /** 文件路径 */
-    path: string;
-    /** 是否是压缩包 */
-    isZip: boolean;
-    /**
-     * 文件大小
-     *   - 单位 `kb`
-     */
-    size: number;
-    /** 文件最后修改的时间 */
-    lastModified: number;
-  };
+  /** 项目路径 */
+  uri: string;
+  /**
+   * 项目大小
+   *   - 单位 `kb`
+   */
+  fileSize: number;
+  /** 文件最后修改的时间 */
+  lastModified: number;
 }
