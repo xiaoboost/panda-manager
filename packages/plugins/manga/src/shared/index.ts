@@ -13,3 +13,8 @@ export interface MangaData extends ItemData {
   /** 漫画项目类别 */
   mangaKind: MangaKind;
 }
+
+/** 漫画模块缓存元数据 */
+export interface MangaCache {
+  cover: Buffer;
+}

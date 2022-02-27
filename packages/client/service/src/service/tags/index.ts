@@ -1,4 +1,4 @@
-import { Database, TagGroups, Tags } from '../model';
+import { Database, TagGroups, Tags } from '../../model';
 
 export const ready = Promise.resolve();
 

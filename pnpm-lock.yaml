@@ -106,6 +106,7 @@ importers:
       '@panda/client-utils': workspace:*
       '@panda/db': workspace:*
       '@panda/fetch': workspace:*
+      '@panda/plugin-manga': workspace:*
       '@panda/shared': workspace:*
       '@panda/tsconfig': workspace:*
       '@types/panda': workspace:*
@@ -117,6 +118,7 @@ importers:
       '@panda/client-utils': link:../utils
       '@panda/db': link:../database
       '@panda/fetch': link:../../shared/fetch
+      '@panda/plugin-manga': link:../../plugins/manga
       '@panda/shared': link:../../shared/shared
       '@xiao-ai/utils': registry.npmmirror.com/@xiao-ai/utils/1.5.1
     devDependencies:

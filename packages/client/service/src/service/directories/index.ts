@@ -1,5 +1,5 @@
-import { Config } from '../model';
-import { remove, search, push } from './files';
+import { Config } from '../../model';
+import { remove, search, push } from '../files';
 
 import { exclude } from '@xiao-ai/utils';
 import { readdir } from '@panda/client-utils';

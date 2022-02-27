@@ -1,7 +1,7 @@
 import { ServiceData } from './types';
 import { SettingData } from '@panda/shared';
 
-import { patch as dirPatch } from '../service/directory';
+import { patch as dirPatch } from '../service/directories';
 import { patch as sortPatch } from '../service/sort';
 
 import { service as get } from './get-config';

@@ -98,8 +98,9 @@ export class Table<Row extends AnyObject = AnyObject> {
   }
 
   /** 添加条目 */
-  insert(...list: Row[]) {
-    const noIdList = list.filter((data) => !data.id);
+  insert(...list: Row[]): TableRow<Row>[] {
+    const startIndex = this._data.length;
+    const noIdList = list.filter((data) => !data.id || data.id <= 0);
     const idList = list.filter((data) => data.id).sort((pre, next) => {
       return (pre.id as number) > (next.id as number) ? 1 : -1;
     });
@@ -121,6 +122,8 @@ export class Table<Row extends AnyObject = AnyObject> {
     }
 
     this._database.write();
+
+    return this._data.slice(startIndex);
   }
   /** 删除条目 */
   remove() {

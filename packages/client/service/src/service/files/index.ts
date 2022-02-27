@@ -1,8 +1,5 @@
 import { Files, Config } from '../../model';
-import { DeepReadonly } from '@xiao-ai/utils';
-import { ItemData, ItemKind, SortBy, warn } from '@panda/shared';
-// import { transArr, toBoolMap } from '@panda/utils';
-
+import { ItemData, SortBy } from '@panda/shared';
 import { filesQueue, startReadItem } from './store';
 
 /** 新增文件 */
@@ -13,6 +10,7 @@ export function push(...inputs: string[]) {
 
 /** 移除项目 */
 export function remove(...inputs: string[]) {
+  // TODO:
   // const exMap = toBoolMap(transArr(input));
   // Files.where(({ filePath }) => exMap[filePath]).remove();
 }

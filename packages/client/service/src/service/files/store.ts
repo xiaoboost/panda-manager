@@ -1,16 +1,15 @@
 import { DeepReadonly } from '@xiao-ai/utils';
-import { ItemData, SortBy, warn } from '@panda/shared';
+import { ItemData, warn } from '@panda/shared';
+import { Manga, MangaData } from '@panda/plugin-manga/client';
 
-import { readManga } from './manga';
-import { Files, Config } from '../../model';
+import { Files } from '../../model';
 
-import * as path from 'path';
 import * as fs from '@panda/client-utils';
 
-/** 待处理的项目路径 */
-export const filesQueue: string[] = [];
 /** 处理器是否正在运行 */
 let isReadingItems = false;
+/** 待处理的项目路径 */
+export const filesQueue: string[] = [];
 
 /** 开始处理项目 */
 export async function startReadItem() {
@@ -61,12 +60,18 @@ export async function readItem(path: string) {
     return;
   }
 
-  const data = await readManga(path, fileStat);
+  const itemData = await Manga.getDataByPath(path, fileStat);
 
-  if (!data) {
+  if (!itemData) {
     return;
   }
 
   // 项目数据添加到数据库
-  Files.insert(data);
+  const insertedData = Files.insert(itemData[0])[0];
+
+  if (!insertedData) {
+    return;
+  }
+
+  await Manga.writeCacheToDisk?.(insertedData.data as MangaData, itemData[1]);
 }
