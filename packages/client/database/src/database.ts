@@ -2,7 +2,11 @@ import { gzip, gunzip, readFile, writeFile } from './utils';
 import { debounce, AnyObject, DeepReadonly } from '@xiao-ai/utils';
 
 /** 数据库文件在文件系统中的储存结构 */
-type DatabaseInFile = Record<string, AnyObject[]>;
+interface DatabaseInFile {
+  version: string;
+  data: Record<string, AnyObject[]>;
+}
+
 /** 基础数据行 */
 type TableRowData<T extends AnyObject> = T & { id: number };
 /** 行数据 */
@@ -209,6 +213,8 @@ export class Table<Row extends AnyObject = AnyObject> {
 
 /** 数据库 */
 export class Database {
+  /** 当前数据版本 */
+  private _version = process.env.VERSION;
   /** 数据库储存的路径 */
   private _path: string;
   /** 数据库数据 */
@@ -232,10 +238,13 @@ export class Database {
 
   /** 写入硬盘 */
   private async _write() {
-    const data: DatabaseInFile = {};
+    const data: DatabaseInFile = {
+      version: this._version,
+      data: {},
+    };
 
     Object.entries(this._data).forEach(([name, table]) => {
-      data[name] = table['_data'].map((row) => row.data);
+      data.data[name] = table['_data'].map((row) => row.data);
     });
 
     if (process.env.NODE_ENV === 'production') {
@@ -247,7 +256,10 @@ export class Database {
   }
   /** 初始化 */
   async init(): Promise<void> {
-    let data: DatabaseInFile = {};
+    let data: DatabaseInFile = {
+      version: this._version,
+      data: {},
+    };
 
     try {
       let buf = await readFile(this.path);
@@ -256,13 +268,19 @@ export class Database {
         buf = await gunzip(buf);
       }
 
-      data = JSON.parse(buf.toString());
+      const dataInDisk = JSON.parse(buf.toString()) as DatabaseInFile;
+
+      if (data.version !== dataInDisk.version) {
+        // FIXME: 升级数据
+      }
+
+      data = dataInDisk;
     }
     catch (err) {
       this.write();
     }
 
-    Object.entries(data).forEach(([name, tableData]) => {
+    Object.entries(data.data).forEach(([name, tableData]) => {
       this.use(name).insert(...tableData);
     });
   }
