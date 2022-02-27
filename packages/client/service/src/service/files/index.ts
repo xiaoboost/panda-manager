@@ -1,72 +1,9 @@
-import { Files, Config } from '../model';
+import { Files, Config } from '../../model';
 import { DeepReadonly } from '@xiao-ai/utils';
 import { ItemData, ItemKind, SortBy, warn } from '@panda/shared';
 // import { transArr, toBoolMap } from '@panda/utils';
 
-import * as path from 'path';
-import * as fs from '@panda/client-utils';
-
-/** 待处理的项目路径 */
-const filesQueue: string[] = [];
-/** 处理器是否正在运行 */
-let isReadingItems = false;
-
-/** 开始处理项目 */
-async function startReadItem() {
-  if (isReadingItems) {
-    return;
-  }
-
-  isReadingItems = true;
-
-  while (filesQueue.length > 0) {
-    await readItem(filesQueue.pop()!);
-  }
-
-  isReadingItems = false;
-}
-
-/** 处理文件 */
-async function readItem(path: string) {
-  async function readStat(filePath: string, data: DeepReadonly<ItemData>) {
-    try {
-      const stat = await fs.stat(filePath);
-
-      // 文件系统中最后修改时间与数据库中记录一致，则跳过
-      if (stat.mtimeMs === data.lastModified) {
-        return;
-      }
-      else {
-        return stat;
-      }
-    }
-    catch (e: any) {
-      warn(e.message);
-      return;
-    }
-  }
-
-  /** 数据库中同路径记录 */
-  const fileInDb = Files.limit(1).where((item) => item.uri === path).toQuery()[0];
-
-  if (!fileInDb) {
-    return;
-  }
-
-  /** 文件在硬盘的数据 */
-  const fileStat = await readStat(path, fileInDb.data);
-
-  if (!fileStat) {
-    return;
-  }
-
-  if (fileStat.isDirectory()) {
-    // ..
-  }
-  else {
-    // ..
-  }
-}
+import { filesQueue, startReadItem } from './store';
 
 /** 新增文件 */
 export function push(...inputs: string[]) {

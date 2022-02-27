@@ -25,7 +25,8 @@
     "@panda/client-utils": "workspace:*",
     "@panda/db": "workspace:*",
     "@panda/fetch": "workspace:*",
-    "@panda/shared": "workspace:*"
+    "@panda/shared": "workspace:*",
+    "@xiao-ai/utils": "^1.5.1"
   },
   "devDependencies": {
     "@panda/tsconfig": "workspace:*",
