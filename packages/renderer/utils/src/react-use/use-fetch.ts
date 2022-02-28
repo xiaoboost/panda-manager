@@ -5,29 +5,28 @@ import { isArray, isBoolean, isUndef, AnyObject } from '@xiao-ai/utils';
 import { fetch as fetchService } from '@panda/fetch/renderer';
 import { ServiceName } from '@panda/shared';
 
-type FetchResult<T> = (
-  {
-    fetch: () => Promise<T>;
-    progress: number;
-    loading: true;
-    error: null;
-    data: null;
-  } |
-  {
-    fetch: () => Promise<T>;
-    progress: number;
-    loading: false;
-    error: null;
-    data: T;
-  } |
-  {
-    fetch: () => Promise<T>;
-    progress: number;
-    loading: false;
-    error: string;
-    data: null;
-  }
-);
+type FetchResult<T> =
+  | {
+      fetch: () => Promise<T>;
+      progress: number;
+      loading: true;
+      error: null;
+      data: null;
+    }
+  | {
+      fetch: () => Promise<T>;
+      progress: number;
+      loading: false;
+      error: null;
+      data: T;
+    }
+  | {
+      fetch: () => Promise<T>;
+      progress: number;
+      loading: false;
+      error: string;
+      data: null;
+    };
 
 interface UseFetchMethod {
   /**
@@ -107,13 +106,11 @@ function standard(
       immediate = params as any;
       params = {};
       depend = [];
-    }
-    else if (isArray(params)) {
+    } else if (isArray(params)) {
       depend = params;
       params = {};
       immediate = false;
-    }
-    else {
+    } else {
       depend = [];
       immediate = false;
     }
@@ -122,8 +119,7 @@ function standard(
   else if (isUndef(immediate)) {
     if (isArray(depend)) {
       immediate = false;
-    }
-    else {
+    } else {
       immediate = depend;
       depend = [];
     }

@@ -7,7 +7,9 @@ import { patch as sortPatch } from '../service/sort';
 import { service as get } from './get-config';
 
 export const service: ServiceData<Promise<SettingData>> = async (context) => {
-  const { requestData: { data } } = context;
+  const {
+    requestData: { data },
+  } = context;
 
   if (data.directories) {
     await dirPatch(data.directories);

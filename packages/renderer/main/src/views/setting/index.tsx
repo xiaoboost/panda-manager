@@ -13,12 +13,12 @@ import { initSettingData } from './utils/constant';
 export function Setting() {
   const [setting, patchSetting] = useState<SettingData>(initSettingData);
   const patchDir = (directories: string[]) => {
-    fetch<SettingData>(ServiceName.PatchConfig, { directories })
-      .then(({ data }) => patchSetting(data));
+    fetch<SettingData>(ServiceName.PatchConfig, { directories }).then(({ data }) =>
+      patchSetting(data),
+    );
   };
   const patchSort = (sort: SortOption) => {
-    fetch<SettingData>(ServiceName.PatchConfig, { sort })
-      .then(({ data }) => patchSetting(data));
+    fetch<SettingData>(ServiceName.PatchConfig, { sort }).then(({ data }) => patchSetting(data));
   };
 
   // 获取初始数据
@@ -30,14 +30,8 @@ export function Setting() {
 
   return (
     <div className={style.classes.setting}>
-      <Directories
-        data={setting.directories}
-        patch={patchDir}
-      />
-      <Display
-        data={setting.sort}
-        patch={patchSort}
-      />
+      <Directories data={setting.directories} patch={patchDir} />
+      <Display data={setting.sort} patch={patchSort} />
     </div>
   );
 }

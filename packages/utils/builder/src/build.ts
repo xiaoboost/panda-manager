@@ -6,10 +6,12 @@ import { CommandOptions, buildConfigs, resolveCWD, buildPackage } from './utils'
 
 function buildWebpack(opt: CommandOptions) {
   return new Promise<void>((resolve) => {
-    const compilerConfigs = buildConfigs.map((item) => getBaseConfig({
-      ...opt,
-      ...item,
-    }));
+    const compilerConfigs = buildConfigs.map((item) =>
+      getBaseConfig({
+        ...opt,
+        ...item,
+      }),
+    );
 
     webpack(compilerConfigs, (err, stats) => {
       console.log('\x1Bc');
@@ -19,14 +21,16 @@ function buildWebpack(opt: CommandOptions) {
       }
 
       if (stats) {
-        console.log(stats.toString({
-          chunks: false,
-          chunkModules: false,
-          chunkOrigins: false,
-          colors: true,
-          modules: false,
-          children: false,
-        }));
+        console.log(
+          stats.toString({
+            chunks: false,
+            chunkModules: false,
+            chunkOrigins: false,
+            colors: true,
+            modules: false,
+            children: false,
+          }),
+        );
 
         console.log('\n  ⚡ Build complete.\n');
       }

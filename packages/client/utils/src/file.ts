@@ -17,8 +17,7 @@ async function filesOperation(
 
     if (newStat.isDirectory()) {
       await filesOperation(newPath, opt);
-    }
-    else {
+    } else {
       await opt(newPath, newStat);
     }
   }
@@ -52,8 +51,7 @@ export async function readFileSize(base: string) {
 
   if (fileStat.isDirectory()) {
     return await folderSize(base);
-  }
-  else {
+  } else {
     return fileStat.size;
   }
 }
@@ -69,11 +67,7 @@ class WriteSharedBuffer extends Stream.Writable {
     this._view = new Uint8Array(this._buffer);
   }
 
-  _write(
-    chunk: Buffer,
-    encoding: BufferEncoding,
-    next: (error?: Error | null) => void,
-  ) {
+  _write(chunk: Buffer, encoding: BufferEncoding, next: (error?: Error | null) => void) {
     const chunkView = new Uint8Array(chunk.buffer);
 
     for (let i = 0; i < chunkView.byteLength; i++) {

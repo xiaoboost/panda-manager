@@ -3,11 +3,7 @@ import { isFunc } from '@xiao-ai/utils';
 import { WindowEvent } from './event';
 import { log } from '@panda/shared';
 
-import {
-  RemoteEventName,
-  RemoteToEvent,
-  RemoteReplyEvent,
-} from '../shared';
+import { RemoteEventName, RemoteToEvent, RemoteReplyEvent } from '../shared';
 
 export function initialize(win: BrowserWindow) {
   const subject = new WindowEvent(win);
@@ -36,20 +32,18 @@ export function initialize(win: BrowserWindow) {
       if (params.callFunction) {
         if (params.isEventListener) {
           subject[params.key](params.params?.[0] ?? '');
-        }
-        else {
+        } else {
           if (process.env.NODE_ENV === 'development') {
             log(
               `获取远程窗口方法: ${params.key}, ` +
-              `参数为: ${JSON.stringify(params.params ?? [], null, 2)}`
+                `参数为: ${JSON.stringify(params.params ?? [], null, 2)}`,
             );
           }
 
           result.returnValue = win[params.key](...(params.params ?? []));
         }
       }
-    }
-    else {
+    } else {
       result.returnValue = win[params.key];
     }
 

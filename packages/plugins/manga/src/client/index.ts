@@ -10,7 +10,7 @@ export * from '../shared';
 
 export const Manga: PluginClient<MangaData, MangaCache> = {
   getDataByPath: async (filePath, stats) => {
-    const fileStat = stats ?? await fs.stat(filePath);
+    const fileStat = stats ?? (await fs.stat(filePath));
     const isDirectory = fileStat.isDirectory();
     const fileName = path.parse(filePath).name;
 
@@ -29,15 +29,11 @@ export const Manga: PluginClient<MangaData, MangaCache> = {
     const data: MangaData = {
       id: -1,
       kind: ItemKind.Manga,
-      mangaKind: isDirectory
-        ? MangaKind.Directory
-        : MangaKind.Zip,
+      mangaKind: isDirectory ? MangaKind.Directory : MangaKind.Zip,
       tags: [],
       name: fileName,
       uri: filePath,
-      fileSize: isDirectory
-        ? await fs.readFileSize(filePath)
-        : fileStat.size,
+      fileSize: isDirectory ? await fs.readFileSize(filePath) : fileStat.size,
       lastModified: fileStat.mtimeMs,
     };
     const cache: MangaCache = {
@@ -61,7 +57,6 @@ export const Manga: PluginClient<MangaData, MangaCache> = {
   openItem: async (data) => {
     // const filePath = data.filePath;
     // const outputPath = temp(data.id);
-
     // // 文件夹则直接打开文件夹
     // if (data.isDirectory) {
     //   shell.openPath(filePath);

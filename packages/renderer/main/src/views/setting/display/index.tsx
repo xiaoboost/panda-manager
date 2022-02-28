@@ -20,7 +20,7 @@ const sortByList = [
 ];
 
 interface Props {
-  data: SortOption,
+  data: SortOption;
   patch(sort: SortOption): void;
 }
 
@@ -32,22 +32,16 @@ export function Display({ data: sort, patch }: Props) {
   return (
     <Card title='漫画排序'>
       <CardLine title='排序方式'>
-        <Select
-          style={{ width: 160 }}
-          value={sort.by}
-          onChange={(by: SortBy) => setSort({ by })}
-        >
+        <Select style={{ width: 160 }} value={sort.by} onChange={(by: SortBy) => setSort({ by })}>
           {sortByList.map(({ value, label }) => (
-            <Select.Option key={value} value={value}>{label}</Select.Option>
+            <Select.Option key={value} value={value}>
+              {label}
+            </Select.Option>
           ))}
         </Select>
       </CardLine>
       <CardLine title={sort.asc ? '顺序排列' : '倒序排列'}>
-        <Switch
-          size='small'
-          checked={sort.asc}
-          onChange={(asc: boolean) => setSort({ asc })}
-        />
+        <Switch size='small' checked={sort.asc} onChange={(asc: boolean) => setSort({ asc })} />
       </CardLine>
     </Card>
   );

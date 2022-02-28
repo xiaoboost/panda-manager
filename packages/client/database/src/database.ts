@@ -13,7 +13,7 @@ type TableRowData<T extends AnyObject> = T & { id: number };
 type RowData<Data extends AnyObject> = DeepReadonly<TableRowData<Data>>;
 
 /** 数据行 */
-export class TableRow<Data extends AnyObject> {
+export class TableRow<Data extends AnyObject = AnyObject> {
   /** 原始数据 */
   private _data: TableRowData<Data>;
 
@@ -98,12 +98,14 @@ export class Table<Row extends AnyObject = AnyObject> {
   }
 
   /** 添加条目 */
-  insert(...list: Row[]): TableRow<Row>[] {
+  insert<T extends TableRow>(...list: Row[]): TableRow<Row>[] {
     const startIndex = this._data.length;
     const noIdList = list.filter((data) => !data.id || data.id <= 0);
-    const idList = list.filter((data) => data.id).sort((pre, next) => {
-      return (pre.id as number) > (next.id as number) ? 1 : -1;
-    });
+    const idList = list
+      .filter((data) => data.id)
+      .sort((pre, next) => {
+        return (pre.id as number) > (next.id as number) ? 1 : -1;
+      });
 
     for (const data of idList) {
       const id = data.id as number;
@@ -252,8 +254,7 @@ export class Database {
 
     if (process.env.NODE_ENV === 'production') {
       await writeFile(this.path, await gzip(JSON.stringify(data)));
-    }
-    else {
+    } else {
       await writeFile(this.path, JSON.stringify(data, null, 2));
     }
   }
@@ -278,8 +279,7 @@ export class Database {
       }
 
       data = dataInDisk;
-    }
-    catch (err) {
+    } catch (err) {
       this.write();
     }
 

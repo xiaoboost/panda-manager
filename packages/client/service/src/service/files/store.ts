@@ -35,19 +35,19 @@ export async function readItem(path: string) {
       // 文件系统中最后修改时间与数据库中记录一致，则跳过
       if (stat.mtimeMs === data.lastModified) {
         return;
-      }
-      else {
+      } else {
         return stat;
       }
-    }
-    catch (e: any) {
+    } catch (e: any) {
       warn(e.message);
       return;
     }
   }
 
   /** 数据库中同路径记录 */
-  const fileInDb = Files.limit(1).where((item) => item.uri === path).toQuery()[0];
+  const fileInDb = Files.limit(1)
+    .where((item) => item.uri === path)
+    .toQuery()[0];
 
   if (!fileInDb) {
     return;

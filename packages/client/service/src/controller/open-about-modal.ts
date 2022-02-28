@@ -10,7 +10,7 @@ function getVersion() {
     `Electron: ${process.versions.electron}`,
     `Nodejs: ${process.version}`,
     `V8: ${process.versions.v8}`,
-    `OS: ${os.type()} ${os.arch()} ${os.release()}`
+    `OS: ${os.type()} ${os.arch()} ${os.release()}`,
   ].join('\n');
 }
 

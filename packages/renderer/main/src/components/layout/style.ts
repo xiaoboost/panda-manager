@@ -1,8 +1,4 @@
-import {
-  createStyles,
-  Black,
-  BlackLight,
-} from '@panda/renderer-utils';
+import { createStyles, Black, BlackLight } from '@panda/renderer-utils';
 
 export const style = createStyles({
   app: {

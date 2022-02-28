@@ -21,7 +21,7 @@ function findRootWorkspace(fsPath) {
   let current = fsPath;
   let last;
 
-  while(!isRoot(current) && last !== current) {
+  while (!isRoot(current) && last !== current) {
     current = path.dirname(current);
   }
 
@@ -30,7 +30,7 @@ function findRootWorkspace(fsPath) {
 
 module.exports = {
   parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint', 'react'],
+  plugins: ['@typescript-eslint', 'react', 'prettier'],
   ignorePatterns: ignorePaths,
   parserOptions: {
     project: projectConfig,
@@ -50,6 +50,7 @@ module.exports = {
     },
   },
   rules: {
+    "prettier/prettier": "error",
     'no-prototype-builtins': 'off',
     'no-sparse-arrays': 'off',
     'indent': 'off',
@@ -68,17 +69,13 @@ module.exports = {
 
     'react/prop-types': 'off',
 
+    '@typescript-eslint/indent': 'off',
     '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/no-empty-interface': 'off',
     '@typescript-eslint/no-this-alias': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/indent':  ['error', 2, {
-      SwitchCase: 1,
-    }],
-    '@typescript-eslint/brace-style': ['error', 'stroustrup', {
-      allowSingleLine: true,
-    }],
+    '@typescript-eslint/brace-style': 'off',
   },
 };

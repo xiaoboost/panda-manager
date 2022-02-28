@@ -23,7 +23,9 @@ export async function patchItem(data: Partial<ItemData> & { id: number }) {
 
   await Files.ready;
 
-  const file = Files.limit(1).where((item) => item.id === data.id).toQuery()[0];
+  const file = Files.limit(1)
+    .where((item) => item.id === data.id)
+    .toQuery()[0];
 
   if (!file) {
     throw new Error(`patch 操作 - 未发现编号为 '${data.id}' 的项目`);
@@ -38,7 +40,9 @@ export async function patchItem(data: Partial<ItemData> & { id: number }) {
 export async function getItemDataById(id: number) {
   await Files.ready;
 
-  const file = Files.limit(1).where((item) => item.id === id).toQuery()[0];
+  const file = Files.limit(1)
+    .where((item) => item.id === id)
+    .toQuery()[0];
 
   if (!file) {
     throw new Error(`get 操作 - 未发现编号为 '${id}' 的项目`);
@@ -56,7 +60,5 @@ export async function search() {
     [SortBy.lastModified]: 'lastModified',
   } as const;
 
-  return Files
-    .orderBy(sortBy[sort.by], sort.asc ? 'asc' : 'desc')
-    .toQuery();
+  return Files.orderBy(sortBy[sort.by], sort.asc ? 'asc' : 'desc').toQuery();
 }

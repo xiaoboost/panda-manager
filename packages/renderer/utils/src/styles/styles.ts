@@ -45,7 +45,7 @@ export function createFontFaceStyles(
   family: string,
   style: string,
   weight: string,
-  url: string
+  url: string,
 ): JssStyle {
   return createStyles({
     '@font-face': {

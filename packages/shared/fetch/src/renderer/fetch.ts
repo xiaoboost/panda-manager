@@ -33,8 +33,7 @@ ipcRenderer.on(ReplyEventName, (_, params: FetchData) => {
 
     if (params.error) {
       data.reject(new Error(params.error));
-    }
-    else {
+    } else {
       data.resolve(params);
     }
   }
@@ -68,17 +67,17 @@ export function fetch<T = any>(name: ServiceName | FetchParam, param?: any): Pro
     const currentId = eventId++;
     const data: FetchData = isNumber(name)
       ? {
-        name,
-        data: param,
-        eventId: currentId,
-        status: Status.Created,
-      }
+          name,
+          data: param,
+          eventId: currentId,
+          status: Status.Created,
+        }
       : {
-        name: name.name,
-        data: name.params,
-        eventId: currentId,
-        status: Status.Created,
-      };
+          name: name.name,
+          data: name.params,
+          eventId: currentId,
+          status: Status.Created,
+        };
     const store: FetchStore = {
       resolve,
       reject,

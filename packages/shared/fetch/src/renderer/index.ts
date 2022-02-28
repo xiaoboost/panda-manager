@@ -1,6 +1,3 @@
 export * from './fetch';
 
-export {
-  FetchData,
-  Status,
-} from '../shared';
+export { FetchData, Status } from '../shared';

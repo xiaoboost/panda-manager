@@ -1,10 +1,6 @@
 import React from 'react';
 
-import {
-  FolderOpenOutlined,
-  FolderAddOutlined,
-  DeleteOutlined,
-} from '@ant-design/icons';
+import { FolderOpenOutlined, FolderAddOutlined, DeleteOutlined } from '@ant-design/icons';
 
 import { style } from './style';
 import { unique } from '@xiao-ai/utils';
@@ -21,14 +17,8 @@ function Directory({ path, remove }: DirProps) {
   return (
     <CardLine isSubLine title={path}>
       <span>
-        <FolderOpenOutlined
-          className={style.classes.iconOpen}
-          onClick={() => openPath(path)}
-        />
-        <DeleteOutlined
-          className={style.classes.iconDelete}
-          onClick={remove}
-        />
+        <FolderOpenOutlined className={style.classes.iconOpen} onClick={() => openPath(path)} />
+        <DeleteOutlined className={style.classes.iconDelete} onClick={remove} />
       </span>
     </CardLine>
   );
@@ -40,9 +30,7 @@ interface AddProps {
 
 function AddDirectory({ add }: AddProps) {
   return (
-    <CardLine
-      title='文件目录'
-      subtitle='目录内的所有 zip 压缩包以及文件夹（不包含子文件夹内容）'>
+    <CardLine title='文件目录' subtitle='目录内的所有 zip 压缩包以及文件夹（不包含子文件夹内容）'>
       <FolderAddOutlined
         style={{ fontSize: '20px' }}
         onClick={() => selectDirectories().then(add)}
@@ -69,16 +57,11 @@ export function Directories({ data, patch }: Props) {
     <Card title='文件夹'>
       <CardBox>
         <AddDirectory add={add} />
-        {data.length === 0
-          ? <CardLine isSubLine title='尚未添加目录' />
-          : data.map((path) => (
-            <Directory
-              key={path}
-              path={path}
-              remove={() => remove(path)}
-            />
-          ))
-        }
+        {data.length === 0 ? (
+          <CardLine isSubLine title='尚未添加目录' />
+        ) : (
+          data.map((path) => <Directory key={path} path={path} remove={() => remove(path)} />)
+        )}
       </CardBox>
     </Card>
   );

@@ -1,8 +1,4 @@
-import type {
-  OpenDialogOptions,
-  MessageBoxOptions,
-  MessageBoxReturnValue,
-} from 'electron';
+import type { OpenDialogOptions, MessageBoxOptions, MessageBoxReturnValue } from 'electron';
 
 import { basename } from 'path';
 import { ServiceName } from '@panda/shared';
@@ -15,8 +11,7 @@ export function selectDirectories() {
     properties: ['openDirectory', 'multiSelections'],
   };
 
-  return fetch<string[]>(ServiceName.OpenSelectDialog, data)
-    .then(({ data }) => data);
+  return fetch<string[]>(ServiceName.OpenSelectDialog, data).then(({ data }) => data);
 }
 
 export function deleteDirectory(dir: string) {
@@ -28,8 +23,9 @@ export function deleteDirectory(dir: string) {
     buttons: ['删除', '取消'],
   };
 
-  return fetch<MessageBoxReturnValue>(ServiceName.OpenMessageDialog, data)
-    .then(({ data }) => data.response === 0);
+  return fetch<MessageBoxReturnValue>(ServiceName.OpenMessageDialog, data).then(
+    ({ data }) => data.response === 0,
+  );
 }
 
 export function openPath(path: string) {

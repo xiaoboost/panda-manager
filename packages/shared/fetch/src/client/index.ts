@@ -10,10 +10,7 @@ import {
   Status,
 } from '../shared';
 
-export {
-  FetchData,
-  Status,
-} from '../shared';
+export { FetchData, Status } from '../shared';
 
 /** 监听服务上下文 */
 export interface ListenerContext {
@@ -52,8 +49,7 @@ export function initialize(win: BrowserWindow, listener: Listener) {
           win.webContents.send(ProgressEventName, progressEvent);
         },
       });
-    }
-    catch (e: any) {
+    } catch (e: any) {
       result = {
         ...requestData,
         error: e.message,

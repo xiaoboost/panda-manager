@@ -35,11 +35,7 @@ interface ExtendOption {
   quality?: number;
 }
 
-export async function extend(
-  main: Buffer,
-  extended: Buffer,
-  opt: ExtendOption = {},
-) {
+export async function extend(main: Buffer, extended: Buffer, opt: ExtendOption = {}) {
   if (!Buffer.isBuffer(main)) {
     main = Buffer.from(main);
   }

@@ -5,8 +5,7 @@ export function isImage(image: Buffer) {
   try {
     const { type } = toSize(image);
     return Boolean(type);
-  }
-  catch (e) {
+  } catch (e) {
     return false;
   }
 }
@@ -24,8 +23,7 @@ export function imageSize(image: Buffer) {
       width: width ?? 0,
       height: height ?? 0,
     };
-  }
-  catch (e) {
+  } catch (e) {
     return null;
   }
 }

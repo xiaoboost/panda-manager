@@ -1,11 +1,4 @@
-import {
-  createStyles,
-  Gray,
-  Black,
-  Shadow,
-  White,
-  BlackLighter,
-} from '@panda/renderer-utils';
+import { createStyles, Gray, Black, Shadow, White, BlackLighter } from '@panda/renderer-utils';
 
 export const style = createStyles({
   card: {

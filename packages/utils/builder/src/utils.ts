@@ -44,7 +44,7 @@ export const buildConfigs: WebpackOptions[] = [
 function createResolve(base: string) {
   return function resolve(...paths: (string | number)[]) {
     return path.join(base, ...paths.map(String)).replace(/\\/g, '/');
-  }
+  };
 }
 
 export const resolveCWD = createResolve(process.cwd());
@@ -101,12 +101,15 @@ export async function buildPackage(input: string, output: string) {
   const json = JSON.parse(jsonString);
 
   await fs.mkdirp(output);
-  await fs.writeFile(path.join(output, packageFileName), JSON.stringify({
-    name: json.name,
-    version: json.version,
-    description: json.description,
-    main: json.main,
-    author: json.author,
-    license: json.license,
-  }));
+  await fs.writeFile(
+    path.join(output, packageFileName),
+    JSON.stringify({
+      name: json.name,
+      version: json.version,
+      description: json.description,
+      main: json.main,
+      author: json.author,
+      license: json.license,
+    }),
+  );
 }

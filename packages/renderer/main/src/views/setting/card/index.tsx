@@ -9,10 +9,12 @@ interface CardProps {
 }
 
 export function Card(props: PropsWithChildren<CardProps>) {
-  return <section className={style.classes.card}>
-    <header className={style.classes.cardTitle}>{props.title}</header>
-    <article className={style.classes.cardContent}>{props.children}</article>
-  </section>;
+  return (
+    <section className={style.classes.card}>
+      <header className={style.classes.cardTitle}>{props.title}</header>
+      <article className={style.classes.cardContent}>{props.children}</article>
+    </section>
+  );
 }
 
 interface CardLineProps {
@@ -23,12 +25,7 @@ interface CardLineProps {
 
 /** 选项卡片元素 */
 export function CardLine(props: PropsWithChildren<CardLineProps>) {
-  const {
-    title,
-    subtitle,
-    isSubLine = false,
-    children,
-  } = props;
+  const { title, subtitle, isSubLine = false, children } = props;
 
   return (
     <div
@@ -39,7 +36,7 @@ export function CardLine(props: PropsWithChildren<CardLineProps>) {
     >
       <span>
         <div className={style.classes.lineName}>{title}</div>
-        { subtitle && <div className={style.classes.lineSubName}>{subtitle}</div>}
+        {subtitle && <div className={style.classes.lineSubName}>{subtitle}</div>}
       </span>
       {children}
     </div>
@@ -47,7 +44,5 @@ export function CardLine(props: PropsWithChildren<CardLineProps>) {
 }
 
 export function CardBox({ children }: PropsWithChildren<EmptyObject>) {
-  return <div className={style.classes.baseBox}>
-    {children}
-  </div>;
+  return <div className={style.classes.baseBox}>{children}</div>;
 }

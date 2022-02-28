@@ -28,8 +28,7 @@ export async function service(context: ListenerContext): Promise<FetchData> {
 
   if (func) {
     result.data = await func(context);
-  }
-  else {
+  } else {
     result.error = `Unknown Method: ${ServiceName[result.name]}`;
     result.status = Status.NotFound;
   }

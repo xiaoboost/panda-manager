@@ -21,26 +21,27 @@ export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Con
   const outDir = resolveCWD(opt.outDir, opt.output ?? opt.process);
   const resolvePackage = getPackageResolve(opt.name);
   const tsConfigFile = resolve('src/tsconfig.json');
-  const tsLoaderConfig = opt.mode === 'development'
-    ? {
-      loader: 'ts-loader',
-      options: {
-        configFile: tsConfigFile,
-        compilerOptions: {
-          module: 'ESNext',
-          target: 'ESNext',
-          baseUrl: resolvePackage(),
-        },
-      },
-    }
-    : {
-      loader: 'esbuild-loader',
-      options: {
-        loader: 'tsx',
-        target: 'esnext',
-        tsconfigRaw: require(tsConfigFile),
-      },
-    };
+  const tsLoaderConfig =
+    opt.mode === 'development'
+      ? {
+          loader: 'ts-loader',
+          options: {
+            configFile: tsConfigFile,
+            compilerOptions: {
+              module: 'ESNext',
+              target: 'ESNext',
+              baseUrl: resolvePackage(),
+            },
+          },
+        }
+      : {
+          loader: 'esbuild-loader',
+          options: {
+            loader: 'tsx',
+            target: 'esnext',
+            tsconfigRaw: require(tsConfigFile),
+          },
+        };
 
   const baseConfig: webpack.Configuration = {
     mode: opt.mode as webpack.Configuration['mode'],
@@ -72,10 +73,7 @@ export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Con
       rules: [
         {
           test: /\.worker\.tsx?$/,
-          use: [
-            'worker-loader',
-            tsLoaderConfig,
-          ],
+          use: ['worker-loader', tsLoaderConfig],
         },
         {
           test: /\.tsx?$/,
@@ -104,10 +102,7 @@ export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Con
         cacheGroups: {
           commons: {
             test(module: any) {
-              return (
-                module.resource &&
-                /[\\/]node_modules[\\/]/.test(module.resource)
-              );
+              return module.resource && /[\\/]node_modules[\\/]/.test(module.resource);
             },
             name: 'common',
             chunks: 'all',
@@ -129,8 +124,7 @@ export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Con
 
   if (opt.mode === 'development') {
     baseConfig.devtool = 'source-map';
-  }
-  else {
+  } else {
     baseConfig.devtool = false;
 
     if (!baseConfig.optimization) {
@@ -163,9 +157,11 @@ export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Con
     };
 
     if (opt.bundleAnalyze) {
-      baseConfig.plugins!.push(new BundleAnalyzerPlugin({
-        analyzerPort: port++,
-      }));
+      baseConfig.plugins!.push(
+        new BundleAnalyzerPlugin({
+          analyzerPort: port++,
+        }),
+      );
     }
   }
 

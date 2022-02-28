@@ -5,35 +5,35 @@ import { getBaseConfig } from './webpack';
 import { CommandOptions, buildConfigs, resolveCWD, buildPackage } from './utils';
 
 function buildWebpack(opt: CommandOptions) {
-  const compilerConfigs = buildConfigs.map((item) => getBaseConfig({
-    ...opt,
-    ...item,
-  }));
+  const compilerConfigs = buildConfigs.map((item) =>
+    getBaseConfig({
+      ...opt,
+      ...item,
+    }),
+  );
 
   const compiler = webpack(compilerConfigs);
 
-  compiler.watch(
-    { ignored: /node_modules/ },
-    (err, stats) => {
-      console.log('\x1Bc');
+  compiler.watch({ ignored: /node_modules/ }, (err, stats) => {
+    console.log('\x1Bc');
 
-      if (err) {
-        console.error(err.stack || err);
-      }
-      else if (stats) {
-        console.log(stats.toString({
+    if (err) {
+      console.error(err.stack || err);
+    } else if (stats) {
+      console.log(
+        stats.toString({
           chunks: false,
           chunkModules: false,
           chunkOrigins: false,
           colors: true,
           modules: false,
           children: false,
-        }));
+        }),
+      );
 
-        console.log('\n  ⚡ Build complete. Watching...\n');
-      }
-    },
-  );
+      console.log('\n  ⚡ Build complete. Watching...\n');
+    }
+  });
 }
 
 export async function watch(opt: CommandOptions) {

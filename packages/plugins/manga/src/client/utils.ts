@@ -79,8 +79,7 @@ async function fromZip(zip: string | Buffer): Promise<Buffer | undefined> {
 export function getCover(filePath: string, stat: fs.Stats) {
   if (stat.isDirectory()) {
     return fromDir(filePath);
-  }
-  else {
+  } else {
     return fromZip(filePath);
   }
 }

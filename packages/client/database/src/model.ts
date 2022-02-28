@@ -37,8 +37,7 @@ export class Model<T> {
 
     if (process.env.NODE_ENV === 'production') {
       await writeFile(this.path, await gzip(JSON.stringify(this._val)));
-    }
-    else {
+    } else {
       await writeFile(this.path, JSON.stringify(this._val, null, 2));
     }
   }
@@ -53,8 +52,7 @@ export class Model<T> {
       }
 
       this.set(JSON.parse(buf.toString()));
-    }
-    catch (err) {
+    } catch (err) {
       this.write();
     }
   }
@@ -79,7 +77,7 @@ export class Model<T> {
       }
     });
 
-    this.set(data)
+    this.set(data);
   }
 
   /**

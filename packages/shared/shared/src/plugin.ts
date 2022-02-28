@@ -8,10 +8,7 @@ export interface PluginClient<Data extends ItemData, Cache> {
    * 从路径生成数据
    *   - 返回`undefined`时表示此路径不是当前插件处理
    */
-  getDataByPath(
-    filePath: string,
-    fileStat?: Stats,
-  ): Promise<[Data, Cache] | undefined>;
+  getDataByPath(filePath: string, fileStat?: Stats): Promise<[Data, Cache] | undefined>;
 
   /** 将缓存写入硬盘 */
   writeCacheToDisk?(data: Data, cache?: Cache): Promise<void>;
