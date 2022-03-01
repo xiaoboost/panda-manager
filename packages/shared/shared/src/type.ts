@@ -42,8 +42,6 @@ export interface TagGroupData extends TagData {
 
 /** 项目数据储存数据 */
 export interface ItemData {
-  /** 项目编号 */
-  id: number;
   /** 项目类型 */
   kind: ItemKind;
   /** 项目名称 */
@@ -60,3 +58,9 @@ export interface ItemData {
   /** 文件最后修改的时间 */
   lastModified: number;
 }
+
+/** 带编号的项目数据 */
+export type DataWithId<Data extends ItemData> = Data & {
+  /** 项目编号 */
+  id: number;
+};

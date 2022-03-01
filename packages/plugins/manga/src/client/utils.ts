@@ -76,8 +76,8 @@ async function fromZip(zip: string | Buffer): Promise<Buffer | undefined> {
 }
 
 /** 生成预览数据 */
-export function getCover(filePath: string, stat: fs.Stats) {
-  if (stat.isDirectory()) {
+export function getCoverData(filePath: string, isDirectory: boolean) {
+  if (isDirectory) {
     return fromDir(filePath);
   } else {
     return fromZip(filePath);

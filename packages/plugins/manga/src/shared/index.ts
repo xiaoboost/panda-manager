@@ -14,7 +14,8 @@ export interface MangaData extends ItemData {
   mangaKind: MangaKind;
 }
 
-/** 漫画模块缓存元数据 */
-export interface MangaCache {
-  cover: Buffer;
+/** 漫画模块在渲染线程的数据 */
+export interface MangaRendererData extends MangaData {
+  /** 封面图片路径 */
+  coverPath: string;
 }

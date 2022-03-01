@@ -1,6 +1,6 @@
 import { DeepReadonly } from '@xiao-ai/utils';
 import { ItemData, warn } from '@panda/shared';
-import { Manga, MangaData } from '@panda/plugin-manga/client';
+import { Manga } from '@panda/plugin-manga/client';
 
 import { Files } from '../../model';
 
@@ -60,7 +60,7 @@ export async function readItem(path: string) {
     return;
   }
 
-  const itemData = await Manga.getDataByPath(path, fileStat);
+  const itemData = await Manga.createByPath(path, fileStat);
 
   if (!itemData) {
     return;

@@ -1,11 +1,9 @@
 import React from 'react';
 
+import { MangaRendererData } from '../shared';
+
 export * from '../shared';
 
-interface Props {
-  path: string;
-}
-
-export function Render(props: Props) {
-  return <img src={props.path} height='200' />;
+export function Render(props: MangaRendererData) {
+  return <img src={props.coverPath} height='200' />;
 }
