@@ -44,13 +44,9 @@ export function MenuNav(props: PropsWithChildren<MenuProps>) {
 
     if (show) {
       setShow(false);
-    }
-    else {
+    } else {
       setShow(true);
-      setPosition([
-        offset[0],
-        offset[1] + el.offsetHeight,
-      ]);
+      setPosition([offset[0], offset[1] + el.offsetHeight]);
     }
   };
 
@@ -79,5 +75,5 @@ export function MenuNav(props: PropsWithChildren<MenuProps>) {
         </div>
       )}
     </span>
-  )
+  );
 }

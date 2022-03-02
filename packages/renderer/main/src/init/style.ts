@@ -1,8 +1,4 @@
-// import 'antd/es/modal/style/index.css';
-// import 'antd/es/switch/style/index.css';
-// import 'antd/es/select/style/index.css';
-// import 'antd/es/button/style/index.css';
-// import 'antd/es/progress/style/index.css';
+import 'antd/dist/antd.min.css';
 
 import {
   createStyles,
@@ -52,7 +48,7 @@ createStyles({
     '::-webkit-scrollbar-thumb': {
       boxShadow: `inset 0 0 ${scrollWidth / 2}px rgba(0, 0, 0, 0.3)`,
       backgroundColor: BlackLight.toString(),
-      opacity: .7,
+      opacity: 0.7,
       transition: 'opacity ease-in-out 200ms',
 
       '&:hover': {

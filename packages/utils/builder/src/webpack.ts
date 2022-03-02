@@ -2,6 +2,8 @@ import webpack from 'webpack';
 
 import TerserPlugin from 'terser-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 
 import {
@@ -19,26 +21,27 @@ export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Con
   const outDir = resolveCWD(opt.outDir, opt.output ?? opt.process);
   const resolvePackage = getPackageResolve(opt.name);
   const tsConfigFile = resolve('src/tsconfig.json');
-  const tsLoaderConfig = opt.mode === 'development'
-    ? {
-      loader: 'ts-loader',
-      options: {
-        configFile: tsConfigFile,
-        compilerOptions: {
-          module: 'ESNext',
-          target: 'ESNext',
-          baseUrl: resolvePackage(),
-        },
-      },
-    }
-    : {
-      loader: 'esbuild-loader',
-      options: {
-        loader: 'tsx',
-        target: 'esnext',
-        tsconfigRaw: require(tsConfigFile),
-      },
-    };
+  const tsLoaderConfig =
+    opt.mode === 'development'
+      ? {
+          loader: 'ts-loader',
+          options: {
+            configFile: tsConfigFile,
+            compilerOptions: {
+              module: 'ESNext',
+              target: 'ESNext',
+              baseUrl: resolvePackage(),
+            },
+          },
+        }
+      : {
+          loader: 'esbuild-loader',
+          options: {
+            loader: 'tsx',
+            target: 'esnext',
+            tsconfigRaw: require(tsConfigFile),
+          },
+        };
 
   const baseConfig: webpack.Configuration = {
     mode: opt.mode as webpack.Configuration['mode'],
@@ -70,20 +73,22 @@ export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Con
       rules: [
         {
           test: /\.worker\.tsx?$/,
-          use: [
-            'worker-loader',
-            tsLoaderConfig,
-          ],
+          use: ['worker-loader', tsLoaderConfig],
         },
         {
           test: /\.tsx?$/,
           ...tsLoaderConfig,
         },
         {
-          test: /\.(png|jpg|webp|svg)$/i,
+          test: /\.css$/i,
+          use: [MiniCssExtractPlugin.loader, 'css-loader'],
+        },
+        {
+          test: /\.(png|jpe?g|webp|svg|otf|ttf)$/i,
           loader: 'url-loader',
           options: {
             limit: 8192,
+            name: '../assets/[name].[ext]',
           },
         },
       ],
@@ -98,10 +103,7 @@ export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Con
         cacheGroups: {
           commons: {
             test(module: any) {
-              return (
-                module.resource &&
-                /[\\/]node_modules[\\/]/.test(module.resource)
-              );
+              return module.resource && /[\\/]node_modules[\\/]/.test(module.resource);
             },
             name: 'common',
             chunks: 'all',
@@ -115,13 +117,15 @@ export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Con
         'process.env.NODE_ENV': JSON.stringify(opt.mode),
         'process.env.VERSION': JSON.stringify(appPackageData.version),
       }),
+      new MiniCssExtractPlugin({
+        filename: 'styles.css',
+      }),
     ],
   };
 
   if (opt.mode === 'development') {
     baseConfig.devtool = 'source-map';
-  }
-  else {
+  } else {
     baseConfig.devtool = false;
 
     if (!baseConfig.optimization) {
@@ -135,6 +139,7 @@ export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Con
     }
 
     baseConfig.optimization.minimizer = baseConfig.optimization.minimizer.concat([
+      new CssMinimizerPlugin(),
       new TerserPlugin({
         extractComments: false,
         terserOptions: {
@@ -153,9 +158,11 @@ export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Con
     };
 
     if (opt.bundleAnalyze) {
-      baseConfig.plugins!.push(new BundleAnalyzerPlugin({
-        analyzerPort: port++,
-      }));
+      baseConfig.plugins!.push(
+        new BundleAnalyzerPlugin({
+          analyzerPort: port++,
+        }),
+      );
     }
   }
 

@@ -6,8 +6,7 @@ export function install() {
   (Module.prototype as any).require = function require(this: Module, path: string) {
     if (path === 'fs') {
       return originalRequire.call(this, 'memfs');
-    }
-    else {
+    } else {
       return originalRequire.call(this, path);
     }
   };

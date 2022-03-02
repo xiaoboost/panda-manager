@@ -22,8 +22,7 @@ function initDir(dir: string) {
     if (process.env.NODE_ENV === 'development') {
       log(`Folder: '${dir}' is already exists.`);
     }
-  }
-  else {
+  } else {
     if (process.env.NODE_ENV === 'development') {
       log(`Folder: '${dir}' is not exists，create it.`);
     }

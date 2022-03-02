@@ -1,15 +1,19 @@
 import { gzip, gunzip, readFile, writeFile } from './utils';
-import { debounce, AnyObject, DeepReadonly } from '@xiao-ai/utils';
+import { debounce, AnyObject, DeepReadonly, isNumber } from '@xiao-ai/utils';
 
 /** 数据库文件在文件系统中的储存结构 */
-type DatabaseInFile = Record<string, AnyObject[]>;
+interface DatabaseInFile {
+  version: string;
+  data: Record<string, AnyObject[]>;
+}
+
 /** 基础数据行 */
 type TableRowData<T extends AnyObject> = T & { id: number };
 /** 行数据 */
 type RowData<Data extends AnyObject> = DeepReadonly<TableRowData<Data>>;
 
 /** 数据行 */
-export class TableRow<Data extends AnyObject> {
+export class TableRow<Data extends AnyObject = AnyObject> {
   /** 原始数据 */
   private _data: TableRowData<Data>;
 
@@ -94,17 +98,18 @@ export class Table<Row extends AnyObject = AnyObject> {
   }
 
   /** 添加条目 */
-  insert(...list: Row[]) {
-    const noIdList = list.filter((data) => !data.id);
-    const idList = list.filter((data) => data.id).sort((pre, next) => {
-      return (pre.id as number) > (next.id as number) ? 1 : -1;
-    });
+  insert(...list: Row[]): TableRow<Row>[] {
+    const startIndex = this._data.length;
+    const noIdList = list.filter((data) => !data.id || data.id <= 0);
+    const idList = list
+      .filter((data): data is TableRowData<Row> => isNumber(data.id) && !Number.isNaN(data.id))
+      .sort((pre, next) => (pre.id > next.id ? 1 : -1));
 
     for (const data of idList) {
-      const id = data.id as number;
+      const id = data.id;
 
       // id 重复则跳过
-      if (id === data.id) {
+      if (this._data.find((item) => item.id === id)) {
         continue;
       }
 
@@ -117,6 +122,8 @@ export class Table<Row extends AnyObject = AnyObject> {
     }
 
     this._database.write();
+
+    return this._data.slice(startIndex);
   }
   /** 删除条目 */
   remove() {
@@ -209,6 +216,8 @@ export class Table<Row extends AnyObject = AnyObject> {
 
 /** 数据库 */
 export class Database {
+  /** 当前数据版本 */
+  private _version = process.env.VERSION;
   /** 数据库储存的路径 */
   private _path: string;
   /** 数据库数据 */
@@ -232,22 +241,27 @@ export class Database {
 
   /** 写入硬盘 */
   private async _write() {
-    const data: DatabaseInFile = {};
+    const data: DatabaseInFile = {
+      version: this._version,
+      data: {},
+    };
 
     Object.entries(this._data).forEach(([name, table]) => {
-      data[name] = table['_data'].map((row) => row.data);
+      data.data[name] = table['_data'].map((row) => row.data);
     });
 
     if (process.env.NODE_ENV === 'production') {
       await writeFile(this.path, await gzip(JSON.stringify(data)));
-    }
-    else {
+    } else {
       await writeFile(this.path, JSON.stringify(data, null, 2));
     }
   }
   /** 初始化 */
   async init(): Promise<void> {
-    let data: DatabaseInFile = {};
+    let data: DatabaseInFile = {
+      version: this._version,
+      data: {},
+    };
 
     try {
       let buf = await readFile(this.path);
@@ -256,13 +270,18 @@ export class Database {
         buf = await gunzip(buf);
       }
 
-      data = JSON.parse(buf.toString());
-    }
-    catch (err) {
+      const dataInDisk = JSON.parse(buf.toString()) as DatabaseInFile;
+
+      if (data.version !== dataInDisk.version) {
+        // FIXME: 升级数据
+      }
+
+      data = dataInDisk;
+    } catch (err) {
       this.write();
     }
 
-    Object.entries(data).forEach(([name, tableData]) => {
+    Object.entries(data.data).forEach(([name, tableData]) => {
       this.use(name).insert(...tableData);
     });
   }

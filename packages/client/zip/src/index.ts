@@ -2,7 +2,7 @@ import path from 'path';
 import JSZip from 'jszip';
 import IconvLite from 'iconv-lite';
 
-import * as fs from '@panda/fs';
+import * as fs from '@panda/client-utils';
 
 import { isString } from '@xiao-ai/utils';
 import { naturalCompare } from '@panda/shared';
@@ -35,7 +35,7 @@ function writeZip(zip: JSZip, targetFile: string) {
 }
 
 /** 生成异步文件列表迭代器 */
-export async function* zipFiles(file: string | Buffer) {
+export async function* zipFiles(file: string | Buffer, sort?: (a: string, b: string) => number) {
   const zip = await readZip(file);
 
   if (!zip) {
@@ -45,7 +45,7 @@ export async function* zipFiles(file: string | Buffer) {
   // 所有文件
   const files = Object.keys(zip.files)
     .filter((name) => !zip.files[name].dir)
-    .sort(naturalCompare);
+    .sort(sort ?? naturalCompare);
 
   // 迭代所有文件
   for (let i = 0; i < files.length; i++) {

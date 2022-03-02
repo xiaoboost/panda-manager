@@ -15,7 +15,7 @@ const createCb = (name: string, win: BrowserWindow) => {
     };
 
     if (process.env.NODE_ENV === 'development') {
-      log(`Send listener event data: ${JSON.stringify(data, null, 2)}`);
+      log(`发送监听数据: ${JSON.stringify(data, null, 2)}`);
     }
 
     win.webContents.send(ListenerEventName, data);
@@ -49,7 +49,7 @@ export class WindowEvent {
     map[name]!.count++;
 
     if (process.env.NODE_ENV === 'development') {
-      log(`Add listener event, name: ${name}, count: ${map[name]!.count}`);
+      log(`添加监听事件, name: ${name}, count: ${map[name]!.count}`);
     }
   }
 
@@ -71,7 +71,7 @@ export class WindowEvent {
     data.count--;
 
     if (process.env.NODE_ENV === 'development') {
-      log(`Remove listener event, name: ${name}, count: ${map[name]!.count}`);
+      log(`移除监听事件, name: ${name}, count: ${map[name]!.count}`);
     }
 
     if (data.count <= 0) {

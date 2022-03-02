@@ -1,0 +1,5 @@
+dist
+draft
+node_modules
+
+.vscode

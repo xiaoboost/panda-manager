@@ -61,7 +61,7 @@ export const style = createStyles({
   },
   logo: {
     padding: [2, 12],
-    fontSize: 20,
+    fontSize: 18,
     transform: 'translateY(2px)',
   },
   title: {
@@ -69,7 +69,7 @@ export const style = createStyles({
   },
   tabItem: {
     fontSize: 14,
-    padding: [6, 12],
+    padding: [5, 12],
     '-webkit-app-region': 'no-drag',
 
     '&:hover, &$highlightTabItem': {

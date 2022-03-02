@@ -32,7 +32,7 @@ export interface ListenerEvent {
   /** 事件名称 */
   name: string;
   /** 事件参数 */
-  params: any[]
+  params: any[];
 }
 
 type EventMethodKey =
@@ -57,7 +57,6 @@ export const EventMethodKey = [
  *   - @link https://www.electronjs.org/zh/docs/latest/api/browser-window
  */
 export type RemoteWindow =
-  | Omit<BrowserWindow, 'webContents' | EventMethodKey>
-  & {
-    [Key in EventMethodKey]: (name: string, ...params: any[]) => void;
-  };
+  | Omit<BrowserWindow, 'webContents' | EventMethodKey> & {
+      [Key in EventMethodKey]: (name: string, ...params: any[]) => void;
+    };

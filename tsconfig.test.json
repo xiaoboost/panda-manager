@@ -15,6 +15,9 @@
     "skipLibCheck": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
-    "lib": ["ESNext", "DOM"]
+    "lib": [
+      "ESNext",
+      "DOM"
+    ]
   }
 }

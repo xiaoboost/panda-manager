@@ -17,19 +17,14 @@ function createIcon(name: string, data: icons.Icon) {
     }
 
     return (
-      <i
-        className={customClass}
-        style={style}
-        onClick={onClick}
-        onDoubleClick={onDoubleClick}
-      >
+      <i className={customClass} style={style} onClick={onClick} onDoubleClick={onDoubleClick}>
         <svg
           viewBox={data.viewBox}
-          version="1.1"
-          width="1em"
-          height="1em"
+          version='1.1'
+          width='1em'
+          height='1em'
           fill={data.fill ? data.fill : 'currentColor'}
-          aria-hidden="true"
+          aria-hidden='true'
         >
           <path d={data.path} />
         </svg>

@@ -1,4 +1,4 @@
-import { Config } from '../model';
+import { Config } from '../../model';
 import { SortOption } from '@panda/shared';
 
 export const ready = Config.ready;

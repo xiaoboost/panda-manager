@@ -4,9 +4,7 @@ import { BrowserWindow, BrowserWindowConstructorOptions } from 'electron';
 
 import { state } from './constant';
 
-export async function windowStateKeeper(
-  options: BrowserWindowConstructorOptions = {},
-) {
+export async function windowStateKeeper(options: BrowserWindowConstructorOptions = {}) {
   // 配置初始化
   await state.ready;
 
@@ -20,14 +18,13 @@ export async function windowStateKeeper(
   });
 
   if (process.env.NODE_ENV === 'development') {
-    log(`Window Manager init data: ${JSON.stringify(state.data)}`);
+    log(`Window Manager 初始化数据: ${JSON.stringify(state.data)}`);
   }
 
   // 最大化
   if (state.data.isMaximize) {
     options.center = true;
-  }
-  else {
+  } else {
     options.width = state.data.width;
     options.height = state.data.height;
     options.x = state.data.left;
@@ -44,27 +41,33 @@ export async function windowStateKeeper(
   win.on('maximize', () => state.set({ isMaximize: true }));
   win.on('unmaximize', () => state.set({ isMaximize: false }));
 
-  win.on('resize', debounce(() => {
-    if (!win.isMaximized()) {
-      const [width, height] = win.getSize();
+  win.on(
+    'resize',
+    debounce(() => {
+      if (!win.isMaximized()) {
+        const [width, height] = win.getSize();
 
-      state.set({
-        width,
-        height,
-      });
-    }
-  }));
+        state.set({
+          width,
+          height,
+        });
+      }
+    }),
+  );
 
-  win.on('move', debounce(() => {
-    if (!win.isMaximized()) {
-      const [left, top] = win.getPosition();
+  win.on(
+    'move',
+    debounce(() => {
+      if (!win.isMaximized()) {
+        const [left, top] = win.getPosition();
 
-      state.set({
-        left,
-        top,
-      });
-    }
-  }));
+        state.set({
+          left,
+          top,
+        });
+      }
+    }),
+  );
 
   return win;
 }

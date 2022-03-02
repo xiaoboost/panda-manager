@@ -35,31 +35,32 @@ export function run() {
     .command(
       ['build'],
       'build',
-      yargs => setYargsCommand(yargs),
-      argv => build(argv),
+      (yargs) => setYargsCommand(yargs),
+      (argv) => build(argv),
     )
     .command(
       ['watch'],
       'watch',
-      yargs => setYargsCommand(yargs),
-      argv => watch(argv),
+      (yargs) => setYargsCommand(yargs),
+      (argv) => watch(argv),
     )
     .command(
       ['package'],
       'package',
-      yargs => yargs.options({
-        output: {
-          type: 'string',
-          describe: '输出路径',
-          require: true,
-        },
-        input: {
-          type: 'string',
-          describe: '打包路径',
-          require: true,
-        },
-      }),
-      argv => generate(argv),
+      (yargs) =>
+        yargs.options({
+          output: {
+            type: 'string',
+            describe: '输出路径',
+            require: true,
+          },
+          input: {
+            type: 'string',
+            describe: '打包路径',
+            require: true,
+          },
+        }),
+      (argv) => generate(argv),
     )
     .strict()
     .showHelpOnFail(false).argv;
