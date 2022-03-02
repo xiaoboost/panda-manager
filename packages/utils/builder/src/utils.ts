@@ -113,3 +113,23 @@ export async function buildPackage(input: string, output: string) {
     }),
   );
 }
+
+function parseNpmRc(content: string) {
+  const result: Record<string, string> = {};
+
+  content
+    .split('\n')
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .forEach((item) => {
+      const [key, value] = item.split('=').map((item) => item.trim());
+
+      if (key && value) {
+        result[key] = value;
+      }
+    });
+
+  return result;
+}
+
+export const npmEnv = parseNpmRc(fs.readFileSync(resolveCWD('.npmrc'), 'utf-8'));

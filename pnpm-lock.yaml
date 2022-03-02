@@ -316,6 +316,7 @@ importers:
       '@types/color': ^3.0.3
       '@types/panda': workspace:*
       '@types/react': ^17.0.39
+      '@xiao-ai/utils': ^1.5.1
       color: ^4.2.1
       electron: ^17.0.1
       jss: ^10.9.0
@@ -329,6 +330,7 @@ importers:
       '@panda/fetch': link:../../shared/fetch
       '@panda/remote': link:../../shared/remote
       '@panda/shared': link:../../shared/shared
+      '@xiao-ai/utils': registry.npmmirror.com/@xiao-ai/utils/1.5.1
       color: registry.npmmirror.com/color/4.2.1
       electron: registry.npmmirror.com/electron/17.0.1
       jss: registry.npmmirror.com/jss/10.9.0
