@@ -9,7 +9,9 @@ export interface PluginRenderer<Data extends ItemData> {
 }
 
 /** 插件数据实例 */
-export interface PluginClientInstance {
+export interface PluginClientInstance<Data extends ItemData = ItemData> {
+  /** 数据 */
+  readonly data: Data;
   /** 写入缓存 */
   writeCache(): Promise<void>;
   /** 删除缓存 */

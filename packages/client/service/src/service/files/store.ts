@@ -1,7 +1,4 @@
-import { DeepReadonly } from '@xiao-ai/utils';
-import { ItemData, warn } from '@panda/shared';
 import { Manga } from '@panda/plugin-manga/client';
-
 import { Files } from '../../model';
 
 import * as fs from '@panda/client-utils';
@@ -28,22 +25,6 @@ export async function startReadItem() {
 
 /** 处理文件 */
 export async function readItem(path: string) {
-  async function readStat(filePath: string, data: DeepReadonly<ItemData>) {
-    try {
-      const stat = await fs.stat(filePath);
-
-      // 文件系统中最后修改时间与数据库中记录一致，则跳过
-      if (stat.mtimeMs === data.lastModified) {
-        return;
-      } else {
-        return stat;
-      }
-    } catch (e: any) {
-      warn(e.message);
-      return;
-    }
-  }
-
   /** 数据库中同路径记录 */
   const fileInDb = Files.limit(1)
     .where((item) => item.uri === path)
@@ -54,24 +35,29 @@ export async function readItem(path: string) {
   }
 
   /** 文件在硬盘的数据 */
-  const fileStat = await readStat(path, fileInDb.data);
+  const fileStat = await fs.stat(path).catch(() => void 0);
 
   if (!fileStat) {
     return;
   }
 
-  const itemData = await Manga.createByPath(path, fileStat);
+  // 文件系统中最后修改时间与数据库中记录一致，则跳过
+  if (fileStat.mtimeMs === fileInDb.data.lastModified) {
+    return;
+  }
 
-  if (!itemData) {
+  const manga = await Manga.createByPath(path, fileStat);
+
+  if (!manga) {
     return;
   }
 
   // 项目数据添加到数据库
-  const insertedData = Files.insert(itemData[0])[0];
+  const insertedData = Files.insert(manga.data)[0];
 
   if (!insertedData) {
     return;
   }
 
-  await Manga.writeCacheToDisk?.(insertedData.data as MangaData, itemData[1]);
+  await manga?.writeCache();
 }

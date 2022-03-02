@@ -84,10 +84,11 @@ export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Con
           use: [MiniCssExtractPlugin.loader, 'css-loader'],
         },
         {
-          test: /\.(png|jpg|webp|svg)$/i,
+          test: /\.(png|jpe?g|webp|svg|otf|ttf)$/i,
           loader: 'url-loader',
           options: {
             limit: 8192,
+            name: '../assets/[name].[ext]',
           },
         },
       ],

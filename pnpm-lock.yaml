@@ -79,6 +79,7 @@ importers:
       '@panda/client-utils': workspace:*
       '@panda/db': workspace:*
       '@panda/fetch': workspace:*
+      '@panda/plugin-manga': workspace:*
       '@panda/remote': workspace:*
       '@panda/service': workspace:*
       '@panda/shared': workspace:*
@@ -93,6 +94,7 @@ importers:
       '@panda/client-utils': link:../utils
       '@panda/db': link:../database
       '@panda/fetch': link:../../shared/fetch
+      '@panda/plugin-manga': link:../../plugins/manga
       '@panda/remote': link:../../shared/remote
       '@panda/service': link:../service
       '@panda/shared': link:../../shared/shared

@@ -8,17 +8,17 @@ import { getCoverData } from './utils';
 import type { DeepReadonly } from '@xiao-ai/utils';
 import type { PluginClientInstance } from '@panda/shared';
 
-export class Manga implements PluginClientInstance {
+export class Manga implements PluginClientInstance<MangaData> {
   /** 缓存 */
   private cache?: Buffer;
   /** 编号 */
   private _id: number;
   /** 数据 */
-  private readonly _data: DeepReadonly<MangaData>;
+  private readonly _data: MangaData;
 
   constructor(id: number, data: MangaData | DeepReadonly<MangaData>) {
     this._id = id;
-    this._data = { ...data };
+    this._data = { ...data } as MangaData;
   }
 
   get id() {

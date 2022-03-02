@@ -22,6 +22,7 @@
     "@panda/client-utils": "workspace:*",
     "@panda/db": "workspace:*",
     "@panda/fetch": "workspace:*",
+    "@panda/plugin-manga": "workspace:*",
     "@panda/remote": "workspace:*",
     "@panda/service": "workspace:*",
     "@panda/shared": "workspace:*",

@@ -4,6 +4,6 @@ import { MangaRendererData } from '../shared';
 
 export * from '../shared';
 
-export function Render(props: MangaRendererData) {
-  return <img src={props.coverPath} height='200' />;
+export function Detail(props: MangaRendererData) {
+  return <div>详情页面</div>;
 }
