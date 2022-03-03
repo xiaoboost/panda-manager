@@ -57,6 +57,7 @@ export function Header() {
         >
           设置
         </span>
+        <span style={{ margin: '0 4px' }} />
         <MenuNav
           title={<span onDoubleClick={stopEvent}>帮助</span>}
           className={style.classes.tabItem}

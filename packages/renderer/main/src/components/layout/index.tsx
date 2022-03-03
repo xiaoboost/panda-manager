@@ -17,9 +17,7 @@ export function Layout({ children }: PropsWithChildren<EmptyObject>) {
       })}
     >
       <Header />
-      <article className={style.classes.appBody}>
-        <div className={style.classes.appContent}>{children}</div>
-      </article>
+      <article className={style.classes.appBody}>{children}</article>
     </div>
   );
 }

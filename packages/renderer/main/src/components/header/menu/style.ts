@@ -1,13 +1,18 @@
 import {
   createStyles,
   Color,
-  Gray,
-  Black2,
-  Black3,
   BlackLight,
   WhiteBg,
-  BlackLighter,
+  Green,
+  BlackExtraLight,
 } from '@panda/renderer-utils';
+
+const bgColor = WhiteBg;
+const itemFocusBgColor = Green;
+const fontColor = BlackLight;
+const fontFocusColor = Color(BlackLight.rgbNumber() + 0x0b0b0b);
+const fontDisableColor = BlackExtraLight;
+const splitColor = Color(BlackExtraLight.rgbNumber() - 0x101010);
 
 export const style = createStyles({
   panelShow: {},
@@ -16,7 +21,7 @@ export const style = createStyles({
   menu: {
     display: 'inline-flex',
     justifyContent: 'center',
-    alignContent: 'center',
+    alignItems: 'center',
     position: 'relative',
   },
   panel: {
@@ -24,10 +29,11 @@ export const style = createStyles({
     minWidth: 180,
     display: 'none',
     flexDirection: 'column',
-    backgroundColor: Black2.toString(),
     padding: [4, 1],
     zIndex: 10,
-    boxShadow: `0 -2px 2px ${Color.rgb(0, 0, 0, 0.05).toString()}`,
+    boxShadow: `0px 1px 4px ${Color.rgb(0, 0, 0, 0.2).toString()}`,
+    backgroundColor: bgColor.toString(),
+    color: fontColor.toString(),
 
     '&$panelShow': {
       display: 'flex',
@@ -36,23 +42,23 @@ export const style = createStyles({
   panelItem: {
     height: 24,
     lineHeight: '24px',
+    fontSize: 12,
     margin: [2, 0],
     padding: [0, 20],
-    color: WhiteBg.toString(),
 
     '&:hover': {
-      color: Gray.toString(),
-      backgroundColor: Black3.toString(),
+      color: fontFocusColor.toString(),
+      backgroundColor: itemFocusBgColor.toString(),
     },
 
     '&$panelItemDisabled': {
-      color: `${BlackLighter.toString()} !important`,
+      color: `${fontDisableColor.toString()} !important`,
       backgroundColor: 'transparent !important',
     },
   },
   panelSplit: {
     height: 1,
     margin: [4, 10],
-    backgroundColor: BlackLight.toString(),
+    backgroundColor: splitColor.toString(),
   },
 });

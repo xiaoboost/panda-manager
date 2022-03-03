@@ -1,14 +1,11 @@
-import {
-  createStyles,
-  Black,
-  White,
-  Black3,
-  BlackLight,
-  BlackLighter,
-  Red,
-} from '@panda/renderer-utils';
+import { createStyles, Color, Black, White, PurpleLight, Red } from '@panda/renderer-utils';
 
-const height = 32;
+export const height = 30;
+const mainBgColor = PurpleLight;
+const mainBlurBgColor = Color(mainBgColor.rgbNumber() + 0x12180b);
+const mainFocusBgColor = Color(mainBgColor.rgbNumber() - 0x141316); // B0A4C1
+const fontColor = Color(Black.rgbNumber() + 0x121212);
+const fontBlurColor = Color(fontColor.rgbNumber() + 0x404040);
 
 export const style = createStyles({
   iconClose: {},
@@ -18,8 +15,8 @@ export const style = createStyles({
   header: {
     height,
     fontSize: 12,
-    color: BlackLighter.toString(),
-    backgroundColor: Black.toString(),
+    color: fontColor.toString(),
+    backgroundColor: mainBgColor.toString(),
 
     flexGrow: 0,
     flexShrink: 0,
@@ -37,10 +34,12 @@ export const style = createStyles({
     },
 
     '&$headerUnFocus': {
-      backgroundColor: BlackLight.toString(),
+      backgroundColor: mainBlurBgColor.toString(),
+      color: fontBlurColor.toString(),
 
       '& $icon': {
-        backgroundColor: BlackLight.toString(),
+        backgroundColor: mainBlurBgColor.toString(),
+        color: fontBlurColor.toString(),
       },
     },
   },
@@ -51,7 +50,7 @@ export const style = createStyles({
     '-webkit-app-region': 'no-drag',
 
     '&:hover': {
-      backgroundColor: Black3.toString(),
+      backgroundColor: mainFocusBgColor.toString(),
     },
 
     '&$iconClose:hover': {
@@ -60,20 +59,20 @@ export const style = createStyles({
     },
   },
   logo: {
-    padding: [2, 12],
+    padding: [1, 12],
     fontSize: 18,
     transform: 'translateY(2px)',
   },
   title: {
-    fontSize: 13,
+    fontSize: 12,
   },
   tabItem: {
-    fontSize: 14,
-    padding: [5, 12],
+    fontSize: 13,
+    padding: [4, 12],
     '-webkit-app-region': 'no-drag',
 
     '&:hover, &$highlightTabItem': {
-      backgroundColor: Black3.toString(),
+      backgroundColor: mainFocusBgColor.toString(),
     },
   },
 });
