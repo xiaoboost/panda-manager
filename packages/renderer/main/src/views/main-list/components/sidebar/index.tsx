@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { style } from './style';
+import { Container, ActionItem } from '../actions';
 import { FileAddOutlined, FolderAddOutlined, MinusSquareOutlined } from '@ant-design/icons';
 
 export function Sidebar() {
@@ -8,29 +9,20 @@ export function Sidebar() {
     <div className={style.classes.main}>
       <header className={style.classes.header}>
         <div className={style.classes.title}>标签管理器</div>
-        <ul className={style.classes.actionsContainer}>
-          <li className={style.classes.actionItem}>
-            <a title='新建标签'>
-              <FileAddOutlined
-                className={style.classes.actionLabel}
-                style={{ transform: 'scaleY(0.95)' }}
-              />
-            </a>
-          </li>
-          <li className={style.classes.actionItem}>
-            <a title='新建标签集'>
-              <FolderAddOutlined
-                className={style.classes.actionLabel}
-                style={{ transform: 'scaleY(1.2)' }}
-              />
-            </a>
-          </li>
-          <li className={style.classes.actionItem}>
-            <a title='在标签管理器中折叠标签'>
-              <MinusSquareOutlined className={style.classes.actionLabel} />
-            </a>
-          </li>
-        </ul>
+        {/* <a title='新建标签'>
+          <FileAddOutlined
+            className={style.classes.actionLabel}
+            style={{ transform: 'scaleY(0.95)' }}
+          />
+        </a> */}
+        <Container className={style.classes.headerActions}>
+          <ActionItem title='新建标签集'>
+            <FolderAddOutlined style={{ transform: 'scaleY(1.2)' }} />
+          </ActionItem>
+          <ActionItem title='在标签管理器中折叠标签'>
+            <MinusSquareOutlined />
+          </ActionItem>
+        </Container>
       </header>
       <article className={style.classes.body}>列表</article>
     </div>

@@ -5,6 +5,8 @@ import { service as openAboutModal } from './open-about-modal';
 import { service as openSelectDialog } from './open-select-dialog';
 import { service as openPathDefaultManner } from './open-path-default-manner';
 import { service as openMessageDialog } from './open-message-dialog';
+import { service as getAllTags } from './get-all-tags';
+// import { service as addTag } from './add-tag';
 
 import { ServiceData } from './types';
 import { ServiceName } from '@panda/shared';
@@ -20,6 +22,10 @@ const serviceMap: Record<ServiceName, ServiceData | undefined> = {
   [ServiceName.OpenAboutModal]: openAboutModal,
   [ServiceName.OpenSelectDialog]: openSelectDialog,
   [ServiceName.OpenMessageDialog]: openMessageDialog,
+  [ServiceName.GetAllTags]: getAllTags,
+  [ServiceName.AddTag]: undefined,
+  [ServiceName.PatchTag]: undefined,
+  [ServiceName.DeleteTag]: undefined,
 };
 
 export async function service(context: ListenerContext): Promise<FetchData> {

@@ -1,16 +1,21 @@
-import { createStyles, Color, WhiteBg, Black, BlackLight } from '@panda/renderer-utils';
+import { createStyles, Color, WhiteBg, BlackLight } from '@panda/renderer-utils';
 
 const titleBgColor = Color(0xede8ef);
 const tagListBgColor = Color(WhiteBg.rgbNumber() - 0x050505);
-const actionColor = Color(BlackLight.rgbNumber() - Black.rgbNumber());
 
 export const style = createStyles({
+  headerActions: {},
+
   main: {
     width: 200,
     display: 'flex',
     flexDirection: 'column',
 
-    '&:hover $actionsContainer': {
+    '& $headerActions': {
+      display: 'none',
+    },
+
+    '&:hover $headerActions': {
       display: 'inline-flex',
     },
   },
@@ -35,41 +40,5 @@ export const style = createStyles({
     overflow: 'hidden',
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
-  },
-  actionsContainer: {
-    display: 'none',
-    margin: 0,
-    padding: 0,
-    listStyle: 'none',
-    height: '100%',
-    alignItems: 'center',
-  },
-  actionItem: {
-    display: 'inline-flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    cursor: 'pointer',
-    position: 'relative',
-    marginLeft: 4,
-
-    '& > a': {
-      display: 'inline-flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-  },
-  actionLabel: {
-    fontSize: 14,
-    padding: 2,
-    textDecoration: 'none',
-    textRendering: 'auto',
-    textAlign: 'center',
-    textTransform: 'none',
-    borderRadius: 4,
-    color: actionColor.toString(),
-
-    '&:hover': {
-      backgroundColor: '#dddddd',
-    },
   },
 });

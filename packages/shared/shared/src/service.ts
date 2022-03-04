@@ -18,4 +18,12 @@ export enum ServiceName {
   OpenSelectDialog,
   /** 打开消息对话框 */
   OpenMessageDialog,
+  /** 获取所有标签数据 */
+  GetAllTags,
+  /** 新增标签 */
+  AddTag,
+  /** 修改标签 */
+  PatchTag,
+  /** 删除标签 */
+  DeleteTag,
 }
