@@ -20,6 +20,7 @@ export interface PackageOptions {
 export interface WebpackOptions {
   name: string;
   entry?: string;
+  html?: string;
   output?: string;
   process: 'main' | 'renderer' | 'preload';
 }
@@ -38,6 +39,13 @@ export const buildConfigs: WebpackOptions[] = [
     process: 'renderer',
     output: 'views/main',
     entry: 'src/init/index.ts',
+  },
+  {
+    name: '@panda/modal-tag-editor',
+    process: 'renderer',
+    output: 'views/tag-editor',
+    entry: 'src/renderer/index.ts',
+    html: 'src/renderer/index.html',
   },
 ];
 

@@ -65,8 +65,10 @@ export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Con
         src: resolvePackage('src'),
         '@xiao-ai/utils/web': resolvePackage('node_modules/@xiao-ai/utils/dist/esm/web'),
         '@xiao-ai/utils/use': resolvePackage('node_modules/@xiao-ai/utils/dist/esm/use'),
-        '@panda/remote': resolvePackage('node_modules/@panda/remote/src'),
-        '@panda/fetch': resolvePackage('node_modules/@panda/fetch/src'),
+        '@panda/remote': resolveCWD('packages/shared/remote/src'),
+        '@panda/fetch': resolveCWD('packages/shared/fetch/src'),
+        '@panda/modal-utils': resolveCWD('packages/modals/utils/src'),
+        '@panda/modal-tag-editor': resolveCWD('packages/modals/tag-editor/src'),
       },
     },
     module: {
@@ -170,7 +172,7 @@ export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Con
     baseConfig.plugins?.push(
       new HtmlWebpackPlugin({
         filename: 'index.html',
-        template: resolvePackage('src/index.html'),
+        template: resolvePackage(opt.html ?? 'src/index.html'),
         inject: true,
         minify: {
           removeComments: true,

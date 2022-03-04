@@ -5,3 +5,4 @@ packages:
   - packages/shared/*
   - packages/utils/*
   - packages/plugins/*
+  - packages/modals/*

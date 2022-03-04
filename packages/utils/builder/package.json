@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@panda/client": "workspace:*",
+    "@panda/modal-tag-editor": "workspace:*",
     "@panda/preload": "workspace:*",
     "@panda/renderer": "workspace:*",
     "electron-packager": "^15.4.0"

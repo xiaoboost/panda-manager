@@ -112,6 +112,7 @@ importers:
       '@panda/client-utils': workspace:*
       '@panda/db': workspace:*
       '@panda/fetch': workspace:*
+      '@panda/modal-tag-editor': workspace:*
       '@panda/plugin-manga': workspace:*
       '@panda/shared': workspace:*
       '@panda/tsconfig': workspace:*
@@ -124,6 +125,7 @@ importers:
       '@panda/client-utils': link:../utils
       '@panda/db': link:../database
       '@panda/fetch': link:../../shared/fetch
+      '@panda/modal-tag-editor': link:../../modals/tag-editor
       '@panda/plugin-manga': link:../../plugins/manga
       '@panda/shared': link:../../shared/shared
       '@xiao-ai/utils': registry.npmmirror.com/@xiao-ai/utils/1.5.1
@@ -213,9 +215,11 @@ importers:
       '@types/node': ^17.0.18
       '@types/panda': workspace:*
       '@types/react': ^17.0.39
+      '@types/react-dom': ^17.0.11
       '@xiao-ai/utils': ^1.5.1
       electron: 17.1.0
       react: ^17.0.2
+      react-dom: ^17.0.2
       tslib: ^2.3.1
       typescript: 4.6.2
     dependencies:
@@ -224,11 +228,13 @@ importers:
       '@xiao-ai/utils': registry.npmmirror.com/@xiao-ai/utils/1.5.1
       electron: registry.npmmirror.com/electron/17.1.0
       react: registry.npmmirror.com/react/17.0.2
+      react-dom: registry.npmmirror.com/react-dom/17.0.2_react@17.0.2
     devDependencies:
       '@panda/tsconfig': link:../../utils/tsconfig
       '@types/node': registry.npmmirror.com/@types/node/17.0.18
       '@types/panda': link:../../utils/typings
       '@types/react': registry.npmmirror.com/@types/react/17.0.39
+      '@types/react-dom': registry.npmmirror.com/@types/react-dom/17.0.11
       tslib: registry.npmmirror.com/tslib/2.3.1
       typescript: registry.npmmirror.com/typescript/4.6.2
 
@@ -464,6 +470,7 @@ importers:
   packages/utils/builder:
     specifiers:
       '@panda/client': workspace:*
+      '@panda/modal-tag-editor': workspace:*
       '@panda/preload': workspace:*
       '@panda/renderer': workspace:*
       '@panda/tsconfig': workspace:*
@@ -493,6 +500,7 @@ importers:
       yargs: ^17.3.1
     dependencies:
       '@panda/client': link:../../client/main
+      '@panda/modal-tag-editor': link:../../modals/tag-editor
       '@panda/preload': link:../../renderer/preload
       '@panda/renderer': link:../../renderer/main
       electron-packager: registry.npmmirror.com/electron-packager/15.4.0

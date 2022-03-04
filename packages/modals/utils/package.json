@@ -1,17 +1,19 @@
 {
-  "name": "@panda/service",
+  "name": "@panda/modal-utils",
   "version": "1.0.0",
-  "description": "panda-manager service lib",
-  "source": "src/index.ts",
-  "module": "src/index.ts",
-  "types": "src/index.ts",
+  "description": "panda-manager modal utils",
+  "exports": {
+    "./*": {
+      "import": "./src/*/index.ts",
+      "types": "./src/*/index.ts"
+    }
+  },
   "files": [
     "dist",
     "README.md",
     "package.json"
   ],
   "scripts": {
-    "watch": "tsc -w -p .",
     "lint": "eslint --quiet --no-error-on-unmatched-pattern --config ../../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
     "lint:fix": "eslint --fix --quiet --no-error-on-unmatched-pattern --config ../../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}"
   },
@@ -23,17 +25,16 @@
   },
   "dependencies": {
     "@panda/client-utils": "workspace:*",
-    "@panda/db": "workspace:*",
-    "@panda/fetch": "workspace:*",
-    "@panda/modal-tag-editor": "workspace:*",
-    "@panda/plugin-manga": "workspace:*",
     "@panda/shared": "workspace:*",
-    "@xiao-ai/utils": "^1.5.1"
+    "@xiao-ai/utils": "^1.5.1",
+    "electron": "17.1.0",
+    "react": "^17.0.2"
   },
   "devDependencies": {
     "@panda/tsconfig": "workspace:*",
+    "@types/node": "^17.0.18",
     "@types/panda": "workspace:*",
-    "electron": "17.1.0",
+    "@types/react": "^17.0.39",
     "tslib": "^2.3.1",
     "typescript": "4.6.2"
   }
