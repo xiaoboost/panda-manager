@@ -1,4 +1,3 @@
-import { URL } from 'url';
 import { app, BrowserWindow } from 'electron';
 import { resolveRoot } from '@panda/client-utils';
 import { windowStateKeeper } from '@panda/window-manager';

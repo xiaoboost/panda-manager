@@ -32,7 +32,7 @@ importers:
       '@xiao-ai/utils': ^1.5.1
       memfs: ^3.4.1
       tslib: ^2.3.1
-      typescript: ^4.5.5
+      typescript: 4.6.2
     dependencies:
       '@xiao-ai/utils': registry.npmmirror.com/@xiao-ai/utils/1.5.1
     devDependencies:
@@ -41,7 +41,7 @@ importers:
       '@types/panda': link:../../utils/typings
       memfs: registry.npmmirror.com/memfs/3.4.1
       tslib: registry.npmmirror.com/tslib/2.3.1
-      typescript: registry.npmmirror.com/typescript/4.5.5
+      typescript: registry.npmmirror.com/typescript/4.6.2
 
   packages/client/image:
     specifiers:
@@ -57,7 +57,7 @@ importers:
       image-size: ^1.0.1
       jimp: ^0.16.1
       tslib: ^2.3.1
-      typescript: ^4.5.5
+      typescript: 4.6.2
     dependencies:
       '@jimp/bmp': registry.npmmirror.com/@jimp/bmp/0.16.1_@jimp+custom@0.16.1
       '@jimp/core': registry.npmmirror.com/@jimp/core/0.16.1
@@ -72,7 +72,7 @@ importers:
       '@panda/tsconfig': link:../../utils/tsconfig
       '@types/panda': link:../../utils/typings
       tslib: registry.npmmirror.com/tslib/2.3.1
-      typescript: registry.npmmirror.com/typescript/4.5.5
+      typescript: registry.npmmirror.com/typescript/4.6.2
 
   packages/client/main:
     specifiers:
@@ -87,9 +87,9 @@ importers:
       '@panda/window-manager': workspace:*
       '@types/panda': workspace:*
       '@xiao-ai/utils': ^1.5.1
-      electron: ^17.0.1
+      electron: 17.1.0
       esbuild: ^0.14.21
-      typescript: ^4.5.5
+      typescript: 4.6.2
     dependencies:
       '@panda/client-utils': link:../utils
       '@panda/db': link:../database
@@ -100,12 +100,12 @@ importers:
       '@panda/shared': link:../../shared/shared
       '@panda/window-manager': link:../window-manager
       '@xiao-ai/utils': registry.npmmirror.com/@xiao-ai/utils/1.5.1
-      electron: registry.npmmirror.com/electron/17.0.1
+      electron: registry.npmmirror.com/electron/17.1.0
       esbuild: registry.npmmirror.com/esbuild/0.14.21
     devDependencies:
       '@panda/tsconfig': link:../../utils/tsconfig
       '@types/panda': link:../../utils/typings
-      typescript: registry.npmmirror.com/typescript/4.5.5
+      typescript: registry.npmmirror.com/typescript/4.6.2
 
   packages/client/service:
     specifiers:
@@ -117,9 +117,9 @@ importers:
       '@panda/tsconfig': workspace:*
       '@types/panda': workspace:*
       '@xiao-ai/utils': ^1.5.1
-      electron: ^17.0.1
+      electron: 17.1.0
       tslib: ^2.3.1
-      typescript: ^4.5.5
+      typescript: 4.6.2
     dependencies:
       '@panda/client-utils': link:../utils
       '@panda/db': link:../database
@@ -130,9 +130,9 @@ importers:
     devDependencies:
       '@panda/tsconfig': link:../../utils/tsconfig
       '@types/panda': link:../../utils/typings
-      electron: registry.npmmirror.com/electron/17.0.1
+      electron: registry.npmmirror.com/electron/17.1.0
       tslib: registry.npmmirror.com/tslib/2.3.1
-      typescript: registry.npmmirror.com/typescript/4.5.5
+      typescript: registry.npmmirror.com/typescript/4.6.2
 
   packages/client/utils:
     specifiers:
@@ -141,13 +141,13 @@ importers:
       '@types/fs-extra': ^9.0.13
       '@types/node': ^17.0.18
       '@types/panda': workspace:*
-      electron: ^17.0.1
+      electron: 17.1.0
       fs-extra: ^10.0.0
       tslib: ^2.3.1
-      typescript: ^4.5.5
+      typescript: 4.6.2
     dependencies:
       '@panda/shared': link:../../shared/shared
-      electron: registry.npmmirror.com/electron/17.0.1
+      electron: registry.npmmirror.com/electron/17.1.0
       fs-extra: registry.npmmirror.com/fs-extra/10.0.0
     devDependencies:
       '@panda/tsconfig': link:../../utils/tsconfig
@@ -155,7 +155,7 @@ importers:
       '@types/node': registry.npmmirror.com/@types/node/17.0.18
       '@types/panda': link:../../utils/typings
       tslib: registry.npmmirror.com/tslib/2.3.1
-      typescript: registry.npmmirror.com/typescript/4.5.5
+      typescript: registry.npmmirror.com/typescript/4.6.2
 
   packages/client/window-manager:
     specifiers:
@@ -166,21 +166,21 @@ importers:
       '@types/node': ^17.0.18
       '@types/panda': workspace:*
       '@xiao-ai/utils': ^1.5.1
-      electron: ^17.0.1
+      electron: 17.1.0
       tslib: ^2.3.1
-      typescript: ^4.5.5
+      typescript: 4.6.2
     dependencies:
       '@panda/client-utils': link:../utils
       '@panda/db': link:../database
       '@panda/shared': link:../../shared/shared
       '@xiao-ai/utils': registry.npmmirror.com/@xiao-ai/utils/1.5.1
-      electron: registry.npmmirror.com/electron/17.0.1
+      electron: registry.npmmirror.com/electron/17.1.0
     devDependencies:
       '@panda/tsconfig': link:../../utils/tsconfig
       '@types/node': registry.npmmirror.com/@types/node/17.0.18
       '@types/panda': link:../../utils/typings
       tslib: registry.npmmirror.com/tslib/2.3.1
-      typescript: registry.npmmirror.com/typescript/4.5.5
+      typescript: registry.npmmirror.com/typescript/4.6.2
 
   packages/client/zip:
     specifiers:
@@ -192,7 +192,7 @@ importers:
       iconv-lite: ^0.6.3
       jszip: ^3.7.1
       tslib: ^2.3.1
-      typescript: ^4.5.5
+      typescript: 4.6.2
     dependencies:
       '@panda/client-utils': link:../utils
       '@panda/shared': link:../../shared/shared
@@ -203,7 +203,61 @@ importers:
       '@panda/tsconfig': link:../../utils/tsconfig
       '@types/panda': link:../../utils/typings
       tslib: registry.npmmirror.com/tslib/2.3.1
-      typescript: registry.npmmirror.com/typescript/4.5.5
+      typescript: registry.npmmirror.com/typescript/4.6.2
+
+  packages/modals/tag-editor:
+    specifiers:
+      '@panda/client-utils': workspace:*
+      '@panda/modal-utils': workspace:*
+      '@panda/tsconfig': workspace:*
+      '@types/node': ^17.0.18
+      '@types/panda': workspace:*
+      '@types/react': ^17.0.39
+      '@xiao-ai/utils': ^1.5.1
+      electron: 17.1.0
+      react: ^17.0.2
+      tslib: ^2.3.1
+      typescript: 4.6.2
+    dependencies:
+      '@panda/client-utils': link:../../client/utils
+      '@panda/modal-utils': link:../utils
+      '@xiao-ai/utils': registry.npmmirror.com/@xiao-ai/utils/1.5.1
+      electron: registry.npmmirror.com/electron/17.1.0
+      react: registry.npmmirror.com/react/17.0.2
+    devDependencies:
+      '@panda/tsconfig': link:../../utils/tsconfig
+      '@types/node': registry.npmmirror.com/@types/node/17.0.18
+      '@types/panda': link:../../utils/typings
+      '@types/react': registry.npmmirror.com/@types/react/17.0.39
+      tslib: registry.npmmirror.com/tslib/2.3.1
+      typescript: registry.npmmirror.com/typescript/4.6.2
+
+  packages/modals/utils:
+    specifiers:
+      '@panda/client-utils': workspace:*
+      '@panda/shared': workspace:*
+      '@panda/tsconfig': workspace:*
+      '@types/node': ^17.0.18
+      '@types/panda': workspace:*
+      '@types/react': ^17.0.39
+      '@xiao-ai/utils': ^1.5.1
+      electron: 17.1.0
+      react: ^17.0.2
+      tslib: ^2.3.1
+      typescript: 4.6.2
+    dependencies:
+      '@panda/client-utils': link:../../client/utils
+      '@panda/shared': link:../../shared/shared
+      '@xiao-ai/utils': registry.npmmirror.com/@xiao-ai/utils/1.5.1
+      electron: registry.npmmirror.com/electron/17.1.0
+      react: registry.npmmirror.com/react/17.0.2
+    devDependencies:
+      '@panda/tsconfig': link:../../utils/tsconfig
+      '@types/node': registry.npmmirror.com/@types/node/17.0.18
+      '@types/panda': link:../../utils/typings
+      '@types/react': registry.npmmirror.com/@types/react/17.0.39
+      tslib: registry.npmmirror.com/tslib/2.3.1
+      typescript: registry.npmmirror.com/typescript/4.6.2
 
   packages/plugins/manga:
     specifiers:
@@ -216,17 +270,17 @@ importers:
       '@types/panda': workspace:*
       '@types/react': ^17.0.39
       '@xiao-ai/utils': ^1.5.1
-      electron: ^17.0.1
+      electron: 17.1.0
       react: ^17.0.2
       tslib: ^2.3.1
-      typescript: ^4.5.5
+      typescript: 4.6.2
     dependencies:
       '@panda/client-utils': link:../../client/utils
       '@panda/image': link:../../client/image
       '@panda/shared': link:../../shared/shared
       '@panda/zip': link:../../client/zip
       '@xiao-ai/utils': registry.npmmirror.com/@xiao-ai/utils/1.5.1
-      electron: registry.npmmirror.com/electron/17.0.1
+      electron: registry.npmmirror.com/electron/17.1.0
       react: registry.npmmirror.com/react/17.0.2
     devDependencies:
       '@panda/tsconfig': link:../../utils/tsconfig
@@ -234,7 +288,7 @@ importers:
       '@types/panda': link:../../utils/typings
       '@types/react': registry.npmmirror.com/@types/react/17.0.39
       tslib: registry.npmmirror.com/tslib/2.3.1
-      typescript: registry.npmmirror.com/typescript/4.5.5
+      typescript: registry.npmmirror.com/typescript/4.6.2
 
   packages/renderer/components:
     specifiers:
@@ -242,13 +296,13 @@ importers:
       '@types/panda': workspace:*
       react: ^17.0.2
       tslib: ^2.3.1
-      typescript: ^4.5.5
+      typescript: 4.6.2
     devDependencies:
       '@panda/tsconfig': link:../../utils/tsconfig
       '@types/panda': link:../../utils/typings
       react: registry.npmmirror.com/react/17.0.2
       tslib: registry.npmmirror.com/tslib/2.3.1
-      typescript: registry.npmmirror.com/typescript/4.5.5
+      typescript: registry.npmmirror.com/typescript/4.6.2
 
   packages/renderer/main:
     specifiers:
@@ -270,7 +324,7 @@ importers:
       react-router: ^6.2.1
       react-router-dom: ^6.2.1
       tslib: ^2.3.1
-      typescript: ^4.5.5
+      typescript: 4.6.2
     dependencies:
       '@ant-design/icons': registry.npmmirror.com/@ant-design/icons/4.7.0_react-dom@17.0.2+react@17.0.2
       '@panda/components': link:../components
@@ -291,21 +345,21 @@ importers:
       '@types/react-dom': registry.npmmirror.com/@types/react-dom/17.0.11
       '@types/react-router-dom': registry.npmmirror.com/@types/react-router-dom/5.3.3
       tslib: registry.npmmirror.com/tslib/2.3.1
-      typescript: registry.npmmirror.com/typescript/4.5.5
+      typescript: registry.npmmirror.com/typescript/4.6.2
 
   packages/renderer/preload:
     specifiers:
       '@panda/tsconfig': workspace:*
       '@types/node': ^17.0.18
       '@types/panda': workspace:*
-      electron: ^17.0.1
-      typescript: ^4.5.5
+      electron: 17.1.0
+      typescript: 4.6.2
     devDependencies:
       '@panda/tsconfig': link:../../utils/tsconfig
       '@types/node': registry.npmmirror.com/@types/node/17.0.18
       '@types/panda': link:../../utils/typings
-      electron: registry.npmmirror.com/electron/17.0.1
-      typescript: registry.npmmirror.com/typescript/4.5.5
+      electron: registry.npmmirror.com/electron/17.1.0
+      typescript: registry.npmmirror.com/typescript/4.6.2
 
   packages/renderer/utils:
     specifiers:
@@ -318,21 +372,21 @@ importers:
       '@types/react': ^17.0.39
       '@xiao-ai/utils': ^1.5.1
       color: ^4.2.1
-      electron: ^17.0.1
+      electron: 17.1.0
       jss: ^10.9.0
       jss-preset-default: ^10.9.0
       react: ^17.0.2
       react-dom: ^17.0.2
       react-use: ^17.3.2
       tslib: ^2.3.1
-      typescript: ^4.5.5
+      typescript: 4.6.2
     dependencies:
       '@panda/fetch': link:../../shared/fetch
       '@panda/remote': link:../../shared/remote
       '@panda/shared': link:../../shared/shared
       '@xiao-ai/utils': registry.npmmirror.com/@xiao-ai/utils/1.5.1
       color: registry.npmmirror.com/color/4.2.1
-      electron: registry.npmmirror.com/electron/17.0.1
+      electron: registry.npmmirror.com/electron/17.1.0
       jss: registry.npmmirror.com/jss/10.9.0
       jss-preset-default: registry.npmmirror.com/jss-preset-default/10.9.0
       react: registry.npmmirror.com/react/17.0.2
@@ -344,7 +398,7 @@ importers:
       '@types/panda': link:../../utils/typings
       '@types/react': registry.npmmirror.com/@types/react/17.0.39
       tslib: registry.npmmirror.com/tslib/2.3.1
-      typescript: registry.npmmirror.com/typescript/4.5.5
+      typescript: registry.npmmirror.com/typescript/4.6.2
 
   packages/shared/fetch:
     specifiers:
@@ -354,20 +408,20 @@ importers:
       '@types/node': ^17.0.18
       '@types/panda': workspace:*
       '@xiao-ai/utils': ^1.5.1
-      electron: ^17.0.1
+      electron: 17.1.0
       tslib: ^2.3.1
-      typescript: ^4.5.5
+      typescript: 4.6.2
     dependencies:
       '@panda/remote': link:../remote
       '@panda/shared': link:../shared
       '@xiao-ai/utils': registry.npmmirror.com/@xiao-ai/utils/1.5.1
-      electron: registry.npmmirror.com/electron/17.0.1
+      electron: registry.npmmirror.com/electron/17.1.0
     devDependencies:
       '@panda/tsconfig': link:../../utils/tsconfig
       '@types/node': registry.npmmirror.com/@types/node/17.0.18
       '@types/panda': link:../../utils/typings
       tslib: registry.npmmirror.com/tslib/2.3.1
-      typescript: registry.npmmirror.com/typescript/4.5.5
+      typescript: registry.npmmirror.com/typescript/4.6.2
 
   packages/shared/remote:
     specifiers:
@@ -376,19 +430,19 @@ importers:
       '@types/node': ^17.0.18
       '@types/panda': workspace:*
       '@xiao-ai/utils': ^1.5.1
-      electron: ^17.0.1
+      electron: 17.1.0
       tslib: ^2.3.1
-      typescript: ^4.5.5
+      typescript: 4.6.2
     dependencies:
       '@panda/shared': link:../shared
       '@xiao-ai/utils': registry.npmmirror.com/@xiao-ai/utils/1.5.1
-      electron: registry.npmmirror.com/electron/17.0.1
+      electron: registry.npmmirror.com/electron/17.1.0
     devDependencies:
       '@panda/tsconfig': link:../../utils/tsconfig
       '@types/node': registry.npmmirror.com/@types/node/17.0.18
       '@types/panda': link:../../utils/typings
       tslib: registry.npmmirror.com/tslib/2.3.1
-      typescript: registry.npmmirror.com/typescript/4.5.5
+      typescript: registry.npmmirror.com/typescript/4.6.2
 
   packages/shared/shared:
     specifiers:
@@ -397,7 +451,7 @@ importers:
       '@types/panda': workspace:*
       '@xiao-ai/utils': ^1.5.1
       tslib: ^2.3.1
-      typescript: ^4.5.5
+      typescript: 4.6.2
     dependencies:
       '@xiao-ai/utils': registry.npmmirror.com/@xiao-ai/utils/1.5.1
     devDependencies:
@@ -405,7 +459,7 @@ importers:
       '@types/node': registry.npmmirror.com/@types/node/17.0.18
       '@types/panda': link:../../utils/typings
       tslib: registry.npmmirror.com/tslib/2.3.1
-      typescript: registry.npmmirror.com/typescript/4.5.5
+      typescript: registry.npmmirror.com/typescript/4.6.2
 
   packages/utils/builder:
     specifiers:
@@ -431,7 +485,7 @@ importers:
       terser-webpack-plugin: ^5.3.1
       ts-loader: ^9.2.6
       tslib: ^2.3.1
-      typescript: ^4.5.5
+      typescript: 4.6.2
       url-loader: ^4.1.1
       webpack: ^5.69.0
       webpack-bundle-analyzer: ^4.5.0
@@ -459,9 +513,9 @@ importers:
       html-webpack-plugin: registry.npmmirror.com/html-webpack-plugin/5.5.0_webpack@5.69.0
       mini-css-extract-plugin: registry.npmmirror.com/mini-css-extract-plugin/2.5.3_webpack@5.69.0
       terser-webpack-plugin: registry.npmmirror.com/terser-webpack-plugin/5.3.1_webpack@5.69.0
-      ts-loader: registry.npmmirror.com/ts-loader/9.2.6_typescript@4.5.5+webpack@5.69.0
+      ts-loader: registry.npmmirror.com/ts-loader/9.2.6_typescript@4.6.2+webpack@5.69.0
       tslib: registry.npmmirror.com/tslib/2.3.1
-      typescript: registry.npmmirror.com/typescript/4.5.5
+      typescript: registry.npmmirror.com/typescript/4.6.2
       url-loader: registry.npmmirror.com/url-loader/4.1.1_file-loader@6.2.0+webpack@5.69.0
       webpack: registry.npmmirror.com/webpack/5.69.0
       webpack-bundle-analyzer: registry.npmmirror.com/webpack-bundle-analyzer/4.5.0
@@ -2811,6 +2865,21 @@ packages:
     resolution: {integrity: sha512-CBReR/QEOpgwMdt59lWCtj9wC8oHB6aAjMF1lhXcGew132xtp+C5N6EaXb/fmDceVYLouziYjbNcpeXsWrqdpA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/electron/-/electron-17.0.1.tgz}
     name: electron
     version: 17.0.1
+    engines: {node: '>= 8.6'}
+    hasBin: true
+    requiresBuild: true
+    dependencies:
+      '@electron/get': registry.npmmirror.com/@electron/get/1.13.1
+      '@types/node': registry.npmmirror.com/@types/node/14.18.12
+      extract-zip: registry.npmmirror.com/extract-zip/1.7.0
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
+  registry.npmmirror.com/electron/17.1.0:
+    resolution: {integrity: sha512-X/qdldmQ8lA15NmeraubWCTtMeTO8K9Ser0wtSCgOXVh53Sr1Ea0VQQ7Q9LuGgWRVz4qtr40cntuEdM8icdmTw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/electron/-/electron-17.1.0.tgz}
+    name: electron
+    version: 17.1.0
     engines: {node: '>= 8.6'}
     hasBin: true
     requiresBuild: true
@@ -7411,7 +7480,7 @@ packages:
     version: 0.2.0
     dev: false
 
-  registry.npmmirror.com/ts-loader/9.2.6_typescript@4.5.5+webpack@5.69.0:
+  registry.npmmirror.com/ts-loader/9.2.6_typescript@4.6.2+webpack@5.69.0:
     resolution: {integrity: sha512-QMTC4UFzHmu9wU2VHZEmWWE9cUajjfcdcws+Gh7FhiO+Dy0RnR1bNz0YCHqhI0yRowCE9arVnNxYHqELOy9Hjw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/ts-loader/-/ts-loader-9.2.6.tgz}
     id: registry.npmmirror.com/ts-loader/9.2.6
     name: ts-loader
@@ -7425,7 +7494,7 @@ packages:
       enhanced-resolve: registry.npmmirror.com/enhanced-resolve/5.9.0
       micromatch: registry.npmmirror.com/micromatch/4.0.4
       semver: registry.npmmirror.com/semver/7.3.5
-      typescript: registry.npmmirror.com/typescript/4.5.5
+      typescript: registry.npmmirror.com/typescript/4.6.2
       webpack: registry.npmmirror.com/webpack/5.69.0
     dev: true
 
@@ -7492,6 +7561,14 @@ packages:
     resolution: {integrity: sha512-TCTIul70LyWe6IJWT8QSYeA54WQe8EjQFU4wY52Fasj5UKx88LNYKCgBEHcOMOrFF1rKGbD8v/xcNWVUq9SymA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/typescript/-/typescript-4.5.5.tgz}
     name: typescript
     version: 4.5.5
+    engines: {node: '>=4.2.0'}
+    hasBin: true
+    dev: true
+
+  registry.npmmirror.com/typescript/4.6.2:
+    resolution: {integrity: sha512-HM/hFigTBHZhLXshn9sN37H085+hQGeJHJ/X7LpBWLID/fbc2acUMfU+lGD98X81sKP+pFa9f0DZmCwB9GnbAg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/typescript/-/typescript-4.6.2.tgz}
+    name: typescript
+    version: 4.6.2
     engines: {node: '>=4.2.0'}
     hasBin: true
     dev: true
