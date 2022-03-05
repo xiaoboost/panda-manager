@@ -214,6 +214,7 @@ importers:
       '@panda/builder': workspace:*
       '@panda/client-utils': workspace:*
       '@panda/modal-utils': workspace:*
+      '@panda/renderer-utils': workspace:*
       '@panda/tsconfig': workspace:*
       '@types/node': ^17.0.18
       '@types/panda': workspace:*
@@ -228,6 +229,7 @@ importers:
     dependencies:
       '@panda/client-utils': link:../../client/utils
       '@panda/modal-utils': link:../utils
+      '@panda/renderer-utils': link:../../renderer/utils
       '@xiao-ai/utils': registry.npmmirror.com/@xiao-ai/utils/1.5.1
       electron: registry.npmmirror.com/electron/17.1.0
       react: registry.npmmirror.com/react/17.0.2

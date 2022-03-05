@@ -30,10 +30,10 @@ export function createModalService<Init, Return>({
     return new Promise<Return>((resolve) => {
       const win = new BrowserWindow({
         ...opt,
-        // 调试时全屏
-        height: process.env.NODE_ENV === 'development' ? 5000 : height,
-        width: process.env.NODE_ENV === 'development' ? 5000 : width,
-        fullscreen: process.env.NODE_ENV === 'development',
+        // 调试时要给调试工具留出空间
+        height: process.env.NODE_ENV === 'development' ? height + 400 : height,
+        width: process.env.NODE_ENV === 'development' ? width + 400 : width,
+        fullscreen: false,
         center: true,
         frame: true,
         resizable: false,
@@ -41,7 +41,8 @@ export function createModalService<Init, Return>({
         maximizable: false,
         hasShadow: true,
         modal: true,
-        alwaysOnTop: true,
+        autoHideMenuBar: true,
+        alwaysOnTop: false,
         webPreferences: {
           ...(opt.webPreferences ?? {}),
           webgl: false,
@@ -84,7 +85,10 @@ export function createModalService<Init, Return>({
       });
 
       win.on('close', () => {
-        debugger;
+        if (process.env.NODE_ENV === 'development') {
+          log(`模态框 ${opt.title} 已关闭`);
+        }
+
         ipcMain.off(ResolveEventName, ipcEvent);
       });
 

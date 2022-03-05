@@ -3,7 +3,6 @@ import React from 'react';
 import { style } from './style';
 import { Container, ActionItem } from '../actions';
 import { fetch } from '@panda/fetch/renderer';
-import { ServiceName } from '@panda/shared';
 import { FileAddOutlined, FolderAddOutlined, MinusSquareOutlined } from '@ant-design/icons';
 
 export function Sidebar() {
@@ -19,10 +18,7 @@ export function Sidebar() {
         </a> */}
         <Container className={style.classes.headerActions}>
           <ActionItem title='新建标签集'>
-            <FolderAddOutlined
-              style={{ transform: 'scaleY(1.2)' }}
-              onClick={() => fetch(ServiceName.AddTag)}
-            />
+            <FolderAddOutlined style={{ transform: 'scaleY(1.2)' }} />
           </ActionItem>
           <ActionItem title='在标签管理器中折叠标签'>
             <MinusSquareOutlined />
