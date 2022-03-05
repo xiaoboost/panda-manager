@@ -28,8 +28,7 @@
     "@panda/shared": "workspace:*",
     "@panda/window-manager": "workspace:*",
     "@xiao-ai/utils": "^1.5.1",
-    "electron": "17.1.0",
-    "esbuild": "^0.14.21"
+    "electron": "17.1.0"
   },
   "devDependencies": {
     "@panda/builder": "workspace:*",

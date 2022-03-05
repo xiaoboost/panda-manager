@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "@panda/tsconfig": "workspace:*",
-    "@types/node": "^17.0.18",
+    "@types/node": "^17.0.21",
     "@types/panda": "workspace:*",
     "@types/react": "^17.0.39",
     "tslib": "^2.3.1",
