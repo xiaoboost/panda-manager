@@ -1,6 +1,13 @@
 const { promises: fs } = require('fs');
-const yaml = require('yaml');
 const path = require('path');
+const package = require('./package.json');
+
+/** 子包文件夹 */
+const packageDir = 'packages';
+/** 项目配置文件 */
+const packageConfigName = 'package.json';
+/** 忽略文件夹 */
+const ignoreDir = ['node_modules', 'dist'];
 
 async function getRootPath() {
   let current = __dirname;
@@ -27,78 +34,43 @@ async function getRootPath() {
   return current;
 }
 
-async function getPackageConfig(root) {
-  const workspaceContent = await fs.readFile(path.join(root, 'pnpm-workspace.yaml'), 'utf-8');
-  const workspace = yaml.parse(workspaceContent);
-
-  return workspace.packages.map((item) => {
-    const isSubPackage = item.endsWith('/*');
-
-    return {
-      dirPath: path.join(root, item.replace(/\/\*/, '')),
-      isSubPackage,
-    };
-  });
+async function isDirectory(dir) {
+  const dirStat = await fs.stat(dir).catch(() => void 0);
+  return dirStat?.isDirectory() ?? false;
 }
 
-async function getPackages(root) {
-  const packages = [];
-  const packageConfigs = await getPackageConfig(root);
+async function isPackage(dir) {
+  const packageFilePath = path.join(dir, packageConfigName);
+  const packageFile = await fs.stat(packageFilePath).catch(() => void 0);
+  return packageFile?.isFile?.() ?? false;
+}
 
-  async function readPackage(dir) {
-    const stat = await fs.stat(dir).catch(() => void 0);
-
-    if (!stat || !stat.isDirectory()) {
-      return;
-    }
-
-    const packageContent = await fs
-      .readFile(path.join(dir, 'package.json'), 'utf-8')
-      .catch(() => void 0);
-
-    if (packageContent) {
-      const data = JSON.parse(packageContent);
-      return {
-        data,
-        dir,
-        get name() {
-          return data.name;
-        },
-        get hasExports() {
-          return Boolean(data.exports);
-        },
-      };
-    }
+async function getPackageDirs(input) {
+  // 当前不是文件夹
+  if (!(await isDirectory(input))) {
+    return [];
   }
 
-  async function readSubPackages(dir) {
-    const stat = await fs.stat(dir).catch(() => void 0);
-
-    if (!stat || !stat.isDirectory()) {
-      return;
-    }
-
-    const dirnames = await fs.readdir(dir);
-    const result = await Promise.all(dirnames.map((name) => readPackage(path.join(dir, name))));
-
-    return result;
+  // 当前文件夹是包
+  if (await isPackage(input)) {
+    return [input];
   }
 
-  for (const item of packageConfigs) {
-    const data = item.isSubPackage
-      ? await readSubPackages(item.dirPath)
-      : await readPackage(item.dirPath);
+  const allDirs = await fs.readdir(input);
+  const dirs = await Promise.all(
+    allDirs
+      .filter((name) => !ignoreDir.includes(name))
+      .map((name) => getPackageDirs(path.join(input, name))),
+  );
 
-    if (data) {
-      if (Array.isArray(data)) {
-        packages.push(...data);
-      } else {
-        packages.push(data);
-      }
-    }
-  }
+  return dirs.reduce((ans, item) => ans.concat(item), []);
+}
 
-  return packages;
+async function getPackageData(dirs) {
+  return dirs.map((dir) => ({
+    dir,
+    ...require(path.join(dir, packageConfigName)),
+  }));
 }
 
 async function readBaseConfig() {
@@ -120,24 +92,27 @@ async function writeTsConfig(packages) {
 
   const { paths } = baseConfig.compilerOptions;
 
-  paths["@xiao-ai/utils/*"] = ["./node_modules/@xiao-ai/utils/dist/types/*"];
+  paths['@xiao-ai/utils/*'] = ['./node_modules/@xiao-ai/utils/dist/types/*'];
 
   for (const data of packages) {
-    if (data.hasExports) {
-      paths[`${data.name}/*`] = [`${path.relative(__dirname, data.dir).replace(/[\\/]/g, '/')}/src/*`];
+    if (data.exports) {
+      paths[`${data.name}/*`] = [
+        `${path.relative(__dirname, data.dir).replace(/[\\/]/g, '/')}/src/*`,
+      ];
     }
   }
 
-  await fs.writeFile(path.join(__dirname, 'tsconfig.relative.json'), JSON.stringify(baseConfig, null, 2));
+  await fs.writeFile(path.join(__dirname, package.main), JSON.stringify(baseConfig, null, 2));
 }
 
 async function main() {
   const rootPath = await getRootPath();
-  const packages = await getPackages(rootPath);
+  const packageDirs = await getPackageDirs(path.join(rootPath, packageDir));
+  const packageData = await getPackageData(packageDirs);
 
-  await writeTsConfig(packages);
+  await writeTsConfig(packageData);
 
-  console.log(' > Build Complete.')
+  console.log(' > Build Complete.');
 }
 
 main();

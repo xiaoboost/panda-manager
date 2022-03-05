@@ -5,8 +5,5 @@
   "main": "tsconfig.json",
   "scripts": {
     "build": "node generate.js"
-  },
-  "devDependencies": {
-    "yaml": "^1.10.2"
   }
 }
