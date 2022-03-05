@@ -32,6 +32,7 @@
     "react-dom": "^17.0.2"
   },
   "devDependencies": {
+    "@panda/builder": "workspace:*",
     "@panda/tsconfig": "workspace:*",
     "@types/node": "^17.0.18",
     "@types/panda": "workspace:*",

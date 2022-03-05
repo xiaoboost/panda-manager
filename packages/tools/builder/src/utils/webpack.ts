@@ -4,6 +4,7 @@ import TerserPlugin from 'terser-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
+import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 
 import {
@@ -13,7 +14,10 @@ import {
   appPackageData,
   CommandOptions,
   WebpackOptions,
-} from './utils';
+  packagePathMap,
+} from '../utils';
+
+import path from 'path';
 
 let port = 6060;
 
@@ -26,11 +30,15 @@ export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Con
       ? {
           loader: 'ts-loader',
           options: {
-            configFile: tsConfigFile,
+            context: packagePathMap[opt.name],
+            configFile: path.join(packagePathMap[opt.name], 'tsconfig.json'), // tsConfigFile,
+            // configFile: tsConfigFile,
             compilerOptions: {
               module: 'ESNext',
               target: 'ESNext',
-              baseUrl: resolvePackage(),
+              // baseUrl: resolvePackage(),
+              // baseUrl: packagePathMap[opt.name],
+              // baseUrl: '.',
             },
           },
         }
@@ -43,6 +51,7 @@ export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Con
           },
         };
 
+  debugger;
   const baseConfig: webpack.Configuration = {
     mode: opt.mode as webpack.Configuration['mode'],
     entry: {
@@ -63,13 +72,18 @@ export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Con
       mainFields: ['source', 'module', 'main'],
       alias: {
         src: resolvePackage('src'),
-        '@xiao-ai/utils/web': resolvePackage('node_modules/@xiao-ai/utils/dist/esm/web'),
-        '@xiao-ai/utils/use': resolvePackage('node_modules/@xiao-ai/utils/dist/esm/use'),
-        '@panda/remote': resolveCWD('packages/shared/remote/src'),
-        '@panda/fetch': resolveCWD('packages/shared/fetch/src'),
-        '@panda/modal-utils': resolveCWD('packages/modals/utils/src'),
-        '@panda/modal-tag-editor': resolveCWD('packages/modals/tag-editor/src'),
+        // '@xiao-ai/utils/web': resolvePackage('node_modules/@xiao-ai/utils/dist/esm/web'),
+        // '@xiao-ai/utils/use': resolvePackage('node_modules/@xiao-ai/utils/dist/esm/use'),
+        // '@panda/remote': resolveCWD('packages/shared/remote/src'),
+        // '@panda/fetch': resolveCWD('packages/shared/fetch/src'),
+        // '@panda/modal-utils': resolveCWD('packages/modals/utils/src'),
+        // '@panda/modal-tag-editor': resolveCWD('packages/modals/tag-editor/src'),
       },
+      // plugins: [
+      //   new TsconfigPathsPlugin({
+      //     configFile: path.join(packagePathMap[opt.name], 'tsconfig.json'),
+      //   }),
+      // ],
     },
     module: {
       rules: [

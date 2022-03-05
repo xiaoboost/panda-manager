@@ -2,7 +2,7 @@
   "name": "@panda/tsconfig",
   "description": "panda's TypeScript configuration",
   "version": "1.0.0",
-  "main": "tsconfig.relative.json",
+  "main": "tsconfig.json",
   "scripts": {
     "build": "node generate.js"
   },

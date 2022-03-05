@@ -21,10 +21,7 @@
     "url": "https://github.com/xiaoboost/panda-manager/build/packager"
   },
   "dependencies": {
-    "@panda/client": "workspace:*",
-    "@panda/modal-tag-editor": "workspace:*",
-    "@panda/preload": "workspace:*",
-    "@panda/renderer": "workspace:*",
+    "@xiao-ai/utils": "^1.5.1",
     "electron-packager": "^15.4.0"
   },
   "devDependencies": {
@@ -44,7 +41,8 @@
     "html-webpack-plugin": "^5.5.0",
     "mini-css-extract-plugin": "^2.5.3",
     "terser-webpack-plugin": "^5.3.1",
-    "ts-loader": "^9.2.6",
+    "ts-loader": "^9.2.7",
+    "tsconfig-paths-webpack-plugin": "^3.5.2",
     "tslib": "^2.3.1",
     "typescript": "4.6.2",
     "url-loader": "^4.1.1",

@@ -1,8 +1,9 @@
 import webpack from 'webpack';
 import fs from 'fs-extra';
 
-import { getBaseConfig } from './webpack';
-import { CommandOptions, buildConfigs, resolveCWD, buildPackage } from './utils';
+import { getBaseConfig } from '../utils/webpack';
+import { CommandOptions } from './types';
+import { buildConfigs, resolveCWD, buildPackage } from '../utils';
 
 function buildWebpack(opt: CommandOptions) {
   const compilerConfigs = buildConfigs.map((item) =>

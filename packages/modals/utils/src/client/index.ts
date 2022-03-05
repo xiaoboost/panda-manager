@@ -30,16 +30,18 @@ export function createModalService<Init, Return>({
     return new Promise<Return>((resolve) => {
       const win = new BrowserWindow({
         ...opt,
-        // 调试时要给 dev-tool 留出高度
-        height: process.env.NODE_ENV === 'development' ? height + 400 : height,
-        width: process.env.NODE_ENV === 'development' ? width + 400 : width,
+        // 调试时全屏
+        height: process.env.NODE_ENV === 'development' ? 5000 : height,
+        width: process.env.NODE_ENV === 'development' ? 5000 : width,
+        fullscreen: process.env.NODE_ENV === 'development',
         center: true,
-        frame: false,
+        frame: true,
         resizable: false,
         minimizable: false,
         maximizable: false,
         hasShadow: true,
         modal: true,
+        alwaysOnTop: true,
         webPreferences: {
           ...(opt.webPreferences ?? {}),
           webgl: false,
@@ -49,6 +51,7 @@ export function createModalService<Init, Return>({
           webSecurity: true,
           safeDialogs: true,
           sandbox: false,
+          images: false,
           allowRunningInsecureContent: false,
           preload: resolveRoot('preload/index.js'),
           devTools: process.env.NODE_ENV === 'development',

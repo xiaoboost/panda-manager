@@ -30,23 +30,23 @@ export const buildConfigs: WebpackOptions[] = [
     name: '@panda/client',
     process: 'main',
   },
-  {
-    name: '@panda/preload',
-    process: 'preload',
-  },
-  {
-    name: '@panda/renderer',
-    process: 'renderer',
-    output: 'views/main',
-    entry: 'src/init/index.ts',
-  },
-  {
-    name: '@panda/modal-tag-editor',
-    process: 'renderer',
-    output: 'views/tag-editor',
-    entry: 'src/renderer/index.ts',
-    html: 'src/renderer/index.html',
-  },
+  // {
+  //   name: '@panda/preload',
+  //   process: 'preload',
+  // },
+  // {
+  //   name: '@panda/renderer',
+  //   process: 'renderer',
+  //   output: 'views/main',
+  //   entry: 'src/init/index.ts',
+  // },
+  // {
+  //   name: '@panda/modal-tag-editor',
+  //   process: 'renderer',
+  //   output: 'views/tag-editor',
+  //   entry: 'src/renderer/index.ts',
+  //   html: 'src/renderer/index.html',
+  // },
 ];
 
 function createResolve(base: string) {
@@ -60,6 +60,34 @@ export const resolveCWD = createResolve(process.cwd());
 export const resolve = createResolve(path.join(__dirname, '..'));
 
 export const appPackageData = fs.readJSONSync(resolveCWD('package.json'));
+
+function getAllPackages() {
+  const root = resolveCWD();
+  const packagePathMap: Record<string, string> = {};
+  const packageDirName = 'packages';
+
+  fs.readdirSync(path.join(root, packageDirName))
+    .map((dirName) => {
+      const basePath = path.join(root, packageDirName, dirName);
+      return fs.readdirSync(basePath).map((subName) => path.join(basePath, subName));
+    })
+    .reduce((ans, item) => ans.concat(item), [])
+    .map((dirPath) => {
+      const packageData = fs.readJsonSync(path.join(dirPath, 'package.json'));
+      return {
+        dir: dirPath,
+        name: packageData.name,
+      };
+    })
+    .forEach(({ dir, name }) => {
+      packagePathMap[name] = dir;
+      packagePathMap[dir] = name;
+    });
+
+  return packagePathMap;
+}
+
+export const packagePathMap = getAllPackages();
 
 export function getPackageResolve(name: string) {
   return createResolve(path.join(__dirname, '../node_modules', name));

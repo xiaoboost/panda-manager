@@ -32,6 +32,7 @@
     "esbuild": "^0.14.21"
   },
   "devDependencies": {
+    "@panda/builder": "workspace:*",
     "@panda/tsconfig": "workspace:*",
     "@types/panda": "workspace:*",
     "typescript": "4.6.2"

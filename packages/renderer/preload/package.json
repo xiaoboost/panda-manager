@@ -10,6 +10,7 @@
     "lint:fix": "eslint --fix --quiet --no-error-on-unmatched-pattern --config ../../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}"
   },
   "devDependencies": {
+    "@panda/builder": "workspace:*",
     "@panda/tsconfig": "workspace:*",
     "@types/node": "^17.0.18",
     "@types/panda": "workspace:*",
