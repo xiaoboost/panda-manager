@@ -7,38 +7,25 @@ import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 
-import {
-  resolve,
-  resolveCWD,
-  getPackageResolve,
-  appPackageData,
-  CommandOptions,
-  WebpackOptions,
-  packagePathMap,
-} from '../utils';
-
-import path from 'path';
+import { ProjectConfig } from './types';
+import { resolveCWD, resolveBuilder, getResolve, appData } from './env';
+import { CommandOptions } from '../commands';
 
 let port = 6060;
 
-export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Configuration {
-  const outDir = resolveCWD(opt.outDir, opt.output ?? opt.process);
-  const resolvePackage = getPackageResolve(opt.name);
-  const tsConfigFile = resolve('src/tsconfig.json');
+export function getBaseConfig(opt: CommandOptions, project: ProjectConfig): webpack.Configuration {
+  const outDir = resolveCWD(opt.outDir, project.output);
+  const resolveProject = getResolve(project.dirname);
+  const tsConfigFile = resolveProject(project.tsConfigFile);
   const tsLoaderConfig =
     opt.mode === 'development'
       ? {
           loader: 'ts-loader',
           options: {
-            context: packagePathMap[opt.name],
-            configFile: path.join(packagePathMap[opt.name], 'tsconfig.json'), // tsConfigFile,
-            // configFile: tsConfigFile,
+            configFile: tsConfigFile,
             compilerOptions: {
               module: 'ESNext',
               target: 'ESNext',
-              // baseUrl: resolvePackage(),
-              // baseUrl: packagePathMap[opt.name],
-              // baseUrl: '.',
             },
           },
         }
@@ -51,11 +38,10 @@ export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Con
           },
         };
 
-  debugger;
   const baseConfig: webpack.Configuration = {
     mode: opt.mode as webpack.Configuration['mode'],
     entry: {
-      index: resolvePackage(opt.entry ?? 'src/index.ts'),
+      index: resolveProject(project.entry),
     },
     output: {
       path: outDir,
@@ -64,26 +50,20 @@ export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Con
       publicPath: './',
     },
     resolveLoader: {
-      modules: [resolve('node_modules'), resolvePackage('node_modules')],
+      modules: [resolveBuilder('node_modules'), resolveProject('node_modules')],
     },
     resolve: {
       extensions: ['.tsx', '.ts', '.js', '.json'],
       mainFiles: ['index.tsx', 'index.ts', 'index.js', 'index.json'],
       mainFields: ['source', 'module', 'main'],
       alias: {
-        src: resolvePackage('src'),
-        // '@xiao-ai/utils/web': resolvePackage('node_modules/@xiao-ai/utils/dist/esm/web'),
-        // '@xiao-ai/utils/use': resolvePackage('node_modules/@xiao-ai/utils/dist/esm/use'),
-        // '@panda/remote': resolveCWD('packages/shared/remote/src'),
-        // '@panda/fetch': resolveCWD('packages/shared/fetch/src'),
-        // '@panda/modal-utils': resolveCWD('packages/modals/utils/src'),
-        // '@panda/modal-tag-editor': resolveCWD('packages/modals/tag-editor/src'),
+        src: resolveProject('src'),
       },
-      // plugins: [
-      //   new TsconfigPathsPlugin({
-      //     configFile: path.join(packagePathMap[opt.name], 'tsconfig.json'),
-      //   }),
-      // ],
+      plugins: [
+        new TsconfigPathsPlugin({
+          configFile: tsConfigFile,
+        }),
+      ],
     },
     module: {
       rules: [
@@ -131,7 +111,7 @@ export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Con
     plugins: [
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(opt.mode),
-        'process.env.VERSION': JSON.stringify(appPackageData.version),
+        'process.env.VERSION': JSON.stringify(appData.version),
       }),
       new MiniCssExtractPlugin({
         filename: 'styles.css',
@@ -182,11 +162,11 @@ export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Con
     }
   }
 
-  if (opt.process === 'renderer') {
+  if (project.process === 'renderer') {
     baseConfig.plugins?.push(
       new HtmlWebpackPlugin({
         filename: 'index.html',
-        template: resolvePackage(opt.html ?? 'src/index.html'),
+        template: resolveProject(project.html),
         inject: true,
         minify: {
           removeComments: true,
@@ -197,7 +177,7 @@ export function getBaseConfig(opt: CommandOptions & WebpackOptions): webpack.Con
     );
   }
 
-  baseConfig.target = `electron-${opt.process}`;
+  baseConfig.target = `electron-${project.process}`;
 
   return baseConfig;
 }

@@ -1,18 +1,16 @@
 import webpack from 'webpack';
 import fs from 'fs-extra';
 
-import { getBaseConfig } from '../utils/webpack';
 import { CommandOptions } from './types';
-import { buildConfigs, resolveCWD, buildPackage } from '../utils';
+import { ProjectConfig } from '../utils/types';
+import { resolveCWD } from '../utils/env';
+import { buildManifest } from '../utils/package';
+import { getBuildConfig } from '../utils/config';
+import { getBaseConfig } from '../utils/webpack';
 
-function buildWebpack(opt: CommandOptions) {
+function buildWebpack(opt: CommandOptions, configs: ProjectConfig[]) {
   return new Promise<void>((resolve) => {
-    const compilerConfigs = buildConfigs.map((item) =>
-      getBaseConfig({
-        ...opt,
-        ...item,
-      }),
-    );
+    const compilerConfigs = configs.map((item) => getBaseConfig(opt, item));
 
     webpack(compilerConfigs, (err, stats) => {
       console.log('\x1Bc');
@@ -43,8 +41,9 @@ function buildWebpack(opt: CommandOptions) {
 
 export async function build(opt: CommandOptions) {
   const outDir = resolveCWD(opt.outDir);
+  const configs = await getBuildConfig(resolveCWD());
 
   await fs.remove(outDir);
-  await buildPackage(resolveCWD(), outDir);
-  await buildWebpack(opt);
+  await buildManifest(outDir);
+  await buildWebpack(opt, configs);
 }

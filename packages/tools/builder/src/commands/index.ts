@@ -4,6 +4,8 @@ import { build } from './build';
 import { watch } from './watch';
 import { generate } from './package';
 
+export * from './types';
+
 function setYargsCommand(yargs: yargs.Argv<any>) {
   return yargs.options({
     outDir: {

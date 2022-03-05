@@ -4,7 +4,7 @@ import path from 'path';
 
 import { runScript } from '@xiao-ai/utils/node';
 import { BuildConfig } from '../builder';
-import { PackageConfig } from './types';
+import { ProjectConfig } from './types';
 
 /** 子包文件夹 */
 const packageDir = 'packages';
@@ -15,7 +15,7 @@ const buildConfigFile = 'build.config.ts';
 /** 忽略文件夹 */
 const ignoreDir = ['node_modules', 'dist'];
 
-async function readConfig(dir: string): Promise<PackageConfig> {
+async function readConfig(dir: string): Promise<ProjectConfig> {
   const file = path.join(dir, buildConfigFile);
   const code = await fs.readFile(file, 'utf-8');
   const transformed = ts.transpile(code, {
@@ -82,8 +82,5 @@ async function getHasBuildConfigPackage(input: string): Promise<string[]> {
 /** 获取所有工程配置 */
 export async function getBuildConfig(root: string) {
   const packages = await getHasBuildConfigPackage(path.join(root, packageDir));
-  const configs = await Promise.all(packages.map((dir) => readConfig(dir)));
-  debugger;
+  return await Promise.all(packages.map((dir) => readConfig(dir)));
 }
-
-getBuildConfig(process.cwd());
