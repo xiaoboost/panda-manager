@@ -24,29 +24,6 @@
     "skipLibCheck": true,
     "suppressImplicitAnyIndexErrors": true,
     "allowJs": true,
-    "lib": [
-      "ESNext",
-      "DOM"
-    ],
-    "paths": {
-      "@xiao-ai/utils/*": [
-        "./node_modules/@xiao-ai/utils/dist/types/*"
-      ],
-      "@panda/remote/*": [
-        "./node_modules/@panda/remote/src/*"
-      ],
-      "@panda/fetch/*": [
-        "./node_modules/@panda/fetch/src/*"
-      ],
-      "@panda/modal-utils/*": [
-        "./node_modules/@panda/modal-utils/src/*"
-      ],
-      "@panda/modal-tag-editor/*": [
-        "./node_modules/@panda/modal-tag-editor/src/*"
-      ],
-      "@panda/plugin-manga/*": [
-        "./node_modules/@panda/plugin-manga/src/*"
-      ]
-    }
+    "lib": ["ESNext", "DOM"]
   }
 }

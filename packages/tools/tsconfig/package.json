@@ -1,0 +1,12 @@
+{
+  "name": "@panda/tsconfig",
+  "description": "panda's TypeScript configuration",
+  "version": "1.0.0",
+  "main": "tsconfig.relative.json",
+  "scripts": {
+    "build": "node generate.js"
+  },
+  "devDependencies": {
+    "yaml": "^1.10.2"
+  }
+}
