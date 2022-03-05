@@ -75,4 +75,10 @@ export const style = createStyles({
       backgroundColor: mainFocusBgColor.toString(),
     },
   },
+  nav: {
+    display: 'inline-flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+  },
 });

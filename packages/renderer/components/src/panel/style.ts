@@ -15,31 +15,28 @@ const fontDisableColor = BlackExtraLight;
 const splitColor = Color(BlackExtraLight.rgbNumber() - 0x101010);
 
 export const style = createStyles({
-  panelShow: {},
-  panelItemDisabled: {},
+  disabled: {},
 
-  menu: {
-    display: 'inline-flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'relative',
+  container: {
+    position: 'static',
   },
   panel: {
-    position: 'fixed',
-    minWidth: 180,
-    display: 'none',
+    display: 'flex',
     flexDirection: 'column',
+    position: 'absolute',
+    minWidth: 180,
     padding: [4, 1],
     zIndex: 10,
     boxShadow: `0px 1px 4px ${Color.rgb(0, 0, 0, 0.2).toString()}`,
     backgroundColor: bgColor.toString(),
     color: fontColor.toString(),
-
-    '&$panelShow': {
-      display: 'flex',
-    },
   },
-  panelItem: {
+  split: {
+    height: 1,
+    margin: [4, 10],
+    backgroundColor: splitColor.toString(),
+  },
+  item: {
     height: 24,
     lineHeight: '24px',
     fontSize: 12,
@@ -51,14 +48,9 @@ export const style = createStyles({
       backgroundColor: itemFocusBgColor.toString(),
     },
 
-    '&$panelItemDisabled': {
+    '&$disabled': {
       color: `${fontDisableColor.toString()} !important`,
       backgroundColor: 'transparent !important',
     },
-  },
-  panelSplit: {
-    height: 1,
-    margin: [4, 10],
-    backgroundColor: splitColor.toString(),
   },
 });

@@ -1,12 +1,13 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
-export function useClickOutside(
-  element: HTMLElement | undefined | null,
+export function useClickOutside<H extends HTMLElement = HTMLElement>(
   onOutsideClick: (event: MouseEvent) => any,
 ) {
+  const ref = useRef<H>(null);
+
   useEffect(() => {
     function clickOutside(event: MouseEvent) {
-      if (event.target && element && !element.contains(event.target as Element)) {
+      if (event.target && ref.current && !ref.current.contains(event.target as Element)) {
         onOutsideClick(event);
       }
     }
@@ -16,5 +17,7 @@ export function useClickOutside(
     return () => {
       document.removeEventListener('click', clickOutside);
     };
-  }, [element]);
+  }, [ref.current]);
+
+  return ref;
 }

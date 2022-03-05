@@ -1,12 +1,9 @@
 import React from 'react';
 
 import { style } from './style';
-import { useClickOutside } from '@panda/renderer-utils';
 import { stringifyClass } from '@xiao-ai/utils';
-
+import { Panel } from '@panda/components';
 import { useState, useRef, PropsWithChildren } from 'react';
-
-export * from './panel';
 
 export interface MenuProps {
   title: React.ReactNode;
@@ -30,10 +27,12 @@ function getOffset(el: HTMLElement): [number, number] {
 }
 
 export function MenuNav(props: PropsWithChildren<MenuProps>) {
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLElement>(null);
   const [show, setShow] = useState(false);
   const [position, setPosition] = useState<[number, number]>();
-  const onClick = () => {
+  const onClick = (ev: React.MouseEvent) => {
+    ev.stopPropagation();
+
     const { current: el } = ref;
 
     if (!el) {
@@ -50,29 +49,19 @@ export function MenuNav(props: PropsWithChildren<MenuProps>) {
     }
   };
 
-  useClickOutside(ref.current, () => setShow(false));
-
   return (
     <span
       ref={ref}
-      className={stringifyClass(style.classes.menu, props.className, {
+      className={stringifyClass(style.classes.nav, props.className, {
         [props.highlightClassName ?? '']: Boolean(props.highlightClassName && show),
       })}
       onClick={onClick}
     >
       {props.title}
       {props.children && (
-        <div
-          className={stringifyClass(style.classes.panel, {
-            [style.classes.panelShow]: show,
-          })}
-          style={{
-            left: position?.[0],
-            top: position?.[1],
-          }}
-        >
+        <Panel visible={show} x={position?.[0]} y={position?.[1]} onVisibleChange={setShow}>
           {props.children}
-        </div>
+        </Panel>
       )}
     </span>
   );

@@ -13,8 +13,8 @@ export interface PanelItemProps {
 export function PanelItem(props: PropsWithChildren<PanelItemProps>) {
   return (
     <div
-      className={stringifyClass(style.classes.panelItem, {
-        [style.classes.panelItemDisabled]: props.disabled ?? false,
+      className={stringifyClass(style.classes.item, {
+        [style.classes.disabled]: props.disabled ?? false,
       })}
       onClick={props.onClick}
     >
@@ -22,8 +22,4 @@ export function PanelItem(props: PropsWithChildren<PanelItemProps>) {
       {props.shortcut && <span>{props.shortcut}</span>}
     </div>
   );
-}
-
-export function PanelSplit() {
-  return <div className={style.classes.panelSplit} />;
 }

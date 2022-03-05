@@ -8,11 +8,12 @@ import { fetch } from '@panda/fetch/renderer';
 import { ServiceName } from '@panda/shared';
 import { getRemoteWindow } from '@panda/remote/renderer';
 
-import { MenuNav, PanelItem, PanelSplit } from './menu';
+import { MenuNav } from './menu';
 
 import { useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
+import { PanelItem, PanelSplit } from '@panda/components';
 import { MinusOutlined, CloseOutlined, BorderOutlined } from '@ant-design/icons';
 
 const stopEvent = (ev: React.MouseEvent) => ev.stopPropagation();
