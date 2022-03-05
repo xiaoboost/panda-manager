@@ -1,3 +1,3 @@
 import { ListenerContext } from '@panda/fetch/client';
 
-export type ServiceData<T = any> = (context: ListenerContext) => T;
+export type ServiceData<R = any, P = any> = (context: ListenerContext<P>) => R;
