@@ -17,12 +17,12 @@ export interface PanelProps {
   /** 如果可见，面板原点的纵坐标 */
   y?: number;
   /** 可见性变更 */
-  onVisibleChange?(visible: boolean): void;
+  onBlur?(): void;
 }
 
 export function Panel(props: PropsWithChildren<PanelProps>) {
-  const { visible = false, x = 0, y = 0, onVisibleChange = () => void 0, children } = props;
-  const ref = useClickOutside<HTMLDivElement>(() => onVisibleChange(false));
+  const { visible = false, x = 0, y = 0, onBlur = () => void 0, children } = props;
+  const ref = useClickOutside<HTMLDivElement>(() => onBlur());
 
   if (!visible) {
     return ReactDom.createPortal(null, panelContainer);

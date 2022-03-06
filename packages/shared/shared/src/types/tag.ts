@@ -53,6 +53,9 @@ export interface PatchTagData extends TagDataInDb {
 }
 
 /** 新标签数据 */
-export interface NewTagData extends Omit<PatchTagData, 'id'> {
-  // ..
+export interface NewTagData {
+  /** 标签种类 */
+  kind: TagKind;
+  /** 新标签名称 */
+  name: string;
 }

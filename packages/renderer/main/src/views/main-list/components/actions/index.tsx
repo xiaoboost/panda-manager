@@ -6,7 +6,7 @@ import { stringifyClass } from '@xiao-ai/utils';
 import { BaseProps } from '@panda/shared';
 
 /** 按钮列表容器 */
-export function Container(props: PropsWithChildren<BaseProps>) {
+export function ActionsContainer(props: PropsWithChildren<BaseProps>) {
   return (
     <ul className={stringifyClass(style.classes.container, props.className)} style={props.style}>
       {props.children}
@@ -15,7 +15,7 @@ export function Container(props: PropsWithChildren<BaseProps>) {
 }
 
 interface ItemProps extends BaseProps {
-  title: string;
+  title?: string;
 }
 
 /** 按钮容器 */

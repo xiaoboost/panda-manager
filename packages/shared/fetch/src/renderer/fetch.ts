@@ -61,8 +61,11 @@ if (process.env.NODE_ENV === 'development') {
 
 export function fetch<T = any>(param: FetchParam): Promise<FetchData<T>>;
 export function fetch<T = any>(name: ServiceName): Promise<FetchData<T>>;
-export function fetch<T = any>(name: ServiceName, param?: any): Promise<FetchData<T>>;
-export function fetch<T = any>(name: ServiceName | FetchParam, param?: any): Promise<FetchData<T>> {
+export function fetch<T = any, P = any>(name: ServiceName, param?: P): Promise<FetchData<T>>;
+export function fetch<T = any, P = any>(
+  name: ServiceName | FetchParam,
+  param?: P,
+): Promise<FetchData<T>> {
   return new Promise<FetchData<T>>((resolve, reject) => {
     const currentId = eventId++;
     const data: FetchData = isNumber(name)

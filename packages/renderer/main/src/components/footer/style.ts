@@ -1,5 +1,7 @@
 import { createStyles, White, Purple } from '@panda/renderer-utils';
 
+export const height = 20;
+
 export const style = createStyles({
   footer: {
     display: 'flex',
@@ -8,7 +10,7 @@ export const style = createStyles({
     alignItems: 'center',
     backgroundColor: Purple.toString(),
     color: White.toString(),
-    height: 20,
+    height,
     fontSize: 12,
     padding: [0, 18],
   },

@@ -31,6 +31,7 @@ export const style = createStyles({
     '& > span': {
       display: 'inline-flex',
       alignItems: 'center',
+      height: '100%',
     },
 
     '&$headerUnFocus': {
@@ -69,6 +70,7 @@ export const style = createStyles({
   tabItem: {
     fontSize: 13,
     padding: [4, 12],
+    height: '100%',
     '-webkit-app-region': 'no-drag',
 
     '&:hover, &$highlightTabItem': {

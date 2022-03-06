@@ -59,7 +59,7 @@ export function MenuNav(props: PropsWithChildren<MenuProps>) {
     >
       {props.title}
       {props.children && (
-        <Panel visible={show} x={position?.[0]} y={position?.[1]} onVisibleChange={setShow}>
+        <Panel visible={show} x={position?.[0]} y={position?.[1]} onBlur={() => setShow(false)}>
           {props.children}
         </Panel>
       )}

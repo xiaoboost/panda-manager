@@ -11,16 +11,19 @@ export function getTags() {
   return Tags.orderBy('name').toQuery();
 }
 
-export function addTag(data: NewTagData) {
-  // 保证数据没有带 id 字段
-  delete (data as any).id;
-
+export function addTagByName(data: NewTagData) {
   if (data.kind === TagKind.Tag) {
-    return Tags.insert(data)[0];
+    return Tags.insert({
+      name: data.name,
+      comment: '',
+      alias: [],
+    })[0];
   } else {
     return TagGroups.insert({
-      ...data,
-      tags: data.tags ?? [],
+      name: data.name,
+      comment: '',
+      alias: [],
+      tags: [],
     })[0];
   }
 }
