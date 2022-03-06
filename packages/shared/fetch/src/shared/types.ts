@@ -1,5 +1,4 @@
-import { Status } from './constant';
-import { ServiceName } from '@panda/shared';
+import { Status, ServiceName } from './constant';
 
 /** 事件基础数据 */
 interface BaseData<T> {

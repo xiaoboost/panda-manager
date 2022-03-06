@@ -10,7 +10,7 @@ import {
   Status,
 } from '../shared';
 
-export { FetchData, Status } from '../shared';
+export { FetchData, Status, ServiceName } from '../shared';
 
 /** 监听服务上下文 */
 export interface ListenerContext<T = any> {

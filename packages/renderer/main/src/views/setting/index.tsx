@@ -6,8 +6,8 @@ import { style } from './style';
 import { Directories } from './directories';
 import { Display } from './display';
 
-import { fetch } from '@panda/fetch/renderer';
-import { SettingData, ServiceName, SortOption } from '@panda/shared';
+import { fetch, ServiceName } from '@panda/fetch/renderer';
+import { SettingData, SortOption } from '@panda/shared';
 import { initSettingData } from './utils/constant';
 
 export function Setting() {

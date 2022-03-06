@@ -2,7 +2,7 @@ import { ipcRenderer } from 'electron';
 import { log } from '@panda/shared';
 import { isNumber } from '@xiao-ai/utils';
 import { FetchParam, FetchStore } from './types';
-import { ServiceName } from '@panda/shared';
+import { ServiceName } from '../shared';
 
 import {
   FetchEventName,

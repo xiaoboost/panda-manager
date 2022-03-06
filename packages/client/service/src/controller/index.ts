@@ -9,8 +9,7 @@ import { service as getAllTags } from './get-all-tags';
 import { service as addTag } from './add-tag';
 
 import { ServiceData } from './types';
-import { ServiceName } from '@panda/shared';
-import { Status, FetchData, ListenerContext } from '@panda/fetch/client';
+import { Status, FetchData, ListenerContext, ServiceName } from '@panda/fetch/client';
 
 const serviceMap: Record<ServiceName, ServiceData | undefined> = {
   [ServiceName.Ready]: ready,
@@ -25,6 +24,7 @@ const serviceMap: Record<ServiceName, ServiceData | undefined> = {
   [ServiceName.GetAllTags]: getAllTags,
   [ServiceName.AddTag]: addTag,
   [ServiceName.PatchTag]: undefined,
+  [ServiceName.PatchTagMeta]: undefined,
   [ServiceName.DeleteTag]: undefined,
 };
 

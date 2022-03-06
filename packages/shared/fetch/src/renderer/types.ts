@@ -1,5 +1,4 @@
-import { FetchData } from '../shared';
-import { ServiceName } from '@panda/shared';
+import { FetchData, ServiceName } from '../shared';
 
 export interface FetchParam {
   /** 事件名称 */
