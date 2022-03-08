@@ -5,8 +5,8 @@ import { Tag } from '../tags';
 import { ActionsContainer, ActionItem } from '../actions';
 
 import { useState } from 'react';
-import { fetch } from '@panda/fetch/renderer';
-import { TagGroupData, ServiceName, log } from '@panda/shared';
+import { fetch, ServiceName } from '@panda/fetch/renderer';
+import { TagGroupData, log } from '@panda/shared';
 import { FolderAddOutlined, MinusSquareOutlined } from '@ant-design/icons';
 
 export function Sidebar() {

@@ -1,8 +1,7 @@
 import type { OpenDialogOptions, MessageBoxOptions, MessageBoxReturnValue } from 'electron';
 
 import { basename } from 'path';
-import { ServiceName } from '@panda/shared';
-import { fetch } from '@panda/fetch/renderer';
+import { fetch, ServiceName } from '@panda/fetch/renderer';
 
 export function selectDirectories() {
   const data: OpenDialogOptions = {

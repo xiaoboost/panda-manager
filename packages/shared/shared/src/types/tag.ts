@@ -1,20 +1,14 @@
-/**
- * 标签数据
- *   - 存在数据库中
- */
+/** 数据库中的标签数据 */
 export interface TagDataInDb {
   /** 标签名称 */
   name: string;
   /** 注释说明 */
-  comment: string;
+  comment?: string;
   /** 标签别名 */
-  alias: string[];
+  alias?: string[];
 }
 
-/**
- * 标签集数据
- *   - 存在数据库中
- */
+/** 数据库中的标签集数据 */
 export interface TagGroupDataInDb extends TagDataInDb {
   /** 包含的标签编号 */
   tags: number[];
@@ -34,28 +28,33 @@ export interface TagGroupData extends TagDataInDb {
   tags: TagData[];
 }
 
-/** 标签种类 */
-export enum TagKind {
-  /** 标签 */
-  Tag,
-  /** 标签集 */
-  Group,
-}
-
 /** 修改标签数据 */
-export interface PatchTagData extends TagDataInDb {
-  /** 标签编号 */
-  id: number;
-  /** 标签种类 */
-  kind: TagKind;
-  /** 包含的标签编号 */
-  tags?: number[];
-}
+export type PatchTagData = TagData;
+/** 修改标签集数据 */
+export type PatchTagGroupData = TagData;
 
-/** 新标签数据 */
+/** 新标签参数 */
 export interface NewTagData {
-  /** 标签种类 */
-  kind: TagKind;
   /** 新标签名称 */
   name: string;
+}
+
+/** 新标签集参数 */
+export type NewTagGroupData = NewTagData;
+
+/** 删除标签参数 */
+export interface DeleteTagData {
+  /** 删除标签编号 */
+  id: string;
+}
+
+/** 删除标签集参数 */
+export type DeleteTagGroupData = DeleteTagData;
+
+/** 移动标签 */
+export interface MoveTagData {
+  /** 待移动的标签编号 */
+  id: number;
+  /** 移动至哪个标签集 */
+  to: number;
 }

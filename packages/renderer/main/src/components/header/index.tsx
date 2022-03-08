@@ -4,8 +4,7 @@ import { style } from './style';
 import { Bamboo, Recover } from '@panda/components';
 import { useIsFocus, useIsMaximize } from '@panda/renderer-utils';
 import { stringifyClass } from '@xiao-ai/utils';
-import { fetch } from '@panda/fetch/renderer';
-import { ServiceName } from '@panda/shared';
+import { fetch, ServiceName } from '@panda/fetch/renderer';
 import { getRemoteWindow } from '@panda/remote/renderer';
 
 import { MenuNav } from './menu';

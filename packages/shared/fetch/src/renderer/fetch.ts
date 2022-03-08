@@ -13,6 +13,9 @@ import {
   Status,
 } from '../shared';
 
+import type { OpenDialogOptions, MessageBoxOptions, MessageBoxReturnValue } from 'electron';
+import type { TagGroupData } from '@panda/shared';
+
 let eventId = 0;
 
 const fetchStore: FetchStore[] = [];
@@ -59,14 +62,39 @@ if (process.env.NODE_ENV === 'development') {
   log('Fetch 模块初始化');
 }
 
-export function fetch<T = any>(param: FetchParam): Promise<FetchData<T>>;
-export function fetch<T = any>(name: ServiceName): Promise<FetchData<T>>;
-export function fetch<T = any, P = any>(name: ServiceName, param?: P): Promise<FetchData<T>>;
-export function fetch<T = any, P = any>(
+/** 打开“关于”对话框 */
+export function fetch(name: ServiceName.OpenAboutModal): Promise<FetchData<void>>;
+/** 以桌面的默认方式打开文件 */
+export function fetch(name: ServiceName.OpenPathDefaultManner): Promise<FetchData<void>>;
+
+/** 打开选择文件（夹）对话框 */
+export function fetch(
+  name: ServiceName.OpenSelectDialog,
+  params?: OpenDialogOptions,
+): Promise<FetchData<string[]>>;
+/** 打开选择文件（夹）对话框 */
+export function fetch(param: FetchParam<OpenDialogOptions>): Promise<FetchData<string[]>>;
+
+/** 打开消息对话框 */
+export function fetch(
+  name: ServiceName.OpenMessageDialog,
+  params?: MessageBoxOptions,
+): Promise<FetchData<MessageBoxReturnValue>>;
+/** 打开消息对话框 */
+export function fetch(
+  param: FetchParam<MessageBoxOptions>,
+): Promise<FetchData<MessageBoxReturnValue>>;
+
+/** 获取所有标签数据 */
+export function fetch(name: ServiceName.GetAllTags): Promise<FetchData<TagGroupData[]>>;
+
+export function fetch<R = any, P = any>(param: FetchParam<P>): Promise<FetchData<R>>;
+export function fetch<R = any, P = any>(name: ServiceName, param?: P): Promise<FetchData<R>>;
+export function fetch<R = any, P = any>(
   name: ServiceName | FetchParam,
   param?: P,
-): Promise<FetchData<T>> {
-  return new Promise<FetchData<T>>((resolve, reject) => {
+): Promise<FetchData<R>> {
+  return new Promise<FetchData<R>>((resolve, reject) => {
     const currentId = eventId++;
     const data: FetchData = isNumber(name)
       ? {
