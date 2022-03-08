@@ -7,6 +7,7 @@ import { service as openPathDefaultManner } from './open-path-default-manner';
 import { service as openMessageDialog } from './open-message-dialog';
 import { service as getAllTags } from './get-all-tags';
 import { service as addTag } from './add-tag';
+import { service as addTagGroup } from './add-tag-group';
 
 import { ServiceData } from './types';
 import { Status, FetchData, ListenerContext, ServiceName } from '@panda/fetch/client';
@@ -23,7 +24,7 @@ const serviceMap: Record<ServiceName, ServiceData | undefined> = {
   [ServiceName.OpenMessageDialog]: openMessageDialog,
   [ServiceName.GetAllTags]: getAllTags,
   [ServiceName.AddTag]: addTag,
-  [ServiceName.AddTagGroup]: addTag,
+  [ServiceName.AddTagGroup]: addTagGroup,
   [ServiceName.PatchTag]: undefined,
   [ServiceName.PatchTagGroup]: undefined,
   [ServiceName.PatchTagMeta]: undefined,
