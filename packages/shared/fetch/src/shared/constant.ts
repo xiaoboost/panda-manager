@@ -1,5 +1,5 @@
 /** 渲染进程到主进程 */
-export const FetchEventName = '_event_fetch_event';
+export const FetchEventName = '_event_fetch_service';
 /** 主进程回复渲染进程通信 */
 export const ReplyEventName = '_event_fetch_reply_renderer';
 /** 主进程回复渲染进程进度事件通信 */
@@ -20,8 +20,10 @@ export enum Status {
 /** 请求服务名称 */
 export enum ServiceName {
   // 状态
-  /** 数据是否准备好 */
+  /** 初始化完成 */
   Ready = 100,
+  /** 构建信息 */
+  GetBuildInfo,
 
   // 配置
   /** 获取配置数据 */
@@ -35,19 +37,9 @@ export enum ServiceName {
   /** 获取项目详情 */
   GetItemDetail,
 
-  // 弹窗
-  /** 打开“关于”对话框 */
-  OpenAboutModal = 400,
-  /** 以桌面的默认方式打开文件 */
-  OpenPathDefaultManner,
-  /** 打开选择文件（夹）对话框 */
-  OpenSelectDialog,
-  /** 打开消息对话框 */
-  OpenMessageDialog,
-
   // 标签
   /** 获取所有标签数据 */
-  GetAllTags = 500,
+  GetAllTags = 400,
   /** 新增标签 */
   AddTag,
   /** 新增标签集 */

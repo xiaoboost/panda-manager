@@ -1,5 +1,5 @@
 import { BrowserWindow, Event } from 'electron';
-import { ListenerEventName, ListenerEvent } from '../shared';
+import { ListenerEventName, ListenerEvent } from '../../shared/window';
 import { log } from '@panda/shared';
 
 interface EventCache {

@@ -62,29 +62,6 @@ if (process.env.NODE_ENV === 'development') {
   log('Fetch 模块初始化');
 }
 
-/** 打开“关于”对话框 */
-export function fetch(name: ServiceName.OpenAboutModal): Promise<FetchData<void>>;
-/** 以桌面的默认方式打开文件 */
-export function fetch(name: ServiceName.OpenPathDefaultManner): Promise<FetchData<void>>;
-
-/** 打开选择文件（夹）对话框 */
-export function fetch(
-  name: ServiceName.OpenSelectDialog,
-  params?: OpenDialogOptions,
-): Promise<FetchData<string[]>>;
-/** 打开选择文件（夹）对话框 */
-export function fetch(param: FetchParam<OpenDialogOptions>): Promise<FetchData<string[]>>;
-
-/** 打开消息对话框 */
-export function fetch(
-  name: ServiceName.OpenMessageDialog,
-  params?: MessageBoxOptions,
-): Promise<FetchData<MessageBoxReturnValue>>;
-/** 打开消息对话框 */
-export function fetch(
-  param: FetchParam<MessageBoxOptions>,
-): Promise<FetchData<MessageBoxReturnValue>>;
-
 /** 获取所有标签数据 */
 export function fetch(name: ServiceName.GetAllTags): Promise<FetchData<TagGroupData[]>>;
 

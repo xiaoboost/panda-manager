@@ -65,6 +65,6 @@ export function initialize(win: BrowserWindow, listener: Listener) {
   });
 
   if (process.env.NODE_ENV === 'development') {
-    log('服务器初始化完成');
+    log('Fetch 模块初始化完成');
   }
 }

@@ -1,11 +1,13 @@
 import React from 'react';
 
 import { style } from './style';
+import { clipboard } from 'electron';
 import { Bamboo, Recover } from '@panda/components';
 import { useIsFocus, useIsMaximize } from '@panda/renderer-utils';
 import { stringifyClass } from '@xiao-ai/utils';
+import { log } from '@panda/shared';
 import { fetch, ServiceName } from '@panda/fetch/renderer';
-import { getRemoteWindow } from '@panda/remote/renderer';
+import { getRemoteWindow, getRemoteDialog } from '@panda/remote/renderer';
 
 import { MenuNav } from './menu';
 
@@ -16,6 +18,30 @@ import { PanelItem, PanelSplit } from '@panda/components';
 import { MinusOutlined, CloseOutlined, BorderOutlined } from '@ant-design/icons';
 
 const stopEvent = (ev: React.MouseEvent) => ev.stopPropagation();
+const openAboutModal = async () => {
+  if (process.env.NODE_ENV === 'development') {
+    log('打开“关于”对话框');
+  }
+
+  const buttons = ['确定', '复制'];
+  const { data: info } = await fetch<string>(ServiceName.GetBuildInfo);
+  const result = await getRemoteDialog().showMessageBox({
+    title: 'Panda Manager',
+    message: info,
+    type: 'info',
+    buttons,
+    cancelId: 0,
+    noLink: true,
+  });
+
+  if (process.env.NODE_ENV === 'development') {
+    log(`用户点击按钮：${buttons[result.response]}`);
+  }
+
+  if (result.response === 1) {
+    clipboard.writeText(info);
+  }
+};
 
 export function Header() {
   const isFocus = useIsFocus();
@@ -66,7 +92,7 @@ export function Header() {
           <PanelItem disabled>发行说明</PanelItem>
           <PanelItem disabled>检查更新</PanelItem>
           <PanelSplit />
-          <PanelItem onClick={() => fetch(ServiceName.OpenAboutModal)}>关于</PanelItem>
+          <PanelItem onClick={openAboutModal}>关于</PanelItem>
         </MenuNav>
       </span>
       <span className={style.classes.title}>Panda Manager</span>
