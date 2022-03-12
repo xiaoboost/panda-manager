@@ -12,7 +12,7 @@ import {
   RemoteReplyEvent,
 } from '../../shared/window';
 
-export { RemoteWindow } from '../../shared/window';
+export type { RemoteWindow } from '../../shared/window';
 
 const subject = new Subject();
 

@@ -8,7 +8,7 @@ import {
   RemoteDialog,
 } from '../../shared/dialog';
 
-export { RemoteDialog } from '../../shared/dialog';
+export type { RemoteDialog } from '../../shared/dialog';
 
 const remoteDialog = new Proxy({} as RemoteDialog, {
   get(target, key: string) {

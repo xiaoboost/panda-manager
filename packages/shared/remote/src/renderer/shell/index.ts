@@ -3,7 +3,7 @@ import { log } from '@panda/shared';
 
 import { RemoteEventName, RemoteToEvent, RemoteReplyEvent, RemoteShell } from '../../shared/shell';
 
-export { RemoteShell } from '../../shared/shell';
+export type { RemoteShell } from '../../shared/shell';
 
 const remoteShell = new Proxy({} as RemoteShell, {
   get(target, key: string) {

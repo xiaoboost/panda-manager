@@ -84,10 +84,9 @@ export const Input = forwardRef<InputRef, InputProps>(function Input(props, ref)
   }));
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    console.log(e.key);
     if (e.key === 'Enter') {
       onPressEnter?.(e);
-    } else if (e.key === 'Esc') {
+    } else if (e.key === 'Escape') {
       onPressEsc?.(e);
     }
   };
