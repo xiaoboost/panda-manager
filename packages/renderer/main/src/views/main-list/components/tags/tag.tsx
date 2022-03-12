@@ -1,159 +1,86 @@
 import React from 'react';
 
 import { styles } from './style';
-import { Indent } from './indent';
-import { useState, useRef, forwardRef, useEffect, useImperativeHandle } from 'react';
-import { DownOutlined, RightOutlined } from '@ant-design/icons';
-import { Input, InputRef, Panel, PanelItem, PanelSplit } from '@panda/components';
-import {
-  TagData,
-  NewTagData,
-  NewTagGroupData,
-  PatchTagData,
-  PatchTagGroupData,
-} from '@panda/shared';
-import { isDef } from '@xiao-ai/utils';
+import { useState, useRef } from 'react';
+import { Panel, PanelItem, PanelSplit } from '@panda/components';
+import { PatchTagData, PatchTagGroupData, TagData } from '@panda/shared';
+import { clipboard } from 'electron';
 import { MouseButtons } from '@xiao-ai/utils/web';
 import { fetch, ServiceName } from '@panda/fetch/renderer';
+import { TagBase, TagBaseRef } from './tag-base';
+import { delateTag } from './dialog';
 
 export interface TagProps {
   /** 编号 */
-  id?: number;
-  /** 上级元素编号 */
-  parentId?: number;
-  /** 是否是标签集 */
-  isGroup: boolean;
+  id: number;
   /** 标签名称 */
-  name: string;
-  /** 子标签 */
-  tags?: TagData[];
-  /** 初始状态为编辑 */
-  startWithEditor?: boolean;
+  title: string;
   /** 更新所有标签数据 */
   update?(): void;
 }
 
-export interface TagRef {
-  /** 进入编辑状态 */
-  edit(): void;
-  /** 折叠子项 */
-  collapse(): void;
-  /** 展开子项 */
-  unCollapse(): void;
-}
-
-export const Tag = forwardRef<TagRef, TagProps>(function Tag(
-  { id, name, isGroup, startWithEditor = false, tags, parentId, update },
-  ref,
-) {
+export function Tag({ id, title, update }: TagProps) {
   const { classes } = styles;
-  const [isEdit, setEdit] = useState(startWithEditor);
-  const [isCollapse, setCollapse] = useState(true);
   const [panelVisible, setPanelVisible] = useState(false);
   const [panelPosition, setPanelPosition] = useState([0, 0]);
-  const [inputVal, setInputVal] = useState('');
-  const inputRef = useRef<InputRef>(null);
+  const tagRef = useRef<TagBaseRef>(null);
 
-  useImperativeHandle(ref, () => ({
-    edit() {
-      setEdit(true);
-    },
-    collapse() {
-      setCollapse(true);
-    },
-    unCollapse() {
-      setCollapse(false);
-    },
-  }));
-
-  useEffect(() => {
-    if (isEdit && inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, [isEdit, inputRef.current]);
-
-  const editEnd = () => {
-    if (isDef(id)) {
-      fetch<void, PatchTagGroupData | PatchTagData>(
-        isGroup ? ServiceName.PatchTagGroup : ServiceName.PatchTag,
-        {
-          id,
-          name: inputVal,
-        },
-      ).then(update);
-    } else {
-      if (isGroup) {
-        fetch<void, NewTagGroupData>(ServiceName.AddTagGroup, { name: inputVal }).then(update);
-      } else if (parentId) {
-        fetch<any, NewTagData>(ServiceName.AddTag, {
-          name: inputVal,
-          groupId: parentId,
-        }).then(update);
-      }
-    }
-  };
-
-  const tagClickHandler: React.MouseEventHandler = (ev) => {
-    // 左键
-    if (ev.buttons === MouseButtons.Left) {
-      // 非编辑模式
-      if (!isEdit) {
-        setCollapse(!isCollapse);
-      }
-    }
-    // 右键
-    else if (ev.buttons === MouseButtons.Right) {
+  const tagClickRight: React.MouseEventHandler = (ev) => {
+    if (ev.button === MouseButtons.Right) {
       // 强制取消编辑模式
-      if (isEdit) {
-        setEdit(false);
+      if (tagRef.current?.isEdit) {
+        tagRef.current?.blur();
       }
 
       setPanelVisible(true);
       setPanelPosition([ev.pageX, ev.pageY]);
     }
   };
+  const editEnd = (val: string) => {
+    // 未修改名称
+    if (val === title) {
+      return;
+    }
+
+    fetch<void, PatchTagGroupData | PatchTagData>(ServiceName.PatchTagGroup, {
+      id,
+      name: val,
+    }).then(update);
+  };
+  const copyTextHandler = () => {
+    clipboard.writeText(title);
+    setPanelVisible(false);
+  };
+  const renameHandler = () => {
+    tagRef.current?.edit();
+    setPanelVisible(false);
+  };
+  const deleteHandler = async () => {
+    setPanelVisible(false);
+
+    if (await delateTag(title, true)) {
+      // ..
+    }
+  };
 
   return (
-    <>
-      <div className={classes.row} onClick={tagClickHandler}>
-        {!isGroup && <Indent />}
-        <span className={classes.icon}>{isCollapse ? <RightOutlined /> : <DownOutlined />}</span>
-        {isEdit ? (
-          <Input
-            ref={inputRef}
-            value={inputVal}
-            onChange={setInputVal}
-            onBlur={editEnd}
-            onPressEnter={editEnd}
-            inputClassName={classes.innerInput}
-          />
-        ) : (
-          <span className={classes.title} title={name}>
-            <a className={classes.titleLabel}>{name}</a>
-          </span>
-        )}
-        {!isCollapse &&
-          (tags ?? []).map((item) => (
-            <Tag
-              key={`tag-${item.id}`}
-              id={item.id}
-              name={item.name}
-              isGroup={false}
-              parentId={id}
-              update={update}
-            />
-          ))}
-      </div>
-      <Panel visible={panelVisible} x={panelPosition[0]} y={panelPosition[1]}>
+    <div className={classes.tagGroup} onContextMenu={tagClickRight}>
+      <TagBase indent={1} ref={tagRef} title={title} onEditEnd={editEnd} />
+      <Panel
+        stopPropagation
+        visible={panelVisible}
+        x={panelPosition[0]}
+        y={panelPosition[1]}
+        onBlur={() => setPanelVisible(false)}
+      >
         <PanelItem disabled>选择以搜索</PanelItem>
         <PanelSplit />
-        <PanelItem>复制文本</PanelItem>
-        {isGroup && <PanelItem>新建标签</PanelItem>}
+        <PanelItem onClick={copyTextHandler}>复制文本</PanelItem>
         <PanelSplit />
         <PanelItem disabled>编辑元数据</PanelItem>
-        <PanelItem onClick={() => setEdit(true)}>重命名</PanelItem>
-        <PanelItem>删除</PanelItem>
+        <PanelItem onClick={renameHandler}>重命名</PanelItem>
+        <PanelItem onClick={deleteHandler}>删除</PanelItem>
       </Panel>
-    </>
+    </div>
   );
-});
+}

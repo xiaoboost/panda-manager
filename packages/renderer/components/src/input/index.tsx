@@ -25,6 +25,8 @@ export interface InputProps {
   onChange?(val: string): void;
   /** 键盘输入回车键时 */
   onPressEnter?(ev: React.KeyboardEvent<HTMLInputElement>): void;
+  /** 键盘输入取消键时 */
+  onPressEsc?(ev: React.KeyboardEvent<HTMLInputElement>): void;
   /** 获得焦点时 */
   onFocus?(ev: React.FocusEvent<HTMLInputElement>): void;
   /** 失去焦点时 */
@@ -57,6 +59,7 @@ export const Input = forwardRef<InputRef, InputProps>(function Input(props, ref)
     inputClassName,
     inputStyle,
     onPressEnter,
+    onPressEsc,
     onFocus,
     onBlur,
   } = props;
@@ -81,8 +84,11 @@ export const Input = forwardRef<InputRef, InputProps>(function Input(props, ref)
   }));
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (onPressEnter && e.key === 'Enter') {
-      onPressEnter(e);
+    console.log(e.key);
+    if (e.key === 'Enter') {
+      onPressEnter?.(e);
+    } else if (e.key === 'Esc') {
+      onPressEsc?.(e);
     }
   };
 

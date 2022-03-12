@@ -16,8 +16,7 @@ export interface TagDataInDb extends BaseTagData {
 
 /** 数据库中的标签集数据 */
 export interface TagGroupDataInDb extends BaseTagData {
-  /** 包含的标签编号 */
-  tags: number[];
+  // ..
 }
 
 /** 标签数据 */
@@ -62,7 +61,7 @@ export interface NewTagGroupData {
 /** 删除标签参数 */
 export interface DeleteTagData {
   /** 删除标签编号 */
-  id: string;
+  id: number;
 }
 
 /** 删除标签集参数 */

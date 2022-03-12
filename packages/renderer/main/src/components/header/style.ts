@@ -71,6 +71,9 @@ export const style = createStyles({
     fontSize: 13,
     padding: [4, 12],
     height: '100%',
+    display: 'inline-flex',
+    justifyContent: 'center',
+    alignItems: 'center',
     '-webkit-app-region': 'no-drag',
 
     '&:hover, &$highlightTabItem': {

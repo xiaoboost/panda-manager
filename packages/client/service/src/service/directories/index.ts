@@ -15,7 +15,6 @@ async function update(paths: string[]) {
   // 硬盘中的所有项目
   const filesInDisk = filesInDirs.reduce((ans, item) => ans.concat(item), []);
 
-  debugger;
   // 删除数据库中存在，而硬盘中不存在的数据
   remove(...exclude(filesInDisk, filesInDatabase));
   // 添加硬盘中存在，而数据库中不存在的数据

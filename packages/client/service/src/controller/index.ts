@@ -5,6 +5,8 @@ import { service as patchConfig } from './patch-config';
 import { service as getAllTags } from './get-all-tags';
 import { service as addTag } from './add-tag';
 import { service as addTagGroup } from './add-tag-group';
+import { service as patchTag } from './patch-tag';
+import { service as patchTagGroup } from './patch-tag-group';
 
 import { ServiceData } from './types';
 import { Status, FetchData, ListenerContext, ServiceName } from '@panda/fetch/client';
@@ -19,8 +21,8 @@ const serviceMap: Record<ServiceName, ServiceData | undefined> = {
   [ServiceName.GetAllTags]: getAllTags,
   [ServiceName.AddTag]: addTag,
   [ServiceName.AddTagGroup]: addTagGroup,
-  [ServiceName.PatchTag]: undefined,
-  [ServiceName.PatchTagGroup]: undefined,
+  [ServiceName.PatchTag]: patchTag,
+  [ServiceName.PatchTagGroup]: patchTagGroup,
   [ServiceName.PatchTagMeta]: undefined,
   [ServiceName.PatchTagGroupMeta]: undefined,
   [ServiceName.MoveTag]: undefined,

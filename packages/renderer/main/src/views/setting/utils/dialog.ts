@@ -19,6 +19,7 @@ export function deleteDirectory(dir: string) {
       type: 'warning',
       defaultId: 0,
       buttons: ['删除', '取消'],
+      noLink: true,
     })
     .then((data) => data.response === 0);
 }

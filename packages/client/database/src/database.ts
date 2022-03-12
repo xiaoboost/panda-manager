@@ -1,5 +1,5 @@
 import { gzip, gunzip, readFile, writeFile } from './utils';
-import { debounce, AnyObject, DeepReadonly, isNumber } from '@xiao-ai/utils';
+import { debounce, AnyObject, DeepReadonly } from '@xiao-ai/utils';
 
 /** 数据库文件在文件系统中的储存结构 */
 interface DatabaseInFile {
@@ -19,8 +19,8 @@ export class TableRow<Data extends AnyObject = AnyObject> {
 
   constructor(id: number, data: Data) {
     this._data = {
-      id,
       ...data,
+      id,
     };
   }
 
@@ -100,24 +100,8 @@ export class Table<Row extends AnyObject = AnyObject> {
   /** 添加条目 */
   insert(...list: Row[]): TableRow<Row>[] {
     const startIndex = this._data.length;
-    const noIdList = list.filter((data) => !data.id || data.id <= 0);
-    const idList = list
-      .filter((data): data is TableRowData<Row> => isNumber(data.id) && !Number.isNaN(data.id))
-      .sort((pre, next) => (pre.id > next.id ? 1 : -1));
 
-    for (const data of idList) {
-      const id = data.id;
-
-      // id 重复则跳过
-      if (this._data.find((item) => item.id === id)) {
-        continue;
-      }
-
-      this._maxId = id;
-      this._data.push(new TableRow(id, data));
-    }
-
-    for (const data of noIdList) {
+    for (const data of list) {
       this._data.push(new TableRow(this._maxId++, data));
     }
 

@@ -1,8 +1,11 @@
 import { TagGroups, Tags } from '../../model';
 import {
   TagData,
-  TagGroupDataInDb,
+  TagGroupData,
   PatchTagData,
+  PatchTagGroupData,
+  DeleteTagData,
+  DeleteTagGroupData,
   NewTagData,
   NewTagGroupData,
 } from '@panda/shared';
@@ -20,7 +23,6 @@ export function getTags() {
 export function addTagGroupByName(data: NewTagGroupData) {
   return TagGroups.insert({
     name: data.name,
-    tags: [],
   })[0].data;
 }
 
@@ -32,5 +34,20 @@ export function addTagByName(data: NewTagData) {
 }
 
 export function patchTag(data: PatchTagData) {
-  // ..
+  Tags.update(data.id, data);
+}
+
+export function patchTagGroup(data: PatchTagGroupData) {
+  TagGroups.update(data.id, data);
+}
+
+export function deleteTag({ id }: DeleteTagData) {
+  Tags.where((item) => item.id === id).remove();
+}
+
+export function deleteTagGroup({ id }: DeleteTagData) {
+  TagGroups.where((item) => item.id === id).remove();
+  Tags.where((data) => data.groupId === id).remove();
+
+  // TODO: 删除项目中的标签
 }

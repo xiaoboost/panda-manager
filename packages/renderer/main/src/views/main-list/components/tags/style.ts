@@ -30,9 +30,16 @@ export const styles = createStyles({
     display: 'inline-block',
     boxSizing: 'border-box',
     height: '100%',
-    width: 8,
-    borderLeft: '1px solid transparent',
+    width: 3,
+    marginLeft: 4,
+    borderLeft: '1px solid #bbb',
     transition: 'border-color .1s linear',
+  },
+  tagGroup: {
+    position: 'relative',
+  },
+  tag: {
+    position: 'relative',
   },
   row: {
     cursor: 'pointer',
@@ -42,21 +49,15 @@ export const styles = createStyles({
     width: '100%',
     alignItems: 'center',
     position: 'relative',
-    fontSize: 16,
+    fontSize: 12,
     paddingLeft: 16,
 
     '&:hover': {
-      // TODO:
-      // backgroundColor: '',
-
-      '& $rowIconAfter': {
-        display: 'inline-flex',
-      },
+      backgroundColor: '#E0E0E0',
     },
   },
   title: {
     flex: 1,
-    fontSize: 12,
     textOverflow: 'ellipsis',
     display: 'inline-flex',
     justifyContent: 'flex-start',
@@ -64,7 +65,7 @@ export const styles = createStyles({
     ...lineHeight,
   },
   innerInput: {
-    padding: 2,
+    padding: [2, 0],
   },
   titleLabel: {
     color: 'inherit',
@@ -80,5 +81,9 @@ export const styles = createStyles({
     ...inlineFlex,
     paddingRight: 6,
     fontSize: 10,
+  },
+  spaceIcon: {
+    width: 10,
+    height: 10,
   },
 });
