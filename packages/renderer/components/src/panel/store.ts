@@ -4,4 +4,4 @@ import { style } from './style';
 export const panelContainer = document.createElement('div');
 
 document.body.appendChild(panelContainer);
-panelContainer.setAttribute('class', style.classes.container);
+panelContainer.setAttribute('class', style.classes.panelContainer);

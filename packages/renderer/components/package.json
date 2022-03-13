@@ -14,6 +14,7 @@
     "lint:fix": "eslint --fix --quiet --no-error-on-unmatched-pattern --config ../../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}"
   },
   "dependencies": {
+    "@ant-design/icons": "^4.7.0",
     "@panda/renderer-utils": "workspace:*",
     "@panda/shared": "workspace:*",
     "@xiao-ai/utils": "^1.5.1",

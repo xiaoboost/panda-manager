@@ -2,13 +2,20 @@ import React from 'react';
 
 import { useEffect, useState } from 'react';
 
-import { style } from './style';
-import { Directories } from './directories';
-import { Display } from './display';
+import { styles } from './style';
+import { Directories } from './components/directories';
+import { Display } from './components/display';
 
 import { fetch, ServiceName } from '@panda/fetch/renderer';
-import { SettingData, SortOption } from '@panda/shared';
-import { initSettingData } from './utils/constant';
+import { SettingData, SortOption, SortBy } from '@panda/shared';
+
+const initSettingData: SettingData = {
+  directories: [],
+  sort: {
+    by: SortBy.name,
+    asc: true,
+  },
+};
 
 export function Setting() {
   const [setting, patchSetting] = useState<SettingData>(initSettingData);
@@ -29,7 +36,7 @@ export function Setting() {
   }, []);
 
   return (
-    <div className={style.classes.setting}>
+    <div className={styles.classes.setting}>
       <Directories data={setting.directories} patch={patchDir} />
       <Display data={setting.sort} patch={patchSort} />
     </div>

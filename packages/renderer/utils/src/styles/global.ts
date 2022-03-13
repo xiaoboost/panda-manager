@@ -1,15 +1,18 @@
-import {
-  createStyles,
-  Black,
-  WhiteBg,
-  BlackLight,
-  FontDefault,
-  FontDefaultSize,
-} from '@panda/renderer-utils';
+import SourceHan from '../assets/fonts/SourceHanSansSC.otf';
+
+import { createStyles } from './styles';
+import { FontDefault, FontDefaultSize } from './constant';
+import { LinkColor, Black, WhiteBg, BlackLight } from './color';
 
 const scrollWidth = 4;
 
 createStyles({
+  '@font-face': {
+    fontFamily: FontDefault,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    src: `url('${SourceHan}')`,
+  },
   '@global': {
     '*': {
       margin: 0,
@@ -30,6 +33,9 @@ createStyles({
       color: Black.toString(),
       fontFamily: FontDefault,
       fontSize: FontDefaultSize,
+    },
+    a: {
+      color: LinkColor.toString(),
     },
     'input, textarea': {
       cursor: 'text',

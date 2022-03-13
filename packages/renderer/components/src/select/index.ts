@@ -1,3 +1,5 @@
-export * from './select';
-export * from './option';
-export * from './option-group';
+export { Select } from './select';
+export { SelectOption } from './utils/option';
+
+export type { SelectProps } from './select';
+export type { SelectOptionProps } from './utils/option';

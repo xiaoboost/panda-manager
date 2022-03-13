@@ -3,27 +3,13 @@ import React from 'react';
 import { style } from './style';
 import { stringifyClass } from '@xiao-ai/utils';
 import { Panel } from '@panda/components';
+import { getOffset } from '@panda/renderer-utils';
 import { useState, useRef, PropsWithChildren } from 'react';
 
 export interface MenuProps {
   title: React.ReactNode;
   className?: string;
   highlightClassName?: string;
-}
-
-/** 获取元素相对于屏幕的位置 */
-function getOffset(el: HTMLElement): [number, number] {
-  let left = 0;
-  let top = 0;
-  let current: HTMLElement | null = el;
-
-  while (current) {
-    left += current.offsetLeft;
-    top += current.offsetTop;
-    current = current.offsetParent as HTMLElement | null;
-  }
-
-  return [left, top];
 }
 
 export function MenuNav(props: PropsWithChildren<MenuProps>) {

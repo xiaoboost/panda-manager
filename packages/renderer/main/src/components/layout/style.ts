@@ -1,4 +1,4 @@
-import { createStyles, BlackLight, Purple } from '@panda/renderer-utils';
+import { createStyles, BlackLight, Purple, WhiteBg } from '@panda/renderer-utils';
 
 import { height as headerHeight } from '../header/style';
 import { height as footerHeight } from '../footer/style';
@@ -19,5 +19,6 @@ export const style = createStyles({
     flexShrink: 1,
     height: `calc(100% - ${headerHeight}px - ${footerHeight}px)`,
     overflow: 'hidden auto',
+    backgroundColor: WhiteBg.toString(),
   },
 });

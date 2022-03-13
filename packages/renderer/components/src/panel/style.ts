@@ -17,14 +17,14 @@ const splitColor = Color(BlackExtraLight.rgbNumber() - 0x101010);
 export const style = createStyles({
   disabled: {},
 
-  container: {
+  panelContainer: {
     position: 'static',
   },
   panel: {
     display: 'flex',
     flexDirection: 'column',
     position: 'absolute',
-    minWidth: 180,
+    minWidth: 100,
     padding: [4, 1],
     zIndex: 10,
     boxShadow: `0px 1px 4px ${Color.rgb(0, 0, 0, 0.2).toString()}`,

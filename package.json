@@ -1,7 +1,7 @@
 {
   "name": "panda-manager",
   "version": "0.3.0",
-  "description": "panda-manager is a cross platform manga/doujinshi manager with tag",
+  "description": "panda-manager is a manga/doujinshi manager with tag at windows platform",
   "main": "main/index.js",
   "author": "xiaoboost",
   "license": "MIT",
