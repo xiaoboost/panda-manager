@@ -1,10 +1,16 @@
-import { createStyles, Color, WhiteBg } from '@panda/renderer-utils';
+import {
+  createStyles,
+  Color,
+  WhiteBg,
+  FontSecondColor,
+  FontThirdColor,
+} from '@panda/renderer-utils';
 
-const FontBlock = Color(0x444444);
-const FontBlackLight = Color(0x656565);
 const WhiteBgHighlight = Color(WhiteBg.rgbNumber() - 0x060606);
+const listHover = Color(0xe0e0e0);
+const listHeight = 24;
 
-export const style = createStyles({
+export const styles = createStyles({
   form: {
     maxWidth: 800,
     width: '100%',
@@ -21,7 +27,7 @@ export const style = createStyles({
     margin: [8, 14],
     fontSize: 24,
     fontWeight: 600,
-    color: FontBlock.toString(),
+    color: FontSecondColor.toString(),
     display: 'inline-block',
     boxSizing: 'border-box',
     width: '100%',
@@ -43,7 +49,7 @@ export const style = createStyles({
   formItemTitle: {
     fontSize: 13,
     fontWeight: 600,
-    color: FontBlock.toString(),
+    color: FontSecondColor.toString(),
   },
   formItemLink: {
     margin: 4,
@@ -51,16 +57,75 @@ export const style = createStyles({
   formItemDescription: {
     fontSize: 13,
     fontWeight: 'normal',
-    color: FontBlackLight.toString(),
+    color: FontThirdColor.toString(),
   },
-  formItemContent: {
+  formItemBody: {
     marginTop: 9,
+    width: '100%',
     display: 'flex',
   },
-  formItemFormItem: {
-    // ..
+  formItemWrapper: {
+    display: 'flex',
+    width: '100%',
   },
   formItemError: {
-    // ..
+    // TODO:
+  },
+  listWrapper: {
+    display: 'flex',
+    width: '100%',
+    flexDirection: 'column',
+  },
+  listContainer: {
+    display: 'flex',
+    width: '100%',
+    flexDirection: 'column',
+    whiteSpace: 'normal',
+    marginBottom: 1,
+    padding: 1,
+    fontSize: 12,
+  },
+  listPlaceholder: {
+    color: FontThirdColor.toString(),
+    margin: [6, 0],
+  },
+  listItem: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: listHeight,
+    lineHeight: `${listHeight}px`,
+    color: FontThirdColor.toString(),
+
+    '&:hover': {
+      backgroundColor: listHover.toString(),
+    },
+
+    '&:hover $listActions': {
+      opacity: 1,
+    },
+  },
+  listContext: {
+    whiteSpace: 'pre',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    margin: [0, 2],
+  },
+  listActions: {
+    opacity: 0,
+    display: 'inline-flex',
+    marginLeft: 8,
+    padding: 0,
+    height: listHeight,
+    alignItems: 'center',
+  },
+  listAction: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
+    position: 'relative',
+    height: listHeight,
+    width: listHeight,
   },
 });

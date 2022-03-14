@@ -7,7 +7,7 @@ import { DownOutlined } from '@ant-design/icons';
 import { useState, useEffect, useRef } from 'react';
 import { BaseProps } from '@panda/shared';
 import { isUndef, stringifyClass as cla } from '@xiao-ai/utils';
-import { getOffset } from '@panda/renderer-utils';
+import { getOffset, useBlur } from '@panda/renderer-utils';
 
 import { styles } from './style';
 import { dropDownContainer } from './utils/store';
@@ -33,13 +33,16 @@ export function Select({
   const { classes } = styles;
   const options = getOptions(children ?? []);
   const boxRef = useRef<HTMLDivElement>(null);
+  const [focus, setFocus] = useState(false);
   const [panelVisible, setPanelVisible] = useState(false);
   const [panelPosition, setPanelPosition] = useState([0, 0, 0]);
   const [selected, setSelected] = useState(value);
   const [inputVal, setInputVal] = useState('');
   const [labelVal, setLabelVal] = useState('');
-
-  // TODO: 本身获得焦点时候的高亮
+  const ref = useBlur<HTMLDivElement>(focus, () => {
+    setFocus(false);
+    setPanelVisible(false);
+  });
 
   // 首次运行时，输入值为空，且待选项中有默认选项，则初始化为默认选项
   useEffect(() => {
@@ -69,6 +72,10 @@ export function Select({
   }, [panelVisible]);
 
   const selectClickHandler = () => {
+    if (disabled) {
+      return;
+    }
+
     const { current: el } = boxRef;
 
     if (!el) {
@@ -76,6 +83,8 @@ export function Select({
     }
 
     const offset = getOffset(el);
+
+    setFocus(true);
 
     if (panelVisible) {
       setPanelVisible(false);
@@ -91,13 +100,20 @@ export function Select({
 
   return (
     <div
-      className={cla(classes.selectContainer, className)}
+      ref={ref}
       style={style}
       onClick={selectClickHandler}
+      className={cla(classes.selectContainer, className)}
     >
-      <div className={classes.select} ref={boxRef}>
+      <div
+        className={cla(classes.select, {
+          [classes.selectDisabled]: disabled,
+          [classes.selectFocus]: focus,
+        })}
+        ref={boxRef}
+      >
         {filter && <input className={classes.selectInput} value={inputVal} />}
-        {<span className={classes.selectInput}>{labelVal}</span>}
+        {<span className={classes.selectLabel}>{labelVal}</span>}
       </div>
       <span className={classes.selectIcon}>
         <DownOutlined />
@@ -110,7 +126,6 @@ export function Select({
         y={panelPosition[1]}
         width={panelPosition[2]}
         renderElement={dropDownContainer}
-        onBlur={() => setPanelVisible(false)}
       >
         {options.map((opt) => (
           <Option

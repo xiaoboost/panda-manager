@@ -22,8 +22,19 @@ export const BlackLight = Color(0x616161);
 export const BlackLighter = Color(0x909399);
 export const BlackExtraLight = Color(0xc0c4cc);
 
+/** 链接颜色 */
 export const LinkColor = Color(0x3794ff);
+/** 白色主要背景色 */
 export const WhiteBg = Color(0xf5f5f5);
-export const HighlightColor = Color(0xa6b39b);
+/** 字体主要颜色 */
 export const FontColor = Color(0x212121);
-export const FontSecondColor = Color(0x616161);
+/** 字体次要颜色 */
+export const FontSecondColor = Color(0x444444);
+/** 字体三等颜色 */
+export const FontThirdColor = Color(0x616161);
+/** 主要颜色 */
+export const MainColor = Color(0x6e5694);
+/** 次要颜色 */
+export const SecondColor = Color(0xc3b7d6);
+/** 高亮颜色 */
+export const HighlightColor = Color(0xa6b39b);

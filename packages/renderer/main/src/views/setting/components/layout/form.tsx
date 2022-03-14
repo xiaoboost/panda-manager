@@ -1,9 +1,9 @@
-import React, { Children } from 'react';
+import React from 'react';
 
-import { style } from './style';
+import { styles } from './style';
 import { Description, DescriptionKind } from './types';
 import { PropsWithChildren } from 'react';
-import { EmptyObject, stringifyClass, isArray } from '@xiao-ai/utils';
+import { isArray } from '@xiao-ai/utils';
 
 export * from './types';
 
@@ -13,8 +13,8 @@ export interface FormProps {
 
 export function Form(props: PropsWithChildren<FormProps>) {
   return (
-    <section className={style.classes.form}>
-      <header className={style.classes.formTitle}>{props.title}</header>
+    <section className={styles.classes.form}>
+      <header className={styles.classes.formTitle}>{props.title}</header>
       {props.children}
     </section>
   );
@@ -32,7 +32,7 @@ export function FormItem({
   children,
   error,
 }: PropsWithChildren<FormItemProps>) {
-  const { classes: cla } = style;
+  const { classes: cla } = styles;
 
   return (
     <div className={cla.formItem}>
@@ -52,8 +52,8 @@ export function FormItem({
             ))
           : description}
       </div>
-      <div className={cla.formItemContent}>
-        <div className={cla.formItemFormItem}>{children}</div>
+      <div className={cla.formItemBody}>
+        <div className={cla.formItemWrapper}>{children}</div>
         {error && <div className={cla.formItemError}>{error}</div>}
       </div>
     </div>

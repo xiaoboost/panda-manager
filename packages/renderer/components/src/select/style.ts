@@ -27,6 +27,9 @@ export const styles = createStyles({
     minWidth: 40,
   },
   selectFocus: {},
+  selectDisabled: {
+    // TODO:
+  },
   select: {
     backgroundColor: WhiteBg.toString(),
     border: `1px solid ${BorderColor.toString()}`,
@@ -53,7 +56,10 @@ export const styles = createStyles({
     // ..
   },
   selectLabel: {
-    // ..
+    position: 'relative',
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
   },
   option: {
     boxSizing: 'border-box',
