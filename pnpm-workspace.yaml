@@ -1,7 +1,7 @@
 packages:
-  - packages/*
   - packages/client/*
   - packages/renderer/*
-  - packages/shared/*
-  - packages/utils/*
+  - packages/modals/*
   - packages/plugins/*
+  - packages/shared/*
+  - packages/tools/*

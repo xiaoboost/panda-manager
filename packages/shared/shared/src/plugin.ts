@@ -1,4 +1,4 @@
-import type { ItemData } from './type';
+import type { ItemData } from './types';
 import type { Stats } from 'fs';
 import type { DeepReadonly } from '@xiao-ai/utils';
 

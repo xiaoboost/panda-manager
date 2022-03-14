@@ -10,17 +10,17 @@ import {
   Status,
 } from '../shared';
 
-export { FetchData, Status } from '../shared';
+export { FetchData, Status, ServiceName } from '../shared';
 
 /** 监听服务上下文 */
-export interface ListenerContext {
+export interface ListenerContext<T = any> {
   window: BrowserWindow;
-  requestData: FetchData;
+  requestData: FetchData<T>;
   sendProgress(progress: number): void;
 }
 
 /** 监听服务 */
-export type Listener = (context: ListenerContext) => any;
+export type Listener<T = any> = (context: ListenerContext<T>) => any;
 
 export function initialize(win: BrowserWindow, listener: Listener) {
   ipcMain.on(FetchEventName, async (event, param) => {
@@ -65,6 +65,6 @@ export function initialize(win: BrowserWindow, listener: Listener) {
   });
 
   if (process.env.NODE_ENV === 'development') {
-    log('服务器初始化完成');
+    log('Fetch 模块初始化完成');
   }
 }

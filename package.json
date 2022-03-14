@@ -1,7 +1,7 @@
 {
   "name": "panda-manager",
-  "version": "0.2.0",
-  "description": "panda-manager is a cross platform manga/doujinshi manager with tag",
+  "version": "0.3.0",
+  "description": "panda-manager is a manga/doujinshi manager with tag at windows platform",
   "main": "main/index.js",
   "author": "xiaoboost",
   "license": "MIT",
@@ -14,7 +14,7 @@
     "watch": "builder watch --outDir=dist/generated --mode=development",
     "build": "builder build --outDir=dist/generated --mode=production",
     "build:analyze": "pnpm run build -- --bundleAnalyze",
-    "build:builder": "pnpm run build --filter @panda/builder",
+    "build:builder": "pnpm run build --filter @panda/builder...",
     "format": "prettier --write ./packages/**/*.{ts,tsx,json,js,jsx}",
     "package": "builder package --input=dist/generated --output=dist/package",
     "generate": "pnpm run build:builder && pnpm run build && pnpm run package"
@@ -25,13 +25,13 @@
   },
   "devDependencies": {
     "@panda/builder": "workspace:*",
-    "@typescript-eslint/eslint-plugin": "^5.12.0",
-    "@typescript-eslint/parser": "^5.12.0",
-    "electron": "^17.0.1",
-    "eslint": "^8.9.0",
+    "@typescript-eslint/eslint-plugin": "^5.13.0",
+    "@typescript-eslint/parser": "^5.13.0",
+    "electron": "17.1.0",
+    "eslint": "^8.10.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react": "^7.29.3",
     "prettier": "^2.5.1",
-    "typescript": "^4.5.5"
+    "typescript": "4.6.2"
   }
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Header } from '../header';
+import { Footer } from '../footer';
 
 import { style } from './style';
 import { PropsWithChildren } from 'react';
@@ -17,9 +18,8 @@ export function Layout({ children }: PropsWithChildren<EmptyObject>) {
       })}
     >
       <Header />
-      <article className={style.classes.appBody}>
-        <div className={style.classes.appContent}>{children}</div>
-      </article>
+      <article className={style.classes.appBody}>{children}</article>
+      <Footer />
     </div>
   );
 }

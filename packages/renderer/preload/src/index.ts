@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer } from 'electron';
+import { contextBridge, ipcRenderer, clipboard } from 'electron';
 
 import path from 'path';
 
@@ -6,6 +6,7 @@ contextBridge.exposeInMainWorld('require', (name: string) => {
   const moduleMap = {
     path,
     electron: {
+      clipboard,
       ipcRenderer: {
         ...ipcRenderer,
         on: ipcRenderer.on.bind(ipcRenderer),

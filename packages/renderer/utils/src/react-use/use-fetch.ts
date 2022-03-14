@@ -1,9 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useMounted } from '@xiao-ai/utils/use';
 import { isArray, isBoolean, isUndef, AnyObject } from '@xiao-ai/utils';
-
-import { fetch as fetchService } from '@panda/fetch/renderer';
-import { ServiceName } from '@panda/shared';
+import { fetch as fetchService, ServiceName } from '@panda/fetch/renderer';
 
 type FetchResult<T> =
   | {

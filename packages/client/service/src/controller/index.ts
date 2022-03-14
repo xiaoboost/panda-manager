@@ -1,25 +1,33 @@
 import { service as ready } from './ready';
+import { service as getBuildInfo } from './get-build-info';
 import { service as getConfig } from './get-config';
 import { service as patchConfig } from './patch-config';
-import { service as openAboutModal } from './open-about-modal';
-import { service as openSelectDialog } from './open-select-dialog';
-import { service as openPathDefaultManner } from './open-path-default-manner';
-import { service as openMessageDialog } from './open-message-dialog';
+import { service as getAllTags } from './get-all-tags';
+import { service as addTag } from './add-tag';
+import { service as addTagGroup } from './add-tag-group';
+import { service as patchTag } from './patch-tag';
+import { service as patchTagGroup } from './patch-tag-group';
 
 import { ServiceData } from './types';
-import { ServiceName } from '@panda/shared';
-import { Status, FetchData, ListenerContext } from '@panda/fetch/client';
+import { Status, FetchData, ListenerContext, ServiceName } from '@panda/fetch/client';
 
 const serviceMap: Record<ServiceName, ServiceData | undefined> = {
   [ServiceName.Ready]: ready,
+  [ServiceName.GetBuildInfo]: getBuildInfo,
   [ServiceName.GetConfig]: getConfig,
   [ServiceName.PatchConfig]: patchConfig,
-  [ServiceName.GetFilesList]: undefined,
-  [ServiceName.GetFileDetail]: undefined,
-  [ServiceName.OpenPathDefaultManner]: openPathDefaultManner,
-  [ServiceName.OpenAboutModal]: openAboutModal,
-  [ServiceName.OpenSelectDialog]: openSelectDialog,
-  [ServiceName.OpenMessageDialog]: openMessageDialog,
+  [ServiceName.GetItemsList]: undefined,
+  [ServiceName.GetItemDetail]: undefined,
+  [ServiceName.GetAllTags]: getAllTags,
+  [ServiceName.AddTag]: addTag,
+  [ServiceName.AddTagGroup]: addTagGroup,
+  [ServiceName.PatchTag]: patchTag,
+  [ServiceName.PatchTagGroup]: patchTagGroup,
+  [ServiceName.PatchTagMeta]: undefined,
+  [ServiceName.PatchTagGroupMeta]: undefined,
+  [ServiceName.MoveTag]: undefined,
+  [ServiceName.DeleteTag]: undefined,
+  [ServiceName.DeleteTagGroup]: undefined,
 };
 
 export async function service(context: ListenerContext): Promise<FetchData> {

@@ -20,13 +20,13 @@
     "@panda/db": "workspace:*",
     "@panda/shared": "workspace:*",
     "@xiao-ai/utils": "^1.5.1",
-    "electron": "^17.0.1"
+    "electron": "17.1.0"
   },
   "devDependencies": {
     "@panda/tsconfig": "workspace:*",
-    "@types/node": "^17.0.18",
+    "@types/node": "^17.0.21",
     "@types/panda": "workspace:*",
     "tslib": "^2.3.1",
-    "typescript": "^4.5.5"
+    "typescript": "4.6.2"
   }
 }

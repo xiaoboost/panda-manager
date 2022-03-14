@@ -28,12 +28,12 @@
     "@panda/shared": "workspace:*",
     "@panda/window-manager": "workspace:*",
     "@xiao-ai/utils": "^1.5.1",
-    "electron": "^17.0.1",
-    "esbuild": "^0.14.21"
+    "electron": "17.1.0"
   },
   "devDependencies": {
+    "@panda/builder": "workspace:*",
     "@panda/tsconfig": "workspace:*",
     "@types/panda": "workspace:*",
-    "typescript": "^4.5.5"
+    "typescript": "4.6.2"
   }
 }

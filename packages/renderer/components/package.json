@@ -13,11 +13,20 @@
     "lint": "eslint --quiet --no-error-on-unmatched-pattern --config ../../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}",
     "lint:fix": "eslint --fix --quiet --no-error-on-unmatched-pattern --config ../../../.eslintrc.js src/**/*.{ts,tsx,js,jsx}"
   },
+  "dependencies": {
+    "@ant-design/icons": "^4.7.0",
+    "@panda/renderer-utils": "workspace:*",
+    "@panda/shared": "workspace:*",
+    "@xiao-ai/utils": "^1.5.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
   "devDependencies": {
     "@panda/tsconfig": "workspace:*",
     "@types/panda": "workspace:*",
-    "react": "^17.0.2",
+    "@types/react": "^17.0.39",
+    "@types/react-dom": "^17.0.13",
     "tslib": "^2.3.1",
-    "typescript": "^4.5.5"
+    "typescript": "4.6.2"
   }
 }

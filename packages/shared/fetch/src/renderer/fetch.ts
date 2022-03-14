@@ -2,7 +2,7 @@ import { ipcRenderer } from 'electron';
 import { log } from '@panda/shared';
 import { isNumber } from '@xiao-ai/utils';
 import { FetchParam, FetchStore } from './types';
-import { ServiceName } from '@panda/shared';
+import { ServiceName } from '../shared';
 
 import {
   FetchEventName,
@@ -12,6 +12,9 @@ import {
   FetchData,
   Status,
 } from '../shared';
+
+import type { OpenDialogOptions, MessageBoxOptions, MessageBoxReturnValue } from 'electron';
+import type { TagGroupData } from '@panda/shared';
 
 let eventId = 0;
 
@@ -59,11 +62,16 @@ if (process.env.NODE_ENV === 'development') {
   log('Fetch 模块初始化');
 }
 
-export function fetch<T = any>(param: FetchParam): Promise<FetchData<T>>;
-export function fetch<T = any>(name: ServiceName): Promise<FetchData<T>>;
-export function fetch<T = any>(name: ServiceName, param?: any): Promise<FetchData<T>>;
-export function fetch<T = any>(name: ServiceName | FetchParam, param?: any): Promise<FetchData<T>> {
-  return new Promise<FetchData<T>>((resolve, reject) => {
+/** 获取所有标签数据 */
+export function fetch(name: ServiceName.GetAllTags): Promise<FetchData<TagGroupData[]>>;
+
+export function fetch<R = any, P = any>(param: FetchParam<P>): Promise<FetchData<R>>;
+export function fetch<R = any, P = any>(name: ServiceName, param?: P): Promise<FetchData<R>>;
+export function fetch<R = any, P = any>(
+  name: ServiceName | FetchParam,
+  param?: P,
+): Promise<FetchData<R>> {
+  return new Promise<FetchData<R>>((resolve, reject) => {
     const currentId = eventId++;
     const data: FetchData = isNumber(name)
       ? {

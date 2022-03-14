@@ -6,20 +6,35 @@ export { Color };
 export const Shadow = Color(0xcccccc);
 export const Blue = Color(0x1890ff);
 export const BlueLight = Color(0x69c0ff);
-export const Green = Color(0xbae637);
-export const GreenLight = Color(0xeaff8f);
+export const Green = Color(0xc4d9b1);
 export const Gray = Color(0xdddddd);
 export const GrayLight = Color(0xf0f2f7);
+export const Purple = Color(0x705697);
+export const PurpleLight = Color(0xc4b7d7);
 export const White = Color(0xffffff);
-export const WhiteBg = Color(0xf7f7f7);
 export const Red = Color(0xd41324);
 export const RedLight = Color(0xff6969);
 export const Yellow = Color(0xfdcb6e);
 export const YellowLight = Color(0xffeaa7);
 export const YellowLighter = Color(0xfef9ed);
-export const Black = Color(0x21252b);
-export const Black2 = Color(0x343434);
-export const Black3 = Color(0x464646);
-export const BlackLight = Color(0x606266);
+export const Black = Color(0x212121);
+export const BlackLight = Color(0x616161);
 export const BlackLighter = Color(0x909399);
 export const BlackExtraLight = Color(0xc0c4cc);
+
+/** 链接颜色 */
+export const LinkColor = Color(0x3794ff);
+/** 白色主要背景色 */
+export const WhiteBg = Color(0xf5f5f5);
+/** 字体主要颜色 */
+export const FontColor = Color(0x212121);
+/** 字体次要颜色 */
+export const FontSecondColor = Color(0x444444);
+/** 字体三等颜色 */
+export const FontThirdColor = Color(0x616161);
+/** 主要颜色 */
+export const MainColor = Color(0x6e5694);
+/** 次要颜色 */
+export const SecondColor = Color(0xc3b7d6);
+/** 高亮颜色 */
+export const HighlightColor = Color(0xa6b39b);

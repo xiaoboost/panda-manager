@@ -1,11 +1,10 @@
-import { FetchData } from '../shared';
-import { ServiceName } from '@panda/shared';
+import { FetchData, ServiceName } from '../shared';
 
-export interface FetchParam {
+export interface FetchParam<P = any> {
   /** 事件名称 */
   name: ServiceName;
   /** 参数 */
-  params?: any;
+  params?: P;
   /**
    * 进度回调
    *   - `progress`为 0 ~ 100
