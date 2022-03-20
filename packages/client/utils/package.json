@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@panda/shared": "workspace:*",
-    "electron": "17.1.0",
+    "electron": "17.1.2",
     "fs-extra": "^10.0.1"
   },
   "devDependencies": {

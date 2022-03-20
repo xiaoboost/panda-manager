@@ -27,12 +27,12 @@
     "@panda/fetch": "workspace:*",
     "@panda/plugin-manga": "workspace:*",
     "@panda/shared": "workspace:*",
-    "@xiao-ai/utils": "^1.5.1"
+    "@xiao-ai/utils": "^1.6.0"
   },
   "devDependencies": {
     "@panda/tsconfig": "workspace:*",
     "@types/panda": "workspace:*",
-    "electron": "17.1.0",
+    "electron": "17.1.2",
     "tslib": "^2.3.1",
     "typescript": "4.6.2"
   }

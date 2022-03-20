@@ -4,6 +4,8 @@ export const FetchEventName = '_event_fetch_service';
 export const ReplyEventName = '_event_fetch_reply_renderer';
 /** 主进程回复渲染进程进度事件通信 */
 export const ProgressEventName = '_event_fetch_progress_renderer';
+/** 主进程回复渲染进程进度事件通信 */
+export const BroadcastEventName = '_event_fetch_broadcast_main';
 
 /** 事件状态 */
 export enum Status {
@@ -58,4 +60,12 @@ export enum ServiceName {
   DeleteTag,
   /** 删除标签集 */
   DeleteTagGroup,
+}
+
+/** 广播事件 */
+export enum BroadcastName {
+  /** 开始读取项目 */
+  ReadItemStart,
+  /** 结束读取项目 */
+  ReadItemEnd,
 }

@@ -28,6 +28,6 @@
     "typescript": "4.6.2"
   },
   "dependencies": {
-    "@xiao-ai/utils": "^1.5.1"
+    "@xiao-ai/utils": "^1.6.0"
   }
 }

@@ -1,4 +1,4 @@
-import { Status, ServiceName } from './constant';
+import { Status, ServiceName, BroadcastName } from './constant';
 
 /** 事件基础数据 */
 interface BaseData<T> {
@@ -26,4 +26,12 @@ export interface ProgressData {
   eventId: number;
   /** 进度数值 */
   progress: number;
+  /** 附加信息 */
+  meta?: any;
+}
+
+/** 广播事件 */
+export interface BroadcastData<T = any> extends BaseData<T> {
+  /** 事件名称 */
+  name: BroadcastName;
 }

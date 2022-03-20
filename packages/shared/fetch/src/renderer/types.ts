@@ -9,7 +9,7 @@ export interface FetchParam<P = any> {
    * 进度回调
    *   - `progress`为 0 ~ 100
    */
-  onProgress?(progress: number): void;
+  onProgress?(progress: number, meta: any): void;
 }
 
 export interface FetchStore extends FetchParam {

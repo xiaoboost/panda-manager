@@ -1,3 +1,3 @@
 export * from './fetch';
 
-export { FetchData, Status, ServiceName } from '../shared';
+export { FetchData, Status, ServiceName, BroadcastData, BroadcastName } from '../shared';

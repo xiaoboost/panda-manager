@@ -2,7 +2,6 @@ import { ipcRenderer } from 'electron';
 import { log } from '@panda/shared';
 import { isNumber } from '@xiao-ai/utils';
 import { FetchParam, FetchStore } from './types';
-import { ServiceName } from '../shared';
 
 import {
   FetchEventName,
@@ -10,10 +9,10 @@ import {
   ReplyEventName,
   ProgressEventName,
   FetchData,
+  ServiceName,
   Status,
 } from '../shared';
 
-import type { OpenDialogOptions, MessageBoxOptions, MessageBoxReturnValue } from 'electron';
 import type { TagGroupData } from '@panda/shared';
 
 let eventId = 0;
@@ -23,7 +22,16 @@ const fetchStore: FetchStore[] = [];
 // 返回事件
 ipcRenderer.on(ReplyEventName, (_, params: FetchData) => {
   if (process.env.NODE_ENV === 'development') {
-    log(`后端返回数据: ${JSON.stringify(params, null, 2)}`);
+    log(
+      `后端返回数据: ${JSON.stringify(
+        {
+          ...params,
+          name: ServiceName[params.name],
+        },
+        null,
+        2,
+      )}`,
+    );
   }
 
   const dataIndex = fetchStore.findIndex((ev) => {
@@ -48,13 +56,12 @@ ipcRenderer.on(ProgressEventName, (_, params: ProgressData) => {
     log(`后端返回进度数据: ${JSON.stringify(params, null, 2)}`);
   }
 
-  debugger;
   const data = fetchStore.find((ev) => {
     return ev.eventId === params.eventId && ev.name === params.name;
   });
 
   if (data) {
-    data.onProgress?.(params.progress);
+    data.onProgress?.(params.progress, params.meta);
   }
 });
 
@@ -96,7 +103,16 @@ export function fetch<R = any, P = any>(
     };
 
     if (process.env.NODE_ENV === 'development') {
-      log(`前端请求事件 data: ${JSON.stringify(data)}`);
+      log(
+        `前端请求事件 data: ${JSON.stringify(
+          {
+            ...data,
+            name: ServiceName[data.name],
+          },
+          null,
+          2,
+        )}`,
+      );
     }
 
     ipcRenderer.send(FetchEventName, data);
