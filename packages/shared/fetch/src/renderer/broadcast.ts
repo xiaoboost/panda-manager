@@ -22,5 +22,5 @@ ipcRenderer.on(BroadcastEventName, (ev, params: BroadcastData) => {
     );
   }
 
-  subscriber.notify(params.name, params);
+  subscriber.notify(params.name, params.data);
 });

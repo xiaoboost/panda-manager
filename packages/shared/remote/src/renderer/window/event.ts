@@ -1,7 +1,7 @@
-import { ChannelSubject, AnyFunction } from '@xiao-ai/utils';
+import { ChannelSubscriber, AnyFunction } from '@xiao-ai/utils';
 import { log } from '@panda/shared';
 
-export class Subject extends ChannelSubject {
+export class Subject extends ChannelSubscriber {
   notify(name: string, ...payloads: any[]): void {
     if (process.env.NODE_ENV === 'development') {
       log(`触发事件, name: ${name}, params: ${JSON.stringify(payloads, null, 2)}`);

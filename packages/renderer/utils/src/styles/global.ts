@@ -1,7 +1,7 @@
 import SourceHan from '../assets/fonts/SourceHanSansSC.otf';
 
 import { createStyles } from './styles';
-import { FontDefault, FontDefaultSize } from './constant';
+import { FontDefault, FontDefaultSize, GlobalClassName } from './constant';
 import { LinkColor, Black, WhiteBg, BlackLight } from './color';
 
 const scrollWidth = 4;
@@ -36,6 +36,22 @@ createStyles({
     },
     a: {
       color: LinkColor.toString(),
+    },
+    [`.${GlobalClassName.flexCenter}`]: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    [`.${GlobalClassName.flexColCenter}`]: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      flexDirection: 'column',
+    },
+    [`.${GlobalClassName.flexLineCenter}`]: {
+      display: 'inline-flex',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     'input, textarea': {
       cursor: 'text',

@@ -1,7 +1,9 @@
 import { Status, ServiceName, BroadcastName } from './constant';
 
-/** 事件基础数据 */
-interface BaseData<T> {
+/** 前端请求数据格式 */
+export interface FetchData<T = any> {
+  /** 事件名称 */
+  name: ServiceName;
   /** 事件编号 */
   eventId: number;
   /** 请求状态 */
@@ -10,12 +12,6 @@ interface BaseData<T> {
   data: T;
   /** 错误信息 */
   error?: string;
-}
-
-/** 前端请求数据格式 */
-export interface FetchData<T = any> extends BaseData<T> {
-  /** 事件名称 */
-  name: ServiceName;
 }
 
 /** 进度事件 */
@@ -31,7 +27,9 @@ export interface ProgressData {
 }
 
 /** 广播事件 */
-export interface BroadcastData<T = any> extends BaseData<T> {
+export interface BroadcastData<T = any> {
   /** 事件名称 */
   name: BroadcastName;
+  /** 广播数据 */
+  data: T;
 }
