@@ -32,16 +32,19 @@ export class Manga implements PluginClientInstance<MangaData> {
     return this._data;
   }
 
+  async createCache() {
+    if (!this.cache) {
+      this.cache = await getCoverData(this.data.uri, this.data.mangaKind === MangaKind.Directory);
+    }
+  }
+
   async writeCache() {
-    let cache = this.cache;
     const coverPath = getCoverPath(this.id);
 
-    if (!cache) {
-      cache = await getCoverData(this.data.uri, this.data.mangaKind === MangaKind.Directory);
-    }
-
+    await this.createCache();
+    await fs.remove(coverPath);
     await fs.mkdirp(path.dirname(coverPath));
-    await fs.writeFile(coverPath, cache);
+    await fs.writeFile(coverPath, this.cache);
   }
 
   async removeCache() {

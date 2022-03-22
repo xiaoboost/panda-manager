@@ -3,7 +3,7 @@ import { webContents } from 'electron';
 import { log } from '@panda/shared';
 import { BroadcastData, BroadcastEventName, BroadcastName } from '../shared';
 
-export function broadcast<T = any>(name: BroadcastName, params: T) {
+export function broadcast<T = any>(name: BroadcastName, params?: T) {
   const data: BroadcastData = {
     name,
     data: params,

@@ -10,8 +10,12 @@ export interface PluginRenderer<Data extends ItemData> {
 
 /** 插件数据实例 */
 export interface PluginClientInstance<Data extends ItemData = ItemData> {
+  /** 编号 */
+  id: number;
   /** 数据 */
   readonly data: Data;
+  /** 创建缓存 */
+  createCache(): Promise<void>;
   /** 写入缓存 */
   writeCache(): Promise<void>;
   /** 删除缓存 */

@@ -2,7 +2,7 @@ import { createStyles, White, Purple } from '@panda/renderer-utils';
 
 export const height = 20;
 
-export const style = createStyles({
+export const styles = createStyles({
   footer: {
     display: 'flex',
     flexDirection: 'row',

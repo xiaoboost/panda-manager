@@ -1,21 +1,25 @@
 import React from 'react';
 
-import { style } from './style';
+import { LoadingOutlined } from '@ant-design/icons';
 
-interface Props {
-  icon?: React.ReactNode;
-  left?: string;
-  right?: string;
-}
+import { styles } from './style';
+import { useReadItem } from './hook/use-read-item';
 
-export function Footer(props: Props) {
+export function Footer() {
+  const { classes } = styles;
+  const readItem = useReadItem();
+
   return (
-    <div className={style.classes.footer}>
-      <div className={style.classes.footerItem}>
-        {props.icon && <div>{props.icon}</div>}
-        <div>{props.left}</div>
+    <div className={classes.footer}>
+      <div className={classes.footerItem}>
+        {readItem && (
+          <>
+            <LoadingOutlined />
+            <div>{readItem.file}</div>
+          </>
+        )}
       </div>
-      <div className={style.classes.footerItem}>{props.right}</div>
+      {/* <div className={classes.footerItem}>{props.right}</div> */}
     </div>
   );
 }

@@ -27,3 +27,11 @@ export type DataWithId<Data extends ItemData> = Data & {
   /** 项目编号 */
   id: number;
 };
+
+/** 读取项目时的广播数据 */
+export interface ReadItemBroadcast {
+  /** 项目路径 */
+  path: string;
+  /** 项目名称 */
+  file: string;
+}

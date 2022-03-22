@@ -26,10 +26,7 @@ async function update(paths: string[]) {
   const onlyInDisk = exclude(filesInDatabase, filesInDisk);
 
   remove(...onlyInDb);
-
-  for (const file of onlyInDisk) {
-    push(file);
-  }
+  push(...onlyInDisk);
 }
 
 /** 初始化 */

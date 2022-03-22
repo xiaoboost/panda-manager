@@ -435,6 +435,7 @@ importers:
       '@types/react': ^17.0.41
       '@xiao-ai/utils': ^1.6.0
       electron: 17.1.2
+      react: ^17.0.2
       tslib: ^2.3.1
       typescript: 4.6.2
     dependencies:
@@ -442,6 +443,7 @@ importers:
       '@panda/shared': link:../shared
       '@xiao-ai/utils': registry.npmmirror.com/@xiao-ai/utils/1.6.0
       electron: registry.npmmirror.com/electron/17.1.2
+      react: registry.npmmirror.com/react/17.0.2
     devDependencies:
       '@panda/tsconfig': link:../../tools/tsconfig
       '@types/node': registry.npmmirror.com/@types/node/17.0.21
