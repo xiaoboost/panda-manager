@@ -35,8 +35,9 @@ async function readConfig(dir: string): Promise<ProjectConfig> {
   return {
     ...data.output,
     name: packageData.name,
+    entryName: data.output.entryName ?? 'index',
     dirname: path.dirname(file),
-    output: data.output.output,
+    output: data.output.output ?? data.output.process,
     html: data.output.html ?? 'src/index.html',
     tsConfigFile: data.output.tsConfigFile ?? 'tsconfig.json',
   };

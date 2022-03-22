@@ -42,7 +42,7 @@ export function getBaseConfig(opt: CommandOptions, project: ProjectConfig): webp
   const baseConfig: webpack.Configuration = {
     mode: opt.mode as webpack.Configuration['mode'],
     entry: {
-      index: resolveProject(project.entry),
+      [project.entryName]: resolveProject(project.entry),
     },
     output: {
       path: outDir,
@@ -61,17 +61,13 @@ export function getBaseConfig(opt: CommandOptions, project: ProjectConfig): webp
         src: resolveProject('src'),
       },
       plugins: [
-        new TsconfigPathsPlugin({
+        new (TsconfigPathsPlugin as any)({
           configFile: tsConfigFile,
         }),
       ],
     },
     module: {
       rules: [
-        {
-          test: /\.worker\.tsx?$/,
-          use: ['worker-loader', tsLoaderConfig],
-        },
         {
           test: /\.tsx?$/,
           ...tsLoaderConfig,

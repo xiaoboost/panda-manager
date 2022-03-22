@@ -28,6 +28,7 @@
     "@jimp/plugin-resize": "^0.16.1",
     "@jimp/plugin-scale": "^0.16.1",
     "@jimp/png": "^0.16.1",
+    "@panda/client-utils": "workspace:*",
     "image-size": "^1.0.1",
     "jimp": "^0.16.1"
   },
