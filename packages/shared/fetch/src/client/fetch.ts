@@ -2,7 +2,8 @@ import { ipcMain, BrowserWindow } from 'electron';
 import { log } from '@panda/shared';
 
 import {
-  FetchEventName,
+  FetchAsyncEventName,
+  FetchSyncEventName,
   ProgressData,
   ReplyEventName,
   ProgressEventName,
@@ -13,18 +14,24 @@ import {
 
 export { FetchData, Status, ServiceName } from '../shared';
 
-/** 监听服务上下文 */
-export interface ListenerContext<T = any> {
-  window: BrowserWindow;
-  requestData: FetchData<T>;
+/** 异步服务上下文 */
+export interface AsyncListenerContext<T = any> extends SyncListenerContext<T> {
   sendProgress(progress: number): void;
 }
 
-/** 监听服务 */
-export type Listener<T = any> = (context: ListenerContext<T>) => any;
+/** 同步服务上下文 */
+export interface SyncListenerContext<T = any> {
+  window: BrowserWindow;
+  requestData: FetchData<T>;
+}
 
-export function initialize(win: BrowserWindow, listener: Listener) {
-  ipcMain.on(FetchEventName, async (event, param) => {
+export interface ListenerOptions {
+  async: (context: AsyncListenerContext) => any;
+  sync: (context: SyncListenerContext) => any;
+}
+
+export function initialize(win: BrowserWindow, listener: ListenerOptions) {
+  ipcMain.on(FetchAsyncEventName, async (event, param) => {
     const requestData: FetchData = {
       ...param,
       status: Status.Ok,
@@ -32,10 +39,11 @@ export function initialize(win: BrowserWindow, listener: Listener) {
 
     if (process.env.NODE_ENV === 'development') {
       log(
-        `服务器接收前端数据为: ${JSON.stringify(
+        `异步服务器接收前端数据为: ${JSON.stringify(
           {
             ...requestData,
             name: ServiceName[requestData.name],
+            status: Status[requestData.status],
           },
           null,
           2,
@@ -46,7 +54,7 @@ export function initialize(win: BrowserWindow, listener: Listener) {
     let result: FetchData;
 
     try {
-      result = await listener({
+      result = await listener.async({
         window: win,
         requestData,
         sendProgress: (progress: number) => {
@@ -68,10 +76,72 @@ export function initialize(win: BrowserWindow, listener: Listener) {
     }
 
     if (process.env.NODE_ENV === 'development') {
-      log(`服务器返回前端数据: ${JSON.stringify(result, null, 2)}`);
+      log(
+        `异步服务器返回前端数据: ${JSON.stringify(
+          {
+            ...result,
+            name: ServiceName[requestData.name],
+            status: Status[requestData.status],
+          },
+          null,
+          2,
+        )}`,
+      );
     }
 
     win.webContents.send(ReplyEventName, result);
+  });
+
+  ipcMain.on(FetchSyncEventName, (event, param) => {
+    const requestData: FetchData = {
+      ...param,
+      status: Status.Ok,
+    };
+
+    if (process.env.NODE_ENV === 'development') {
+      log(
+        `同步服务器接收前端数据为: ${JSON.stringify(
+          {
+            ...requestData,
+            name: ServiceName[requestData.name],
+            status: Status[requestData.status],
+          },
+          null,
+          2,
+        )}`,
+      );
+    }
+
+    let result: FetchData;
+
+    try {
+      result = listener.sync({
+        window: win,
+        requestData,
+      }) as FetchData;
+    } catch (e: any) {
+      result = {
+        ...requestData,
+        error: e.message,
+        status: Status.ServerError,
+      };
+    }
+
+    if (process.env.NODE_ENV === 'development') {
+      log(
+        `同步服务器返回前端数据: ${JSON.stringify(
+          {
+            ...result,
+            name: ServiceName[requestData.name],
+            status: Status[requestData.status],
+          },
+          null,
+          2,
+        )}`,
+      );
+    }
+
+    event.returnValue = result;
   });
 
   if (process.env.NODE_ENV === 'development') {

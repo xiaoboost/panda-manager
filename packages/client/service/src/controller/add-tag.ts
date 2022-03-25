@@ -1,7 +1,7 @@
-import { ServiceData } from './types';
+import { SyncService } from './types';
 import { NewTagData } from '@panda/shared';
 import { addTagByName } from '../service/tags';
 
-export const service: ServiceData<void, NewTagData> = ({ requestData }) => {
+export const service: SyncService<NewTagData, void> = ({ requestData }) => {
   return addTagByName(requestData.data);
 };

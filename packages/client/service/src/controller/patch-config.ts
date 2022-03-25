@@ -1,4 +1,4 @@
-import { ServiceData } from './types';
+import { AsyncService } from './types';
 import { SettingData } from '@panda/shared';
 
 import { patch as dirPatch } from '../service/directories';
@@ -6,7 +6,7 @@ import { patch as sortPatch } from '../service/sort';
 
 import { service as get } from './get-config';
 
-export const service: ServiceData<Promise<SettingData>> = async (context) => {
+export const service: AsyncService<SettingData, SettingData> = async (context) => {
   const {
     requestData: { data },
   } = context;

@@ -6,7 +6,7 @@ import { Bamboo, Recover } from '@panda/components';
 import { useIsFocus, useIsMaximize } from '@panda/renderer-utils';
 import { stringifyClass } from '@xiao-ai/utils';
 import { log } from '@panda/shared';
-import { fetch, ServiceName } from '@panda/fetch/renderer';
+import { fetchSync, ServiceName } from '@panda/fetch/renderer';
 import { getRemoteWindow, getRemoteDialog } from '@panda/remote/renderer';
 
 import { MenuNav } from './menu';
@@ -24,7 +24,7 @@ const openAboutModal = async () => {
   }
 
   const buttons = ['确定', '复制'];
-  const { data: info } = await fetch<string>(ServiceName.GetBuildInfo);
+  const { data: info } = fetchSync<string>(ServiceName.GetBuildInfo);
   const result = await getRemoteDialog().showMessageBox({
     title: 'Panda Manager',
     message: info,

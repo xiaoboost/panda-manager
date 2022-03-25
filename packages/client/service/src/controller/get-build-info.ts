@@ -1,8 +1,8 @@
-import { ServiceData } from './types';
+import { SyncService } from './types';
 
 import os from 'os';
 
-export const service: ServiceData<string> = () => {
+export const service: SyncService<void, string> = () => {
   return [
     `版本: ${process.env.VERSION}`,
     `Electron: ${process.versions.electron}`,

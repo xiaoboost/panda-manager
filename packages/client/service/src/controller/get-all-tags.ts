@@ -1,8 +1,8 @@
-import { ServiceData } from './types';
+import { SyncService } from './types';
 import { TagGroupData } from '@panda/shared';
 import { getTags, getTagGroups } from '../service/tags';
 
-export const service: ServiceData<TagGroupData[]> = () => {
+export const service: SyncService<void, TagGroupData[]> = () => {
   const tags = getTags();
   const groups = getTagGroups();
 

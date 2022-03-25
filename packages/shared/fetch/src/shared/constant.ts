@@ -1,5 +1,7 @@
-/** 渲染进程到主进程 */
-export const FetchEventName = '_event_fetch_service';
+/** 异步渲染进程请求 */
+export const FetchAsyncEventName = '_event_fetch_async_service';
+/** 同步渲染进程请求 */
+export const FetchSyncEventName = '_event_fetch_sync_service';
 /** 主进程回复渲染进程通信 */
 export const ReplyEventName = '_event_fetch_reply_renderer';
 /** 主进程回复渲染进程进度事件通信 */
@@ -17,6 +19,8 @@ export enum Status {
   ServerError,
   /** 未识别的请求 */
   NotFound,
+  /** 不支持异步函数 */
+  NotSupportPromise,
 }
 
 /** 请求服务名称 */
@@ -38,6 +42,8 @@ export enum ServiceName {
   GetItemsList = 300,
   /** 获取项目详情 */
   GetItemDetail,
+  /** 获取读取状态 */
+  GetReadStatus,
 
   // 标签
   /** 获取所有标签数据 */
@@ -64,8 +70,6 @@ export enum ServiceName {
 
 /** 广播事件 */
 export enum BroadcastName {
-  /** 开始读取项目 */
-  ReadItemStart,
-  /** 结束读取项目 */
-  ReadItemEnd,
+  /** 读取项目状态变更 */
+  ReadingStatusChange,
 }

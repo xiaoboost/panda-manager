@@ -1,3 +1,6 @@
-import { ListenerContext } from '@panda/fetch/client';
+import { AsyncListenerContext, SyncListenerContext } from '@panda/fetch/client';
 
-export type ServiceData<R = any, P = any> = (context: ListenerContext<P>) => R;
+export type AsyncService<Parameter, Return> = (
+  context: AsyncListenerContext<Parameter>,
+) => Promise<Return>;
+export type SyncService<Parameter, Return> = (context: SyncListenerContext<Parameter>) => Return;
