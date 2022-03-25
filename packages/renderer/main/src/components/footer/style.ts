@@ -11,8 +11,11 @@ export const styles = createStyles({
     backgroundColor: Purple.toString(),
     color: White.toString(),
     height,
-    fontSize: 12,
+    fontSize: 10,
     padding: [0, 18],
+  },
+  footerIcon: {
+    marginRight: 6,
   },
   footerItem: {
     display: 'inline-flex',

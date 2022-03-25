@@ -7,6 +7,7 @@ import { service as addTag } from './add-tag';
 import { service as addTagGroup } from './add-tag-group';
 import { service as patchTag } from './patch-tag';
 import { service as patchTagGroup } from './patch-tag-group';
+import { service as getReadStatus } from './get-read-status';
 
 import { AsyncService, SyncService } from './types';
 
@@ -36,7 +37,7 @@ const serviceMap: Record<ServiceName, AsyncService<any, any> | SyncService<any, 
     [ServiceName.MoveTag]: undefined,
     [ServiceName.DeleteTag]: undefined,
     [ServiceName.DeleteTagGroup]: undefined,
-    [ServiceName.GetReadStatus]: undefined,
+    [ServiceName.GetReadStatus]: getReadStatus,
   };
 
 /** 异步服务 */

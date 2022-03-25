@@ -7,8 +7,6 @@ import { BroadcastEventName, BroadcastName, BroadcastData } from '../shared';
 export const subscriber = new ChannelSubscriber();
 
 ipcRenderer.on(BroadcastEventName, (ev, params: BroadcastData) => {
-  ev.stopPropagation();
-
   if (process.env.NODE_ENV === 'development') {
     log(
       `前端接收广播数据: ${JSON.stringify(

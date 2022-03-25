@@ -3,19 +3,21 @@ import React from 'react';
 import { LoadingOutlined } from '@ant-design/icons';
 
 import { styles } from './style';
-import { useReadItem } from './hook/use-read-item';
+import { useBroadcast, BroadcastName, fetchSync, ServiceName } from '@panda/fetch/renderer';
+
+const defaultReadStatus = fetchSync<string>(ServiceName.GetReadStatus);
 
 export function Footer() {
   const { classes } = styles;
-  const readItem = useReadItem();
+  const readItem = useBroadcast(BroadcastName.ReadingStatusChange, defaultReadStatus.data);
 
   return (
     <div className={classes.footer}>
       <div className={classes.footerItem}>
         {readItem && (
           <>
-            <LoadingOutlined />
-            <div>{readItem.file}</div>
+            <LoadingOutlined className={styles.classes.footerIcon} />
+            <div>{readItem}</div>
           </>
         )}
       </div>

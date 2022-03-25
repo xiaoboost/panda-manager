@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { subscriber } from '../broadcast';
 import { BroadcastName } from '../../shared';
 
-export function useBroadcast<T = any>(name: BroadcastName) {
-  const [state, setState] = useState<T | undefined>();
+export function useBroadcast<T = any>(name: BroadcastName, initVal?: T) {
+  const [state, setState] = useState<T | undefined>(initVal);
 
   useEffect(() => {
     function onChange(data: T) {

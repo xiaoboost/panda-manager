@@ -1,30 +1,24 @@
 import { Manga } from '@panda/plugin-manga/client';
-import { broadcast, BroadcastName } from '@panda/fetch/client';
-import { ReadItemBroadcast } from '@panda/shared';
-import { basename } from 'path';
 import { Files } from '../../model';
+import { readingStatus } from '../../store';
 
 import * as fs from '@panda/client-utils';
 
-/** 处理器是否正在运行 */
-let isReadingItems = false;
 /** 待处理的项目路径 */
 export const filesQueue: string[] = [];
 
 /** 开始处理项目 */
 export function startReadItem() {
-  if (isReadingItems) {
+  if (readingStatus.data.length > 0) {
     return;
   }
-
-  isReadingItems = true;
 
   setTimeout(async () => {
     while (filesQueue.length > 0) {
       await readItem(filesQueue.pop()!);
     }
 
-    isReadingItems = false;
+    readingStatus.setData('');
   });
 }
 
@@ -47,15 +41,11 @@ export async function readItem(path: string) {
     return;
   }
 
-  broadcast<ReadItemBroadcast>(BroadcastName.ReadItemStart, {
-    path,
-    file: basename(path),
-  });
+  readingStatus.setData(path);
 
   const manga = await Manga.createByPath(path, fileStat);
 
   if (!manga) {
-    broadcast<ReadItemBroadcast>(BroadcastName.ReadItemEnd);
     return;
   }
 
@@ -66,7 +56,6 @@ export async function readItem(path: string) {
   const insertedData = Files.insert(manga.data)[0];
 
   if (!insertedData) {
-    broadcast<ReadItemBroadcast>(BroadcastName.ReadItemEnd);
     return;
   }
 
@@ -74,6 +63,4 @@ export async function readItem(path: string) {
   manga.id = insertedData.id;
 
   await manga.writeCache();
-
-  broadcast<ReadItemBroadcast>(BroadcastName.ReadItemEnd);
 }
