@@ -1,4 +1,4 @@
-import type { ItemData, ItemDataInList } from './types';
+import type { ItemData, ItemDataInList, ItemDataInDetail } from './types';
 import type { Stats } from 'fs';
 
 /** 插件在渲染端接口 */
@@ -24,7 +24,7 @@ export interface PluginClientInstance<Data extends ItemData = ItemData> {
   /** 渲染进程中列表页数据 */
   toRendererDataInList(): ItemDataInList;
   /** 渲染进程中详情页数据 */
-  toRendererDataInDetail(): any;
+  toRendererDataInDetail(): ItemDataInDetail;
 }
 
 /** 插件公共接口 */

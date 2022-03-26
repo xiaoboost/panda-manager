@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as fs from '@panda/client-utils';
 
-import { MangaData, MangaKind, MangaDataInList } from '../shared';
+import { MangaData, MangaKind, MangaDataInList, MangaDetail } from '../shared';
 import { getCoverPath, getTempDirPath } from './path';
 import { getCoverData } from './utils';
 
@@ -77,7 +77,13 @@ export class Manga implements PluginClientInstance<MangaData> {
     };
   }
 
-  toRendererDataInDetail() {
-    // ..
+  toRendererDataInDetail(): MangaDetail {
+    const { uri, ...rest } = this._data;
+
+    return {
+      ...rest,
+      id: this._id,
+      coverPath: getCoverPath(this.id),
+    };
   }
 }
