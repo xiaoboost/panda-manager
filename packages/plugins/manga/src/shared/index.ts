@@ -1,4 +1,4 @@
-import { ItemData, ItemKind } from '@panda/shared';
+import { ItemData, ItemKind, ItemDataInList } from '@panda/shared';
 
 /** 漫画项目类别 */
 export enum MangaKind {
@@ -15,7 +15,7 @@ export interface MangaData extends ItemData {
 }
 
 /** 漫画模块在渲染线程的数据 */
-export interface MangaRendererData extends MangaData {
+export interface MangaDataInList extends ItemDataInList {
   /** 封面图片路径 */
   coverPath: string;
 }

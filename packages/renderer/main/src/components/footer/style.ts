@@ -22,4 +22,10 @@ export const styles = createStyles({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  readStatus: {
+    maxWidth: 180,
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+  },
 });

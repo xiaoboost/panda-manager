@@ -1,11 +1,10 @@
 import * as path from 'path';
 import * as fs from '@panda/client-utils';
 
-import { MangaData, MangaKind } from '../shared';
+import { MangaData, MangaKind, MangaDataInList } from '../shared';
 import { getCoverPath, getTempDirPath } from './path';
 import { getCoverData } from './utils';
 
-import type { DeepReadonly } from '@xiao-ai/utils';
 import type { PluginClientInstance } from '@panda/shared';
 
 export class Manga implements PluginClientInstance<MangaData> {
@@ -14,11 +13,11 @@ export class Manga implements PluginClientInstance<MangaData> {
   /** 编号 */
   private _id: number;
   /** 数据 */
-  private readonly _data: MangaData;
+  private readonly _data: Readonly<MangaData>;
 
-  constructor(id: number, data: MangaData | DeepReadonly<MangaData>) {
+  constructor(id: number, data: MangaData | Readonly<MangaData>) {
     this._id = id;
-    this._data = { ...data } as MangaData;
+    this._data = data;
   }
 
   get id() {
@@ -68,7 +67,17 @@ export class Manga implements PluginClientInstance<MangaData> {
     // }
   }
 
-  toRendererData() {
+  toRendererDataInList(): MangaDataInList {
+    return {
+      id: this.id,
+      name: this.data.name,
+      size: this.data.fileSize,
+      kind: this.data.kind,
+      coverPath: getCoverPath(this.id),
+    };
+  }
+
+  toRendererDataInDetail() {
     // ..
   }
 }

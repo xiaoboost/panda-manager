@@ -22,6 +22,14 @@ export interface ItemData {
   lastModified: number;
 }
 
+/** 列表基础数据 */
+export interface ItemDataInList {
+  id: number;
+  name: string;
+  size: number;
+  kind: ItemKind;
+}
+
 /** 带编号的项目数据 */
 export type DataWithId<Data extends ItemData> = Data & {
   /** 项目编号 */

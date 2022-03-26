@@ -8,6 +8,7 @@ import { service as addTagGroup } from './add-tag-group';
 import { service as patchTag } from './patch-tag';
 import { service as patchTagGroup } from './patch-tag-group';
 import { service as getReadStatus } from './get-read-status';
+import { service as getItemsList } from './get-items-list';
 
 import { AsyncService, SyncService } from './types';
 
@@ -25,7 +26,7 @@ const serviceMap: Record<ServiceName, AsyncService<any, any> | SyncService<any, 
     [ServiceName.GetBuildInfo]: getBuildInfo,
     [ServiceName.GetConfig]: getConfig,
     [ServiceName.PatchConfig]: patchConfig,
-    [ServiceName.GetItemsList]: undefined,
+    [ServiceName.GetItemsList]: getItemsList,
     [ServiceName.GetItemDetail]: undefined,
     [ServiceName.GetAllTags]: getAllTags,
     [ServiceName.AddTag]: addTag,

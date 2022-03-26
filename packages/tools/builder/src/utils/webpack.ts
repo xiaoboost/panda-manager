@@ -5,7 +5,6 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
-// import WindiCSSWebpackPlugin from 'windicss-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 
 import { ProjectConfig } from './types';
@@ -113,18 +112,6 @@ export function getBaseConfig(opt: CommandOptions, project: ProjectConfig): webp
       new MiniCssExtractPlugin({
         filename: 'styles.css',
       }),
-      // new (WindiCSSWebpackPlugin as any)({
-      //   root: resolveProject(),
-      //   scan: {
-      //     fileExtensions: ['.tsx'],
-      //   },
-      //   config: {
-      //     extract: {
-      //       include: ['src/**/*.tsx'],
-      //       exclude: ['node_modules', '.git', 'dist'],
-      //     },
-      //   },
-      // }),
     ],
   };
 

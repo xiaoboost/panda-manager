@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { MangaRendererData } from '../shared';
+import { MangaDataInList } from '../shared';
 
 export * from '../shared';
 
-export function Detail(props: MangaRendererData) {
+export function Detail(props: MangaDataInList) {
   return <div>详情页面</div>;
 }

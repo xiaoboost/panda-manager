@@ -1,5 +1,5 @@
 import { gzip, gunzip, readFile, writeFile } from './utils';
-import { debounce, AnyObject, DeepReadonly } from '@xiao-ai/utils';
+import { debounce, AnyObject } from '@xiao-ai/utils';
 
 /** 数据库文件在文件系统中的储存结构 */
 interface DatabaseInFile {
@@ -10,7 +10,7 @@ interface DatabaseInFile {
 /** 基础数据行 */
 type TableRowData<T extends AnyObject> = T & { id: number };
 /** 行数据 */
-type RowData<Data extends AnyObject> = DeepReadonly<TableRowData<Data>>;
+type RowData<Data extends AnyObject> = Readonly<TableRowData<Data>>;
 
 /** 数据行 */
 export class TableRow<Data extends AnyObject = AnyObject> {
@@ -30,7 +30,7 @@ export class TableRow<Data extends AnyObject = AnyObject> {
   }
 
   /** 数据 */
-  get data(): DeepReadonly<TableRowData<Data>> {
+  get data(): Readonly<TableRowData<Data>> {
     return this._data as any;
   }
 
