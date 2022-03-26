@@ -341,10 +341,12 @@ importers:
       '@panda/shared': workspace:*
       '@panda/tsconfig': workspace:*
       '@types/panda': workspace:*
+      '@types/qs': ^6.9.7
       '@types/react': ^17.0.41
       '@types/react-dom': ^17.0.14
       '@types/react-router-dom': ^5.3.3
       '@xiao-ai/utils': ^1.6.0
+      qs: ^6.10.3
       react: ^17.0.2
       react-dom: ^17.0.2
       react-router: ^6.2.2
@@ -360,6 +362,7 @@ importers:
       '@panda/renderer-utils': link:../utils
       '@panda/shared': link:../../shared/shared
       '@xiao-ai/utils': registry.npmmirror.com/@xiao-ai/utils/1.6.0
+      qs: registry.npmmirror.com/qs/6.10.3
       react: registry.npmmirror.com/react/17.0.2
       react-dom: registry.npmmirror.com/react-dom/17.0.2_react@17.0.2
       react-router: registry.npmmirror.com/react-router/6.2.2_react@17.0.2
@@ -368,6 +371,7 @@ importers:
       '@panda/builder': link:../../tools/builder
       '@panda/tsconfig': link:../../tools/tsconfig
       '@types/panda': link:../../tools/typings
+      '@types/qs': registry.npmmirror.com/@types/qs/6.9.7
       '@types/react': registry.npmmirror.com/@types/react/17.0.41
       '@types/react-dom': registry.npmmirror.com/@types/react-dom/17.0.14
       '@types/react-router-dom': registry.npmmirror.com/@types/react-router-dom/5.3.3
@@ -402,6 +406,7 @@ importers:
       '@xiao-ai/utils': ^1.6.0
       color: ^4.2.1
       electron: 17.1.2
+      hotkeys-js: ^3.8.7
       jss: ^10.9.0
       jss-preset-default: ^10.9.0
       react: ^17.0.2
@@ -416,6 +421,7 @@ importers:
       '@xiao-ai/utils': registry.npmmirror.com/@xiao-ai/utils/1.6.0
       color: registry.npmmirror.com/color/4.2.1
       electron: registry.npmmirror.com/electron/17.1.2
+      hotkeys-js: registry.npmmirror.com/hotkeys-js/3.8.7
       jss: registry.npmmirror.com/jss/10.9.0
       jss-preset-default: registry.npmmirror.com/jss-preset-default/10.9.0
       react: registry.npmmirror.com/react/17.0.2
@@ -1499,6 +1505,12 @@ packages:
     version: 15.7.4
     dev: true
 
+  registry.npmmirror.com/@types/qs/6.9.7:
+    resolution: {integrity: sha512-FGa1F62FT09qcrueBA6qYTrJPVDzah9a+493+o2PCXsesWHIn27G98TsSMs3WPNbZIEj4+VJf6saSFpvD+3Zsw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/qs/-/qs-6.9.7.tgz}
+    name: '@types/qs'
+    version: 6.9.7
+    dev: true
+
   registry.npmmirror.com/@types/react-dom/17.0.14:
     resolution: {integrity: sha512-H03xwEP1oXmSfl3iobtmQ/2dHF5aBHr8aUMwyGZya6OW45G+xtdzmq6HkncefiBt5JU8DVyaWl/nWZbjZCnzAQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/react-dom/-/react-dom-17.0.14.tgz}
     name: '@types/react-dom'
@@ -2135,7 +2147,6 @@ packages:
     dependencies:
       function-bind: registry.npmmirror.com/function-bind/1.1.1
       get-intrinsic: registry.npmmirror.com/get-intrinsic/1.1.1
-    dev: true
 
   registry.npmmirror.com/callsites/3.1.0:
     resolution: {integrity: sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/callsites/-/callsites-3.1.0.tgz}
@@ -3684,7 +3695,6 @@ packages:
       function-bind: registry.npmmirror.com/function-bind/1.1.1
       has: registry.npmmirror.com/has/1.0.3
       has-symbols: registry.npmmirror.com/has-symbols/1.0.2
-    dev: true
 
   registry.npmmirror.com/get-package-info/1.0.0:
     resolution: {integrity: sha512-SCbprXGAPdIhKAXiG+Mk6yeoFH61JlYunqdFQFHDtLjJlDjFf6x07dsS8acO+xWt52jpdVo49AlVDnUVK1sDNw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/get-package-info/-/get-package-info-1.0.0.tgz}
@@ -3902,7 +3912,6 @@ packages:
     name: has-symbols
     version: 1.0.2
     engines: {node: '>= 0.4'}
-    dev: true
 
   registry.npmmirror.com/has-tostringtag/1.0.0:
     resolution: {integrity: sha512-kFjcSNhnlGV1kyoGk7OXKSawH5JOb/LzUc5w9B02hOTO0dfFRjbHQKvg1d6cf3HbeUmtU9VbbV3qzZ2Teh97WQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/has-tostringtag/-/has-tostringtag-1.0.0.tgz}
@@ -3940,6 +3949,12 @@ packages:
     resolution: {integrity: sha512-mxIDAb9Lsm6DoOJ7xH+5+X4y1LU/4Hi50L9C5sIswK3JzULS4bwk1FvjdBgvYR4bzT4tuUQiC15FE2f5HbLvYw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/hosted-git-info/-/hosted-git-info-2.8.9.tgz}
     name: hosted-git-info
     version: 2.8.9
+    dev: false
+
+  registry.npmmirror.com/hotkeys-js/3.8.7:
+    resolution: {integrity: sha512-ckAx3EkUr5XjDwjEHDorHxRO2Kb7z6Z2Sxul4MbBkN8Nho7XDslQsgMJT+CiJ5Z4TgRxxvKHEpuLE3imzqy4Lg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/hotkeys-js/-/hotkeys-js-3.8.7.tgz}
+    name: hotkeys-js
+    version: 3.8.7
     dev: false
 
   registry.npmmirror.com/html-minifier-terser/6.1.0:
@@ -5002,7 +5017,6 @@ packages:
     resolution: {integrity: sha512-Ho2z80bVIvJloH+YzRmpZVQe87+qASmBUKZDWgx9cu+KDrX2ZDH/3tMy+gXbZETVGs2M8YdxObOh7XAtim9Y0g==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/object-inspect/-/object-inspect-1.12.0.tgz}
     name: object-inspect
     version: 1.12.0
-    dev: true
 
   registry.npmmirror.com/object-keys/1.1.1:
     resolution: {integrity: sha512-NuAESUOUMrlIXOfHKzD6bpPu3tYt3xvjNdRIQ+FeT0lNb4K8WR70CaDxhuNguS2XG+GjkyMwOzsN5ZktImfhLA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/object-keys/-/object-keys-1.1.1.tgz}
@@ -5841,6 +5855,15 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
+  registry.npmmirror.com/qs/6.10.3:
+    resolution: {integrity: sha512-wr7M2E0OFRfIfJZjKGieI8lBKb7fRCH4Fv5KNPEs7gJ8jadvotdsS08PzOKR7opXhZ/Xkjtt3WF9g38drmyRqQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/qs/-/qs-6.10.3.tgz}
+    name: qs
+    version: 6.10.3
+    engines: {node: '>=0.6'}
+    dependencies:
+      side-channel: registry.npmmirror.com/side-channel/1.0.4
+    dev: false
+
   registry.npmmirror.com/queue-microtask/1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/queue-microtask/-/queue-microtask-1.2.3.tgz}
     name: queue-microtask
@@ -6309,7 +6332,6 @@ packages:
       call-bind: registry.npmmirror.com/call-bind/1.0.2
       get-intrinsic: registry.npmmirror.com/get-intrinsic/1.1.1
       object-inspect: registry.npmmirror.com/object-inspect/1.12.0
-    dev: true
 
   registry.npmmirror.com/simple-swizzle/0.2.2:
     resolution: {integrity: sha512-JA//kQgZtbuY83m+xT+tXJkmJncGMTFT+C+g2h2R9uxkYIrE2yy9sgmcLhCnw57/WSD+Eh3J97FPEDFnbXnDUg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/simple-swizzle/-/simple-swizzle-0.2.2.tgz}

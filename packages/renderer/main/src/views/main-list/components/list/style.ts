@@ -1,4 +1,4 @@
-import { createStyles, White, MainColor, SecondColor } from '@panda/renderer-utils';
+import { createStyles, White, MainColor, SecondColor, Shadow } from '@panda/renderer-utils';
 
 const fullBlock = {
   position: 'absolute',
@@ -8,19 +8,23 @@ const fullBlock = {
 
 export const styles = createStyles({
   list: {
-    overflowX: 'hidden',
-    overflowY: 'auto',
-
     margin: 0,
     padding: 0,
+    outline: 0,
 
+    flexGrow: 1,
+    height: '100%',
+    position: 'relative',
+    alignItems: 'self-start',
+  },
+  listContainer: {
+    overflowX: 'hidden',
+    overflowY: 'auto',
     display: 'flex',
+    justifyContent: 'flex-start',
+    alignContent: 'flex-start',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    flexGrow: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'self-start',
-    alignContent: 'flex-start',
   },
   itemCover: {
     position: 'relative',
@@ -28,7 +32,7 @@ export const styles = createStyles({
     flexShrink: 0,
     flexGrow: 0,
     height: 200,
-    boxShadow: '2px 2px 4px Shadow',
+    boxShadow: `2px 2px 4px ${Shadow.toString()}`,
     transition: 'box-shadow 200ms',
 
     '&:hover': {
