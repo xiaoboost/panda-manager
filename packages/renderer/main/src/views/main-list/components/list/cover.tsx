@@ -5,15 +5,17 @@ import { ItemDataInList, ItemKind } from '@panda/shared';
 import { Cover as MangaCover, MangaDataInList } from '@panda/plugin-manga/renderer';
 import { stringifyClass as cln } from '@xiao-ai/utils';
 import { MouseButtons } from '@xiao-ai/utils/web';
+import { useNavigate } from 'react-router';
 
 export interface CoverProps {
   data: ItemDataInList;
-  isSelected: boolean;
+  isSelected?: boolean;
   onLeftClick?: (ev: React.MouseEvent) => void;
   onRightClick?: (ev: React.MouseEvent) => void;
 }
 
-export function Cover({ data, isSelected, onLeftClick, onRightClick }: CoverProps) {
+export function Cover({ data, isSelected = false, onLeftClick, onRightClick }: CoverProps) {
+  const navigate = useNavigate();
   const { classes: names } = styles;
   const isItemData = data.kind === ItemKind.Manga;
 
@@ -23,7 +25,7 @@ export function Cover({ data, isSelected, onLeftClick, onRightClick }: CoverProp
 
   const dbClickHandler = (ev: React.MouseEvent) => {
     if (ev.button === MouseButtons.Left) {
-      // router.history.push(`/detail/${manga.id}`);
+      navigate(`/detail/${data.id}`);
     }
   };
 
@@ -35,6 +37,7 @@ export function Cover({ data, isSelected, onLeftClick, onRightClick }: CoverProp
       className={cln(names.itemCover, {
         [names.selected]: isSelected,
       })}
+      title={data.name}
     >
       <div className={names.mask}>
         <div className={names.maskOutside}></div>

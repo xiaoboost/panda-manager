@@ -335,6 +335,7 @@ importers:
       '@panda/builder': workspace:*
       '@panda/components': workspace:*
       '@panda/fetch': workspace:*
+      '@panda/plugin-manga': workspace:*
       '@panda/remote': workspace:*
       '@panda/renderer-utils': workspace:*
       '@panda/shared': workspace:*
@@ -354,6 +355,7 @@ importers:
       '@ant-design/icons': registry.npmmirror.com/@ant-design/icons/4.7.0_react-dom@17.0.2+react@17.0.2
       '@panda/components': link:../components
       '@panda/fetch': link:../../shared/fetch
+      '@panda/plugin-manga': link:../../plugins/manga
       '@panda/remote': link:../../shared/remote
       '@panda/renderer-utils': link:../utils
       '@panda/shared': link:../../shared/shared

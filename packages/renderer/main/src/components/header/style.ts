@@ -46,7 +46,7 @@ export const style = createStyles({
   },
   icon: {
     cursor: 'default !important',
-    padding: [10, 17],
+    padding: [8, 16],
     display: 'flex',
     '-webkit-app-region': 'no-drag',
 

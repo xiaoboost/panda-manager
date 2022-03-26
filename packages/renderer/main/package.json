@@ -24,6 +24,7 @@
     "@ant-design/icons": "^4.7.0",
     "@panda/components": "workspace:*",
     "@panda/fetch": "workspace:*",
+    "@panda/plugin-manga": "workspace:*",
     "@panda/remote": "workspace:*",
     "@panda/renderer-utils": "workspace:*",
     "@panda/shared": "workspace:*",

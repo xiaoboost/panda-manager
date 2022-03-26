@@ -1,4 +1,4 @@
-import { createStyles, Color, White, BlackLight } from '@panda/renderer-utils';
+import { createStyles, White, MainColor, SecondColor } from '@panda/renderer-utils';
 
 const fullBlock = {
   position: 'absolute',
@@ -30,14 +30,23 @@ export const styles = createStyles({
     height: 200,
     boxShadow: '2px 2px 4px Shadow',
     transition: 'box-shadow 200ms',
+
+    '&:hover': {
+      '& $mask': {
+        opacity: 1,
+      },
+      '& $maskOutside': {
+        borderColor: SecondColor.toString(),
+      },
+    },
   },
   mask: {
-    display: 'none',
+    opacity: 0,
     ...fullBlock,
   },
   maskOutside: {
     zIndex: 10,
-    border: '2px solid #316AC5',
+    border: '2px solid',
     ...fullBlock,
   },
   maskInside: {
@@ -47,7 +56,10 @@ export const styles = createStyles({
   },
   selected: {
     '& $mask': {
-      display: 'block',
+      opacity: 1,
+      '& $maskOutside': {
+        borderColor: MainColor.toString(),
+      },
     },
   },
 });
