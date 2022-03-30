@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { ErrorPanel } from '../common/error-panel';
+
 import { styles } from './style';
 import { useState, useRef, forwardRef, useEffect, useImperativeHandle } from 'react';
 import { stringifyClass as cla } from '@xiao-ai/utils';
@@ -21,8 +23,18 @@ export interface InputProps {
   inputClassName?: string;
   /** 内部输入框样式 */
   inputStyle?: React.CSSProperties;
-  /** 输入值变更 */
-  onChange?(val: string): void;
+  /**
+   * 校验值
+   *   - 返回`undefined | null | void | ''`时表示校验通过
+   *   - 返回字符串时表示校验未通过，且字符串为错误信息
+   */
+  validate?(val: string): string | undefined | null | void;
+  /**
+   * 输入值变更
+   *   - 没有`validate`校验函数时，`validateStatus`永远为`true`
+   *   - 有`validate`校验函数时，校验通过时`validateStatus`为`true`
+   */
+  onChange?(val: string, validateStatus: boolean): void;
   /** 键盘输入回车键时 */
   onPressEnter?(ev: React.KeyboardEvent<HTMLInputElement>): void;
   /** 键盘输入取消键时 */
@@ -46,7 +58,9 @@ export interface InputRef {
 
 export const Input = forwardRef<InputRef, InputProps>(function Input(props, ref) {
   const { classes } = styles;
+  const boxRef = useRef<HTMLDivElement>(null);
   const [isFocus, setFocus] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const inputEl = useRef<HTMLInputElement>(null);
   const {
     type,
@@ -58,6 +72,7 @@ export const Input = forwardRef<InputRef, InputProps>(function Input(props, ref)
     disabled,
     inputClassName,
     inputStyle,
+    validate,
     onPressEnter,
     onPressEsc,
     onFocus,
@@ -98,14 +113,35 @@ export const Input = forwardRef<InputRef, InputProps>(function Input(props, ref)
 
   const handleBlur: React.FocusEventHandler<HTMLInputElement> = (e) => {
     setFocus(false);
+    setErrorMessage('');
     onBlur?.(e);
+  };
+
+  const changeHandler: React.ChangeEventHandler<HTMLInputElement> = ({ target }) => {
+    const val = target.value;
+    let validateStatus = true;
+
+    if (validate) {
+      const result = validate(val);
+
+      if (result) {
+        validateStatus = false;
+        setErrorMessage(result);
+      } else {
+        setErrorMessage('');
+      }
+    }
+
+    onChange?.(val, validateStatus);
   };
 
   return (
     <div
+      ref={boxRef}
       className={cla(classes.box, classes.idle, className, {
         [classes.focus]: isFocus,
         [classes.disabled]: disabled ?? false,
+        [classes.error]: errorMessage.length > 0,
       })}
       style={style}
     >
@@ -121,9 +157,10 @@ export const Input = forwardRef<InputRef, InputProps>(function Input(props, ref)
           onFocus={handleFocus}
           onBlur={handleBlur}
           onKeyDown={handleKeyDown}
-          onChange={({ target }) => onChange?.(target.value)}
+          onChange={changeHandler}
         />
       </div>
+      <ErrorPanel message={errorMessage} targetRef={boxRef} />
     </div>
   );
 });

@@ -1,6 +1,7 @@
-import { createStyles } from '@panda/renderer-utils';
+import { createStyles, ErrorMain, ErrorBg, Focus } from '@panda/renderer-utils';
 
 export const styles = createStyles({
+  error: {},
   box: {
     position: 'relative',
     display: 'block',
@@ -8,6 +9,10 @@ export const styles = createStyles({
     boxSizing: 'border-box',
     fontSize: 'inherit',
     height: '100%',
+
+    '&$error': {
+      outlineColor: ErrorMain.toString(),
+    },
   },
   disabled: {
     // TODO: 待补
@@ -44,6 +49,6 @@ export const styles = createStyles({
     outlineStyle: 'solid',
     outlineOffset: -1,
     opacity: '1 !important',
-    outlineColor: '#528bff',
+    outlineColor: Focus.toString(),
   },
 });
