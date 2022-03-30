@@ -29,16 +29,15 @@
     "hotkeys-js": "^3.8.7",
     "jss": "^10.9.0",
     "jss-preset-default": "^10.9.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-use": "^17.3.2"
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
   },
   "devDependencies": {
     "@panda/tsconfig": "workspace:*",
     "@types/color": "^3.0.3",
     "@types/panda": "workspace:*",
-    "@types/react": "^17.0.41",
+    "@types/react": "^17.0.43",
     "tslib": "^2.3.1",
-    "typescript": "4.6.2"
+    "typescript": "4.6.3"
   }
 }

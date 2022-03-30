@@ -21,8 +21,8 @@
     "url": "https://github.com/xiaoboost/panda-manager"
   },
   "dependencies": {
-    "@panda/shared": "workspace:*",
     "@panda/client-utils": "workspace:*",
+    "@panda/shared": "workspace:*",
     "@xiao-ai/utils": "^1.6.0",
     "iconv-lite": "^0.6.3",
     "jszip": "^3.7.1"
@@ -31,6 +31,6 @@
     "@panda/tsconfig": "workspace:*",
     "@types/panda": "workspace:*",
     "tslib": "^2.3.1",
-    "typescript": "4.6.2"
+    "typescript": "4.6.3"
   }
 }

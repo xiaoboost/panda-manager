@@ -5,7 +5,8 @@ import { fetch, ServiceName } from '@panda/fetch/renderer';
 export const tagData = new Watcher<TagGroupData[]>([]);
 
 export function fetchTagData() {
-  fetch<TagGroupData[]>(ServiceName.GetAllTags).then(({ data }) => tagData.setData(data));
+  return fetch<TagGroupData[]>(ServiceName.GetAllTags).then(({ data }) => tagData.setData(data));
 }
 
+// 初始化获取数据
 fetchTagData();

@@ -1,4 +1,4 @@
-import { createStyles, Black, FontDefault, FontDefaultSize } from '@panda/renderer-utils';
+import { createStyles, WhiteBg } from '@panda/renderer-utils';
 
 export const style = createStyles({
   footer: {
@@ -6,7 +6,7 @@ export const style = createStyles({
     height: 40,
     padding: [0, 10],
     margin: 0,
-    backgroundColor: '#F0F0F0',
+    backgroundColor: WhiteBg.toString(),
     borderTop: '1px solid #DFDFDF',
     display: 'flex',
     justifyContent: 'flex-end',

@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { MangaDataInList } from '@panda/plugin-manga/renderer';
 import { fetch, ServiceName } from '@panda/fetch/renderer';
 import { SearchOption, log } from '@panda/shared';
-import { useMap, useKeyboard } from '@panda/renderer-utils';
+import { useKeyboard } from '@panda/renderer-utils';
 import { SearchBar } from '../search';
 
 import { styles } from './style';
@@ -19,7 +19,7 @@ export function List() {
   const [items, setItems] = useState<ItemData[]>([]);
   const [searchOpts, setSearchOpts] = useState<SearchOption[]>([]);
   const [searchVisible, setSearchVisible] = useState(false);
-  const [selected, setSelected] = useMap<Record<number, boolean>>({});
+  const [selected, setSelected] = useState<number>();
 
   useKeyboard('ctrl+f', () => setSearchVisible(true));
   useKeyboard('esc, escape', () => setSearchVisible(false));
@@ -38,12 +38,11 @@ export function List() {
 
   const leftClickHandler = (id: number) => (ev: React.MouseEvent) => {
     ev.stopPropagation();
-    setSelected.reset();
-    setSelected.set(id, true);
+    setSelected(id);
   };
   const resetHandler = (ev: React.MouseEvent) => {
     if (ev.currentTarget === ev.target) {
-      setSelected.reset();
+      setSelected(undefined);
     }
   };
 
@@ -59,7 +58,7 @@ export function List() {
           <Cover
             key={item.id}
             data={item}
-            isSelected={selected[item.id]}
+            isSelected={selected === item.id}
             onLeftClick={leftClickHandler(item.id)}
           />
         ))}

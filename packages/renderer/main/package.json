@@ -30,8 +30,8 @@
     "@panda/shared": "workspace:*",
     "@xiao-ai/utils": "^1.6.0",
     "qs": "^6.10.3",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
     "react-router": "^6.2.2",
     "react-router-dom": "^6.2.2"
   },
@@ -40,10 +40,10 @@
     "@panda/tsconfig": "workspace:*",
     "@types/panda": "workspace:*",
     "@types/qs": "^6.9.7",
-    "@types/react": "^17.0.41",
+    "@types/react": "^17.0.43",
     "@types/react-dom": "^17.0.14",
     "@types/react-router-dom": "^5.3.3",
     "tslib": "^2.3.1",
-    "typescript": "4.6.2"
+    "typescript": "4.6.3"
   }
 }
