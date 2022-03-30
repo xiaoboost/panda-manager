@@ -21,8 +21,13 @@ export interface TagGroupProps {
   title?: string;
   /** 子标签 */
   tags?: TagData[];
-  /** 更新所有标签数据 */
-  update?(): void;
+  /**
+   * 编辑结束
+   *   - `refresh`是否需要刷新列表
+   */
+  onEditEnd(refresh: boolean): void;
+  /** 标签名称验证 */
+  onEditValidate?(val: string): string | void;
 }
 
 export interface TagGroupRef {
@@ -33,7 +38,7 @@ export interface TagGroupRef {
 }
 
 export const TagGroup = forwardRef<TagGroupRef, TagGroupProps>(function TagGroup(
-  { id, title = '', isNew = false, tags = [], update },
+  { id, title = '', isNew = false, tags = [], onEditEnd, onEditValidate },
   ref,
 ) {
   const { classes } = styles;
@@ -52,6 +57,7 @@ export const TagGroup = forwardRef<TagGroupRef, TagGroupProps>(function TagGroup
     },
   }));
 
+  const refreshList = () => onEditEnd(true);
   const tagClickLeft: React.MouseEventHandler = (ev) => {
     if (ev.button === MouseButtons.Left) {
       // 非编辑模式
@@ -74,18 +80,19 @@ export const TagGroup = forwardRef<TagGroupRef, TagGroupProps>(function TagGroup
   const editEnd = (val: string) => {
     // 未修改名称
     if (val === title) {
+      onEditEnd(false);
       return;
     }
 
     if (isNew) {
       fetch<void, NewTagGroupData>(ServiceName.AddTagGroup, {
         name: val,
-      }).then(update);
+      }).then(refreshList);
     } else {
       fetch<void, PatchTagGroupData>(ServiceName.PatchTagGroup, {
         id,
         name: val,
-      }).then(update);
+      }).then(refreshList);
     }
   };
   const newTagHandler = () => {
@@ -101,7 +108,7 @@ export const TagGroup = forwardRef<TagGroupRef, TagGroupProps>(function TagGroup
     fetch<any, NewTagData>(ServiceName.AddTag, {
       name: val,
       groupId: id,
-    }).then(update);
+    }).then(refreshList);
   };
   const copyTextHandler = () => {
     clipboard.writeText(title);
@@ -128,12 +135,13 @@ export const TagGroup = forwardRef<TagGroupRef, TagGroupProps>(function TagGroup
           startEdit={isNew}
           icon={isCollapse ? <RightOutlined /> : <DownOutlined />}
           onEditEnd={editEnd}
+          onEditValidate={onEditValidate}
         />
       </div>
       {newTag && <TagBase indent={1} startEdit key='tag-new' onEditEnd={newTagEndHandler} />}
       {!isCollapse &&
         tags.map((data) => (
-          <Tag key={`tag-${data.id}`} id={data.id} title={data.name} update={update} />
+          <Tag key={`tag-${data.id}`} id={data.id} title={data.name} update={refreshList} />
         ))}
       <Panel
         stopPropagation

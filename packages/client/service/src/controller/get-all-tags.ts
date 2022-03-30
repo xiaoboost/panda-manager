@@ -8,8 +8,16 @@ export const service: SyncService<void, TagGroupData[]> = () => {
 
   return groups.map((data) => {
     return {
+      comment: '',
+      alias: [],
       ...data.data,
-      tags: tags.filter((tag) => tag.data.groupId === data.id).map((tag) => ({ ...tag.data })),
+      tags: tags
+        .filter((tag) => tag.data.groupId === data.id)
+        .map((tag) => ({
+          comment: '',
+          alias: [],
+          ...tag.data,
+        })),
     } as TagGroupData;
   });
 };

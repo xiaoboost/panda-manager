@@ -43,3 +43,9 @@ export const BlackLight = Color(0x616161);
 export const BlackLighter = Color(0x909399);
 /** 灰色 */
 export const BlackExtraLight = Color(0xc0c4cc);
+/** 错误高亮颜色 */
+export const ErrorMain = Color(0xf1897f);
+/** 错误背景颜色 */
+export const ErrorBg = Color(0xffeaea);
+/** 表单关注颜色 */
+export const Focus = Color(0x528bff);

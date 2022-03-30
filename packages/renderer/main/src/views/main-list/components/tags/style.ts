@@ -1,8 +1,6 @@
-import { createStyles, Color, Black, White, PurpleLight, Red } from '@panda/renderer-utils';
+import { createStyles } from '@panda/renderer-utils';
 
 export const height = 30;
-const mainBgColor = PurpleLight;
-const fontColor = Color(Black.rgbNumber() + 0x121212);
 
 export const RowHeight = 22;
 
@@ -63,6 +61,9 @@ export const styles = createStyles({
     justifyContent: 'flex-start',
     alignItems: 'center',
     ...lineHeight,
+  },
+  input: {
+    flexGrow: 1,
   },
   innerInput: {
     padding: [2, 0],

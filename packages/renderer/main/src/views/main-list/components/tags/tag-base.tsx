@@ -4,7 +4,6 @@ import { styles } from './style';
 import { Indent } from './indent';
 import { useState, useRef, forwardRef, useEffect, useImperativeHandle } from 'react';
 import { Input, InputRef } from '@panda/components';
-import { MouseButtons } from '@xiao-ai/utils/web';
 
 export interface TagBaseProps {
   /** 前置空格的数量 */
@@ -17,6 +16,8 @@ export interface TagBaseProps {
   startEdit?: boolean;
   /** 更新所有标签数据 */
   onEditEnd?(val: string): void;
+  /** 标签名称是否重复 */
+  onEditValidate?(val: string): string | void;
 }
 
 export interface TagBaseRef {
@@ -29,13 +30,15 @@ export interface TagBaseRef {
 }
 
 export const TagBase = forwardRef<TagBaseRef, TagBaseProps>(function Tag(
-  { title = '', indent = 0, icon, startEdit = false, onEditEnd },
+  { title = '', indent = 0, icon, startEdit = false, onEditEnd, onEditValidate },
   ref,
 ) {
   const { classes } = styles;
   const [isEdit, setEdit] = useState(startEdit);
+  const [isEditError, setEditError] = useState(false);
   const [inputVal, setInputVal] = useState('');
   const inputRef = useRef<InputRef>(null);
+  const ignoreBlur = useRef(false);
 
   useEffect(() => {
     if (isEdit && inputRef.current) {
@@ -57,14 +60,49 @@ export const TagBase = forwardRef<TagBaseRef, TagBaseProps>(function Tag(
     },
   }));
 
+  /** 编辑取消 */
   const editCancel = () => {
     setEdit(false);
     onEditEnd?.(title);
     setInputVal(title);
   };
-  const editEnd = () => {
+  /** 编辑确认 */
+  const editEnter = () => {
     setEdit(false);
     onEditEnd?.(inputVal);
+  };
+
+  const inputChangeHandler = (val: string, status: boolean) => {
+    setEditError(!status);
+    setInputVal(val);
+  };
+  const blurHandler = () => {
+    // 忽略 blur 事件的状态只保留一次
+    if (ignoreBlur.current) {
+      ignoreBlur.current = false;
+      return;
+    }
+
+    setEdit(false);
+
+    // 有错误时触发取消操作
+    if (isEditError) {
+      editCancel();
+    }
+    // 在编辑状态
+    else if (isEdit) {
+      onEditEnd?.(inputVal);
+    }
+  };
+  const pressEnterHandler = () => {
+    if (!isEditError) {
+      ignoreBlur.current = true;
+      editEnter();
+    }
+  };
+  const pressEscHandler = () => {
+    ignoreBlur.current = true;
+    editCancel();
   };
 
   return (
@@ -79,10 +117,12 @@ export const TagBase = forwardRef<TagBaseRef, TagBaseProps>(function Tag(
         <Input
           ref={inputRef}
           value={inputVal}
-          onChange={setInputVal}
-          onBlur={editEnd}
-          onPressEnter={editEnd}
-          onPressEsc={editCancel}
+          onChange={inputChangeHandler}
+          onBlur={blurHandler}
+          onPressEnter={pressEnterHandler}
+          onPressEsc={pressEscHandler}
+          validate={onEditValidate}
+          className={classes.input}
           inputClassName={classes.innerInput}
         />
       ) : (
