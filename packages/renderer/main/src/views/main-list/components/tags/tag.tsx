@@ -3,7 +3,7 @@ import React from 'react';
 import { styles } from './style';
 import { useState, useRef } from 'react';
 import { Panel, PanelItem, PanelSplit } from '@panda/components';
-import { PatchTagData, PatchTagGroupData, TagData } from '@panda/shared';
+import { PatchTagData, PatchTagGroupData, PatchTagMetaData } from '@panda/shared';
 import { clipboard } from 'electron';
 import { MouseButtons } from '@xiao-ai/utils/web';
 import { fetch, ServiceName } from '@panda/fetch/renderer';
@@ -55,12 +55,12 @@ export function Tag({ id, title, update }: TagProps) {
     tagRef.current?.edit();
     setPanelVisible(false);
   };
-  const deleteHandler = async () => {
+  const deleteHandler = () => {
     setPanelVisible(false);
-
-    if (await delateTag(title, true)) {
-      // ..
-    }
+    delateTag(title, false).then(update);
+  };
+  const editMetaHandler = () => {
+    fetch<void, PatchTagMetaData>(ServiceName.PatchTagMeta, { id }).then(update);
   };
 
   return (
@@ -77,7 +77,7 @@ export function Tag({ id, title, update }: TagProps) {
         <PanelSplit />
         <PanelItem onClick={copyTextHandler}>复制文本</PanelItem>
         <PanelSplit />
-        <PanelItem disabled>编辑元数据</PanelItem>
+        <PanelItem onClick={editMetaHandler}>编辑元数据</PanelItem>
         <PanelItem onClick={renameHandler}>重命名</PanelItem>
         <PanelItem onClick={deleteHandler}>删除</PanelItem>
       </Panel>

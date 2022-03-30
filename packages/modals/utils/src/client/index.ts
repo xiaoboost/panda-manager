@@ -17,8 +17,6 @@ export interface ModalServiceOptions {
 export interface StartOptions<InitData = any> extends BrowserWindowConstructorOptions {
   /** 初始化数据 */
   initData?: InitData;
-  /** 模态框标题 */
-  title: string;
 }
 
 export function createModalService<Init, Return>({

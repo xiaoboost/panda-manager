@@ -1,12 +1,26 @@
 import React from 'react';
 
-import { style } from './style';
+import { styles } from './style';
 import { Form } from '../form';
-import { Footer } from '../footer';
+import { InitData } from '../../../shared';
+import { useEffect, useState } from 'react';
+import { Layout, getInitData } from '@panda/modal-utils/renderer';
 
-export const App = () => (
-  <div className={style.classes.app}>
-    <Form />
-    <Footer />
-  </div>
-);
+export function App() {
+  const [{ title, ...formData }, setData] = useState<InitData>({
+    title: '',
+    name: '',
+    comment: '',
+    alias: [],
+  });
+
+  useEffect(() => {
+    getInitData<InitData>().then(setData);
+  }, []);
+
+  return (
+    <Layout title={title}>
+      <Form data={formData} />
+    </Layout>
+  );
+}

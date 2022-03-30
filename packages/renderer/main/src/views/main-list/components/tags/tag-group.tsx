@@ -4,7 +4,13 @@ import { styles } from './style';
 import { useState, useRef, forwardRef, useImperativeHandle } from 'react';
 import { DownOutlined, RightOutlined } from '@ant-design/icons';
 import { Panel, PanelItem, PanelSplit } from '@panda/components';
-import { NewTagData, NewTagGroupData, PatchTagGroupData, TagData } from '@panda/shared';
+import {
+  NewTagData,
+  NewTagGroupData,
+  PatchTagGroupData,
+  TagData,
+  PatchTagMetaData,
+} from '@panda/shared';
 import { clipboard } from 'electron';
 import { MouseButtons } from '@xiao-ai/utils/web';
 import { fetch, ServiceName } from '@panda/fetch/renderer';
@@ -118,12 +124,12 @@ export const TagGroup = forwardRef<TagGroupRef, TagGroupProps>(function TagGroup
     tagRef.current?.edit();
     setPanelVisible(false);
   };
-  const deleteHandler = async () => {
+  const deleteHandler = () => {
     setPanelVisible(false);
-
-    if (await delateTag(title, true)) {
-      // ..
-    }
+    delateTag(title, true).then(refreshList);
+  };
+  const editGroupMetaHandler = () => {
+    fetch<void, PatchTagMetaData>(ServiceName.PatchTagGroupMeta, { id }).then(refreshList);
   };
 
   return (
@@ -153,7 +159,7 @@ export const TagGroup = forwardRef<TagGroupRef, TagGroupProps>(function TagGroup
         <PanelItem onClick={newTagHandler}>新建标签</PanelItem>
         <PanelItem onClick={copyTextHandler}>复制文本</PanelItem>
         <PanelSplit />
-        <PanelItem disabled>编辑元数据</PanelItem>
+        <PanelItem onClick={editGroupMetaHandler}>编辑元数据</PanelItem>
         <PanelItem onClick={renameHandler}>重命名</PanelItem>
         <PanelItem onClick={deleteHandler}>删除</PanelItem>
       </Panel>

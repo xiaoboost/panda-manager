@@ -10,6 +10,8 @@ import { service as patchTagGroup } from './patch-tag-group';
 import { service as getReadStatus } from './get-read-status';
 import { service as getItemsList } from './get-items-list';
 import { service as getItemDetail } from './get-item-detail';
+import { service as patchTagMeta } from './patch-tag-meta';
+import { service as patchTagGroupMeta } from './patch-tag-group-meta';
 
 import { AsyncService, SyncService } from './types';
 
@@ -34,8 +36,8 @@ const serviceMap: Record<ServiceName, AsyncService<any, any> | SyncService<any, 
     [ServiceName.AddTagGroup]: addTagGroup,
     [ServiceName.PatchTag]: patchTag,
     [ServiceName.PatchTagGroup]: patchTagGroup,
-    [ServiceName.PatchTagMeta]: undefined,
-    [ServiceName.PatchTagGroupMeta]: undefined,
+    [ServiceName.PatchTagMeta]: patchTagMeta,
+    [ServiceName.PatchTagGroupMeta]: patchTagGroupMeta,
     [ServiceName.MoveTag]: undefined,
     [ServiceName.DeleteTag]: undefined,
     [ServiceName.DeleteTagGroup]: undefined,
