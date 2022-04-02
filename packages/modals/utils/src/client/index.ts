@@ -33,7 +33,7 @@ export function createModalService<Init, Return>({
         width: process.env.NODE_ENV === 'development' ? width + 400 : width,
         fullscreen: false,
         center: true,
-        frame: true,
+        frame: false,
         resizable: false,
         minimizable: false,
         maximizable: false,

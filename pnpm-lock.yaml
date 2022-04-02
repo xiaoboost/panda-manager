@@ -246,28 +246,36 @@ importers:
 
   packages/modals/utils:
     specifiers:
+      '@ant-design/icons': ^4.7.0
       '@panda/client-utils': workspace:*
+      '@panda/renderer-utils': workspace:*
       '@panda/shared': workspace:*
       '@panda/tsconfig': workspace:*
       '@types/node': ^17.0.23
       '@types/panda': workspace:*
       '@types/react': ^17.0.43
+      '@types/react-dom': ^17.0.14
       '@xiao-ai/utils': ^1.6.0
       electron: 17.1.2
       react: ^18.0.0
+      react-dom: ^18.0.0
       tslib: ^2.3.1
       typescript: 4.6.3
     dependencies:
+      '@ant-design/icons': registry.npmmirror.com/@ant-design/icons/4.7.0_react-dom@18.0.0+react@18.0.0
       '@panda/client-utils': link:../../client/utils
+      '@panda/renderer-utils': link:../../renderer/utils
       '@panda/shared': link:../../shared/shared
       '@xiao-ai/utils': registry.npmmirror.com/@xiao-ai/utils/1.6.0
       electron: registry.npmmirror.com/electron/17.1.2
       react: registry.npmmirror.com/react/18.0.0
+      react-dom: registry.npmmirror.com/react-dom/18.0.0_react@18.0.0
     devDependencies:
       '@panda/tsconfig': link:../../tools/tsconfig
       '@types/node': registry.npmmirror.com/@types/node/17.0.23
       '@types/panda': link:../../tools/typings
       '@types/react': registry.npmmirror.com/@types/react/17.0.43
+      '@types/react-dom': registry.npmmirror.com/@types/react-dom/17.0.14
       tslib: registry.npmmirror.com/tslib/2.3.1
       typescript: registry.npmmirror.com/typescript/4.6.3
 

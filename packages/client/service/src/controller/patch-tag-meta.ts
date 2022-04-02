@@ -4,7 +4,7 @@ import { patchTagGroup, getTags } from '../service/tags';
 
 import { open } from '@panda/modal-tag-editor/client';
 
-export const service: AsyncService<PatchTagMetaData, void> = async ({ requestData }) => {
+export const service: AsyncService<PatchTagMetaData, void> = async ({ window, requestData }) => {
   const { id } = requestData.data;
   const current = getTags().find((tag) => tag.id === id);
 
@@ -17,9 +17,10 @@ export const service: AsyncService<PatchTagMetaData, void> = async ({ requestDat
       title: `修改标签“${current.data.name}”的元数据`,
       name: current.data.name,
       comment: current.data.comment ?? '',
-      alias: current.data.alias ?? [],
+      alias: current.data.alias ?? '',
       groupId: current.data.groupId,
     },
+    parent: window,
     width: 300,
     height: 400,
   });

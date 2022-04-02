@@ -7,11 +7,12 @@ import { useEffect, useState } from 'react';
 import { Layout, getInitData } from '@panda/modal-utils/renderer';
 
 export function App() {
+  const { classes: cla } = styles;
   const [{ title, ...formData }, setData] = useState<InitData>({
     title: '',
     name: '',
     comment: '',
-    alias: [],
+    alias: '',
   });
 
   useEffect(() => {
@@ -19,7 +20,7 @@ export function App() {
   }, []);
 
   return (
-    <Layout title={title}>
+    <Layout title={title} className={cla.app}>
       <Form data={formData} />
     </Layout>
   );
