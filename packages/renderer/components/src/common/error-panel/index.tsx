@@ -32,7 +32,7 @@ export function ErrorPanel({ targetRef, message }: ErrorPanelProps) {
       const offset = getOffset(el);
       setPanelPosition([offset[0], offset[1] + el.offsetHeight, el.offsetWidth]);
     }
-  }, [message]);
+  }, [message, targetRef.current]);
 
   return (
     <Panel

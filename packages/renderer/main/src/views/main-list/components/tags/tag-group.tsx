@@ -32,7 +32,7 @@ export interface TagGroupProps {
    *   - `refresh`是否需要刷新列表
    */
   onEditEnd(refresh: boolean): void;
-  /** 标签名称验证 */
+  /** 标签集名称验证 */
   onEditValidate?(val: string): string | void;
 }
 
@@ -64,6 +64,11 @@ export const TagGroup = forwardRef<TagGroupRef, TagGroupProps>(function TagGroup
   }));
 
   const refreshList = () => onEditEnd(true);
+  const tagNameValidate = (val: string) => {
+    if (tags.find((group) => group.name === val)) {
+      return `此位置已经存在标签 "${val}"，请选择其他名称`;
+    }
+  };
   const tagClickLeft: React.MouseEventHandler = (ev) => {
     if (ev.button === MouseButtons.Left) {
       // 非编辑模式
@@ -129,6 +134,7 @@ export const TagGroup = forwardRef<TagGroupRef, TagGroupProps>(function TagGroup
     delateTag(title, true).then(refreshList);
   };
   const editGroupMetaHandler = () => {
+    setPanelVisible(false);
     fetch<void, PatchTagMetaData>(ServiceName.PatchTagGroupMeta, { id }).then(refreshList);
   };
 
@@ -147,7 +153,13 @@ export const TagGroup = forwardRef<TagGroupRef, TagGroupProps>(function TagGroup
       {newTag && <TagBase indent={1} startEdit key='tag-new' onEditEnd={newTagEndHandler} />}
       {!isCollapse &&
         tags.map((data) => (
-          <Tag key={`tag-${data.id}`} id={data.id} title={data.name} update={refreshList} />
+          <Tag
+            key={`tag-${data.id}`}
+            id={data.id}
+            title={data.name}
+            update={refreshList}
+            onEditValidate={tagNameValidate}
+          />
         ))}
       <Panel
         stopPropagation

@@ -1,4 +1,4 @@
-import { createStyles, ErrorMain, ErrorBg, Focus } from '@panda/renderer-utils';
+import { createStyles, ErrorMain, Focus } from '@panda/renderer-utils';
 
 export const styles = createStyles({
   error: {},

@@ -17,9 +17,11 @@ export interface TagProps {
   title: string;
   /** 更新所有标签数据 */
   update?(): void;
+  /** 标签集名称验证 */
+  onEditValidate?(val: string): string | void;
 }
 
-export function Tag({ id, title, update }: TagProps) {
+export function Tag({ id, title, update, onEditValidate }: TagProps) {
   const { classes } = styles;
   const [panelVisible, setPanelVisible] = useState(false);
   const [panelPosition, setPanelPosition] = useState([0, 0]);
@@ -60,12 +62,19 @@ export function Tag({ id, title, update }: TagProps) {
     delateTag(title, false).then(update);
   };
   const editMetaHandler = () => {
+    setPanelVisible(false);
     fetch<void, PatchTagMetaData>(ServiceName.PatchTagMeta, { id }).then(update);
   };
 
   return (
     <div className={classes.tagGroup} onContextMenu={tagClickRight}>
-      <TagBase indent={1} ref={tagRef} title={title} onEditEnd={editEnd} />
+      <TagBase
+        indent={1}
+        ref={tagRef}
+        title={title}
+        onEditEnd={editEnd}
+        onEditValidate={onEditValidate}
+      />
       <Panel
         stopPropagation
         visible={panelVisible}
