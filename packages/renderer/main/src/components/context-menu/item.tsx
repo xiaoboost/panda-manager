@@ -1,20 +1,20 @@
 import React from 'react';
 
-import { style } from './style';
+import { styles } from './style';
 import { stringifyClass } from '@xiao-ai/utils';
 import { PropsWithChildren } from 'react';
 
-export interface PanelItemProps {
+export interface MenuItemProps {
   shortcut?: string;
   disabled?: boolean;
   onClick?(): void;
 }
 
-export function PanelItem(props: PropsWithChildren<PanelItemProps>) {
+export function MenuItem(props: PropsWithChildren<MenuItemProps>) {
   return (
     <div
-      className={stringifyClass(style.classes.item, {
-        [style.classes.disabled]: props.disabled ?? false,
+      className={stringifyClass(styles.classes.item, {
+        [styles.classes.disabled]: props.disabled ?? false,
       })}
       onClick={props.onClick}
     >

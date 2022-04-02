@@ -2,8 +2,9 @@ import React from 'react';
 
 import { styles } from './style';
 import { useState, useRef } from 'react';
-import { Panel, PanelItem, PanelSplit } from '@panda/components';
-import { PatchTagData, PatchTagGroupData, PatchTagMetaData } from '@panda/shared';
+import { Float } from '@panda/components';
+import { MenuItem, MenuSplit } from 'src/components/context-menu';
+import { PatchTagData, PatchTagGroupData } from '@panda/shared';
 import { clipboard } from 'electron';
 import { MouseButtons } from '@xiao-ai/utils/web';
 import { fetch, ServiceName } from '@panda/fetch/renderer';
@@ -63,7 +64,7 @@ export function Tag({ id, title, update, onEditValidate }: TagProps) {
   };
   const editMetaHandler = () => {
     setPanelVisible(false);
-    fetch<void, PatchTagMetaData>(ServiceName.PatchTagMeta, { id }).then(update);
+    // fetch<void, PatchTagMetaData>(ServiceName.PatchTagMeta, { id }).then(update);
   };
 
   return (
@@ -75,21 +76,21 @@ export function Tag({ id, title, update, onEditValidate }: TagProps) {
         onEditEnd={editEnd}
         onEditValidate={onEditValidate}
       />
-      <Panel
+      <Float
         stopPropagation
         visible={panelVisible}
         x={panelPosition[0]}
         y={panelPosition[1]}
         onBlur={() => setPanelVisible(false)}
       >
-        <PanelItem disabled>选择以搜索</PanelItem>
-        <PanelSplit />
-        <PanelItem onClick={copyTextHandler}>复制文本</PanelItem>
-        <PanelSplit />
-        <PanelItem onClick={editMetaHandler}>编辑元数据</PanelItem>
-        <PanelItem onClick={renameHandler}>重命名</PanelItem>
-        <PanelItem onClick={deleteHandler}>删除</PanelItem>
-      </Panel>
+        <MenuItem disabled>选择以搜索</MenuItem>
+        <MenuSplit />
+        <MenuItem onClick={copyTextHandler}>复制文本</MenuItem>
+        <MenuSplit />
+        <MenuItem onClick={editMetaHandler}>编辑元数据</MenuItem>
+        <MenuItem onClick={renameHandler}>重命名</MenuItem>
+        <MenuItem onClick={deleteHandler}>删除</MenuItem>
+      </Float>
     </div>
   );
 }

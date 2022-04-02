@@ -3,14 +3,9 @@ import React from 'react';
 import { styles } from './style';
 import { useState, useRef, forwardRef, useImperativeHandle } from 'react';
 import { DownOutlined, RightOutlined } from '@ant-design/icons';
-import { Panel, PanelItem, PanelSplit } from '@panda/components';
-import {
-  NewTagData,
-  NewTagGroupData,
-  PatchTagGroupData,
-  TagData,
-  PatchTagMetaData,
-} from '@panda/shared';
+import { Float } from '@panda/components';
+import { MenuItem, MenuSplit } from 'src/components/context-menu';
+import { NewTagData, NewTagGroupData, PatchTagGroupData, TagData } from '@panda/shared';
 import { clipboard } from 'electron';
 import { MouseButtons } from '@xiao-ai/utils/web';
 import { fetch, ServiceName } from '@panda/fetch/renderer';
@@ -135,7 +130,7 @@ export const TagGroup = forwardRef<TagGroupRef, TagGroupProps>(function TagGroup
   };
   const editGroupMetaHandler = () => {
     setPanelVisible(false);
-    fetch<void, PatchTagMetaData>(ServiceName.PatchTagGroupMeta, { id }).then(refreshList);
+    // fetch<void, PatchTagMetaData>(ServiceName.PatchTagGroupMeta, { id }).then(refreshList);
   };
 
   return (
@@ -161,20 +156,20 @@ export const TagGroup = forwardRef<TagGroupRef, TagGroupProps>(function TagGroup
             onEditValidate={tagNameValidate}
           />
         ))}
-      <Panel
+      <Float
         stopPropagation
         visible={panelVisible}
         x={panelPosition[0]}
         y={panelPosition[1]}
         onBlur={() => setPanelVisible(false)}
       >
-        <PanelItem onClick={newTagHandler}>新建标签</PanelItem>
-        <PanelItem onClick={copyTextHandler}>复制文本</PanelItem>
-        <PanelSplit />
-        <PanelItem onClick={editGroupMetaHandler}>编辑元数据</PanelItem>
-        <PanelItem onClick={renameHandler}>重命名</PanelItem>
-        <PanelItem onClick={deleteHandler}>删除</PanelItem>
-      </Panel>
+        <MenuItem onClick={newTagHandler}>新建标签</MenuItem>
+        <MenuItem onClick={copyTextHandler}>复制文本</MenuItem>
+        <MenuSplit />
+        <MenuItem onClick={editGroupMetaHandler}>编辑元数据</MenuItem>
+        <MenuItem onClick={renameHandler}>重命名</MenuItem>
+        <MenuItem onClick={deleteHandler}>删除</MenuItem>
+      </Float>
     </>
   );
 });

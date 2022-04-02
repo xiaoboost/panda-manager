@@ -5,12 +5,9 @@ import { stringifyClass as cla } from '@xiao-ai/utils';
 import { useBlur } from '@panda/renderer-utils';
 import { PropsWithChildren } from 'react';
 import { panelContainer } from './store';
-import { style } from './style';
+import { styles } from './style';
 
-export * from './split';
-export * from './item';
-
-export interface PanelProps {
+export interface FloatProps {
   /** 面板类名 */
   className?: string;
   /** 是否可见 */
@@ -31,7 +28,7 @@ export interface PanelProps {
   onClick?(ev: React.MouseEvent): void;
 }
 
-export function Panel({
+export function Float({
   visible = false,
   x = 0,
   y = 0,
@@ -42,7 +39,7 @@ export function Panel({
   onBlur = () => void 0,
   onClick,
   children,
-}: PropsWithChildren<PanelProps>) {
+}: PropsWithChildren<FloatProps>) {
   const portalEl = renderElement ?? panelContainer;
   const ref = useBlur<HTMLDivElement>(visible, onBlur);
   const clickHandler = stopPropagation
@@ -58,7 +55,7 @@ export function Panel({
 
   return ReactDom.createPortal(
     <div
-      className={cla(style.classes.panel, className)}
+      className={cla(styles.classes.panel, className)}
       onClick={clickHandler}
       style={{ left: x, top: y, width }}
       ref={ref}

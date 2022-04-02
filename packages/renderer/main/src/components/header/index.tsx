@@ -14,7 +14,7 @@ import { MenuNav } from './menu';
 import { useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
-import { PanelItem, PanelSplit } from '@panda/components';
+import { MenuItem, MenuSplit } from '../context-menu';
 import { MinusOutlined, CloseOutlined, BorderOutlined } from '@ant-design/icons';
 
 const stopEvent = (ev: React.MouseEvent) => ev.stopPropagation();
@@ -89,10 +89,10 @@ export function Header() {
           className={style.classes.tabItem}
           highlightClassName={style.classes.highlightTabItem}
         >
-          <PanelItem disabled>发行说明</PanelItem>
-          <PanelItem disabled>检查更新</PanelItem>
-          <PanelSplit />
-          <PanelItem onClick={openAboutModal}>关于</PanelItem>
+          <MenuItem disabled>发行说明</MenuItem>
+          <MenuItem disabled>检查更新</MenuItem>
+          <MenuSplit />
+          <MenuItem onClick={openAboutModal}>关于</MenuItem>
         </MenuNav>
       </span>
       <span className={style.classes.title}>Panda Manager</span>

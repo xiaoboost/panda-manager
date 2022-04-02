@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Panel } from '../../panel';
+import { Float } from '../../float';
 
 import { styles } from './style';
 import { errorContainer } from './store';
@@ -35,7 +35,7 @@ export function ErrorPanel({ targetRef, message }: ErrorPanelProps) {
   }, [message, targetRef.current]);
 
   return (
-    <Panel
+    <Float
       visible={message.length > 0}
       x={panelPosition[0]}
       y={panelPosition[1]}
@@ -44,6 +44,6 @@ export function ErrorPanel({ targetRef, message }: ErrorPanelProps) {
       className={styles.classes.panel}
     >
       {message}
-    </Panel>
+    </Float>
   );
 }
