@@ -9,11 +9,11 @@ import { BaseProps } from '@panda/shared';
 export interface ButtonProps extends BaseProps {
   /**
    * 设置按钮类型
+   *   - `'normal'` 只有边框
    *   - `'primary'` 蓝色，默认值
-   *   - `'ghost'` 浅黑色
    *   - `'danger'` 红色
    */
-  type?: 'primary' | 'ghost' | 'danger';
+  type?: 'normal' | 'primary' | 'danger';
   // /** 禁用状态 */
   // disabled?: boolean;
   /** 加载状态 */

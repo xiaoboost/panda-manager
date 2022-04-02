@@ -20,7 +20,7 @@ export const YellowLighter = Color(0xfef9ed);
 /** 链接颜色 */
 export const LinkColor = Color(0x3794ff);
 /** 白色主要背景色 */
-export const WhiteBg = Color(0xf5f5f5);
+export const WhiteBg = Color(0xf3f3f3);
 /** 字体主要颜色 */
 export const FontColor = Color(0x212121);
 /** 字体次要颜色 */

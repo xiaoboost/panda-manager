@@ -6,11 +6,20 @@ import { styles } from './style';
 import { useState, useRef, forwardRef, useEffect, useImperativeHandle } from 'react';
 import { stringifyClass as cla } from '@xiao-ai/utils';
 
+type InputEl = HTMLInputElement | HTMLTextAreaElement;
+
+export interface TextareaSize {
+  minRows: number;
+  maxRows: number;
+}
+
 export interface InputProps {
   /** 输入框类别 */
   type?: string;
   /** 输入框的值 */
   value: string;
+  /** 自适应内容高度 */
+  autoSize?: boolean | TextareaSize;
   /** 内容最大长度 */
   maxLength?: number;
   /** 是否禁用 */
@@ -36,13 +45,13 @@ export interface InputProps {
    */
   onChange?(val: string, validateStatus: boolean): void;
   /** 键盘输入回车键时 */
-  onPressEnter?(ev: React.KeyboardEvent<HTMLInputElement>): void;
+  onPressEnter?(ev: React.KeyboardEvent<InputEl>): void;
   /** 键盘输入取消键时 */
-  onPressEsc?(ev: React.KeyboardEvent<HTMLInputElement>): void;
+  onPressEsc?(ev: React.KeyboardEvent<InputEl>): void;
   /** 获得焦点时 */
-  onFocus?(ev: React.FocusEvent<HTMLInputElement>): void;
+  onFocus?(ev: React.FocusEvent<InputEl>): void;
   /** 失去焦点时 */
-  onBlur?(ev: React.FocusEvent<HTMLInputElement>): void;
+  onBlur?(ev: React.FocusEvent<InputEl>): void;
 }
 
 export interface InputRef {
@@ -59,9 +68,10 @@ export interface InputRef {
 export const Input = forwardRef<InputRef, InputProps>(function Input(props, ref) {
   const { classes } = styles;
   const boxRef = useRef<HTMLDivElement>(null);
+  const inputEl = useRef<InputEl>(null);
   const [isFocus, setFocus] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const inputEl = useRef<HTMLInputElement>(null);
+
   const {
     type,
     value,
@@ -98,7 +108,7 @@ export const Input = forwardRef<InputRef, InputProps>(function Input(props, ref)
     },
   }));
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<InputEl>) => {
     if (e.key === 'Enter') {
       onPressEnter?.(e);
     } else if (e.key === 'Escape') {
@@ -106,18 +116,18 @@ export const Input = forwardRef<InputRef, InputProps>(function Input(props, ref)
     }
   };
 
-  const handleFocus: React.FocusEventHandler<HTMLInputElement> = (e) => {
+  const handleFocus: React.FocusEventHandler<InputEl> = (e) => {
     setFocus(true);
     onFocus?.(e);
   };
 
-  const handleBlur: React.FocusEventHandler<HTMLInputElement> = (e) => {
+  const handleBlur: React.FocusEventHandler<InputEl> = (e) => {
     setFocus(false);
     setErrorMessage('');
     onBlur?.(e);
   };
 
-  const changeHandler: React.ChangeEventHandler<HTMLInputElement> = ({ target }) => {
+  const changeHandler: React.ChangeEventHandler<InputEl> = ({ target }) => {
     const val = target.value;
     let validateStatus = true;
 
@@ -135,6 +145,8 @@ export const Input = forwardRef<InputRef, InputProps>(function Input(props, ref)
     onChange?.(val, validateStatus);
   };
 
+  const TagName = type === 'textarea' ? 'textarea' : 'input';
+
   return (
     <div
       ref={boxRef}
@@ -146,8 +158,8 @@ export const Input = forwardRef<InputRef, InputProps>(function Input(props, ref)
       style={style}
     >
       <div className={classes.ibWrapper}>
-        <input
-          ref={inputEl}
+        <TagName
+          ref={inputEl as any}
           className={cla(classes.input, inputClassName)}
           style={inputStyle}
           type={type}

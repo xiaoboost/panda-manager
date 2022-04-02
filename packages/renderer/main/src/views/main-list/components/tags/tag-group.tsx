@@ -12,6 +12,7 @@ import { fetch, ServiceName } from '@panda/fetch/renderer';
 import { TagBase, TagBaseRef } from './tag-base';
 import { Tag } from './tag';
 import { delateTag } from './dialog';
+import { MetaModal } from '../meta-modal';
 
 export interface TagGroupProps {
   /** 编号 */
@@ -43,6 +44,7 @@ export const TagGroup = forwardRef<TagGroupRef, TagGroupProps>(function TagGroup
   ref,
 ) {
   const { classes } = styles;
+  const [metaVisible, setMetaVisible] = useState(false);
   const [panelVisible, setPanelVisible] = useState(false);
   const [panelPosition, setPanelPosition] = useState([0, 0]);
   const [isCollapse, setCollapse] = useState(true);
@@ -130,6 +132,7 @@ export const TagGroup = forwardRef<TagGroupRef, TagGroupProps>(function TagGroup
   };
   const editGroupMetaHandler = () => {
     setPanelVisible(false);
+    setMetaVisible(true);
     // fetch<void, PatchTagMetaData>(ServiceName.PatchTagGroupMeta, { id }).then(refreshList);
   };
 
@@ -156,6 +159,7 @@ export const TagGroup = forwardRef<TagGroupRef, TagGroupProps>(function TagGroup
             onEditValidate={tagNameValidate}
           />
         ))}
+      <MetaModal isGroup visible={metaVisible} onCancel={() => setMetaVisible(false)} />
       <Float
         stopPropagation
         visible={panelVisible}

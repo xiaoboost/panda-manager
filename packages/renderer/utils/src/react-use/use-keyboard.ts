@@ -9,5 +9,5 @@ export function useKeyboard(filter: string, handler: KeyHandler) {
     return () => {
       hotkeys.unbind(filter, handler);
     };
-  }, []);
+  }, [filter, handler]);
 }

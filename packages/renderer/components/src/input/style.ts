@@ -8,6 +8,7 @@ export const styles = createStyles({
     padding: 0,
     boxSizing: 'border-box',
     fontSize: 'inherit',
+    lineHeight: 'inherit',
     height: '100%',
 
     '&$error': {
@@ -35,8 +36,8 @@ export const styles = createStyles({
     boxSizing: 'border-box',
     width: '100%',
     height: '100%',
-    lineHeight: 'inherit',
     border: 'none',
+    lineHeight: '150%',
     fontFamily: 'inherit',
     fontSize: 'inherit',
     resize: 'none',
