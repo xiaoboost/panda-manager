@@ -25,7 +25,6 @@
     "@panda/client-utils": "workspace:*",
     "@panda/db": "workspace:*",
     "@panda/fetch": "workspace:*",
-    "@panda/modal-tag-editor": "workspace:*",
     "@panda/plugin-manga": "workspace:*",
     "@panda/shared": "workspace:*",
     "@xiao-ai/utils": "^1.6.0"
@@ -38,3 +37,4 @@
     "typescript": "4.6.3"
   }
 }
+

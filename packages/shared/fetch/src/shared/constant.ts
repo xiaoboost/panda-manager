@@ -56,10 +56,6 @@ export enum ServiceName {
   PatchTag,
   /** 修改标签集 */
   PatchTagGroup,
-  /** 修改标签元数据 */
-  PatchTagMeta,
-  /** 修改标签集元数据 */
-  PatchTagGroupMeta,
   /** 移动标签 */
   MoveTag,
   /** 删除标签 */

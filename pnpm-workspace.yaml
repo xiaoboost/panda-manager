@@ -1,7 +1,6 @@
 packages:
   - packages/client/*
   - packages/renderer/*
-  - packages/modals/*
   - packages/plugins/*
   - packages/shared/*
   - packages/tools/*
