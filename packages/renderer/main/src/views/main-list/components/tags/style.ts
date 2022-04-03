@@ -33,13 +33,11 @@ export const styles = createStyles({
     borderLeft: '1px solid #bbb',
     transition: 'border-color .1s linear',
   },
-  tagGroup: {
-    position: 'relative',
+  list: {
+    display: 'flex',
+    flexDirection: 'column',
   },
-  tag: {
-    position: 'relative',
-  },
-  row: {
+  tagRow: {
     cursor: 'pointer',
     touchAction: 'none',
     display: 'flex',
