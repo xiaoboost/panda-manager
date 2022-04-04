@@ -1,4 +1,4 @@
-import { createStyles } from '@panda/renderer-utils';
+import { createStyles, Red } from '@panda/renderer-utils';
 
 export const height = 30;
 
@@ -84,5 +84,38 @@ export const styles = createStyles({
   spaceIcon: {
     width: 10,
     height: 10,
+  },
+  metaFormItem: {
+    display: 'flex',
+    fontSize: 12,
+    lineHeight: '28px',
+    marginBottom: 6,
+
+    '&:last-child': {
+      marginBottom: 0,
+    },
+  },
+  metaRequired: {},
+  metaFormLabel: {
+    width: 56,
+    textAlign: 'right',
+
+    '&$metaRequired:before': {
+      display: 'inline-block',
+      marginRight: 2,
+      color: Red.toString(),
+      fontSize: 12,
+      lineHeight: 1,
+      content: '"*"',
+    },
+    '&:after': {
+      content: '":"',
+      position: 'relative',
+      top: -0.5,
+      margin: '0 6px 0 2px',
+    },
+  },
+  metaFormContent: {
+    flexGrow: 1,
   },
 });

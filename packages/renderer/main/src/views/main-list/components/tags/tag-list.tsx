@@ -11,7 +11,15 @@ import { tagData, fetchTagData } from 'src/store/tags';
 import { fetch, ServiceName } from '@panda/fetch/renderer';
 import { Tag, TagRef, TagItemData } from './tag';
 import { delateTag } from './dialog';
-import { log, NewTagGroupData, NewTagData, PatchTagGroupData, PatchTagData } from '@panda/shared';
+import { MetaModal, ModalFormData, ModalFormOption } from './meta-modal';
+import {
+  log,
+  NewTagGroupData,
+  NewTagData,
+  PatchTagGroupData,
+  PatchTagData,
+  TagGroupData,
+} from '@panda/shared';
 
 export interface TagListRef {
   /** 创建新标签集 */
@@ -33,9 +41,13 @@ export const TagList = forwardRef<TagListRef, EmptyObject>(function TagList(_, r
   const [data] = useWatcher(tagData);
   const { current: tagMap } = useRef<Record<string, TagRef | null>>({});
   const [list, setList] = useState<TagItemData[]>([]);
-  const [currentTag, setCurrentTag] = useState<TagItemData>();
+  const [menuContext, setMenuContext] = useState<TagItemData>();
   const [panelVisible, setPanelVisible] = useState(false);
   const [panelPosition, setPanelPosition] = useState([0, 0]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalTitle, setModalTitle] = useState('');
+  const [modalData, setModalData] = useState<ModalFormData>();
+  const [modalOption, setModalOption] = useState<ModalFormOption>();
 
   // 内部方法
   const insertTags = (list: TagItemData[], groupId: number) => {
@@ -63,6 +75,25 @@ export const TagList = forwardRef<TagListRef, EmptyObject>(function TagList(_, r
     return list.filter((v) => {
       return v.isGroup || v.groupId !== groupId;
     });
+  };
+  const findGroup = (groupId?: number) => {
+    const group = data.find((v) => v.id === groupId);
+
+    if (!group) {
+      throw new Error(`未找到编号为${groupId}原始标签集数据`);
+    }
+
+    return group;
+  };
+  const findTag = (groupId?: number, tagId?: number) => {
+    const group = data.find((v) => v.id === groupId);
+    const tag = group?.tags.find((v) => v.id === tagId);
+
+    if (!group || !tag) {
+      throw new Error(`未找到编号为${tagId}原始标签数据`);
+    }
+
+    return tag;
   };
 
   // 标签事件
@@ -104,11 +135,15 @@ export const TagList = forwardRef<TagListRef, EmptyObject>(function TagList(_, r
       tagRef.blur();
     }
 
-    setCurrentTag(data);
+    setMenuContext(data);
     setPanelVisible(true);
     setPanelPosition([ev.pageX, ev.pageY]);
   };
-  const tagNameValidate = (val: string, item: TagItemData) => {
+  const tagNameValidate = (val: string, item?: TagItemData) => {
+    if (!item) {
+      return;
+    }
+
     if (val.length === 0) {
       return '名称不能为空';
     }
@@ -122,6 +157,27 @@ export const TagList = forwardRef<TagListRef, EmptyObject>(function TagList(_, r
 
       if (group && group.tags.some((v) => v.name === val && item.id !== v.id)) {
         return `此位置已经存在标签 "${val}"，请选择其他名称`;
+      }
+    }
+  };
+  const tagAliasValidate = (val: string, item?: TagItemData) => {
+    if (val.length === 0 || !item) {
+      return;
+    }
+
+    if (val === item.title) {
+      return '别名不能和名称相同';
+    }
+
+    if (item.isGroup) {
+      if (data.some((v) => v.alias === val && item.id !== v.id)) {
+        return `此位置已经存在标签集别名 "${val}"，请选择其他名称`;
+      }
+    } else {
+      const group = data.find((v) => v.id === item.groupId);
+
+      if (group && group.tags.some((v) => v.alias === val && item.id !== v.id)) {
+        return `此位置已经存在标签别名 "${val}"，请选择其他名称`;
       }
     }
   };
@@ -158,12 +214,9 @@ export const TagList = forwardRef<TagListRef, EmptyObject>(function TagList(_, r
 
   // 右键菜单回调
   const newTagHandler = () => {
-    if (!currentTag) {
-      throw new Error('必须先设定当前标签集');
-    }
-
+    const tag = menuContext!;
     const newList = list.slice();
-    const groupIndex = list.findIndex((data) => data.isGroup && data.id === currentTag.id);
+    const groupIndex = list.findIndex((data) => data.isGroup && data.id === tag.id);
 
     // 强制展开该标签集
     list[groupIndex].isCollapse = false;
@@ -172,7 +225,7 @@ export const TagList = forwardRef<TagListRef, EmptyObject>(function TagList(_, r
     newList.splice(groupIndex + 1, 0, {
       id: -1,
       title: '',
-      groupId: currentTag.id,
+      groupId: tag.id,
       isGroup: false,
       isNew: true,
     });
@@ -181,39 +234,96 @@ export const TagList = forwardRef<TagListRef, EmptyObject>(function TagList(_, r
     setPanelVisible(false);
   };
   const renameHandler = () => {
-    if (!currentTag) {
-      throw new Error('必须先设定当前标签集');
-    }
-
-    tagMap[getKey(currentTag)]?.edit();
+    const tag = menuContext!;
+    tagMap[getKey(tag)]?.edit();
     setPanelVisible(false);
   };
   const copyTextHandler = () => {
-    if (!currentTag) {
-      throw new Error('必须先设定当前标签集');
-    }
-
-    clipboard.writeText(currentTag.title ?? '');
+    const tag = menuContext!;
+    clipboard.writeText(tag.title ?? '');
     setPanelVisible(false);
   };
   const deleteHandler = async () => {
-    if (!currentTag) {
-      throw new Error('必须先设定当前标签集');
-    }
+    const tag = menuContext!;
 
     setPanelVisible(false);
 
-    if (await delateTag(currentTag.title, currentTag.isGroup)) {
-      fetch(ServiceName.DeleteTagGroup, { id: currentTag.id }).then(fetchTagData);
+    if (await delateTag(tag.title, tag.isGroup)) {
+      fetch(ServiceName.DeleteTagGroup, { id: tag.id }).then(fetchTagData);
     }
   };
   const editMetaHandler = () => {
-    // ..
+    const current = menuContext!;
+
+    if (current.isGroup) {
+      const group = findGroup(current.id);
+
+      setModalTitle(`标签集“${group.name}”元数据`);
+      setModalOption({
+        groups: [],
+      });
+      setModalData({
+        name: group.name,
+        alias: group.alias ?? '',
+        comment: group.comment ?? '',
+        groupId: -1,
+      });
+    } else {
+      const tag = findTag(current.groupId, current.id);
+
+      setModalTitle(`标签“${tag.name}”元数据`);
+      setModalOption({
+        groups: data.map((v) => ({
+          name: v.name,
+          id: v.id,
+        })),
+      });
+      setModalData({
+        name: tag.name,
+        alias: tag.alias ?? '',
+        comment: tag.comment ?? '',
+        groupId: tag.groupId,
+      });
+    }
+
+    setPanelVisible(false);
+    setModalVisible(true);
   };
 
   // 对话框回调
-  const editMetaEndHandler = () => {
-    // ..
+  const editMetaOkHandler = (formData: ModalFormData) => {
+    const current = menuContext!;
+
+    if (current.isGroup) {
+      const group = findGroup(current.id);
+
+      if (
+        group.name !== formData.name ||
+        (group.alias ?? '') !== formData.alias ||
+        (group.comment ?? '') !== formData.comment
+      ) {
+        fetch<void, PatchTagGroupData>(ServiceName.PatchTagGroup, {
+          ...formData,
+          id: group.id,
+        }).then(fetchTagData);
+      }
+    } else {
+      const tag = findTag(current.groupId, current.id);
+
+      if (
+        tag.name !== formData.name ||
+        tag.groupId !== formData.groupId ||
+        (tag.alias ?? '') !== formData.alias ||
+        (tag.comment ?? '') !== formData.comment
+      ) {
+        fetch<void, PatchTagData>(ServiceName.PatchTag, {
+          ...formData,
+          id: tag.id,
+        }).then(fetchTagData);
+      }
+    }
+
+    setModalVisible(false);
   };
 
   useEffect(() => {
@@ -273,19 +383,29 @@ export const TagList = forwardRef<TagListRef, EmptyObject>(function TagList(_, r
         y={panelPosition[1]}
         onBlur={() => setPanelVisible(false)}
       >
-        {!currentTag?.isGroup && (
+        {!menuContext?.isGroup && (
           <>
             <MenuItem disabled>选择以搜索</MenuItem>
             <MenuSplit />
           </>
         )}
-        {currentTag?.isGroup && <MenuItem onClick={newTagHandler}>新建标签</MenuItem>}
+        {menuContext?.isGroup && <MenuItem onClick={newTagHandler}>新建标签</MenuItem>}
         <MenuItem onClick={copyTextHandler}>复制文本</MenuItem>
         <MenuSplit />
         <MenuItem onClick={editMetaHandler}>编辑元数据</MenuItem>
         <MenuItem onClick={renameHandler}>重命名</MenuItem>
         <MenuItem onClick={deleteHandler}>删除</MenuItem>
       </Float>
+      <MetaModal
+        visible={modalVisible}
+        title={modalTitle}
+        value={modalData}
+        option={modalOption}
+        onOk={editMetaOkHandler}
+        onCancel={() => setModalVisible(false)}
+        nameValidate={(val) => tagNameValidate(val, menuContext)}
+        aliasValidate={(val) => tagAliasValidate(val, menuContext)}
+      />
     </div>
   );
 });

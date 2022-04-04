@@ -74,9 +74,3 @@ export interface MoveTagData {
   /** 移动至哪个标签集 */
   toGroup: number;
 }
-
-/** 变更元数据的需求数据 */
-export interface PatchTagMetaData {
-  /** 编号 */
-  id: number;
-}

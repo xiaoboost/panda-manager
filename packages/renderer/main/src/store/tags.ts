@@ -10,7 +10,7 @@ export function fetchTagData() {
     if (process.env.NODE_ENV === 'development') {
       setTimeout(() => {
         tagData.setData(data);
-      }, 100);
+      }, 50);
     } else {
       tagData.setData(data);
     }
