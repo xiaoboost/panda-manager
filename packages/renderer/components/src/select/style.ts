@@ -1,10 +1,4 @@
-import {
-  createStyles,
-  Color,
-  WhiteBg,
-  HighlightColor,
-  FontSecondColor,
-} from '@panda/renderer-utils';
+import { createStyles, Color, White, HighlightColor, FontSecondColor } from '@panda/renderer-utils';
 
 const BorderColor = Color(0xcecece);
 const HighlightBgColor = Color(0xccdebb);
@@ -31,11 +25,13 @@ export const styles = createStyles({
     // TODO:
   },
   select: {
-    backgroundColor: WhiteBg.toString(),
+    backgroundColor: White.toString(),
     border: `1px solid ${BorderColor.toString()}`,
     fontSize: 12,
     height: 26,
     padding: [2, 8],
+    display: 'flex',
+    alignItems: 'center',
 
     '&$selectFocus': {
       borderColor: HighlightColor.toString(),

@@ -1,7 +1,7 @@
-import { ServiceData } from './types';
+import { SyncService } from './types';
 import { PatchTagData } from '@panda/shared';
 import { patchTag } from '../service/tags';
 
-export const service: ServiceData<any, PatchTagData> = ({ requestData }) => {
+export const service: SyncService<PatchTagData, void> = ({ requestData }) => {
   return patchTag(requestData.data);
 };

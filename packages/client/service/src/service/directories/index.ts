@@ -1,3 +1,5 @@
+import path from 'path';
+
 import { Config } from '../../model';
 import { remove, search, push } from '../files';
 
@@ -11,14 +13,20 @@ async function update(paths: string[]) {
   // 当前数据库中的所有项目
   const filesInDatabase = (await search()).map(({ data }) => data.uri);
   // 读取所有文件夹
-  const filesInDirs = await Promise.all(Config.data.directories.map((item) => readdir(item)));
+  const filesInDirs = await Promise.all(
+    Config.data.directories.map((item) =>
+      readdir(item).then((arr) => arr.map((name) => path.join(item, name))),
+    ),
+  );
   // 硬盘中的所有项目
   const filesInDisk = filesInDirs.reduce((ans, item) => ans.concat(item), []);
+  // 数据库中存在，而硬盘中不存在的数据
+  const onlyInDb = exclude(filesInDisk, filesInDatabase);
+  // 硬盘中存在，而数据库中不存在的数据
+  const onlyInDisk = exclude(filesInDatabase, filesInDisk);
 
-  // 删除数据库中存在，而硬盘中不存在的数据
-  remove(...exclude(filesInDisk, filesInDatabase));
-  // 添加硬盘中存在，而数据库中不存在的数据
-  push(...exclude(filesInDatabase, filesInDisk));
+  remove(...onlyInDb);
+  push(...onlyInDisk);
 }
 
 /** 初始化 */

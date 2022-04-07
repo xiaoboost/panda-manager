@@ -7,7 +7,7 @@ export const style = createStyles({
   headerActions: {},
 
   main: {
-    width: 200,
+    width: 240,
     display: 'flex',
     flexDirection: 'column',
 

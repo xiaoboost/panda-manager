@@ -1,21 +1,27 @@
 import React from 'react';
+import path from 'path';
 
-import { style } from './style';
+import { LoadingOutlined } from '@ant-design/icons';
 
-interface Props {
-  icon?: React.ReactNode;
-  left?: string;
-  right?: string;
-}
+import { styles } from './style';
+import { useBroadcast, BroadcastName, fetchSync, ServiceName } from '@panda/fetch/renderer';
 
-export function Footer(props: Props) {
+const defaultReadStatus = fetchSync<string>(ServiceName.GetReadStatus);
+
+export function Footer() {
+  const { classes } = styles;
+  const readItem = useBroadcast(BroadcastName.ReadingStatusChange, defaultReadStatus.data);
+  const basename = path.parse(readItem ?? '').name;
+
   return (
-    <div className={style.classes.footer}>
-      <div className={style.classes.footerItem}>
-        {props.icon && <div>{props.icon}</div>}
-        <div>{props.left}</div>
-      </div>
-      <div className={style.classes.footerItem}>{props.right}</div>
+    <div className={classes.footer}>
+      {readItem && (
+        <div className={classes.footerItem}>
+          <LoadingOutlined className={styles.classes.footerIcon} />
+          <div className={classes.readStatus}>{basename}</div>
+        </div>
+      )}
+      {/* <div className={classes.footerItem}>{props.right}</div> */}
     </div>
   );
 }

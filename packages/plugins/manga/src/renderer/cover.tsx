@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { MangaRendererData } from '../shared';
+import { MangaDataInList } from '../shared';
 
 export * from '../shared';
 
-export function Cover(props: MangaRendererData) {
+export function Cover(props: MangaDataInList) {
   return <img src={props.coverPath} height='100%' />;
 }

@@ -3,14 +3,22 @@ export interface BuildConfig {
   /** 入口文件 */
   entry: string;
   /**
+   * 入口名称
+   *   - 默认为`'index'`
+   */
+  entryName?: string;
+  /**
    * 编译模式
    *   - `'main'`主进程
    *   - `'renderer'`渲染进程
    *   - `'preload'`预加载进程
    */
   process: 'main' | 'renderer' | 'preload';
-  /** 打包输出文件夹 */
-  output: string;
+  /**
+   * 打包输出文件夹
+   *   - 默认为`process`字段
+   */
+  output?: string;
   /** html 入口文件 */
   html?: string;
   /**

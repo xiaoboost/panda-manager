@@ -2,7 +2,7 @@ import React from 'react';
 
 import { style } from './style';
 import { stringifyClass } from '@xiao-ai/utils';
-import { Panel } from '@panda/components';
+import { Float } from '@panda/components';
 import { getOffset } from '@panda/renderer-utils';
 import { useState, useRef, PropsWithChildren } from 'react';
 
@@ -45,9 +45,9 @@ export function MenuNav(props: PropsWithChildren<MenuProps>) {
     >
       {props.title}
       {props.children && (
-        <Panel visible={show} x={position?.[0]} y={position?.[1]} onBlur={() => setShow(false)}>
+        <Float visible={show} x={position?.[0]} y={position?.[1]} onBlur={() => setShow(false)}>
           {props.children}
-        </Panel>
+        </Float>
       )}
     </span>
   );

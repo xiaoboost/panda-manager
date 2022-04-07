@@ -5,7 +5,7 @@ interface BaseTagData {
   /** 注释说明 */
   comment?: string;
   /** 标签别名 */
-  alias?: string[];
+  alias?: string;
 }
 
 /** 数据库中的标签数据 */

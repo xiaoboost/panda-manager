@@ -1,13 +1,19 @@
-import { createStyles } from '@panda/renderer-utils';
+import { createStyles, ErrorMain, Focus } from '@panda/renderer-utils';
 
 export const styles = createStyles({
+  error: {},
   box: {
     position: 'relative',
     display: 'block',
     padding: 0,
     boxSizing: 'border-box',
     fontSize: 'inherit',
+    lineHeight: 'inherit',
     height: '100%',
+
+    '&$error': {
+      outlineColor: ErrorMain.toString(),
+    },
   },
   disabled: {
     // TODO: 待补
@@ -30,8 +36,8 @@ export const styles = createStyles({
     boxSizing: 'border-box',
     width: '100%',
     height: '100%',
-    lineHeight: 'inherit',
     border: 'none',
+    lineHeight: '150%',
     fontFamily: 'inherit',
     fontSize: 'inherit',
     resize: 'none',
@@ -44,6 +50,6 @@ export const styles = createStyles({
     outlineStyle: 'solid',
     outlineOffset: -1,
     opacity: '1 !important',
-    outlineColor: '#528bff',
+    outlineColor: Focus.toString(),
   },
 });

@@ -21,16 +21,16 @@ export function getTags() {
 }
 
 export function addTagGroupByName(data: NewTagGroupData) {
-  return TagGroups.insert({
+  TagGroups.insert({
     name: data.name,
-  })[0].data;
+  });
 }
 
 export function addTagByName(data: NewTagData) {
-  return Tags.insert({
+  Tags.insert({
     name: data.name,
     groupId: data.groupId,
-  })[0].data;
+  });
 }
 
 export function patchTag(data: PatchTagData) {

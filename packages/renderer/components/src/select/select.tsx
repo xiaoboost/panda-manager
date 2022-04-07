@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Panel } from '../panel';
+import { Float } from '../float';
 import { Option } from './option';
 import { DownOutlined } from '@ant-design/icons';
 
@@ -118,7 +118,7 @@ export function Select({
       <span className={classes.selectIcon}>
         <DownOutlined />
       </span>
-      <Panel
+      <Float
         stopPropagation
         className={classes.selectDropDown}
         visible={panelVisible}
@@ -136,7 +136,7 @@ export function Select({
             onClick={() => clickOptionHandler(opt.value)}
           />
         ))}
-      </Panel>
+      </Float>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { createStyles, MainColor, White } from '@panda/renderer-utils';
+import { createStyles, MainColor, White, FontColor, BlackLighter } from '@panda/renderer-utils';
 import type { ButtonProps } from './index';
 
 export function getClassNameByType(type: NonNullable<ButtonProps['type']>): string {
@@ -33,5 +33,10 @@ export const styles = createStyles({
   btnPrimary: {
     backgroundColor: MainColor.toString(),
     color: White.toString(),
+  },
+  btnNormal: {
+    backgroundColor: 'transparent',
+    color: FontColor.toString(),
+    border: `1px solid ${BlackLighter.toString()}`,
   },
 });

@@ -1,8 +1,6 @@
-import { createStyles, Color, Black, White, PurpleLight, Red } from '@panda/renderer-utils';
+import { createStyles, Red } from '@panda/renderer-utils';
 
 export const height = 30;
-const mainBgColor = PurpleLight;
-const fontColor = Color(Black.rgbNumber() + 0x121212);
 
 export const RowHeight = 22;
 
@@ -35,13 +33,11 @@ export const styles = createStyles({
     borderLeft: '1px solid #bbb',
     transition: 'border-color .1s linear',
   },
-  tagGroup: {
-    position: 'relative',
+  list: {
+    display: 'flex',
+    flexDirection: 'column',
   },
-  tag: {
-    position: 'relative',
-  },
-  row: {
+  tagRow: {
     cursor: 'pointer',
     touchAction: 'none',
     display: 'flex',
@@ -64,6 +60,9 @@ export const styles = createStyles({
     alignItems: 'center',
     ...lineHeight,
   },
+  input: {
+    flexGrow: 1,
+  },
   innerInput: {
     padding: [2, 0],
   },
@@ -85,5 +84,38 @@ export const styles = createStyles({
   spaceIcon: {
     width: 10,
     height: 10,
+  },
+  metaFormItem: {
+    display: 'flex',
+    fontSize: 12,
+    lineHeight: '28px',
+    marginBottom: 6,
+
+    '&:last-child': {
+      marginBottom: 0,
+    },
+  },
+  metaRequired: {},
+  metaFormLabel: {
+    width: 56,
+    textAlign: 'right',
+
+    '&$metaRequired:before': {
+      display: 'inline-block',
+      marginRight: 2,
+      color: Red.toString(),
+      fontSize: 12,
+      lineHeight: 1,
+      content: '"*"',
+    },
+    '&:after': {
+      content: '":"',
+      position: 'relative',
+      top: -0.5,
+      margin: '0 6px 0 2px',
+    },
+  },
+  metaFormContent: {
+    flexGrow: 1,
   },
 });
