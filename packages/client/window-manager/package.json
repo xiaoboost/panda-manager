@@ -20,7 +20,7 @@
     "@panda/db": "workspace:*",
     "@panda/shared": "workspace:*",
     "@xiao-ai/utils": "^1.6.0",
-    "electron": "17.1.2"
+    "electron": "22.3.25"
   },
   "devDependencies": {
     "@panda/tsconfig": "workspace:*",
